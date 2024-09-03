@@ -13,12 +13,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     @Value("${cors.allowedOrigins.frontend}")
-    private String allowedOriginsFronted;
+    private String allowedOriginsFrontend;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(allowedOriginsFronted)
+                .allowedOrigins(allowedOriginsFrontend)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("Set-Cookie")
