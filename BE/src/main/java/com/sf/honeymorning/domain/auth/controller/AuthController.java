@@ -1,4 +1,4 @@
-package com.sf.honeymorning.domain.user.controller;
+package com.sf.honeymorning.domain.auth.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,37 +13,38 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "회원")
-@RequestMapping("/api/users")
+@Tag(name = "인증")
+@RequestMapping("/api/auth")
 @RestController
-public class UserController {
+public class AuthController {
+
 	@Operation(
-		summary = "회원가입"
+		summary = "로그인"
 	)
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "회원 가입 성공",
+			description = "로그인 성공",
 			content = @Content(schema = @Schema(type = "string", example = "success"))
 		)
 	})
-	@PostMapping
-	public ResponseEntity<String> register() {
+	@PostMapping("/login")
+	public ResponseEntity<String> login() {
 		return ResponseEntity.ok("success");
 	}
 
 	@Operation(
-		summary = "회원탈퇴"
+		summary = "로그아웃"
 	)
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "탈퇴 성공",
+			description = "로그아웃 성공",
 			content = @Content(schema = @Schema(type = "string", example = "success"))
 		)
 	})
-	@DeleteMapping
-	public ResponseEntity<String> withdraw() {
+	@PostMapping("/logout")
+	public ResponseEntity<String> logout() {
 		return ResponseEntity.ok("success");
 	}
 }

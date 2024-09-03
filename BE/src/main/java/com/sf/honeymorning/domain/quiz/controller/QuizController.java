@@ -1,8 +1,7 @@
-package com.sf.honeymorning.domain.user.controller;
+package com.sf.honeymorning.domain.quiz.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,37 +12,24 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "회원")
-@RequestMapping("/api/users")
+@Tag(name = "퀴즈")
+@RequestMapping("/api/quizzes")
 @RestController
-public class UserController {
+public class QuizController {
 	@Operation(
-		summary = "회원가입"
+		summary = "퀴즈 결과 확인"
 	)
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "회원 가입 성공",
+			description = "퀴즈 결과 가져오기 성공",
 			content = @Content(schema = @Schema(type = "string", example = "success"))
 		)
 	})
-	@PostMapping
-	public ResponseEntity<String> register() {
+	@GetMapping("/result")
+	public ResponseEntity<String> show() {
 		return ResponseEntity.ok("success");
 	}
 
-	@Operation(
-		summary = "회원탈퇴"
-	)
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "탈퇴 성공",
-			content = @Content(schema = @Schema(type = "string", example = "success"))
-		)
-	})
-	@DeleteMapping
-	public ResponseEntity<String> withdraw() {
-		return ResponseEntity.ok("success");
-	}
 }
+	
