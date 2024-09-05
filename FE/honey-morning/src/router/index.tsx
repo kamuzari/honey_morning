@@ -1,7 +1,7 @@
 import React from 'react';
 import {RouteObject} from 'react-router-dom';
 
-import LoginPage from '@pages/LoginPage';
+import LoginPage from '@/pages/LoginPage';
 
 import AlarmSetting from '@/pages/AlarmSetting';
 
