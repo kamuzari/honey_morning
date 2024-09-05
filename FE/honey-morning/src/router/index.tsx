@@ -1,11 +1,18 @@
 import React from 'react';
-import {createBrowserRouter, RouteObject} from 'react-router-dom';
+import {RouteObject} from 'react-router-dom';
+
+import LoginPage from '@/pages/LoginPage';
+
 import AlarmSetting from '@/pages/AlarmSetting';
 
 const routerInfo: RouteObject[] = [
   {
     path: '/alarmsetting',
-    element: <AlarmSetting />, // 라우트에서 렌더링할 컴포넌트
+    element: <AlarmSetting />,
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
   },
 ];
 
