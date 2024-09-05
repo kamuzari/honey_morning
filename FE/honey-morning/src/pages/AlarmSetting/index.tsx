@@ -7,6 +7,7 @@ const Container = styled.div`
   height: 100%;
   color: var(--yellow-color);
   background-color: var(--darkblue-color);
+  margin: 0;
 `;
 
 const AlarmSetting: React.FunctionComponent = () => {
