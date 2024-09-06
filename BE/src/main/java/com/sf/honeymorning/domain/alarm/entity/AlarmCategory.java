@@ -1,6 +1,7 @@
 package com.sf.honeymorning.domain.alarm.entity;
 
 import com.sf.honeymorning.domain.common.BaseEntity;
+import com.sf.honeymorning.domain.common.Tag;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,7 +28,8 @@ public class AlarmCategory extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Alarm alarm;
 
-    @Column(length = 50, nullable = false)
-    private String category;
+    @JoinColumn(name = "tag_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Tag tag;
 
 }
