@@ -43,4 +43,7 @@ public class Quiz extends BaseEntity {
     @Column(length = 200, nullable = false)
     private String option4;
 
+    private Integer selection;
+
+
 }
