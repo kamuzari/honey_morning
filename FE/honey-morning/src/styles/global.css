@@ -30,38 +30,38 @@ body {
 @font-face {
     font-family: 'Noto Sans';
     font-weight: 300;
-    src: url('../../public/fonts/Noto\ Sans/NotoSans-Light.ttf') format('truetype');
+    src: url('../../fonts/Noto\ Sans/NotoSans-Light.ttf') format('truetype');
   }
 
 @font-face {
     font-family: 'Noto Sans';
     font-weight: 400;
-    src: url(../../public/fonts/Noto\ Sans/NotoSans-Regular.ttf) format('truetype');
+    src: url(../../fonts/Noto\ Sans/NotoSans-Regular.ttf) format('truetype');
 }
   
 @font-face {
     font-family: 'Noto Sans';
     font-weight: 500;
-    src: url('../../public/fonts/Noto\ Sans/NotoSans-Medium.ttf') format('woff2');
+    src: url('../../fonts/Noto\ Sans/NotoSans-Medium.ttf') format('woff2');
 }
 
 @font-face {
     font-family: 'Noto Sans';
     font-weight: 700;
-    src: url('../../public/fonts/Noto\ Sans/NotoSans-Bold.ttf') format('truetype');
+    src: url('../../fonts/Noto\ Sans/NotoSans-Bold.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'Noto Sans KR';
     font-weight: 300;
-    src: url('../../public/fonts/Noto\ Sans\ KR/NotoSansKR-Light.ttf') format('truetype');
+    src: url('../../fonts/Noto\ Sans\ KR/NotoSansKR-Light.ttf') format('truetype');
     unicode-range: U+AC00-D7A3;
   }
 
 @font-face {
     font-family: 'Noto Sans KR';
     font-weight: 400;
-    src: url(../../public/fonts/Noto\ Sans\ KR/NotoSansKR-Regular.ttf) format('truetype');
+    src: url(../../fonts/Noto\ Sans\ KR/NotoSansKR-Regular.ttf) format('truetype');
     unicode-range: U+AC00-D7A3;
 }
 
@@ -70,7 +70,7 @@ body {
 @font-face {
     font-family: 'Noto Sans KR';
     font-weight: 500;
-    src: url('../../public/fonts/Noto\ Sans\ KR/NotoSansKR-Medium.ttf') format('woff2');
+    src: url('../../fonts/Noto\ Sans\ KR/NotoSansKR-Medium.ttf') format('woff2');
     unicode-range: U+AC00-D7A3;
 
 }
@@ -78,7 +78,7 @@ body {
 @font-face {
     font-family: 'Noto Sans KR';
     font-weight: 700;
-    src: url('../../public/fonts/Noto\ Sans\ KR/NotoSansKR-Bold.ttf') format('truetype');
+    src: url('../../fonts/Noto\ Sans\ KR/NotoSansKR-Bold.ttf') format('truetype');
     unicode-range: U+AC00-D7A3;
 
 }
