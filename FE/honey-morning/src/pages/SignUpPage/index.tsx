@@ -1,32 +1,6 @@
 import React, {useState} from 'react';
 import styled, {createGlobalStyle} from 'styled-components';
 
-const GlobalStyle = createGlobalStyle`
- body {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  background-color: var(--yellow-color);
-  clip-path: polygon(
-    0% 20%,
-    20% 40%,
-    40% 20%,
-    60% 40%,
-    80% 20%,
-    100% 40%,
-    100% 100%,
-    0% 100%
-  );
- }
-`;
-
-const WaveTop = styled.div`
-  position: absolute;
-  top: 0;
-  height: 150px;
-  background-color: var(--yellow-color);
-`;
-
 const Title = styled.div`
   display: flex;
   justify-content: center;
@@ -36,38 +10,8 @@ const Title = styled.div`
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
-
-  align-items: center;
+  fix-direction: column;
   justify-content: center;
-
-  padding: 10px;
-  border: solid 1px black;
-  background-color: white;
-
-  width: 700px;
-
-  .loginForm {
-  display: flex;
-  flex-direction: column;
-
-  border: solid 1px red;
-  padding: 20px;
-  box-shadow: 5px 5px 3px #666;
-
-  
-    .inputGroup {
-    background-color: blue;
-    }
-  }
-
-
-  .signUpYet {
-  display: flex;
-  align-items: center;
-  
-  }
-  }
 `;
 
 const SubmitButton = styled.button`
@@ -82,23 +26,15 @@ const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
-const MoveToSignUp = styled.button`
-  color: var(--mediumblue-color);
-  background-color: transparent;
-  cursor: pointer;
-  border: none;
-  text-decoration: underline;
-`;
-
-const LoginProcess: React.FC = () => {
+const SignUpProcess: React.FC = () => {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
     <>
-      <GlobalStyle />
-      <WaveTop />
-      <Title>Sign In</Title>
+      <Title>Sign Up</Title>
       <Container>
         <div className="loginForm">
           <div className="inputGroup">
@@ -112,6 +48,16 @@ const LoginProcess: React.FC = () => {
             />
           </div>
           <div className="inputGroup">
+            <label>Email</label>
+            <input
+              type="name"
+              value={name}
+              placeholder="이메일을 입력해주세요."
+              onChange={e => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="inputGroup">
             <label>Password</label>
             <input
               type="password"
@@ -121,16 +67,22 @@ const LoginProcess: React.FC = () => {
               required
             />
           </div>
+          <div className="inputGroup">
+            <label>Confirm Password</label>
+            <input
+              type="confrimPassword"
+              value={confirmPassword}
+              placeholder="비밀번호를 입력해주세요."
+              onChange={e => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
 
-          <SubmitButton>로그인</SubmitButton>
-        </div>
-        <div className="signUpYet">
-          <div>아직 회원이 아니신가요?</div>
-          <MoveToSignUp>회원가입 하기</MoveToSignUp>
+          <SubmitButton>회원가입</SubmitButton>
         </div>
       </Container>
     </>
   );
 };
 
-export default LoginProcess;
+export default SignUpProcess;
