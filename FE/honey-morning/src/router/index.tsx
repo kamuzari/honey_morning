@@ -5,6 +5,8 @@ import LoginPage from '@/pages/LoginPage';
 
 import AlarmSetting from '@/pages/AlarmSetting';
 
+import SleepPage from '@/pages/Sleep';
+
 const routerInfo: RouteObject[] = [
   {
     path: '/alarmsetting',
@@ -13,6 +15,10 @@ const routerInfo: RouteObject[] = [
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  {
+    path: '/sleep',
+    element: <SleepPage />,
   },
 ];
 
