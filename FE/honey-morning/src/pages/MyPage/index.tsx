@@ -105,7 +105,7 @@ const MyPage: React.FC = () => {
   );
 };
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   width: 100%;
   height: 100vh;
@@ -118,7 +118,7 @@ const Container = styled.div`
   }
 `;
 
-const WhiteContainer = styled.div`
+export const WhiteContainer = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -127,9 +127,10 @@ const WhiteContainer = styled.div`
   padding: 5rem 0 0 0;
 `;
 
-const Content = styled.div`
-  displya: flex;
+export const Content = styled.div`
+  display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   .titleContainer {
     display: flex;
@@ -150,8 +151,10 @@ const Content = styled.div`
 
   .smallTitleContainer {
     display: flex;
+    width: 100%;
     margin: 2rem;
     padding: 0 0 0 3rem;
+    align-items: center;
   }
 
   .streakContainer {
@@ -162,20 +165,19 @@ const Content = styled.div`
     border: 1px solid lime;
   }
 `;
-const Title = styled.div`
+export const Title = styled.div`
   display: flex;
-  width: 20rem;
   height: 6rem;
   border-radius: 0 10rem 10rem 0;
   background-color: var(--yellow-color);
   font-weight: bold;
   font-size: 4rem;
-  padding: 0 0 0 5rem;
+  padding: 0 5rem 0 5rem;
   align-items: center;
 `;
 
-const SmallTitle = styled.div`
-  color: var(--darkblue-color);
+export const SmallTitle = styled.div`
+  color: var(--black-color);
   font-size: 3.5rem;
   font-weight: bold;
 `;
