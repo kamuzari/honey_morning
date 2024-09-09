@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import HashTag from '@/component/AlarmSetting/HashTag';
-
+import HashTag from '@/component/MyPage/HashTag';
+import Pagination from '@/component/MyPage/Pagination';
+import {useState} from 'react';
 const categoryList = [
   '정치',
   '경제',
@@ -12,7 +13,39 @@ const categoryList = [
   '스포츠',
 ];
 
+const selectedList = ['경제', '기술/IT'];
+
+interface Data {
+  date: string;
+  content: string;
+}
+const dataSample: Data = {
+  date: '8/30',
+  content: '이것은 아무 내용이 들어있는 아무 샘플이지요.',
+};
+
 const MyPage: React.FC = () => {
+  //Pagination
+  var data: Data[] = [
+    dataSample,
+    dataSample,
+    dataSample,
+    dataSample,
+    dataSample,
+    dataSample,
+  ]; // 임시 데이터 100개
+
+  const itemsPerPage = 5;
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // 페이지에 따라 데이터 슬라이싱
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+
   return (
     <Container>
       <WhiteContainer>
@@ -21,7 +54,13 @@ const MyPage: React.FC = () => {
             <Title>내 관심사</Title>
           </div>
           <div className="hashTagContainer">
-            {categoryList.map((item) => <HashTag text={item} type='NEWS')}
+            {categoryList.map(item => (
+              <HashTag
+                text={item}
+                type="NEWS"
+                selected={selectedList.includes(item) ? true : false}
+              />
+            ))}
           </div>
           <div className="smallTitleContainer">
             <SmallTitle>나만의 관심사</SmallTitle>
@@ -29,11 +68,37 @@ const MyPage: React.FC = () => {
           <div className="hashTagContainer">
             <HashTag text="유럽에 사는 고양이" type="CUSTOM" />
             <HashTag text="유럽에 사는 고양이" type="CUSTOM" />
-            <HashTag text="유럽에 사는 고양이" type="CUSTOM" />
-            <HashTag text="유럽에 사는 고양이" type="CUSTOM" />
-            <HashTag text="유럽에 사는 고양이" type="CUSTOM" />
-            <HashTag text="유럽에 사는 고양이" type="CUSTOM" />
           </div>
+        </Content>
+
+        <Content>
+          <div className="titleContainer">
+            <Title>스트릭</Title>
+          </div>
+          <div className="streakContainer">스트릭은 아직 디자인 중입니다.</div>
+        </Content>
+
+        <Content>
+          <div className="titleContainer">
+            <Title>히스토리</Title>
+          </div>
+          <PaginationContainer>
+            <PaginationHead>
+              <li>날짜</li>
+              <li>핵심 브리핑</li>
+            </PaginationHead>
+            {currentItems.map((item, index) => (
+              <PaginationItem key={index}>
+                <span className="date">{item.date}</span>
+                <span className="content">{item.content}</span>
+              </PaginationItem>
+            ))}
+          </PaginationContainer>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </Content>
       </WhiteContainer>
     </Container>
@@ -88,6 +153,14 @@ const Content = styled.div`
     margin: 2rem;
     padding: 0 0 0 3rem;
   }
+
+  .streakContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40rem;
+    border: 1px solid lime;
+  }
 `;
 const Title = styled.div`
   display: flex;
@@ -105,6 +178,63 @@ const SmallTitle = styled.div`
   color: var(--darkblue-color);
   font-size: 3.5rem;
   font-weight: bold;
+`;
+
+const PaginationContainer = styled.ul`
+  display: flex;
+  box-sizing: border-box;
+  margin: 3rem 0 0 0;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const PaginationHead = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  border-bottom: 4px solid var(--black-color);
+  padding: 0 0 1rem 0;
+  li {
+    display: flex;
+    font-size: 3rem;
+    font-weight: bold;
+    justify-content: center;
+  }
+
+  li:nth-child(1) {
+    width: 15rem;
+  }
+  li:nth-child(2) {
+    width: 40rem;
+  }
+`;
+
+const PaginationItem = styled.li`
+  display: flex;
+  font-size: 2.8rem;
+  height: 5.2rem;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+  span {
+    display: flex;
+    justify-content: center;
+  }
+  .date {
+    display: flex;
+    width: 15rem;
+  }
+  .content {
+    display: block;
+    width: 40rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  &&:hover {
+    font-weight: bold;
+    background-color: var(--lightblue-color);
+  }
 `;
 
 export default MyPage;
