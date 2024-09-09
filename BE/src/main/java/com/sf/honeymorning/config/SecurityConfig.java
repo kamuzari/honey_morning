@@ -82,9 +82,9 @@ public class SecurityConfig {
 		http
 				.authorizeHttpRequests((auth) -> auth
 					.requestMatchers("/api/auth/test").authenticated()
-					.requestMatchers("/api/auth/**", "/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
+					.requestMatchers("/api/auth/**", "api/users/check/email", "/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
 					.requestMatchers("/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
-					.anyRequest().permitAll());
+					.anyRequest().authenticated());
 
 		http
 				.csrf(csrf -> csrf.disable());

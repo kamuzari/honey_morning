@@ -57,7 +57,6 @@ public class AuthController {
 	})
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@RequestBody User user){
-		System.out.println("check");
 		authService.saveUser(user);
 		return ResponseEntity.ok("success");
 	}
