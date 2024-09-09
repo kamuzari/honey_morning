@@ -1,7 +1,8 @@
 import React from 'react';
 import {RouteObject} from 'react-router-dom';
 
-import LoginPage from '@/pages/LoginPage';
+import SignInPage from '@/pages/SignInPage';
+import SignUpPage from '@/pages/SignUpPage';
 
 import AlarmSetting from '@/pages/AlarmSetting';
 
@@ -12,7 +13,11 @@ const routerInfo: RouteObject[] = [
   },
   {
     path: '/login',
-    element: <LoginPage />,
+    element: <SignInPage />,
+  },
+  {
+    path: '/signup',
+    element: <SignUpPage />,
   },
 ];
 

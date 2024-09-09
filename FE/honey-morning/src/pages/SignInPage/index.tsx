@@ -6,17 +6,6 @@ const GlobalStyle = createGlobalStyle`
   display: flex;
   justify-content: center;
   width: 100%;
-  background-color: var(--yellow-color);
-  clip-path: polygon(
-    0% 20%,
-    20% 40%,
-    40% 20%,
-    60% 40%,
-    80% 20%,
-    100% 40%,
-    100% 100%,
-    0% 100%
-  );
  }
 `;
 
@@ -24,7 +13,6 @@ const WaveTop = styled.div`
   position: absolute;
   top: 0;
   height: 150px;
-  background-color: var(--yellow-color);
 `;
 
 const Title = styled.div`
