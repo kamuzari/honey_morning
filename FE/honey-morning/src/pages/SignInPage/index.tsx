@@ -94,31 +94,6 @@ const LoginProcess: React.FC = () => {
     reset,
   } = useForm({mode: 'onChange'});
 
-  // const handleSignIn = async data => {
-  //   const formData = new FormData();
-  //   formData.append('email', data.email);
-  //   formData.append('password', data.password);
-
-  //   try {
-  //     const response = await instance.post('/api/auth/login', formData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     });
-
-  //     console.log(formData);
-
-  //     if (response.status == 200) {
-  //       const accessToken = response.headers['access'];
-  //       sessionStorage.setItem('access', accessToken);
-  //       alert('로그인 성공');
-  //     }
-  //   } catch (error) {
-  //     console.error('로그인 실패', error);
-  //     alert('로그인 실패');
-  //   }
-  // };
-
   const loginUser = async (payload: {email: string, password: string}) => {
     try {
       const formData = new FormData();
@@ -132,9 +107,13 @@ const LoginProcess: React.FC = () => {
       });
 
       const accessToken = res.headers['access'];
+      console.log('res:', res);
 
       if (accessToken) {
         sessionStorage.setItem('access', accessToken);
+        console.log('access:', accessToken);
+      } else {
+        console.warn('Access token이 응답에 존재하지 않습니다.');
       }
       return res.data.result;
     } catch (error) {
@@ -147,6 +126,7 @@ const LoginProcess: React.FC = () => {
     mutationFn: loginUser,
     onSuccess: data => {
       queryClient.setQueryData(['userInfo'], data);
+      console.log('data:', data);
       alert('로그인 성공');
     },
     onError: error => {
@@ -161,11 +141,8 @@ const LoginProcess: React.FC = () => {
 
   const onSubmit = (data: {email: string, password: string}) => {
     signMutate(data, {
-      onSuccess: () => {
-        alert('로그인 성공');
-      },
+      onSuccess: () => {},
       onError: () => {
-        alert('로그인 실패');
         reset({email: '', password: ''});
       },
     });
