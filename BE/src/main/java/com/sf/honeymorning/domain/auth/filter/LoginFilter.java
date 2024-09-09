@@ -50,7 +50,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication authentication){
 
-        System.out.println("check4");
 
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
