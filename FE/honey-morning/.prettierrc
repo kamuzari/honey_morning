@@ -19,6 +19,7 @@
   "rangeStart": 0,
   "requirePragma": false,
   "insertPragma": false,
+  "singleAttributePerLine": true,
   "overrides": [
     {
       "files": "*.json",
