@@ -36,12 +36,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(final HttpServletRequest request, final HttpServletResponse res) throws AuthenticationException {
         // 내부의 요청을 가로채서 요청 내에 있는 아이디와 패스워드를 추출할 것이다.
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
-        System.out.println(username);
-        System.out.println(password);
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
 
 
         return authenticationManager.authenticate(authToken);
