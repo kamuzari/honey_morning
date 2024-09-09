@@ -80,9 +80,11 @@ public class SecurityConfig {
 
 		// 경로별 인가
 		http
-			.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/api/auth/**", "/swagger-ui/**","/v3/api-docs/**").permitAll()
-				.anyRequest().authenticated());
+				.authorizeHttpRequests((auth) -> auth
+					.requestMatchers("/api/auth/test").authenticated()
+					.requestMatchers("/api/auth/**", "api/users/check/email", "/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
+					.requestMatchers("/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
+					.anyRequest().authenticated());
 
 		http
 				.csrf(csrf -> csrf.disable());
