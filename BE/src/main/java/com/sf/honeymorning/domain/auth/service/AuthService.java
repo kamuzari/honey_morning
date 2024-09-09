@@ -8,11 +8,14 @@ import com.sf.honeymorning.domain.user.dto.response.UserDetailDto;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
 import com.sf.honeymorning.domain.user.service.UserStatusService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -110,6 +113,39 @@ public class AuthService {
                 .build();
 
         userRepository.save(newUser);
+
+    }
+
+    public void reissueToken(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = extractRefreshTokenFromCookie(request);
+
+        // refreshToken check
+        if (refreshToken == null) {
+            return;
+        }
+
+        // expired check
+        try {
+            jwtUtil.isExpired(refreshToken);
+        } catch (ExpiredJwtException e) {
+            //response status code
+            return;
+        }
+
+        // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
+        String category = jwtUtil.getCategory(refreshToken);
+        if (!category.equals("refresh")) {
+            //response status code
+            return;
+        }
+
+        //DB에 저장되어 있는지 확인
+//        Boolean isExist = refreshTokenRepository.existsByRefresh(refreshToken);
+//        if (!isExist) {
+//
+//            //response body
+//            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+//        }
 
     }
 
