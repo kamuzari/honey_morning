@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const Overlay = styled.div<{ isScreenDimmed: boolean}>`
   position: fixed;
@@ -139,14 +140,130 @@ const HelpIcon = styled.span`
 
 
 
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const Modal = styled.div`
+  background-color: white;
+  border-radius: 2rem;
+  width: 45rem;
+  min-height: 40rem;
+  text-align: center;
+  // padding: 2rem;
+  z-index: 1001;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: white;
+  height: 7rem;
+  background-color: var(--red-color);
+  border-radius: 2rem 2rem 0 0;
+  position: relative;
+`;
+
+const ModalIcon = styled.span`
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 4rem;
+`;
+
+const ModalTitle = styled.h2`
+  margin: 0;
+  font-size: 3rem;
+  font-weight: bold;
+`;
+
+const ModalBody = styled.div`
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 5.5rem 5.5rem 1rem 5.5rem;
+  text-align: center;
+  white-space: pre-line; /* 줄바꿈이 가능하도록 설정 */
+`;
+
+const ModalActions = styled.div`
+  display: flex;
+  justify-content: center; /* 버튼을 중앙으로 배치 */
+  padding: 1rem 4rem;
+`;
+
+const ActionButton = styled.button<{ disabled?: boolean }>`
+  background-color: var(--darkblue-color);
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+  min-width: 15rem;
+  border: none;
+  padding: 1.5rem 3rem;
+  margin: 3.3rem;
+  border-radius: 8px;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
+`;
+
+const HighlightedText = styled.span`
+  color: red; /* 특정 텍스트만 빨간색으로 변경 */
+`;
+
+const AlertText = styled.span`
+  color: red;
+  font-size: 2rem;
+`;
+
+const HelpModalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: white;
+  height: 7rem;
+  background-color: var(--darkblue-color);
+  border-radius: 2rem 2rem 0 0;
+  position: relative;
+`;
+
+const HelpModalBody = styled.div`
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 5rem 5rem 3rem 5rem;
+  text-align: center;
+`;
+
 
 // SleepWakeLock 컴포넌트 정의
 const SleepWakeLock = () => {
+  const navigate = useNavigate();
+
   const [wakeLock, setWakeLock] = useState<WakeLockSentinel | null>(null);
   const [isScreenDimmed, setIsScreenDimmed] = useState(false); // 화면 어둡게 처리할지 여부
-
   const [timer, setTimer] = useState("00:00:00");
-  
+  const [modalOpen, setModalOpen] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0); // 경과 시간을 관리하는 상태
+  const [startTime, setStartTime] = useState<Date | null>(null); // 페이지 방문 시작 시간
+  const [helpModalOpen, setHelpModalOpen] =  useState(false);
+
+
+
+  // 임시 설정
+  const alarmTime = "06:05";
+
   let timerId: NodeJS.Timeout | null = null;
 
   const currentTimer = () => {
@@ -159,6 +276,60 @@ const SleepWakeLock = () => {
   const startTimer = () => {
     setInterval(currentTimer, 1000)
   }
+
+
+  const calculateElapsedTime = () => {
+    if (startTime) {
+      const currentTime = new Date();
+      const timeDiff = (currentTime.getTime() - startTime.getTime()) / 1000; // 초 단위 경과 시간
+      setElapsedTime(timeDiff);
+    }
+  };
+
+  const openModalHandler = () => {
+    calculateElapsedTime(); // 모달 열기 전에 경과 시간 계산
+    setModalOpen(true);
+  };
+
+  const closeModalHandler = () => {
+    setModalOpen(false);
+  };
+
+
+  const openHelpModalHandler = () => {
+    setHelpModalOpen(true); // 도움말 모달 열기
+  };
+
+  const closeHelpModalHandler = () => {
+    setHelpModalOpen(false); // 도움말 모달 닫기
+  };
+
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // e.target이 ModalOverlay이면 모달을 닫음
+    if (e.target === e.currentTarget) {
+      closeModalHandler();
+      closeHelpModalHandler();
+    }
+  };
+
+
+  const handleYesClick = () => {
+    navigate('/'); // 메인 페이지로 이동
+  };
+
+  const handleNoClick = () => {
+    closeModalHandler(); // 모달 닫기
+  };
+
+  const handleBriefingStart = () => {
+    navigate('/briefing'); // 브리핑 페이지로 이동
+  };
+
+  const handleBriefingSkip = () => {
+    navigate('/'); // 메인 페이지로 이동
+  };
+
+
 
   startTimer()
   
@@ -211,15 +382,19 @@ const SleepWakeLock = () => {
     // 일정 시간 후 화면을 어둡게 처리하는 새로운 타이머 설정(10초)
     timerId = setTimeout(() => {
       setIsScreenDimmed(true);
-    }, 10000);
+    }, 10000000);
   }
 
 
   // 페이지가 로드될 때 Wake Lock을 자동으로 요청
   // 터치 이벤트를 등록
   useEffect(() => {
-    handleRequestWakeLock(); // 컴포넌트 로드 시 Wake Lock 자동 요청
 
+    // 페이지 초기 로드 시 현재 시간을 시작 시간으로 설정
+    setStartTime(new Date());
+    startTimer();
+
+    handleRequestWakeLock(); // 컴포넌트 로드 시 Wake Lock 자동 요청
 
     // 페이지 로드 시 타이머 1회 실행
     resetTimer();
@@ -239,33 +414,118 @@ const SleepWakeLock = () => {
     };
   }, []);
 
+  const getModalContent = () => {
+    if (elapsedTime < 10) {
+      // 2시간 미만일 때의 모달창
+      return {
+        header: '수면 경고',
+        body: (
+        <>
+          체류시간 확인용: {elapsedTime}{"\n\n"}
+          정말 수면을 종료하시겠습니까?{"\n\n"}
+          수면 시간이 <HighlightedText>2시간</HighlightedText> 이하입니다.{"\n\n"}
+          지금 수면을 종료하면 브리핑이 생성되지 않고, 기록이 남지 않습니다.{"\n\n\n"}
+          계속하시겠습니까?
+        </>
+        ),
+        actions:(
+          <>
+            <ActionButton onClick={handleYesClick}>네</ActionButton>
+            <ActionButton onClick={handleNoClick}>아니오</ActionButton>
+          </>
+        )
+      };
+    } else {
+      // 2시간 이상일 때의 모달 내용
+      return {
+        header: '수면 종료',
+        body: (
+        <>
+          정말 수면을 종료하시겠습니까?{"\n\n"}
+          OOO님의 관심사를 기준으로{"\n"}
+          현재 시간까지의 브리핑을 준비했습니다.{"\n\n"}
+          수면을 종료하고, 브리핑을 시작하시겠습니까?{"\n\n"}
+          <AlertText>알람 시각보다 빨리 일어난 경우,{"\n"}브리핑 생성에 약 n분 소요됩니다.</AlertText>
+        </>
+        ),
+        actions: (
+          <>
+            <ActionButton onClick={handleBriefingStart}>브리핑 시작</ActionButton>
+            <ActionButton onClick={handleBriefingSkip}>브리핑 스킵</ActionButton>
+          </>
+        ),
+      };
+    }
+  };
+
+  const modalContent = getModalContent();
+
+
+
+
 
   return (
     <>
-    
-    <Container>
-      <WaveOne />
-      <WaveTwo />
-      <WaveThree />
-      <HelpIcon>
-        <span className="material-icons">help</span>
-      </HelpIcon>
-      <CurrentTime>{timer}</CurrentTime>
-      <BeeImage src="sleepingbee.webp" alt="Sleeping Bee" />
-      <Divider />
-      <AlarmInfo>
-        <span className="material-icons">alarm</span>
-        {/* 06:05 span 태그 안에 내가 설정한 알람 시각 조회해서 보여줘야 함 */}
-        <span>06:05</span>
-      </AlarmInfo>
-      <EndButton>잠자기 종료</EndButton>
+      <Container>
+        <WaveOne />
+        <WaveTwo />
+        <WaveThree />
+        <HelpIcon onClick={openHelpModalHandler}>
+          <span className="material-icons">help</span>
+        </HelpIcon>
+        <CurrentTime>{timer}</CurrentTime>
+        <BeeImage src="sleepingbee.webp" alt="Sleeping Bee" />
+        <Divider />
+        <AlarmInfo>
+          <span className="material-icons">alarm</span>
+          {/* span 태그 안에 내가 설정한 알람 시각 조회해서 보여줘야 함 */}
+          <span>{alarmTime}</span>
+        </AlarmInfo>
+  
+        <EndButton onClick={openModalHandler}>잠자기 종료</EndButton>
+  
+        {modalOpen && (
+          <ModalOverlay onClick={handleOverlayClick}>
+            <Modal>
+              <ModalHeader>
+                <ModalIcon className="material-icons">error_outline</ModalIcon>
+                <ModalTitle>{modalContent.header}</ModalTitle>
+              </ModalHeader>
+              <ModalBody>{modalContent.body}</ModalBody>
+              <ModalActions>
+                {modalContent.actions}
+              </ModalActions>
+            </Modal>
+          </ModalOverlay>
+        )}
+  
+        {/* 도움말 모달 */}
+        {helpModalOpen && (
+          <ModalOverlay onClick={handleOverlayClick}>
+            <Modal>
+              <HelpModalHeader>
+                <ModalTitle>도움말</ModalTitle>
+              </HelpModalHeader>
+              <HelpModalBody>
+                  올바른 브리핑 생성을 위해<br/><br/>
+                  화면을 끄지 않고,<br/><br/>
+                  핸드폰을 뒤집어 주세요.<br/><br/>
+                  화면은 자동으로 어두워집니다.<br/><br/><br/>
+                  배터리 잔량이 거의 없는 경우<br/><br/>
+                  핸드폰에 충전기를 연결하고<br/><br/>
+                  수면을 취하세요.<br/>
+              </HelpModalBody>
+              <ModalActions>
+                <ActionButton onClick={closeHelpModalHandler}>닫기</ActionButton>
+              </ModalActions>
+            </Modal>
+          </ModalOverlay>
+        )}
+
         {/* 일정 시간 후 화면을 어둡게 처리 */}
         <Overlay isScreenDimmed={isScreenDimmed} />
-    </Container>
-    
-    
+      </Container>
     </>
-    
   );
 };
 
