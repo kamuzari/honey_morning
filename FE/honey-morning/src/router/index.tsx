@@ -5,7 +5,7 @@ import SignUpPage from '@/pages/SignUpPage';
 
 import AlarmSetting from '@/pages/AlarmSetting';
 import MyPage from '@/pages/MyPage';
-
+import BriefingDetail from '@/pages/BriefingDetail';
 import SleepPage from '@/pages/Sleep';
 
 const routerInfo: RouteObject[] = [
@@ -28,6 +28,10 @@ const routerInfo: RouteObject[] = [
   {
     path: '/sleep',
     element: <SleepPage />,
+  },
+  {
+    path: '/briefingdetail',
+    element: <BriefingDetail />,
   },
 ];
 
