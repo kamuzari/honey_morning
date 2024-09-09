@@ -1,5 +1,9 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import styled, {createGlobalStyle} from 'styled-components';
+import {useWatch, useForm, Controller} from 'react-hook-form';
+import {useNavigate} from 'react-router-dom';
+import {useQueryClient, useMutation} from '@tanstack/react-query';
+import {instance} from '@/api/axios';
 
 const GlobalStyle = createGlobalStyle`
  body {
@@ -7,12 +11,6 @@ const GlobalStyle = createGlobalStyle`
   justify-content: center;
   width: 100%;
  }
-`;
-
-const WaveTop = styled.div`
-  position: absolute;
-  top: 0;
-  height: 150px;
 `;
 
 const Title = styled.div`
@@ -58,6 +56,13 @@ const Container = styled.div`
   }
 `;
 
+const Input = styled.input`
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid black;
+`;
+
 const SubmitButton = styled.button`
   background-color: var(--yellow-color);
   color: white;
@@ -79,39 +84,137 @@ const MoveToSignUp = styled.button`
 `;
 
 const LoginProcess: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const queryClient = useQueryClient();
+
+  const {
+    handleSubmit,
+    control,
+    watch,
+    formState: {errors},
+    reset,
+  } = useForm({mode: 'onChange'});
+
+  // const handleSignIn = async data => {
+  //   const formData = new FormData();
+  //   formData.append('email', data.email);
+  //   formData.append('password', data.password);
+
+  //   try {
+  //     const response = await instance.post('/api/auth/login', formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //     });
+
+  //     console.log(formData);
+
+  //     if (response.status == 200) {
+  //       const accessToken = response.headers['access'];
+  //       sessionStorage.setItem('access', accessToken);
+  //       alert('로그인 성공');
+  //     }
+  //   } catch (error) {
+  //     console.error('로그인 실패', error);
+  //     alert('로그인 실패');
+  //   }
+  // };
+
+  const loginUser = async (payload: {email: string, password: string}) => {
+    try {
+      const formData = new FormData();
+      formData.append('email', payload.email);
+      formData.append('password', payload.password);
+
+      const res = await instance.post('/api/auth/login', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      const accessToken = res.headers['access'];
+
+      if (accessToken) {
+        sessionStorage.setItem('access', accessToken);
+      }
+      return res.data.result;
+    } catch (error) {
+      console.error('로그인 실패', error);
+      throw error;
+    }
+  };
+
+  const {mutate: signMutate} = useMutation({
+    mutationFn: loginUser,
+    onSuccess: data => {
+      queryClient.setQueryData(['userInfo'], data);
+      alert('로그인 성공');
+    },
+    onError: error => {
+      if (error.message) {
+        alert(`로그인 실패: ${error.message}`);
+      } else {
+        alert('로그인 실패');
+      }
+      reset({email: '', password: ''});
+    },
+  });
+
+  const onSubmit = (data: {email: string, password: string}) => {
+    signMutate(data, {
+      onSuccess: () => {
+        alert('로그인 성공');
+      },
+      onError: () => {
+        alert('로그인 실패');
+        reset({email: '', password: ''});
+      },
+    });
+  };
 
   return (
     <>
       <GlobalStyle />
-      <WaveTop />
       <Title>Sign In</Title>
       <Container>
-        <div className="loginForm">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="loginForm"
+        >
           <div className="inputGroup">
-            <label>Email</label>
-            <input
-              type="email"
-              value={email}
-              placeholder="이메일을 입력해주세요."
-              onChange={e => setEmail(e.target.value)}
-              required
+            <label>Name</label>
+            <Controller
+              name="email"
+              control={control}
+              defaultValue=""
+              rules={{required: '이메일은 필수 입력 항목입니다.'}}
+              render={({field}) => (
+                <Input
+                  {...field}
+                  type="email"
+                  placeholder="이메일을 입력해주세요"
+                />
+              )}
             />
           </div>
           <div className="inputGroup">
             <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              placeholder="비밀번호를 입력해주세요."
-              onChange={e => setPassword(e.target.value)}
-              required
+            <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              rules={{required: '이메일은 필수 입력 항목입니다.'}}
+              render={({field}) => (
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder="이메일을 입력해주세요"
+                />
+              )}
             />
           </div>
 
-          <SubmitButton>로그인</SubmitButton>
-        </div>
+          <SubmitButton type="submit">로그인</SubmitButton>
+        </form>
         <div className="signUpYet">
           <div>아직 회원이 아니신가요?</div>
           <MoveToSignUp>회원가입 하기</MoveToSignUp>

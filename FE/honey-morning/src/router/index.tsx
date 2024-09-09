@@ -14,7 +14,7 @@ const routerInfo: RouteObject[] = [
     element: <AlarmSetting />,
   },
   {
-    path: '/login',
+    path: '/signin',
     element: <SignInPage />,
   },
   {
