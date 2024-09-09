@@ -1,0 +1,41 @@
+# 빌드 결과물
+build/
+out/
+
+# Gradle 관련
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE 관련 파일
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+
+# 로그 파일
+*.log
+
+# 시스템 파일
+.DS_Store
+Thumbs.db
+
+# 테스트 관련
+src/test/
+
+# 기타 불필요한 파일
+README.md
+CHANGELOG.md
+LICENSE
+
+# 환경 설정 파일
+.env
+*.properties
+
+# Git 관련
+.git/
+.gitignore
+
+# Docker 관련
+Dockerfile
+docker-compose.yml
