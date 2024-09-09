@@ -1,15 +1,8 @@
 package com.sf.honeymorning.domain.user.entity;
 
 import com.sf.honeymorning.domain.common.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
@@ -22,8 +15,8 @@ public class User extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(length = 100, unique = true, nullable = false)
-    private String loginId;
+    @Column(length = 100, nullable = false)
+    private String email;
 
     @Column(length = 255, nullable = false)
     private String password;
@@ -31,9 +24,16 @@ public class User extends BaseEntity {
     @Column(length = 50, nullable = false)
     private String username;
 
-    @Column(length = 100, nullable = false)
-    private String email;
+    // TODO : type, role, isActive 필드도 고려사항
+    private String role;
 
-    // TODO : role, isActive 필드도 고려사항
+    @Builder
+    public User(String email, String password, String username, String role){
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.role = role;
+    }
+
 
 }

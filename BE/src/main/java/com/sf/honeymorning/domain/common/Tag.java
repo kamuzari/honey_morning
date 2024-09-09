@@ -1,15 +1,10 @@
-package com.sf.honeymorning.domain.quiz.entity;
+package com.sf.honeymorning.domain.common;
 
-import com.sf.honeymorning.domain.common.BaseEntity;
-import com.sf.honeymorning.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,17 +12,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class QuizResult extends BaseEntity {
+public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "quiz_result_id")
+    @Column(name = "tag_id")
     private Long id;
 
-    @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    @Column(length = 50, nullable = false)
+    private String word;
 
     @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
-    private Integer count = 0;
+    private Integer isCustom = 0;
+
 }
