@@ -7,7 +7,13 @@ const LogoutProcess: React.FC = () => {
   const navigate = useNavigate();
 
   const userLogout = async () => {
-    await instance.post('api/auth/logout');
+    await instance.post(
+      'api/auth/logout',
+      {},
+      {
+        withCredentials: true,
+      },
+    );
   };
 
   const {mutate: logoutMutation} = useMutation({
