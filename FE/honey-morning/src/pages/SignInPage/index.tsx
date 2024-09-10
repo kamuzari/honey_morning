@@ -4,6 +4,7 @@ import {useWatch, useForm, Controller} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {useQueryClient, useMutation} from '@tanstack/react-query';
 import {instance} from '@/api/axios';
+import Logout from '@/component/Logout';
 
 const GlobalStyle = createGlobalStyle`
  body {
@@ -197,6 +198,7 @@ const LoginProcess: React.FC = () => {
           <MoveToSignUp>회원가입 하기</MoveToSignUp>
         </div>
       </Container>
+      <Logout />
     </>
   );
 };
