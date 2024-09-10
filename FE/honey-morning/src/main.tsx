@@ -6,13 +6,18 @@ import App from './App';
 // 라우터 생성
 const router = createBrowserRouter(routerInfo);
 
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+const queryClient = new QueryClient();
+
 // root 요소 찾기 및 애플리케이션 렌더링
 const rootElement = document.getElementById('root');
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-      <RouterProvider router={router} />
-      <App></App>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+        <App></App>
+      </QueryClientProvider>
     </React.StrictMode>,
   );
 } else {
