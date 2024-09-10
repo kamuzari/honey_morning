@@ -43,6 +43,7 @@ const routerInfo: RouteObject[] = [
     path: '/briefingdetail',
     element: <BriefingDetail />,
   },
+  // {path: '/interestsetting', element: <InterestSetting />},
 ];
 
 export default routerInfo;
