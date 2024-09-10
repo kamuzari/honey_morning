@@ -42,7 +42,7 @@ const Briefing = () => {
             <HoneySpan>꿀</HoneySpan> 모닝 전체 브리핑
           </SmallTitle>
         </div>
-        <GlobalBtn></GlobalBtn>
+        <GlobalBtn text="전체 듣기" $padding={4}></GlobalBtn>
         <LongText>{LongData}</LongText>
       </Content>
     </Container>
@@ -73,6 +73,7 @@ const LongText = styled.div`
   font-weight: 500;
   font-size: 3.2rem;
   line-height: 3.7rem;
+  margin-top: 3rem;
 `;
 
 export default Briefing;
