@@ -2,7 +2,13 @@ import styled from 'styled-components';
 import HashTag from '@/component/MyPage/HashTag';
 import Pagination from '@/component/MyPage/Pagination';
 import {useState} from 'react';
-const categoryList = [
+import GlobalBtn from '@/component/GlobalBtn';
+import {
+  HashTagSelect,
+  CustomHashTagSelect,
+} from '@/component/InterestSetting/InterestSetting';
+import {useInterestStore} from '@/store/InterestStore';
+export const categoryList = [
   '정치',
   '경제',
   '사회',
@@ -12,8 +18,6 @@ const categoryList = [
   '연예',
   '스포츠',
 ];
-
-const selectedList = ['경제', '기술/IT'];
 
 interface Data {
   date: string;
@@ -43,32 +47,81 @@ const MyPage: React.FC = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
   const totalPages = Math.ceil(data.length / itemsPerPage);
-
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const {selectedCategory, selectedCustomCategory, addCustomCategory} =
+    useInterestStore();
+  const selectedList = selectedCategory;
   return (
     <Container>
       <WhiteContainer>
         <Content>
           <div className="titleContainer">
             <Title>내 관심사</Title>
+            <BtnContainer>
+              {isSelectOpen ? (
+                <GlobalBtn
+                  text="저장"
+                  $bgColor="var(--green-color)"
+                  $textColor="var(--black-color)"
+                  $padding={3}
+                  onClick={() => {
+                    setIsSelectOpen(false);
+                    addCustomCategory();
+                  }}
+                />
+              ) : (
+                <GlobalBtn
+                  text="수정"
+                  $bgColor="var(--darkblue-color)"
+                  $textColor="var(--white-color)"
+                  $padding={3}
+                  onClick={() => {
+                    console.log('작동');
+                    setIsSelectOpen(true);
+                  }}
+                />
+              )}
+            </BtnContainer>
           </div>
-          <div className="hashTagContainer">
-            {categoryList.map(item => (
-              <HashTag
-                text={item}
-                type="NEWS"
-                selected={selectedList.includes(item) ? true : false}
-              />
-            ))}
-          </div>
+          {isSelectOpen ? (
+            <HashTagSelect />
+          ) : (
+            <div className="hashTagContainer">
+              {categoryList.map(item => (
+                <HashTag
+                  text={item}
+                  type="NEWS"
+                  selected={selectedList.includes(item) ? true : false}
+                />
+              ))}
+            </div>
+          )}
           <div className="smallTitleContainer">
             <SmallTitle>나만의 관심사</SmallTitle>
           </div>
-          <div className="hashTagContainer">
-            <HashTag text="유럽에 사는 고양이" type="CUSTOM" />
-            <HashTag text="유럽에 사는 고양이" type="CUSTOM" />
-          </div>
+
+          {isSelectOpen ? (
+            <CustomHashTagSelect />
+          ) : (
+            <div className="hashTagContainer">
+              {selectedCustomCategory.length >= 1 ? (
+                selectedCustomCategory.map(item => {
+                  return (
+                    <HashTag
+                      text={item}
+                      type="CUSTOM"
+                    />
+                  );
+                })
+              ) : (
+                <HashTag
+                  text="나만의 관심사가 없습니다."
+                  type="CUSTOM"
+                />
+              )}
+            </div>
+          )}
         </Content>
 
         <Content>
@@ -139,9 +192,10 @@ export const Content = styled.div`
 
   .hashTagContainer {
     display: flex;
-    width: 100%;
+    width: 90%;
+    height: 12rem;
     box-sizing: border-box;
-    padding: 3rem 0 3rem 4rem;
+    padding: 3rem 0 3rem 0;
 
     overflow-x: auto;
     &::-webkit-scrollbar {
@@ -237,6 +291,12 @@ const PaginationItem = styled.li`
     font-weight: bold;
     background-color: var(--lightblue-color);
   }
+`;
+
+const BtnContainer = styled.div`
+  display: flex;
+  width: 20rem;
+  justify-content: center;
 `;
 
 export default MyPage;
