@@ -183,6 +183,7 @@ const ModalIcon = styled.span`
   top: 50%;
   transform: translateY(-50%);
   font-size: 4rem;
+  font-weight: light;
 `;
 
 const ModalTitle = styled.h2`
@@ -208,12 +209,13 @@ const ModalActions = styled.div`
 const ActionButton = styled.button<{ disabled?: boolean }>`
   background-color: var(--darkblue-color);
   color: white;
-  font-size: 2.5rem;
+  font-size: 2.3rem;
   font-weight: bold;
   min-width: 15rem;
+  min-height: 7rem;
   border: none;
-  padding: 1.5rem 3rem;
-  margin: 3.3rem;
+  padding: 1rem;
+  margin: 3rem;
   border-radius: 8px;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 `;
@@ -258,11 +260,9 @@ const SleepWakeLock = () => {
   const [elapsedTime, setElapsedTime] = useState(0); // 경과 시간을 관리하는 상태
   const [startTime, setStartTime] = useState<Date | null>(null); // 페이지 방문 시작 시간
   const [helpModalOpen, setHelpModalOpen] =  useState(false);
+  const [alarmTime, setAlarmTime] = useState("13:29"); // 예시 알람 시간 임시 설정, 해당 시간이 되면 알람 페이지로 자동 이동
 
 
-
-  // 임시 설정
-  const alarmTime = "06:05";
 
   let timerId: NodeJS.Timeout | null = null;
 
@@ -382,7 +382,7 @@ const SleepWakeLock = () => {
     // 일정 시간 후 화면을 어둡게 처리하는 새로운 타이머 설정(10초)
     timerId = setTimeout(() => {
       setIsScreenDimmed(true);
-    }, 10000000);
+    }, 5000);
   }
 
 
@@ -393,6 +393,18 @@ const SleepWakeLock = () => {
     // 페이지 초기 로드 시 현재 시간을 시작 시간으로 설정
     setStartTime(new Date());
     startTimer();
+
+    const checkAlarmTime = setInterval(() => {
+      const currentDate = new Date();
+      const currentHours = String(currentDate.getHours()).padStart(2, "0");
+      const currentMinutes = String(currentDate.getMinutes()).padStart(2, "0");
+      const currentAlarm = `${currentHours}:${currentMinutes}`;
+
+      if (currentAlarm === alarmTime) {
+        navigate('/alarm'); // 알람 시간이 되면 Alarm 페이지로 이동
+      }
+    }, 1000); // 매초 알람 시간 확인
+
 
     handleRequestWakeLock(); // 컴포넌트 로드 시 Wake Lock 자동 요청
 
@@ -406,13 +418,14 @@ const SleepWakeLock = () => {
 
     // 컴포넌트 언마운트 시 Wake Lock 해제 및 터치 이벤트 제거
     return () => {
+      clearInterval(checkAlarmTime);
       if (wakeLock) {
         handleReleaseWakeLock(); // 다른 페이지로 이동할 때 Wake Lock 해제
       }
       window.removeEventListener('touchstart', resetTimer);
       window.removeEventListener('mousedown', resetTimer);
     };
-  }, []);
+  }, [alarmTime, navigate]);
 
   const getModalContent = () => {
     if (elapsedTime < 10) {
@@ -450,8 +463,8 @@ const SleepWakeLock = () => {
         ),
         actions: (
           <>
-            <ActionButton onClick={handleBriefingStart}>브리핑 시작</ActionButton>
-            <ActionButton onClick={handleBriefingSkip}>브리핑 스킵</ActionButton>
+            <ActionButton onClick={handleBriefingStart}>브리핑 듣기</ActionButton>
+            <ActionButton onClick={handleBriefingSkip} style={{background:'grey'}}>넘어가기</ActionButton>
           </>
         ),
       };
@@ -504,6 +517,7 @@ const SleepWakeLock = () => {
           <ModalOverlay onClick={handleOverlayClick}>
             <Modal>
               <HelpModalHeader>
+                <ModalIcon className="material-icons">info</ModalIcon>
                 <ModalTitle>도움말</ModalTitle>
               </HelpModalHeader>
               <HelpModalBody>
