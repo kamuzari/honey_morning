@@ -67,9 +67,8 @@ public class BriefController {
 		@RequestParam(value = "page") Integer page,
 		@RequestParam(value = "size") Integer size) {
 
-		String username = auth.getUsername();
 		PageRequest demoRequest = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
-		List<BriefHistory> briefs = briefService.getBriefs(username, demoRequest);
+		List<BriefHistory> briefs = briefService.getBriefs(auth.getUsername(), demoRequest);
 
 		return ResponseEntity.ok(briefs);
 	}
