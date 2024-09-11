@@ -11,8 +11,9 @@ import MyPage from '@/pages/MyPage';
 import BriefingPage from '@/pages/Briefing';
 import BriefingDetail from '@/pages/BriefingDetail';
 import SleepPage from '@/pages/Sleep';
-
+import Main from '@/pages/Main';
 const routerInfo: RouteObject[] = [
+  {path: '/', element: <Main />},
   {
     path: '/alarm',
     element: <AlarmPage />,

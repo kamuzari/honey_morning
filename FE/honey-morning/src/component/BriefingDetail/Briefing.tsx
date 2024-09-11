@@ -42,8 +42,11 @@ const Briefing = () => {
             <HoneySpan>꿀</HoneySpan> 모닝 전체 브리핑
           </SmallTitle>
         </div>
-        <GlobalBtn text="전체 듣기" $padding={4}></GlobalBtn>
-        <LongText>{LongData}</LongText>
+        <GlobalBtn
+          text="전체 듣기"
+          $padding={4}
+        ></GlobalBtn>
+        <LongText $isHelpOpen={isHelpOpen}>{LongData}</LongText>
       </Content>
     </Container>
   );
@@ -61,18 +64,21 @@ const ShortText = styled.div`
   overflow: scroll;
   text-overflow: ellipsis;
   font-weight: 500;
-  line-height: 3.7rem;
+  line-height: 5rem;
 `;
 
-const LongText = styled.div`
+const LongText =
+  styled.div <
+  {$isHelpOpen: boolean} >
+  `
   width: 90%;
   display: flex;
   overflow: scroll;
   text-overflow: ellipsis;
-  height: 60rem;
+  height: ${props => (props.$isHelpOpen ? '50rem' : '55rem')};
   font-weight: 500;
   font-size: 3.2rem;
-  line-height: 3.7rem;
+  line-height: 5rem;
   margin-top: 3rem;
 `;
 
