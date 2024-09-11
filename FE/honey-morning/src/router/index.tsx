@@ -3,6 +3,8 @@ import {RouteObject} from 'react-router-dom';
 import SignInPage from '@/pages/SignInPage';
 import SignUpPage from '@/pages/SignUpPage';
 
+import Quiz from '@/pages/Quiz';
+
 import AlarmPage from '@/pages/Alarm';
 import AlarmSetting from '@/pages/AlarmSetting';
 import MyPage from '@/pages/MyPage';
@@ -43,7 +45,10 @@ const routerInfo: RouteObject[] = [
     path: '/briefingdetail',
     element: <BriefingDetail />,
   },
-  // {path: '/interestsetting', element: <InterestSetting />},
+  {
+    path: '/quizzie',
+    element: <Quiz />,
+  },
 ];
 
 export default routerInfo;
