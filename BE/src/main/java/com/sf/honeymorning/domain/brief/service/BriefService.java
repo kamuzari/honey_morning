@@ -35,7 +35,7 @@ public class BriefService {
 	public List<BriefHistory> getBriefs(String authUsername, Pageable pageable) {
 		User user = userRepository.findByEmail(authUsername)
 			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
-		Page<Brief> briefPage = briefRepository.findByUser(user,pageable);
+		Page<Brief> briefPage = briefRepository.findByUser(user, pageable);
 		List<Brief> briefs = briefPage.getContent();
 		List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(briefs);
 		List<Quiz> quizzes = quizRepository.findByBriefIn(briefs);
@@ -43,14 +43,15 @@ public class BriefService {
 		return toBriefHistoryDto(briefs, briefCategories, quizzes);
 	}
 
-	private List<BriefHistory> toBriefHistoryDto(List<Brief> briefs, List<BriefCategory> briefCategories, List<Quiz> quizzes) {
+	private List<BriefHistory> toBriefHistoryDto(List<Brief> briefs, List<BriefCategory> briefCategories,
+		List<Quiz> quizzes) {
 		Map<Long, List<BriefCategory>> briefCategoryByBrief = briefCategories.stream()
 			.collect(Collectors.groupingBy(v -> v.getBrief().getId()));
 		Map<Long, List<Quiz>> quizzesByBrief = quizzes.stream()
 			.collect(Collectors.groupingBy(v -> v.getBrief().getId()));
 
-		return briefs.stream().map(brief -> {
-			return new BriefHistory(
+		return briefs.stream().map(brief ->
+			new BriefHistory(
 				brief.getId(),
 				brief.getCreatedAt(),
 				briefCategoryByBrief.get(brief.getId()).stream()
@@ -59,9 +60,9 @@ public class BriefService {
 					.toList(),
 				brief.getSummary(),
 				quizzesByBrief.get(brief.getId()).stream()
-					.filter(quiz -> quiz.getAnswer() == quiz.getSelection())
+					.filter(quiz -> quiz.getAnswer().equals(quiz.getSelection()))
 					.count()
-			);
-		}).toList();
+			)
+		).toList();
 	}
 }
