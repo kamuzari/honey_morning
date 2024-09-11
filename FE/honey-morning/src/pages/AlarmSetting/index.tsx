@@ -3,14 +3,16 @@ import styled from 'styled-components';
 import {useState} from 'react';
 import GlobalBtn from '@/component/GlobalBtn';
 import {useNavigate} from 'react-router-dom';
-
+import NavBar from '@/component/NavBar/NavBar';
+import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
 const Container = styled.div`
   display: flex;
   width: 100%;
   height: 100vh;
   color: var(--white-color);
   background-color: var(--darkblue-color);
-  justify-content: center;
+  align-items: center;
+  flex-direction: column;
   z-index: -1;
 
   // * {
@@ -22,6 +24,7 @@ const ContentsContainer = styled.div`
   flex-direction: column;
   width: 100%;
   align-items: center;
+  margin: 4rem 0 4rem 0;
 `;
 
 const TimeContainer = styled.div`
@@ -113,7 +116,7 @@ const SettingContainer = styled.div`
     color: var(--white-color);
     font-size: 5rem;
     font-weight: bold;
-    margin-bottom: 7rem;
+    margin-bottom: 5rem;
   }
   ul {
     display: flex;
@@ -127,10 +130,11 @@ const SettingContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: 50%;
+    height: 18rem;
     .optionContainer {
       display: flex;
-      height: 40rem;
-      align-items: center;
+      height: 100%;
+      align-items: end;
       justify-content: center;
       font-size: 3.5rem;
       font-weight: bold;
@@ -504,6 +508,7 @@ const AlarmSetting: React.FunctionComponent = () => {
           </Modal>
         </ModalOverlay>
       )}
+      <NavBar props={SoleMainNavBarProps}></NavBar>
     </Container>
   );
 };
