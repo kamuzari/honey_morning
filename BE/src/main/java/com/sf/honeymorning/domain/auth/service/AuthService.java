@@ -93,7 +93,6 @@ public class AuthService {
     }
 
     public void saveUser(User user){
-        System.out.println("check2");
 
         String email = user.getEmail();
         String username = user.getUsername();

@@ -1,5 +1,6 @@
 package com.sf.honeymorning.domain.auth.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.domain.auth.util.JWTUtil;
 import com.sf.honeymorning.domain.user.dto.CustomUserDetails;
 import com.sf.honeymorning.domain.user.entity.User;
@@ -15,6 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -28,6 +30,8 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 헤더에서 access키에 담긴 토큰을 꺼냄
         String accessToken = request.getHeader("access");
+
+        System.out.println(accessToken);
 
         // 토큰이 없다면 다음 필터로 넘김
         if (accessToken == null) {

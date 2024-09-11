@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -71,7 +72,7 @@ public class SecurityConfig {
 					configuration.setMaxAge(3600L);
 
 					// 응답시 Authorization을 같이 보내준다.
-					configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+					configuration.setExposedHeaders(Collections.singletonList("access"));
 
 					return configuration;
 				}
@@ -81,8 +82,9 @@ public class SecurityConfig {
 		// 경로별 인가
 		http
 				.authorizeHttpRequests((auth) -> auth
-					.requestMatchers("/api/auth/test").authenticated()
-					.requestMatchers("/api/auth/**", "api/users/check/email", "/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
+					.requestMatchers("/api/auth/**").permitAll()
+					.requestMatchers("api/users/**").permitAll()
+					.requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
 					.requestMatchers("/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
 					.anyRequest().authenticated());
 

@@ -35,7 +35,7 @@ public class Alarm extends BaseEntity {
      * - 127 (1111111) = Every day
      */
     @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
-    private Integer daysOfWeek = 0;
+    private String daysOfWeek = "1111111";
 
     @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
     private Integer repeatFrequency = 0;
