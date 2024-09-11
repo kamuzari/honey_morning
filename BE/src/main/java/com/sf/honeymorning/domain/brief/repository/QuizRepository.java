@@ -9,4 +9,6 @@ import com.sf.honeymorning.domain.quiz.entity.Quiz;
 
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
 	List<Quiz> findByBriefIn(List<Brief> briefs);
+
+	List<Quiz> findByBrief(Brief brief);
 }

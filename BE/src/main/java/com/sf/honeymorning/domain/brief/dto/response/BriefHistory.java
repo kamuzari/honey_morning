@@ -6,7 +6,6 @@ import java.util.List;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
-@Schema(name = "브리핑 기록", description = "브리핑 목록 조회에서 필요한 응답 모델이에요 📦")
 @Getter
 public class BriefHistory {
 	@Schema(description = "브리프 ID", example = "1")

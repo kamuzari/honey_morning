@@ -9,12 +9,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sf.honeymorning.domain.brief.dto.response.BriefDetailResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.BriefHistory;
+import com.sf.honeymorning.domain.brief.dto.response.breifdetail.BriefResponseDto;
+import com.sf.honeymorning.domain.brief.dto.response.breifdetail.QuizResponseDto;
+import com.sf.honeymorning.domain.brief.dto.response.breifdetail.SummaryResponseDto;
+import com.sf.honeymorning.domain.brief.dto.response.breifdetail.SummaryResponseDto.WordCloudResponseDto;
 import com.sf.honeymorning.domain.brief.entity.Brief;
 import com.sf.honeymorning.domain.brief.entity.BriefCategory;
+import com.sf.honeymorning.domain.brief.entity.WordCloud;
 import com.sf.honeymorning.domain.brief.repository.BriefCategoryRepository;
 import com.sf.honeymorning.domain.brief.repository.BriefRepository;
 import com.sf.honeymorning.domain.brief.repository.QuizRepository;
+import com.sf.honeymorning.domain.brief.repository.WordCloudRepository;
 import com.sf.honeymorning.domain.common.Tag;
 import com.sf.honeymorning.domain.quiz.entity.Quiz;
 import com.sf.honeymorning.domain.user.entity.User;
@@ -30,6 +37,7 @@ public class BriefService {
 	private final UserRepository userRepository;
 	private final BriefRepository briefRepository;
 	private final BriefCategoryRepository briefCategoryRepository;
+	private final WordCloudRepository wordCloudRepository;
 	private final QuizRepository quizRepository;
 
 	public List<BriefHistory> getBriefs(String authUsername, Pageable pageable) {
@@ -41,6 +49,55 @@ public class BriefService {
 		List<Quiz> quizzes = quizRepository.findByBriefIn(briefs);
 
 		return toBriefHistoryDto(briefs, briefCategories, quizzes);
+	}
+
+	public BriefDetailResponseDto getBrief(String authUsername, Long briefId) {
+		User user = userRepository.findUsername(authUsername)
+			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
+		Brief brief = briefRepository.findByUserAndId(user, briefId)
+			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
+
+		boolean canAccess = brief.getUser().getId().equals(user.getId());
+		if (!canAccess) {
+			throw new RuntimeException("not allowed service");
+		}
+
+		List<WordCloud> wordClouds = wordCloudRepository.findByBrief(brief);
+		List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(brief);
+		List<Quiz> quizzes = quizRepository.findByBrief(brief);
+
+		return toBriefDetailResponseDto(briefId, wordClouds, briefCategories, brief, quizzes);
+	}
+
+	private static BriefDetailResponseDto toBriefDetailResponseDto(Long briefId, List<WordCloud> wordClouds,
+		List<BriefCategory> briefCategories, Brief brief, List<Quiz> quizzes) {
+		return new BriefDetailResponseDto(
+			briefId,
+			new SummaryResponseDto(
+				wordClouds.stream()
+					.map(wordCloud -> new WordCloudResponseDto(
+						wordCloud.getKeyword(),
+						wordCloud.getFrequency()))
+					.toList(),
+				briefCategories.stream()
+					.map(briefCategory -> briefCategory.getTag().getWord())
+					.toList()
+			),
+			new BriefResponseDto(
+				brief.getSummary(),
+				brief.getContent()
+			)
+			,
+			quizzes.stream().map(quiz -> new QuizResponseDto(
+				quiz.getQuestion(),
+				quiz.getOption1(),
+				quiz.getOption2(),
+				quiz.getOption3(),
+				quiz.getOption4(),
+				quiz.getSelection(),
+				quiz.getAnswer()
+			)).toList()
+		);
 	}
 
 	private List<BriefHistory> toBriefHistoryDto(List<Brief> briefs, List<BriefCategory> briefCategories,
