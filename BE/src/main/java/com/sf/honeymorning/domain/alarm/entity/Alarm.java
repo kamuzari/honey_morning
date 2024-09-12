@@ -46,4 +46,7 @@ public class Alarm extends BaseEntity {
     @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 1")
     private Integer isActive = 1;
 
+    @Column(length = 1000, nullable = false)
+    private String musicFilePath;
+
 }

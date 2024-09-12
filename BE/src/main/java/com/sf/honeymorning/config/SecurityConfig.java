@@ -83,7 +83,7 @@ public class SecurityConfig {
 		http
 				.authorizeHttpRequests((auth) -> auth
 					.requestMatchers("/api/auth/**").permitAll()
-					.requestMatchers("api/users/**").permitAll()
+					.requestMatchers("/api/users/**").permitAll()
 					.requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
 					.requestMatchers("/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
 					.anyRequest().authenticated());

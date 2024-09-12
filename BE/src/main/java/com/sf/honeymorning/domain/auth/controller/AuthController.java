@@ -58,6 +58,10 @@ public class AuthController {
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@RequestBody User user){
 		authService.saveUser(user);
+
+		// 회원가입이 되면서 각 회원이 가질 알람 테이블을 생성해야한다.
+		// alarmService.saveAlarm(user)
+
 		return ResponseEntity.ok("success");
 	}
 
