@@ -4,6 +4,7 @@ import SignInPage from '@/pages/SignInPage';
 import SignUpPage from '@/pages/SignUpPage';
 
 import Quiz from '@/pages/Quiz';
+import QuizResult from '@/pages/QuizResult';
 
 import AlarmPage from '@/pages/Alarm';
 import AlarmSetting from '@/pages/AlarmSetting';
@@ -49,6 +50,10 @@ const routerInfo: RouteObject[] = [
   {
     path: '/quizzie',
     element: <Quiz />,
+  },
+  {
+    path: '/quizresult',
+    element: <QuizResult />,
   },
 ];
 
