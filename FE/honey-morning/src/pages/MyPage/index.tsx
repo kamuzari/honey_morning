@@ -8,6 +8,11 @@ import {
   CustomHashTagSelect,
 } from '@/component/InterestSetting/InterestSetting';
 import {useInterestStore} from '@/store/InterestStore';
+import NavBar from '@/component/NavBar/NavBar';
+import {NavBarProps} from '@/component/NavBar/NavBar';
+import {NavIconProps} from '@/component/NavBar/NavIcon';
+import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
+import {useNavigate} from 'react-router-dom';
 export const categoryList = [
   '정치',
   '경제',
@@ -52,6 +57,8 @@ const MyPage: React.FC = () => {
   const {selectedCategory, selectedCustomCategory, addCustomCategory} =
     useInterestStore();
   const selectedList = selectedCategory;
+  const NavIcons = SoleMainNavBarProps;
+  const navigate = useNavigate();
   return (
     <Container>
       <WhiteContainer>
@@ -141,7 +148,12 @@ const MyPage: React.FC = () => {
               <li>핵심 브리핑</li>
             </PaginationHead>
             {currentItems.map((item, index) => (
-              <PaginationItem key={index}>
+              <PaginationItem
+                key={index}
+                onClick={() => {
+                  navigate('/briefingdetail');
+                }}
+              >
                 <span className="date">{item.date}</span>
                 <span className="content">{item.content}</span>
               </PaginationItem>
@@ -153,6 +165,7 @@ const MyPage: React.FC = () => {
             onPageChange={setCurrentPage}
           />
         </Content>
+        <NavBar props={NavIcons}></NavBar>
       </WhiteContainer>
     </Container>
   );
@@ -164,7 +177,9 @@ export const Container = styled.div`
   height: 100vh;
   background-color: var(--darkblue-color);
   justify-content: center;
-  padding: 3rem;
+  align-items: center;
+  flex-direction: column;
+  padding: 2rem 3rem;
   box-sizing: border-box;
   * {
     // border: 1px solid lime;
@@ -174,6 +189,7 @@ export const Container = styled.div`
 export const WhiteContainer = styled.div`
   display: flex;
   width: 100%;
+  height: 100%;
   flex-direction: column;
   background-color: white;
   border-radius: 3rem;

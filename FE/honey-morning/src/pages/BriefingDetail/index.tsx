@@ -4,6 +4,8 @@ import {Title, Container, WhiteContainer, Content} from '../MyPage';
 import Briefing from '@/component/BriefingDetail/Briefing';
 import Summary from '@/component/BriefingDetail/Summary';
 import Quiz from '@/component/BriefingDetail/Quiz';
+import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
+import NavBar from '@/component/NavBar/NavBar';
 
 interface BriefingDetailData {
   date: string;
@@ -26,7 +28,7 @@ const BriefingDetail = () => {
           </div>
         </Content>
         <BriefingContainer>
-          <NavBar>
+          <NavSection>
             {navType.map(item => {
               return (
                 <NavBarContent
@@ -39,7 +41,7 @@ const BriefingDetail = () => {
                 </NavBarContent>
               );
             })}
-          </NavBar>
+          </NavSection>
           <BriefingContent>
             {nav == '요약' ? (
               <Summary />
@@ -50,6 +52,7 @@ const BriefingDetail = () => {
             )}
           </BriefingContent>
         </BriefingContainer>
+        <NavBar props={SoleMainNavBarProps} />
       </WhiteContainer>
     </Container>
   );
@@ -59,12 +62,14 @@ const BriefingContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  height: 87%;
   * {
     // border: 1px solid red;
   }
 `;
 
-const NavBar = styled.div`
+const NavSection = styled.div`
   display: flex;
   width: 95%;
   margin: 3rem 0 0 0;
