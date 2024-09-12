@@ -2,7 +2,18 @@ import styled from 'styled-components';
 import HashTag from '@/component/MyPage/HashTag';
 import Pagination from '@/component/MyPage/Pagination';
 import {useState} from 'react';
-const categoryList = [
+import GlobalBtn from '@/component/GlobalBtn';
+import {
+  HashTagSelect,
+  CustomHashTagSelect,
+} from '@/component/InterestSetting/InterestSetting';
+import {useInterestStore} from '@/store/InterestStore';
+import NavBar from '@/component/NavBar/NavBar';
+import {NavBarProps} from '@/component/NavBar/NavBar';
+import {NavIconProps} from '@/component/NavBar/NavIcon';
+import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
+import {useNavigate} from 'react-router-dom';
+export const categoryList = [
   '정치',
   '경제',
   '사회',
@@ -12,8 +23,6 @@ const categoryList = [
   '연예',
   '스포츠',
 ];
-
-const selectedList = ['경제', '기술/IT'];
 
 interface Data {
   date: string;
@@ -43,32 +52,83 @@ const MyPage: React.FC = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
   const totalPages = Math.ceil(data.length / itemsPerPage);
-
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const {selectedCategory, selectedCustomCategory, addCustomCategory} =
+    useInterestStore();
+  const selectedList = selectedCategory;
+  const NavIcons = SoleMainNavBarProps;
+  const navigate = useNavigate();
   return (
     <Container>
       <WhiteContainer>
         <Content>
           <div className="titleContainer">
             <Title>내 관심사</Title>
+            <BtnContainer>
+              {isSelectOpen ? (
+                <GlobalBtn
+                  text="저장"
+                  $bgColor="var(--green-color)"
+                  $textColor="var(--black-color)"
+                  $padding={3}
+                  onClick={() => {
+                    setIsSelectOpen(false);
+                    addCustomCategory();
+                  }}
+                />
+              ) : (
+                <GlobalBtn
+                  text="수정"
+                  $bgColor="var(--darkblue-color)"
+                  $textColor="var(--white-color)"
+                  $padding={3}
+                  onClick={() => {
+                    console.log('작동');
+                    setIsSelectOpen(true);
+                  }}
+                />
+              )}
+            </BtnContainer>
           </div>
-          <div className="hashTagContainer">
-            {categoryList.map(item => (
-              <HashTag
-                text={item}
-                type="NEWS"
-                selected={selectedList.includes(item) ? true : false}
-              />
-            ))}
-          </div>
+          {isSelectOpen ? (
+            <HashTagSelect />
+          ) : (
+            <div className="hashTagContainer">
+              {categoryList.map(item => (
+                <HashTag
+                  text={item}
+                  type="NEWS"
+                  selected={selectedList.includes(item) ? true : false}
+                />
+              ))}
+            </div>
+          )}
           <div className="smallTitleContainer">
             <SmallTitle>나만의 관심사</SmallTitle>
           </div>
-          <div className="hashTagContainer">
-            <HashTag text="유럽에 사는 고양이" type="CUSTOM" />
-            <HashTag text="유럽에 사는 고양이" type="CUSTOM" />
-          </div>
+
+          {isSelectOpen ? (
+            <CustomHashTagSelect />
+          ) : (
+            <div className="hashTagContainer">
+              {selectedCustomCategory.length >= 1 ? (
+                selectedCustomCategory.map(item => {
+                  return (
+                    <HashTag
+                      text={item}
+                      type="CUSTOM"
+                    />
+                  );
+                })
+              ) : (
+                <HashTag
+                  text="나만의 관심사가 없습니다."
+                  type="CUSTOM"
+                />
+              )}
+            </div>
+          )}
         </Content>
 
         <Content>
@@ -88,7 +148,12 @@ const MyPage: React.FC = () => {
               <li>핵심 브리핑</li>
             </PaginationHead>
             {currentItems.map((item, index) => (
-              <PaginationItem key={index}>
+              <PaginationItem
+                key={index}
+                onClick={() => {
+                  navigate('/briefingdetail');
+                }}
+              >
                 <span className="date">{item.date}</span>
                 <span className="content">{item.content}</span>
               </PaginationItem>
@@ -100,36 +165,41 @@ const MyPage: React.FC = () => {
             onPageChange={setCurrentPage}
           />
         </Content>
+        <NavBar props={NavIcons}></NavBar>
       </WhiteContainer>
     </Container>
   );
 };
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   width: 100%;
   height: 100vh;
   background-color: var(--darkblue-color);
   justify-content: center;
-  padding: 3rem;
+  align-items: center;
+  flex-direction: column;
+  padding: 2rem 3rem;
   box-sizing: border-box;
   * {
     // border: 1px solid lime;
   }
 `;
 
-const WhiteContainer = styled.div`
+export const WhiteContainer = styled.div`
   display: flex;
   width: 100%;
+  height: 100%;
   flex-direction: column;
   background-color: white;
   border-radius: 3rem;
   padding: 5rem 0 0 0;
 `;
 
-const Content = styled.div`
-  displya: flex;
+export const Content = styled.div`
+  display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   .titleContainer {
     display: flex;
@@ -138,9 +208,10 @@ const Content = styled.div`
 
   .hashTagContainer {
     display: flex;
-    width: 100%;
+    width: 90%;
+    height: 12rem;
     box-sizing: border-box;
-    padding: 3rem 0 3rem 4rem;
+    padding: 3rem 0 3rem 0;
 
     overflow-x: auto;
     &::-webkit-scrollbar {
@@ -150,8 +221,10 @@ const Content = styled.div`
 
   .smallTitleContainer {
     display: flex;
+    width: 100%;
     margin: 2rem;
     padding: 0 0 0 3rem;
+    align-items: center;
   }
 
   .streakContainer {
@@ -162,20 +235,19 @@ const Content = styled.div`
     border: 1px solid lime;
   }
 `;
-const Title = styled.div`
+export const Title = styled.div`
   display: flex;
-  width: 20rem;
   height: 6rem;
   border-radius: 0 10rem 10rem 0;
   background-color: var(--yellow-color);
   font-weight: bold;
   font-size: 4rem;
-  padding: 0 0 0 5rem;
+  padding: 0 5rem 0 5rem;
   align-items: center;
 `;
 
-const SmallTitle = styled.div`
-  color: var(--darkblue-color);
+export const SmallTitle = styled.div`
+  color: var(--black-color);
   font-size: 3.5rem;
   font-weight: bold;
 `;
@@ -235,6 +307,12 @@ const PaginationItem = styled.li`
     font-weight: bold;
     background-color: var(--lightblue-color);
   }
+`;
+
+const BtnContainer = styled.div`
+  display: flex;
+  width: 20rem;
+  justify-content: center;
 `;
 
 export default MyPage;

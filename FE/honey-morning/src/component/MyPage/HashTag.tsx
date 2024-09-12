@@ -4,13 +4,15 @@ interface HashTagProps {
   text: string;
   type: 'NEWS' | 'CUSTOM';
   selected?: boolean;
+  onClick?:()=>void;
 }
 
 const HashTagContainer =
   styled.div <
   {$type: string, $selected?: boolean} >
   `
-  display: flex;
+  display: inline-flex;
+  max-width: 40rem;
   border-radius: 5rem;
   border: 3px solid black;
   justify-content: center;
@@ -24,15 +26,17 @@ const HashTagContainer =
   span {
     font-size: 3rem;
     font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
     color: ${props => props.$selected ? "var(--white-color)" : "var(--black-color)"}
   }
 `;
 
 const HashTag: React.FC<HashTagProps> = props => {
-  console.log(props.text);
-  console.log(props.selected);
   return (
-    <HashTagContainer $type={props.type} $selected={props.selected}>
+    <HashTagContainer $type={props.type} $selected={props.selected} onClick={props.onClick}>
       <span># {props.text}</span>
     </HashTagContainer>
   );
