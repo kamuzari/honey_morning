@@ -2,21 +2,33 @@ services:
   # Nginx
   nginx:
     image: nginx:latest
-    container_name: honeymorning-nginx
+    restart: unless-stopped
+    container_name: hm-nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./data/certbot/conf:/etc/letsencrypt 
+      - ./data/certbot/www:/var/www/certbot
     depends_on:
       - backend
       - frontend
+  
+  # HTTPS
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt 
+      - ./data/certbot/www:/var/www/certbot
 
   # 백엔드
   backend:
     build:
       context: ./BE
       dockerfile: Dockerfile
-    container_name: honeymorning-backend
+    container_name: hm-backend
     ports:
       - "8081:8081"
     environment:
@@ -41,7 +53,7 @@ services:
     build:
       context: ./FE/honey-morning
       dockerfile: Dockerfile
-    container_name: honeymorning-frontend
+    container_name: hm-frontend
     ports:
       - "5173:5173"
     depends_on:
@@ -55,7 +67,7 @@ services:
   # MySQL 데이터베이스
   mysql:
     image: mysql:8.0
-    container_name: honeymorning-mysql
+    container_name: hm-mysql
     environment:
       MYSQL_ROOT_PASSWORD: ssafy
       MYSQL_DATABASE: honeymorning
@@ -69,7 +81,7 @@ services:
   # Redis 데이터베이스
   redis:
     image: redis:latest
-    container_name: honeymorning-redis
+    container_name: hm-redis
     ports:
       - "6379:6379"
     volumes:
