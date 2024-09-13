@@ -14,6 +14,8 @@ services:
     depends_on:
       - backend
       - frontend
+    networks:
+      - hm-network
   
   # HTTPS
   certbot:
@@ -23,6 +25,8 @@ services:
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt 
       - ./data/certbot/www:/var/www/certbot
+    networks:
+      - hm-network
 
   # 백엔드
   backend:
@@ -33,7 +37,6 @@ services:
     ports:
       - "8081:8081"
     environment:
-      # SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/honeymorning?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: ssafy
       SPRING_DATASOURCE_PASSWORD: ssafy
@@ -48,6 +51,8 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+    networks:
+      - hm-network
 
   # 프론트엔드
   frontend:
@@ -64,6 +69,8 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+    networks:
+      - hm-network
 
   # MySQL 데이터베이스
   mysql:
@@ -78,6 +85,8 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - hm-network
 
   # Redis 데이터베이스
   redis:
@@ -87,8 +96,15 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - hm-network
 
 # 사용하는 볼륨들
 volumes:
   mysql_data:
   redis_data:
+
+# 네트워크 설정
+networks:
+  hm-network:
+    driver: bridge
