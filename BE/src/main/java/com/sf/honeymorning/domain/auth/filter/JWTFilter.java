@@ -1,5 +1,6 @@
 package com.sf.honeymorning.domain.auth.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.domain.auth.util.JWTUtil;
 import com.sf.honeymorning.domain.user.dto.CustomUserDetails;
 import com.sf.honeymorning.domain.user.entity.User;
@@ -16,7 +17,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-@Slf4j
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
+
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
