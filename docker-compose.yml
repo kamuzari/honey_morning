@@ -7,6 +7,9 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    network_mode: "bridge"
+    links:
+      - jenkins
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./data/certbot/conf:/etc/letsencrypt 
