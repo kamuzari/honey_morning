@@ -43,8 +43,6 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JWT_REDIS_HOST: hm-redis
       SPRING_JWT_PORT: 6379
-    depends_on:
-      - frontend
     networks:
       - hm-network
 
