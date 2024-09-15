@@ -37,20 +37,14 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/honeymorning?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_URL: jdbc:mysql://hm-mysql:3306/honeymorning?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: ssafy
       SPRING_DATASOURCE_PASSWORD: ssafy
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_JWT_REDIS_HOST: redis
+      SPRING_JWT_REDIS_HOST: hm-redis
       SPRING_JWT_PORT: 6379
     depends_on:
-      - mysql
-      - redis
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+      - frontend
     networks:
       - hm-network
 
@@ -64,45 +58,8 @@ services:
       - "5173:5173"
     depends_on:
       - backend
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
     networks:
       - hm-network
-
-  # MySQL 데이터베이스
-  mysql:
-    image: mysql:8.0
-    container_name: hm-mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ssafy
-      MYSQL_DATABASE: honeymorning
-      MYSQL_USER: ssafy
-      MYSQL_PASSWORD: ssafy
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - hm-network
-
-  # Redis 데이터베이스
-  redis:
-    image: redis:latest
-    container_name: hm-redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - hm-network
-
-# 사용하는 볼륨들
-volumes:
-  mysql_data:
-  redis_data:
 
 # 네트워크 설정
 networks:
