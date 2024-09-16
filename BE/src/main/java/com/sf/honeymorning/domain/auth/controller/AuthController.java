@@ -1,5 +1,6 @@
 package com.sf.honeymorning.domain.auth.controller;
 
+import com.sf.honeymorning.domain.alarm.service.AlarmService;
 import com.sf.honeymorning.domain.auth.service.AuthService;
 import com.sf.honeymorning.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
 	private final AuthService authService;
+	private final AlarmService alarmService;
 
 	@GetMapping("/test")
 	public ResponseEntity<?> test(HttpServletRequest req, HttpServletResponse res){
@@ -57,10 +59,11 @@ public class AuthController {
 	})
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@RequestBody User user){
+		// 회원 데이터 생성
 		authService.saveUser(user);
 
-		// 회원가입이 되면서 각 회원이 가질 알람 테이블을 생성해야한다.
-		// alarmService.saveAlarm(user)
+		// 회원의 고유한 알람 테이블 생성
+		alarmService.saveAlarm(user);
 
 		return ResponseEntity.ok("success");
 	}
