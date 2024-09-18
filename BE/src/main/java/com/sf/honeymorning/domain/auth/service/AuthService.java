@@ -1,7 +1,11 @@
 package com.sf.honeymorning.domain.auth.service;
 
+import com.sf.honeymorning.domain.alarm.entity.Alarm;
+import com.sf.honeymorning.domain.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.domain.auth.repository.RefreshTokenRepository;
 import com.sf.honeymorning.domain.auth.util.JWTUtil;
+import com.sf.honeymorning.domain.tag.entity.Tag;
+import com.sf.honeymorning.domain.tag.repository.TagRepository;
 import com.sf.honeymorning.domain.user.constant.LoginMessage;
 import com.sf.honeymorning.domain.user.dto.CustomUserDetails;
 import com.sf.honeymorning.domain.user.dto.response.UserDetailDto;
@@ -14,11 +18,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalTime;
 
 @Slf4j
 @Service
@@ -30,6 +34,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final UserStatusService userStatusService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AlarmRepository alarmRepository;
+    private final TagRepository tagRepository;
 
     public UserDetailDto getUserInfo(HttpServletRequest request) {
         User loginUser = getLoginUser();
@@ -45,10 +51,17 @@ public class AuthService {
 
     public User getLoginUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(principal.toString());
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         if (!isLogin(principal)) {
+            System.out.println("null check");
+
             return null;
         }
         String email = ((CustomUserDetails) principal).getUsername();
+        System.out.println(email);
+        System.out.println("email check");
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException(
                         LoginMessage.WRONG_LOGIN_REQUEST.getValue()));
@@ -91,12 +104,12 @@ public class AuthService {
         }
         return null;
     }
-
     public void saveUser(User user){
 
         String email = user.getEmail();
         String username = user.getUsername();
         String password = user.getPassword();
+        String role = "ROLE_USER";
 
         // 중복 체크
         Boolean isExist = userRepository.existsByEmail(email);
@@ -109,9 +122,38 @@ public class AuthService {
                 .password(bCryptPasswordEncoder.encode(password))
                 .username(username)
                 .email(email)
+                .role(role)
                 .build();
 
-        userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+
+        // 알람 entity 생성
+        Alarm alarm = Alarm.builder()
+                .user(savedUser)
+                .alarmTime(LocalTime.of(7,0)) // 오전 7시 기본 설정
+                .daysOfWeek((1 << 7) - 1) // 모든 요일 기본 설정
+                .repeatFrequency(0) // 반복 없음 기본 설정
+                .repeatInterval(0) // 반복 없음 기본 설정
+                .isActive(0) // 비활성 상태 기본 설정
+                .build();
+
+        // database 저장
+        alarmRepository.save(alarm);
+
+        String[] wordList = {"정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"};
+        int selectedNum = 1;
+        for(int i = 0; i < wordList.length; i++){
+            if(i == 3){
+                selectedNum = 0;
+            }
+            Tag tag = Tag.builder()
+                    .user(savedUser)
+                    .word(wordList[i])
+                    .isCustom(0)
+                    .isSelected(selectedNum)
+                    .build();
+            tagRepository.save(tag);
+        }
 
     }
 

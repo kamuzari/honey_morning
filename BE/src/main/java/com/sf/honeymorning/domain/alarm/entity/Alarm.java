@@ -1,6 +1,6 @@
 package com.sf.honeymorning.domain.alarm.entity;
 
-import com.sf.honeymorning.domain.common.BaseEntity;
+import com.sf.honeymorning.domain.common.entity.BaseEntity;
 import com.sf.honeymorning.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +21,7 @@ public class Alarm extends BaseEntity {
     private Long id;
 
     @JoinColumn(name = "user_id")
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private User user;
 
     /**
@@ -57,7 +57,7 @@ public class Alarm extends BaseEntity {
     @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
     private Integer isActive = 0;
 
-    @Column(length = 1000, nullable = false)
+    @Column(length = 1000, nullable = true)
     private String musicFilePath;
 
 }

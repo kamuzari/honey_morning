@@ -4,9 +4,9 @@ import com.sf.honeymorning.domain.auth.filter.CustomLogoutFilter;
 import com.sf.honeymorning.domain.auth.filter.JWTFilter;
 import com.sf.honeymorning.domain.auth.filter.LoginFilter;
 import com.sf.honeymorning.domain.auth.repository.RefreshTokenRepository;
+import com.sf.honeymorning.domain.auth.service.CustomUserDetailsService;
 import com.sf.honeymorning.domain.auth.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,9 +20,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -35,6 +36,7 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final CustomUserDetailsService customUserDetailsService;
 
 
     @Bean

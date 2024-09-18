@@ -48,7 +48,6 @@ public class JWTFilter extends OncePerRequestFilter {
         try {
             jwtUtil.isExpired(accessToken);
         } catch (ExpiredJwtException e) {
-
             //response body
             PrintWriter writer = response.getWriter();
             writer.print("access token expired");
@@ -75,9 +74,8 @@ public class JWTFilter extends OncePerRequestFilter {
         // username, role 값을 획득
         String username = jwtUtil.getUsername(accessToken);
         String role = jwtUtil.getRole(accessToken);
-
         User userEntity = User.builder()
-                .username(username)
+                .email(username)
                 .role(role)
                 .build();
 

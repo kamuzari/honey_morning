@@ -1,10 +1,15 @@
 package com.sf.honeymorning.domain.alarm.repository;
 
 import com.sf.honeymorning.domain.alarm.entity.Alarm;
-import com.sf.honeymorning.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
-    // 특정 User에 대한 Alarm을 조회하는 메서드
-    Alarm findByUser(User user);
+
+    @Query("SELECT a FROM Alarm a WHERE a.user.id = :userId")
+    Alarm findAlarmsByUserId(@Param("userId") Long userId);
+
+    @Query("DELETE FROM Alarm a WHERE a.user.id = :userId")
+    Alarm deleteAlarmsByUserId(@Param("userId") Long userId);
 }

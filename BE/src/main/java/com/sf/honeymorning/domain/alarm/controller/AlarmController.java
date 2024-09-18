@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -52,10 +51,8 @@ public class AlarmController {
 	})
 	@GetMapping
 	public ResponseEntity<?> read() {
-		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
 		// 사용자가 알람 설정창에 들어갈 때 알람 정보 조회
-		AlarmResponseDto alarm = alarmService.findAlarmByUsername(username);
+		AlarmResponseDto alarm = alarmService.findAlarmByUsername();
 		
 		return ResponseEntity.ok(alarm);
 	}
