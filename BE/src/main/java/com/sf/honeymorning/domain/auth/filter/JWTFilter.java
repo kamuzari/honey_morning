@@ -28,7 +28,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         // 요청된 URL을 로그로 출력
         String requestUrl = request.getRequestURI();
@@ -43,7 +43,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
             return;
         }
-
+        System.out.println("check");
         // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
         try {
             jwtUtil.isExpired(accessToken);

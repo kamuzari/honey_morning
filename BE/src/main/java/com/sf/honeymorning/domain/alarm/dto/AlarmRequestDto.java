@@ -15,4 +15,5 @@ public class AlarmRequestDto {
     private int repeatFrequency;
     private int repeatInterval;
     private Integer isActive;
+    private String musicFilePath;
 }
