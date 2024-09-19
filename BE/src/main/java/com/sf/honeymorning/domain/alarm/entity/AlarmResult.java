@@ -25,6 +25,6 @@ public class AlarmResult extends BaseEntity {
     private Integer count = 0;
 
     @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
-    private Integer isAttending = 0;
-    
+    private Integer isAttended = 0;
+
 }
