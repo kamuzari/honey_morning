@@ -11,7 +11,6 @@ import com.sf.honeymorning.domain.user.dto.CustomUserDetails;
 import com.sf.honeymorning.domain.user.dto.response.UserDetailDto;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
-import com.sf.honeymorning.domain.user.service.UserStatusService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +31,6 @@ public class AuthService {
     private final JWTUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
-    private final UserStatusService userStatusService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AlarmRepository alarmRepository;
     private final TagRepository tagRepository;
@@ -45,7 +43,9 @@ public class AuthService {
 
         return UserDetailDto.builder()
                 .id(loginUser.getId())
+                .role(loginUser.getRole())
                 .email(loginUser.getEmail())
+                .username(loginUser.getUsername())
                 .build();
     }
 
@@ -71,28 +71,6 @@ public class AuthService {
         return principal instanceof CustomUserDetails;
     }
 
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = extractRefreshTokenFromCookie(request);
-        if (refreshToken == null) {
-            log.info("refreshToken을 쿠키에서 찾을 수 없습니다.");
-            return;
-        }
-
-        String email = jwtUtil.getUsername(refreshToken);
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 이메일의 유저가 없습니다"));
-        String userId = user.getId().toString();
-
-        // refreshToken 쿠키 제거
-        Cookie cookie = new Cookie("refreshToken", null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-        refreshTokenRepository.deleteById(refreshToken);
-//        userStatusService.setUserOffline(Long.parseLong(userId));
-    }
-
     private String extractRefreshTokenFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
@@ -104,7 +82,8 @@ public class AuthService {
         }
         return null;
     }
-    public void saveUser(User user){
+
+    public void saveUser(User user) {
 
         String email = user.getEmail();
         String username = user.getUsername();
@@ -114,7 +93,7 @@ public class AuthService {
         // 중복 체크
         Boolean isExist = userRepository.existsByEmail(email);
 
-        if(isExist){
+        if (isExist) {
             return;
         }
 
@@ -130,7 +109,7 @@ public class AuthService {
         // 알람 entity 생성
         Alarm alarm = Alarm.builder()
                 .user(savedUser)
-                .alarmTime(LocalTime.of(7,0)) // 오전 7시 기본 설정
+                .alarmTime(LocalTime.of(7, 0)) // 오전 7시 기본 설정
                 .daysOfWeek((1 << 7) - 1) // 모든 요일 기본 설정
                 .repeatFrequency(0) // 반복 없음 기본 설정
                 .repeatInterval(0) // 반복 없음 기본 설정
@@ -141,16 +120,10 @@ public class AuthService {
         alarmRepository.save(alarm);
 
         String[] wordList = {"정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"};
-        int selectedNum = 1;
-        for(int i = 0; i < wordList.length; i++){
-            if(i == 3){
-                selectedNum = 0;
-            }
+        for (int i = 0; i < wordList.length; i++) {
             Tag tag = Tag.builder()
-                    .user(savedUser)
                     .word(wordList[i])
                     .isCustom(0)
-                    .isSelected(selectedNum)
                     .build();
             tagRepository.save(tag);
         }
