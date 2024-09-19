@@ -1,22 +1,29 @@
 package com.sf.honeymorning.domain.alarm.controller;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.sf.honeymorning.domain.alarm.dto.AlarmRequestDto;
+import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
+import com.sf.honeymorning.domain.alarm.service.AlarmService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Tag(name = "알람")
 @RequestMapping("/api/alarms")
 @RestController
 public class AlarmController {
+	private final AlarmService alarmService;
+
+	public AlarmController(AlarmService alarmService) {
+		this.alarmService = alarmService;
+	}
+
 	@Operation(
 		summary = "설정 일부 수정"
 	)
@@ -28,8 +35,8 @@ public class AlarmController {
 		)
 	})
 	@PatchMapping
-	public ResponseEntity<String> update() {
-		return ResponseEntity.ok("success");
+	public ResponseEntity<?> update(@RequestBody AlarmRequestDto alarmRequestDto) {
+		return alarmService.updateAlarm(alarmRequestDto);
 	}
 
 	@Operation(
@@ -43,23 +50,26 @@ public class AlarmController {
 		)
 	})
 	@GetMapping
-	public ResponseEntity<String> read() {
-		return ResponseEntity.ok("success");
+	public ResponseEntity<?> read() {
+		// 사용자가 알람 설정창에 들어갈 때 알람 정보 조회
+		AlarmResponseDto alarm = alarmService.findAlarmByUsername();
+		
+		return ResponseEntity.ok(alarm);
 	}
 
-	@Operation(
-		summary = "사용자 알람 시작"
-	)
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "알람 시작 성공",
-			content = @Content(schema = @Schema(type = "string", example = "success"))
-		)
-	})
-	@GetMapping("/start")
-	public ResponseEntity<String> start() {
-		return ResponseEntity.ok("success");
-	}
+//	@Operation(
+//		summary = "사용자 알람 시작"
+//	)
+//	@ApiResponses(value = {
+//		@ApiResponse(
+//			responseCode = "200",
+//			description = "알람 시작 성공",
+//			content = @Content(schema = @Schema(type = "string", example = "success"))
+//		)
+//	})
+//	@GetMapping("/start")
+//	public ResponseEntity<String> start() {
+//		return ResponseEntity.ok("success");
+//	}
 
 }

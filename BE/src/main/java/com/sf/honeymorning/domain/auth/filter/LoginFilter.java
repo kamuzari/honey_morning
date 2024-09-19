@@ -61,7 +61,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // access 토큰 생성 및 발급
         String access = jwtUtil.createAccessJwt("access", username, role);
-        res.setHeader("access", access);
+        res.addHeader("access", access);
 
         // refresh 토큰 생성 및 발급
         String refresh = jwtUtil.createRefreshJwt("refresh", username, role);
@@ -75,8 +75,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // Refresh 토큰 저장 (repository)
         refreshTokenRepository.save(redis);
-        // user 상태 저장
-//        userStatusService.setUserOnline(customUserDetails.getUser().getId());
 
         // 응답 설정
         res.setStatus(HttpStatus.OK.value());
