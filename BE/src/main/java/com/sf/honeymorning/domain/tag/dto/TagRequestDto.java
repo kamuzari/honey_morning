@@ -9,5 +9,4 @@ import lombok.Data;
 @Builder
 public class TagRequestDto {
     private String word;
-    private Integer isSelected;
 }
