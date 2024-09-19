@@ -27,3 +27,6 @@ dist-ssr
 # HTTPS
 certbot/conf/
 certbot/www/
+
+# Environment variables
+.env
