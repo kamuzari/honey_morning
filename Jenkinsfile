@@ -26,7 +26,6 @@ pipeline {
             steps {
                 dir('FE/honey-morning') {
                     writeFile file: '.env', text: env.FRONTEND_ENV
-                    sh 'cat .env'
                 }
             }
         }
