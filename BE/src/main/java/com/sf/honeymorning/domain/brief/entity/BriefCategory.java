@@ -1,7 +1,7 @@
 package com.sf.honeymorning.domain.brief.entity;
 
-import com.sf.honeymorning.domain.common.BaseEntity;
-import com.sf.honeymorning.domain.common.Tag;
+import com.sf.honeymorning.domain.common.entity.BaseEntity;
+import com.sf.honeymorning.domain.tag.entity.Tag;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
