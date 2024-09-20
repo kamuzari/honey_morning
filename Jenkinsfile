@@ -14,7 +14,7 @@ pipeline {
             steps {
                 dir('BE') {
                     // 백엔드 Docker 이미지 빌드
-                    sh 'docker build -t hm-backend:latest -f Dockerfile .'
+                    sh 'docker build -t backend:latest -f Dockerfile .'
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
             steps {
                 dir('FE/honey-morning') {
                     // 프론트엔드 Docker 이미지 빌드
-                    sh 'docker build -t hm-frontend:latest -f Dockerfile .'
+                    sh 'docker build -t frontend:latest -f Dockerfile .'
                 }
             }
         }
@@ -55,7 +55,7 @@ pipeline {
                       -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
                       -e SPRING_JWT_REDIS_HOST=hm-redis \
                       -e SPRING_JWT_PORT=6379 \
-                      hm-backend:latest
+                      backend:latest
                     '''
                 }
             }
@@ -71,7 +71,7 @@ pipeline {
                       -p 5173:5173 \
                       --network hm-network \
                       --link hm-backend:hm-backend \
-                      hm-frontend:latest
+                      frontend:latest
                     '''
                 }
             }
