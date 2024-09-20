@@ -6,7 +6,7 @@ pipeline {
             steps {
                 git branch: 'develop',
                     url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git',
-                    credentialsId: 'wngud1225'  // Jenkins에 등록된 Username/Password 자격 증명 ID
+                    credentialsId: 'wngud1225'
             }
         }
 
