@@ -39,8 +39,8 @@ public class Alarm extends BaseEntity {
      * - 1000001 = Monday and Sunday
      * - 1111111 = Every day
      */
-    @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 1111111")
-    private Integer daysOfWeek = 1111111;
+    @Column(nullable = false)
+    private String daysOfWeek;
 
     @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
     private Integer repeatFrequency = 0;
