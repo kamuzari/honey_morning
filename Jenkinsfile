@@ -55,7 +55,7 @@ pipeline {
                     --name hm-backend \
                     -p 8081:8081 \
                     --network hm-network \
-                    -v $APP_PROPS:/app/src/main/resources/application.properties \
+                    -v $APP_PROPS:/app/config/application.properties \
                     backend:latest
                 '''
             }
@@ -68,7 +68,6 @@ pipeline {
                     --name hm-frontend \
                     -p 5173:5173 \
                     --network hm-network \
-                    --link hm-backend:hm-backend \
                     frontend:latest
                 '''
             }
