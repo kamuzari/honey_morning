@@ -1,12 +1,23 @@
 pipeline {
     agent any
 
+    environment {
+        APP_PROPS = credentials('application-properties')
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
                 git branch: 'develop',
                     url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git',
                     credentialsId: 'wngud1225'
+            }
+        }
+
+        stage('Prepare Application Properties') {
+            steps {
+                sh 'mkdir -p BE/src/main/resources'
+                sh 'cp $APP_PROPS BE/src/main/resources/application.properties'
             }
         }
 
@@ -44,12 +55,7 @@ pipeline {
                     --name hm-backend \
                     -p 8081:8081 \
                     --network hm-network \
-                    -e SPRING_DATASOURCE_URL="jdbc:mysql://hm-mysql:3306/honeymorning?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC" \
-                    -e SPRING_DATASOURCE_USERNAME=ssafy \
-                    -e SPRING_DATASOURCE_PASSWORD=ssafy \
-                    -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
-                    -e SPRING_DATA_REDIS_HOST=hm-redis \
-                    -e SPRING_DATA_REDIS_PORT=6379 \
+                    -v $APP_PROPS:/app/application.properties \
                     backend:latest
                 '''
             }
