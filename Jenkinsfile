@@ -25,7 +25,8 @@ pipeline {
         stage('Prepare Frontend ENV') {
             steps {
                 dir('FE/honey-morning') {
-                    sh 'cp $FRONTEND_ENV .env'
+                    writeFile file: '.env', text: env.FRONTEND_ENV
+                    sh 'cat .env'
                 }
             }
         }
