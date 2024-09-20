@@ -53,8 +53,8 @@ pipeline {
                       -e SPRING_DATASOURCE_USERNAME=ssafy \
                       -e SPRING_DATASOURCE_PASSWORD=ssafy \
                       -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
-                      -e SPRING_JWT_REDIS_HOST=hm-redis \
-                      -e SPRING_JWT_PORT=6379 \
+                      -e SPRING_DATA_REDIS_HOST=hm-redis \
+                      -e SPRING_DATA_REDIS_PORT=6379 \
                       backend:latest
                     '''
                 }
