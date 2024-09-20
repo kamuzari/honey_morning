@@ -45,17 +45,17 @@ pipeline {
                 script {
                     // 새로운 백엔드 컨테이너 실행
                     sh '''
-                    docker run -d \
-                      --name hm-backend \
-                      -p 8081:8081 \
-                      --network hm-network \
-                      -e SPRING_DATASOURCE_URL=jdbc:mysql://hm-mysql:3306/honeymorning?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC \
-                      -e SPRING_DATASOURCE_USERNAME=ssafy \
-                      -e SPRING_DATASOURCE_PASSWORD=ssafy \
-                      -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
-                      -e SPRING_DATA_REDIS_HOST=hm-redis \
-                      -e SPRING_DATA_REDIS_PORT=6379 \
-                      backend:latest
+                        docker run -d \
+                        --name hm-backend \
+                        -p 8081:8081 \
+                        --network hm-network \
+                        -e SPRING_DATASOURCE_URL=jdbc:mysql://hm-mysql:3306/honeymorning?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC \
+                        -e SPRING_DATASOURCE_USERNAME=ssafy \
+                        -e SPRING_DATASOURCE_PASSWORD=ssafy \
+                        -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
+                        -e SPRING_DATA_REDIS_HOST=hm-redis \
+                        -e SPRING_DATA_REDIS_PORT=6379 \
+                        backend:latest
                     '''
                 }
             }
@@ -67,11 +67,11 @@ pipeline {
                     // 새로운 프론트엔드 컨테이너 실행
                     sh '''
                     docker run -d \
-                      --name hm-frontend \
-                      -p 5173:5173 \
-                      --network hm-network \
-                      --link hm-backend:hm-backend \
-                      frontend:latest
+                        --name hm-frontend \
+                        -p 5173:5173 \
+                        --network hm-network \
+                        --link hm-backend:hm-backend \
+                        frontend:latest
                     '''
                 }
             }
