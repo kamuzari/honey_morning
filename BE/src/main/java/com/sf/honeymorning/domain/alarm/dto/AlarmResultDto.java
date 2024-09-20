@@ -1,5 +1,6 @@
 package com.sf.honeymorning.domain.alarm.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class AlarmResultDto {
+    @ApiModelProperty(value = "퀴즈 정답 개수", dataType = "Integer", example = "2")
     private Integer count;
+    @ApiModelProperty(value = "출석 유무", dataType = "Integer", example = "1")
     private Integer isAttending;
 }

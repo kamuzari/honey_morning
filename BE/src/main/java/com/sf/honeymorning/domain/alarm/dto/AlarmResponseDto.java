@@ -1,5 +1,6 @@
 package com.sf.honeymorning.domain.alarm.dto;
 
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,14 +13,18 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Schema(description = "알람 응답 DTO")
 public class AlarmResponseDto {
-    @Schema(description = "아이디")
+    @ApiModelProperty(value = "아이디", dataType = "Integer", example = "1")
     private Long id;
-    @Schema(description = "알람 시각", example = "07:00:00")
+    @ApiModelProperty(value = "알람 시각", dataType = "String", example = "07:00:00")
     private LocalTime alarmTime;
-    @Schema(description = "요일", example = "1111111", allowableValues = {"0000000", "0000001", "0010000", "0101010"})
+    @ApiModelProperty(value = "요일", dataType = "Integer", example = "127")
     private Integer daysOfWeek;
+    @ApiModelProperty(value = "반복 횟수", dataType = "Integer", example = "3")
     private Integer repeatFrequency;
+    @ApiModelProperty(value = "반복 간격", dataType = "Integer", example = "5")
     private Integer repeatInterval;
+    @ApiModelProperty(value = "음악 파일 경로", dataType = "String", example = "폴더명칭/파일이름.확장자명")
     private String musicFilePath;
+    @ApiModelProperty(value = "활성화 여부", dataType = "Integer", example = "1")
     private Integer isActive;
 }

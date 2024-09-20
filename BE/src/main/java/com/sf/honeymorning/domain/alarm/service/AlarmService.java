@@ -148,7 +148,7 @@ public class AlarmService {
         for (AlarmResult alarmResult : alarmResultList) {
             AlarmResultDto alarmResultDto = AlarmResultDto.builder()
                     .count(alarmResult.getCount())
-                    .isAttending(alarmResult.getIsAttending())
+                    .isAttending(alarmResult.getIsAttended())
                     .build();
             alarmResultDtoList.add(alarmResultDto);
         }
@@ -162,7 +162,7 @@ public class AlarmService {
         AlarmResult alarmResult = AlarmResult.builder()
                 .user(user)
                 .count(alarmResultDto.getCount())
-                .isAttending(alarmResultDto.getIsAttending())
+                .isAttended(alarmResultDto.getIsAttending())
                 .build();
 
         alarmResultRepository.save(alarmResult);
