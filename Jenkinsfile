@@ -2,38 +2,33 @@ pipeline {
     agent any
 
     stages {
-        stage('코드 체크아웃') {
+        stage('Checkout Code') {
             steps {
-                // GitLab 저장소의 develop 브랜치에서 코드 체크아웃
                 git branch: 'develop',
                     url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git',
                     credentialsId: 'wngud1225'  // Jenkins에 등록된 Username/Password 자격 증명 ID
             }
         }
 
-        stage('백엔드 빌드') {
+        stage('Build Backend') {
             steps {
                 dir('BE') {
                     // 백엔드 Docker 이미지 빌드
-                    script {
-                        docker.build('hm-backend:latest', '-f Dockerfile .')
-                    }
+                    sh 'docker build -t hm-backend:latest -f Dockerfile .'
                 }
             }
         }
 
-        stage('프론트엔드 빌드') {
+        stage('Build Frontend') {
             steps {
                 dir('FE/honey-morning') {
                     // 프론트엔드 Docker 이미지 빌드
-                    script {
-                        docker.build('hm-frontend:latest', '-f Dockerfile .')
-                    }
+                    sh 'docker build -t hm-frontend:latest -f Dockerfile .'
                 }
             }
         }
 
-        stage('기존 컨테이너 중지 및 제거') {
+        stage('Stop and Remove Existing Containers') {
             steps {
                 script {
                     // 기존 백엔드 및 프론트엔드 컨테이너 중지 및 제거
@@ -45,7 +40,7 @@ pipeline {
             }
         }
 
-        stage('백엔드 컨테이너 실행') {
+        stage('Run Backend Container') {
             steps {
                 script {
                     // 새로운 백엔드 컨테이너 실행
@@ -66,7 +61,7 @@ pipeline {
             }
         }
 
-        stage('프론트엔드 컨테이너 실행') {
+        stage('Run Frontend Container') {
             steps {
                 script {
                     // 새로운 프론트엔드 컨테이너 실행
@@ -85,7 +80,6 @@ pipeline {
 
     post {
         always {
-            // 빌드 후 워크스페이스 정리
             cleanWs()
         }
         success {

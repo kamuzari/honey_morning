@@ -29,7 +29,7 @@ services:
   #     - hm-network
 
   # 백엔드
-  backend:
+  hm-backend:
     build:
       context: ./BE
       dockerfile: Dockerfile
@@ -47,7 +47,7 @@ services:
       - hm-network
 
   # 프론트엔드
-  frontend:
+  hm-frontend:
     build:
       context: ./FE/honey-morning
       dockerfile: Dockerfile
