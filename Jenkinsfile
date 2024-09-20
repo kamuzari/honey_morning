@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         APP_PROPS = credentials('application-properties')
+        FRONTEND_ENV = credentials('frontend-env')
     }
 
     stages {
@@ -21,6 +22,14 @@ pipeline {
             }
         }
 
+        stage('Prepare Frontend ENV') {
+            steps {
+                dir('FE/honey-morning') {
+                    sh 'cp $FRONTEND_ENV .env'
+                }
+            }
+        }
+
         stage('Build Backend') {
             steps {
                 dir('BE') {
@@ -32,7 +41,10 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('FE/honey-morning') {
-                    sh 'docker build -t frontend:latest -f Dockerfile .'
+                    script {
+                        def viteBaseUrl = sh(script: "grep VITE_BASE_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
+                        sh "docker build -t frontend:latest --build-arg VITE_BASE_URL=${viteBaseUrl} -f Dockerfile ."
+                    }
                 }
             }
         }
@@ -68,6 +80,7 @@ pipeline {
                     --name hm-frontend \
                     -p 5173:5173 \
                     --network hm-network \
+                    -e VITE_BASE_URL=$(grep VITE_BASE_URL $FRONTEND_ENV | cut -d '=' -f2) \
                     frontend:latest
                 '''
             }

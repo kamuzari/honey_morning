@@ -1,5 +1,6 @@
 # 빌드 단계
 FROM openjdk:17-jdk-slim AS builder
+
 WORKDIR /app
 
 COPY gradlew gradlew
@@ -14,7 +15,9 @@ RUN ./gradlew clean build --no-daemon --stacktrace -x test
 
 # 실행 단계
 FROM openjdk:17-jdk-slim
+
 WORKDIR /app
+
 COPY --from=builder /app/build/libs/*.jar app.jar
 
 # 설정 파일을 위한 디렉토리 생성
