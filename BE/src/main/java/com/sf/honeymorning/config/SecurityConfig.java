@@ -4,9 +4,9 @@ import com.sf.honeymorning.domain.auth.filter.CustomLogoutFilter;
 import com.sf.honeymorning.domain.auth.filter.JWTFilter;
 import com.sf.honeymorning.domain.auth.filter.LoginFilter;
 import com.sf.honeymorning.domain.auth.repository.RefreshTokenRepository;
+import com.sf.honeymorning.domain.auth.service.CustomUserDetailsService;
 import com.sf.honeymorning.domain.auth.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +23,8 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Collections;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -34,6 +36,7 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final CustomUserDetailsService customUserDetailsService;
 
 
     @Bean
@@ -72,26 +75,22 @@ public class SecurityConfig {
                                 configuration.setAllowedHeaders(Collections.singletonList("*"));
                                 configuration.setMaxAge(3600L);
 
-                                // 응답시 Authorization을 같이 보내준다.
-                                configuration.setExposedHeaders(
-                                        Collections.singletonList("Authorization"));
+					// 응답시 Authorization을 같이 보내준다.
+					configuration.setExposedHeaders(Collections.singletonList("access"));
 
                                 return configuration;
                             }
 
                         }));
 
-        // 경로별 인가
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/api/auth/test").authenticated()
-                        .requestMatchers("/api/auth/**", "api/users/check/email", "/swagger",
-                                "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**",
-                                "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/error", "/favicon.ico", "/**/*.png", "/**/*.gif",
-                                "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js")
-                        .permitAll()
-                        .anyRequest().permitAll()); // TODO : swagger 이후 고치기
+		// 경로별 인가
+		http
+				.authorizeHttpRequests((auth) -> auth
+					.requestMatchers("/api/auth/**").permitAll()
+					.requestMatchers("/api/users/**").permitAll()
+					.requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
+					.requestMatchers("/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html", "/**/*.css", "/**/*.js").permitAll()
+					.anyRequest().authenticated());
 
         http
                 .csrf(csrf -> csrf.disable());

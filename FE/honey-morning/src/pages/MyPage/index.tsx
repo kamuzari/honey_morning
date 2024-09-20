@@ -1,7 +1,9 @@
+import {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
+import {findAlarmCategory} from '@/api/alarmApi';
 import HashTag from '@/component/MyPage/HashTag';
 import Pagination from '@/component/MyPage/Pagination';
-import {useState} from 'react';
 import GlobalBtn from '@/component/GlobalBtn';
 import {
   HashTagSelect,
@@ -12,7 +14,7 @@ import NavBar from '@/component/NavBar/NavBar';
 import {NavBarProps} from '@/component/NavBar/NavBar';
 import {NavIconProps} from '@/component/NavBar/NavIcon';
 import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
-import {useNavigate} from 'react-router-dom';
+
 export const categoryList = [
   '정치',
   '경제',
@@ -59,6 +61,21 @@ const MyPage: React.FC = () => {
   const selectedList = selectedCategory;
   const NavIcons = SoleMainNavBarProps;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchAlarmCategories = async () => {
+      try {
+        const data = await findAlarmCategory();
+        console.log('알람 카테고리 데이터:', data);
+        // 데이터를 상태로 저장하거나 처리하는 로직 추가
+      } catch (error) {
+        console.error('알람 카테고리 데이터를 가져오는 중 오류 발생:', error);
+      }
+    };
+
+    fetchAlarmCategories();
+  }, []);
+
   return (
     <Container>
       <WhiteContainer>
