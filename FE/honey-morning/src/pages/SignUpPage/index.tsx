@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {useWatch, useForm, Controller} from 'react-hook-form';
+import {useNavigate} from 'react-router-dom';
+import {useMutation} from '@tanstack/react-query';
 import styled, {createGlobalStyle} from 'styled-components';
 import {instance} from '@/api/axios';
-import {useNavigate} from 'react-router-dom';
 import Modal from '@/component/Modal';
 
 interface SignUpFormData {
@@ -63,7 +64,7 @@ const SignUpProcess: React.FC = () => {
     return emailPattern.test(email) || '이메일의 형식이 올바르지 않습니다.';
   };
 
-  const checkEmailDuplicate = async email => {
+  const checkEmailDuplicate = async (email: string) => {
     if (!email) {
       setError('email', {
         message: '이메일을 입력해주세요.',
@@ -74,14 +75,16 @@ const SignUpProcess: React.FC = () => {
     }
 
     try {
-      const response = await instance.get(`api/users/check/email`);
+      const response = await instance.get(
+        `/api/users/check/email?email=${email}`,
+      );
 
-      if (response.status === 200) {
-        setEmailMessage('사용 가능한 이메일입니다.');
+      if (response.data === true) {
+        setEmailMessage('이미 사용 중인 이메일입니다.');
         setEmailMessageType('success');
         setIsEmailChecked(true);
       } else {
-        setEmailMessage('이미 사용 중인 이메일입니다.');
+        setEmailMessage('사용 가능한 이메일입니다.');
         setEmailMessageType('error');
         setIsEmailChecked(false);
       }
@@ -298,7 +301,7 @@ const SubmitButton = styled.button`
 
 //prettier-ignore
 const EmailMessage = styled.p<{ type: string }>`
-  color: ${({ type }) => (type === 'success' ? 'green' : 'red')};
+  color: ${({ type }) => (type === 'success' ? 'var(--red-color)' : 'var(--darkgreen-color)')};
   font-size: 14px;
 `;
 
