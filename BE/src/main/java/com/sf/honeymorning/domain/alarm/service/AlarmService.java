@@ -11,6 +11,8 @@ import com.sf.honeymorning.domain.alarm.repository.AlarmCategoryRepository;
 import com.sf.honeymorning.domain.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.domain.alarm.repository.AlarmResultRepository;
 import com.sf.honeymorning.domain.auth.service.AuthService;
+import com.sf.honeymorning.domain.tag.entity.Tag;
+import com.sf.honeymorning.domain.tag.repository.TagRepository;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -35,6 +37,7 @@ public class AlarmService {
     private final AuthService authService;
     private final AlarmCategoryRepository alarmCategoryRepository;
     private final AlarmResultRepository alarmResultRepository;
+    private final TagRepository tagRepository;
 
     public AlarmResponseDto findAlarmByUsername() {
         User user = authService.getLoginUser();
@@ -56,59 +59,61 @@ public class AlarmService {
     @Transactional
     public ResponseEntity<?> updateAlarm(AlarmRequestDto alarmRequestDto) {
 
-        // 설정한 시간 및 요일이 현재 시간에서 5시간 이상 차이가 나지 않으면 업데이트 거부
+        /**
+         *설정한 시간 및 요일이 현재 시간에서 5시간 이상 차이가 나지 않으면 업데이트 거부
+         */
+
+        // 현재 시간
         LocalDateTime nowDateTime = LocalDateTime.now();
         LocalTime nowTime = LocalTime.now();
-        int currentDayOfWeek = nowDateTime.getDayOfWeek().getValue() - 1; // 현재 요일
-        int binary = 1 << currentDayOfWeek;
+        int currentDayOfWeek = nowDateTime.getDayOfWeek().getValue() - 1; // 현재 요일 (0 ~ 6)
+        String binary = "";
+        String nextBinary = "";
 
+        for (int i = 0; i < 7; i++) {
+            if (i == currentDayOfWeek) {
+                binary += "1";
+            } else {
+                binary += "0";
+            }
+        }
+
+        for (int i = 0; i < 7; i++) {
+            if (i == (currentDayOfWeek + 1) % 7) {
+                nextBinary += "1";
+            } else {
+                nextBinary += "0";
+            }
+        }
+
+        // 설정한 알람 시각
         LocalTime alarmTime = alarmRequestDto.getAlarmTime();
-        int alarmWeek = alarmRequestDto.getDaysOfWeek();
+        // 설정한 알람 요일
+        String alarmWeek = alarmRequestDto.getDaysOfWeek();
 
         System.out.println(binary);
         System.out.println(alarmWeek);
+        System.out.println(ChronoUnit.SECONDS.between(nowTime, alarmTime));
+
+
         // 알람이 현재 요일만 설정 되어 있고, 이후 시간이며, 5시간 이전에 설정되어 있을 때.
-        if (binary == alarmWeek && ChronoUnit.HOURS.between(nowTime, alarmTime) < 5) {
+        if (binary.equals(alarmWeek) && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0 && ChronoUnit.HOURS.between(nowTime, alarmTime) < 5) {
             System.out.println("same day and less 5 hours difference");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
         }
 
         // 알람이 내일 요일만 설정 되어 있고, 5시간 이전에 설정되어 있을 때.
-        if ((binary << 1) == alarmWeek && ChronoUnit.HOURS.between(nowTime, alarmTime.plusHours(24)) < 5) {
+        if (nextBinary.equals(alarmWeek) && ChronoUnit.HOURS.between(nowTime, alarmTime) + 24 <= 5) {
             System.out.println("next day and less 5 hours difference");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
         }
 
-        // 현재 요일과 알람 설정 요일이 같을 때
-//        if((binary & alarmWeek) == binary){
-//            Long difference = ChronoUnit.HOURS.between(nowTime, alarmTime);
-//            if(difference < 5){
-//                System.out.println("same day");
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                        .body("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
-//            }
-//        }
-
-        // 알람 설정 요일이 현재의 바로 다음날일 때
-//        if((binary << 1 & alarmWeek) == binary || ((binary & (1 << 6)) == binary && (alarmWeek & 1) == 1)){
-//            alarmTime = alarmTime.plusHours(24);
-//            Long difference = ChronoUnit.HOURS.between(nowTime, alarmTime);
-//            if(difference < 5){
-//                System.out.println("next day");
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                        .body("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
-//            }
-//        }
-
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 이메일의 유저가 없습니다"));
         Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
-
-        System.out.println("check");
-        System.out.println(alarmRequestDto.getRepeatInterval());
 
         alarm.setAlarmTime(alarmRequestDto.getAlarmTime());
         alarm.setDaysOfWeek(alarmRequestDto.getDaysOfWeek());
@@ -139,6 +144,57 @@ public class AlarmService {
         return alarmCategoryDtoList;
 
     }
+
+    // 알람 카테고리 추가
+    public void addAlarmCategory(String word) {
+
+
+        Tag tag = tagRepository.findTagByWord(word);
+
+
+        // 해당 단어에 대한 tag 데이터가 존재하지 않다면 tag 데이터를 추가한다.
+        if (tag == null) {
+            int customNum = 1;
+
+            String[] wordList = {"정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"};
+
+            // 기본 태그인지 확인
+            for (String w : wordList) {
+                if (w.equals(word)) {
+                    customNum = 0;
+                    break;
+                }
+            }
+
+            Tag tempTag = Tag.builder()
+                    .word(word)
+                    .isCustom(customNum)
+                    .build();
+
+            tag = tagRepository.save(tempTag);
+        }
+
+        // 똑같은 알람 카테고리를 추가했는지 확인.
+        AlarmCategory alarmCategory = alarmCategoryRepository.findByTagId(tag.getId());
+        if (alarmCategory != null) {
+            return;
+        }
+
+        // alarmCategory 추가.
+        User user = authService.getLoginUser();
+        Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
+        alarmCategoryRepository.save(new AlarmCategory(alarm, tag));
+
+    }
+
+    // 알람 카테고리 삭제
+    public void deleteAlarmCategory(String word) {
+        // tag는 공유되는 것이기 때문에 alarmCategory만 삭제한다.
+        User user = authService.getLoginUser();
+        Tag tag = tagRepository.findTagByWord(word);
+        alarmCategoryRepository.deleteByAlarmIdAndTagIds(user.getId(), tag.getId());
+    }
+
 
     // 알람 결과 조회
     public List<AlarmResultDto> findAlarmResult() {
