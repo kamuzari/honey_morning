@@ -11,9 +11,12 @@ app = FastAPI()
 class JSON_Briefing(BaseModel):
     text: str
 
+class JSON_Briefing_Out(BaseModel):
+    data: str
 
-@app.get("/ai/briefing")
-def read_briefing(json: JSON_Briefing):
+
+@app.post("/ai/briefing")
+def read_briefing(json: JSON_Briefing, response_model=JSON_Briefing_Out):
 
     tokenizer = PreTrainedTokenizerFast.from_pretrained('gogamza/kobart-summarization')
     model = BartForConditionalGeneration.from_pretrained('gogamza/kobart-summarization')
@@ -29,5 +32,6 @@ def read_briefing(json: JSON_Briefing):
         max_length = 256, # 요약문의 최대 길이 설정
         min_length = 1, # 요약문의 최소 길이 설정
         num_beams = 8) # 문장 생성 시 다음 단어를 탐색하는 영역의 개수
+    resp = {"data": tokenizer.decode(summary_text_ids[0], skip_special_tokens=True)}
 
-    return {data: tokenizer.decode(summary_text_ids[0], skip_special_tokens=True)}
+    return resp
