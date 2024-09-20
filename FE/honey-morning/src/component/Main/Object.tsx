@@ -1,7 +1,20 @@
 import styled from 'styled-components';
-const Object = () => {
-  return <Container>Object가 올 예정입니다.</Container>;
+import Header from '@/component/Header';
+
+const MainPage = () => {
+  return (
+    <>
+      <Head>
+        <Header />
+      </Head>
+      <Container>
+        <div>Object</div>
+      </Container>
+    </>
+  );
 };
+
+const Head = styled.div``;
 
 const Container = styled.div`
   display: flex;
@@ -12,4 +25,5 @@ const Container = styled.div`
   font-size: 5rem;
   color: white;
 `;
-export default Object;
+
+export default MainPage;

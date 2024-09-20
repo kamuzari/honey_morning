@@ -71,6 +71,7 @@ const LoginProcess: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<LoginFormData> = data => {
+    event.preventDefault();
     signMutate(data, {
       onSuccess: () => {},
       onError: () => {
