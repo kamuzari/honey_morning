@@ -1,23 +1,20 @@
 pipeline {
     agent any
-    environment {
-        GIT_CREDENTIALS = credentials('153d5dcc-2f40-421c-8e4b-552d35dad7e1')
-    }
 
     stages {
-        stage('Checkout Code') {
+        stage('코드 체크아웃') {
             steps {
-                // GitLab
+                // GitLab 저장소의 develop 브랜치에서 코드 체크아웃
                 git branch: 'develop',
-                    url: 'https://oauth2:${GIT_CREDENTIALS}@lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git'
+                    url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git',
+                    credentialsId: 'wngud1225'  // Jenkins에 등록된 Username/Password 자격 증명 ID
             }
         }
 
-        // 백엔드 Docker 이미지 빌드
-        stage('Build Backend') {
+        stage('백엔드 빌드') {
             steps {
                 dir('BE') {
-
+                    // 백엔드 Docker 이미지 빌드
                     script {
                         docker.build('hm-backend:latest', '-f Dockerfile .')
                     }
@@ -25,11 +22,10 @@ pipeline {
             }
         }
 
-        // 프론트엔드 Docker 이미지 빌드
-        stage('Build Frontend') {
+        stage('프론트엔드 빌드') {
             steps {
                 dir('FE/honey-morning') {
-
+                    // 프론트엔드 Docker 이미지 빌드
                     script {
                         docker.build('hm-frontend:latest', '-f Dockerfile .')
                     }
@@ -37,10 +33,10 @@ pipeline {
             }
         }
 
-         // 기존 컨테이너 중지 및 제거 (이미 없으면 에러 무시)
-        stage('Stop and Remove Existing Containers') {
+        stage('기존 컨테이너 중지 및 제거') {
             steps {
                 script {
+                    // 기존 백엔드 및 프론트엔드 컨테이너 중지 및 제거
                     sh '''
                     docker stop hm-backend || true && docker rm hm-backend || true
                     docker stop hm-frontend || true && docker rm hm-frontend || true
@@ -49,38 +45,38 @@ pipeline {
             }
         }
 
-        // 새로운 백엔드 컨테이너 실행
-        stage('Run Backend Container') {
+        stage('백엔드 컨테이너 실행') {
             steps {
                 script {
+                    // 새로운 백엔드 컨테이너 실행
                     sh '''
                     docker run -d \
-                        --name hm-backend \
-                        -p 8081:8081 \
-                        --network hm-network \
-                        -e SPRING_DATASOURCE_URL=jdbc:mysql://hm-mysql:3306/honeymorning?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC \
-                        -e SPRING_DATASOURCE_USERNAME=ssafy \
-                        -e SPRING_DATASOURCE_PASSWORD=ssafy \
-                        -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
-                        -e SPRING_JWT_REDIS_HOST=hm-redis \
-                        -e SPRING_JWT_PORT=6379 \
-                        hm-backend:latest
+                      --name hm-backend \
+                      -p 8081:8081 \
+                      --network hm-network \
+                      -e SPRING_DATASOURCE_URL=jdbc:mysql://hm-mysql:3306/honeymorning?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC \
+                      -e SPRING_DATASOURCE_USERNAME=ssafy \
+                      -e SPRING_DATASOURCE_PASSWORD=ssafy \
+                      -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
+                      -e SPRING_JWT_REDIS_HOST=hm-redis \
+                      -e SPRING_JWT_PORT=6379 \
+                      hm-backend:latest
                     '''
                 }
             }
         }
 
-        // 새로운 프론트엔드 컨테이너 실행
-        stage('Run Frontend Container') {
+        stage('프론트엔드 컨테이너 실행') {
             steps {
                 script {
+                    // 새로운 프론트엔드 컨테이너 실행
                     sh '''
                     docker run -d \
-                        --name hm-frontend \
-                        -p 5173:5173 \
-                        --network hm-network \
-                        --link hm-backend:hm-backend \
-                        hm-frontend:latest
+                      --name hm-frontend \
+                      -p 5173:5173 \
+                      --network hm-network \
+                      --link hm-backend:hm-backend \
+                      hm-frontend:latest
                     '''
                 }
             }
@@ -93,10 +89,10 @@ pipeline {
             cleanWs()
         }
         success {
-            echo 'Build successful!'
+            echo '빌드 성공!'
         }
         failure {
-            echo 'Build failed!'
+            echo '빌드 실패!'
         }
     }
 }
