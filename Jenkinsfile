@@ -1,80 +1,63 @@
 pipeline {
     agent any
+    environment {
+        GIT_CREDENTIALS = credentials('153d5dcc-2f40-421c-8e4b-552d35dad7e1')
+    }
+
     stages {
-        stage('Cleanup') {
+        stage('Checkout Code') {
             steps {
-                cleanWs()
+                // GitLab
+                git branch: 'develop',
+                    url: 'https://oauth2:${GIT_CREDENTIALS}@lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git'
             }
         }
-        stage('Prepare Workspace') {
-            steps {
-                script {
-                    sh 'mkdir -p workspace'
-                    dir('workspace') {
-                        sh 'pwd'
-                        sh 'ls -la'
-                    }
-                }
-            }
-        }
-        stage('Checkout') {
-            steps {
-                script {
-                    dir('workspace') {
-                        try {
-                            checkout([
-                                $class: 'GitSCM',
-                                branches: [[name: '*/develop']],
-                                userRemoteConfigs: [[url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git', 
-                                credentialsId: 'gitlab-access-token']] // access-token 수정 필요
-                            ])
-                        } catch (Exception e) {
-                            echo "Git checkout failed: ${e}"
-                            sh 'pwd'
-                            sh 'ls -la'
-                            sh 'git rev-parse --is-inside-work-tree || true'
-                            sh 'git config --list || true'
-                            sh 'git status || true'
-                            error("Git checkout failed")
-                        }
-                    }
-                }
-            }
-        }
-        stage('Build Frontend') {
-            steps {
-                dir('workspace/FE/honey-morning') {
-                    script {
-                        sh 'docker build -t hm-frontend:latest .'
-                    }
-                }
-            }
-        }
+
+        // 백엔드 Docker 이미지 빌드
         stage('Build Backend') {
             steps {
-                dir('workspace/BE') {
+                dir('BE') {
+
                     script {
-                        sh './gradlew build'
-                        sh 'docker build -t hm-backend:latest .'
+                        docker.build('hm-backend:latest', '-f Dockerfile .')
                     }
                 }
             }
         }
-        stage('Deploy') {
+
+        // 프론트엔드 Docker 이미지 빌드
+        stage('Build Frontend') {
+            steps {
+                dir('FE/honey-morning') {
+
+                    script {
+                        docker.build('hm-frontend:latest', '-f Dockerfile .')
+                    }
+                }
+            }
+        }
+
+         // 기존 컨테이너 중지 및 제거 (이미 없으면 에러 무시)
+        stage('Stop and Remove Existing Containers') {
             steps {
                 script {
-                    // 기존 컨테이너 중지 및 제거
-                    sh 'docker stop hm-frontend hm-backend || true'
-                    sh 'docker rm hm-frontend hm-backend || true'
-                    
-                    // 네트워크 생성 (이미 존재하는 경우 무시)
-                    sh 'docker network create hm-network || true'
-                    
-                    // 백엔드 배포
                     sh '''
-                    docker run -d --name hm-backend \
-                        --network hm-network \
+                    docker stop hm-backend || true && docker rm hm-backend || true
+                    docker stop hm-frontend || true && docker rm hm-frontend || true
+                    '''
+                }
+            }
+        }
+
+        // 새로운 백엔드 컨테이너 실행
+        stage('Run Backend Container') {
+            steps {
+                script {
+                    sh '''
+                    docker run -d \
+                        --name hm-backend \
                         -p 8081:8081 \
+                        --network hm-network \
                         -e SPRING_DATASOURCE_URL=jdbc:mysql://hm-mysql:3306/honeymorning?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC \
                         -e SPRING_DATASOURCE_USERNAME=ssafy \
                         -e SPRING_DATASOURCE_PASSWORD=ssafy \
@@ -83,27 +66,37 @@ pipeline {
                         -e SPRING_JWT_PORT=6379 \
                         hm-backend:latest
                     '''
-                    
-                    // 프론트엔드 배포
+                }
+            }
+        }
+
+        // 새로운 프론트엔드 컨테이너 실행
+        stage('Run Frontend Container') {
+            steps {
+                script {
                     sh '''
-                    docker run -d --name hm-frontend \
-                        --network hm-network \
+                    docker run -d \
+                        --name hm-frontend \
                         -p 5173:5173 \
+                        --network hm-network \
+                        --link hm-backend:hm-backend \
                         hm-frontend:latest
                     '''
                 }
             }
         }
     }
+
     post {
         always {
-            deleteDir()
+            // 빌드 후 워크스페이스 정리
+            cleanWs()
         }
         success {
-            echo 'Deployment succeeded!'
+            echo 'Build successful!'
         }
         failure {
-            echo 'Deployment failed!'
+            echo 'Build failed!'
         }
     }
 }
