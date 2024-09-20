@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 const Object = () => {
-  return <Container>Three.js 로 만들 Object가 올 예정입니다.</Container>;
+  return <Container>Object가 올 예정입니다.</Container>;
 };
 
 const Container = styled.div`
