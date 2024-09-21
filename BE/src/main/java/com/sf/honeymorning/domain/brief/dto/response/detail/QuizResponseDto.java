@@ -1,9 +1,13 @@
-package com.sf.honeymorning.domain.brief.dto.response.breifdetail;
+package com.sf.honeymorning.domain.brief.dto.response.detail;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
+@Data
+@AllArgsConstructor
+@Builder
 public class QuizResponseDto {
 	@Schema(name = "문제", example = "돈을 빌리고 빌려주는 과정에서 이루어지는 돈의 흐름은?")
 	private String question;
@@ -25,17 +29,6 @@ public class QuizResponseDto {
 
 	@Schema(name = "정답 번호", example = "1")
 	private Integer answerNumber;
-
-	public QuizResponseDto(String question, String option1, String option2, String option3, String option4,
-		Integer selectedOption, Integer answerNumber) {
-		this.question = question;
-		this.option1 = option1;
-		this.option2 = option2;
-		this.option3 = option3;
-		this.option4 = option4;
-		this.selectedOption = selectedOption;
-		this.answerNumber = answerNumber;
-	}
 }
 
 
