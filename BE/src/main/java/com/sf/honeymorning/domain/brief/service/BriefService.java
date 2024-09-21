@@ -9,32 +9,30 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sf.honeymorning.domain.brief.dto.response.BriefHistory;
+import com.sf.honeymorning.domain.auth.service.AuthService;
+import com.sf.honeymorning.domain.brief.dto.BriefHistoryDto;
 import com.sf.honeymorning.domain.brief.entity.Brief;
 import com.sf.honeymorning.domain.brief.entity.BriefCategory;
 import com.sf.honeymorning.domain.brief.repository.BriefCategoryRepository;
 import com.sf.honeymorning.domain.brief.repository.BriefRepository;
 import com.sf.honeymorning.domain.brief.repository.QuizRepository;
-import com.sf.honeymorning.domain.common.Tag;
 import com.sf.honeymorning.domain.quiz.entity.Quiz;
+import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.user.entity.User;
-import com.sf.honeymorning.domain.user.repository.UserRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class BriefService {
-	private final UserRepository userRepository;
+	private final AuthService authService;
 	private final BriefRepository briefRepository;
 	private final BriefCategoryRepository briefCategoryRepository;
 	private final QuizRepository quizRepository;
 
-	public List<BriefHistory> getBriefs(String authUsername, Pageable pageable) {
-		User user = userRepository.findUsername(authUsername)
-			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
+	public List<BriefHistoryDto> getBriefs(Pageable pageable) {
+		User user = authService.getLoginUser();
 		Page<Brief> briefPage = briefRepository.findByUser(user, pageable);
 		List<Brief> briefs = briefPage.getContent();
 		List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(briefs);
@@ -43,7 +41,7 @@ public class BriefService {
 		return toBriefHistoryDto(briefs, briefCategories, quizzes);
 	}
 
-	private List<BriefHistory> toBriefHistoryDto(List<Brief> briefs, List<BriefCategory> briefCategories,
+	private List<BriefHistoryDto> toBriefHistoryDto(List<Brief> briefs, List<BriefCategory> briefCategories,
 		List<Quiz> quizzes) {
 		Map<Long, List<BriefCategory>> briefCategoryByBrief = briefCategories.stream()
 			.collect(Collectors.groupingBy(v -> v.getBrief().getId()));
@@ -51,7 +49,7 @@ public class BriefService {
 			.collect(Collectors.groupingBy(v -> v.getBrief().getId()));
 
 		return briefs.stream().map(brief ->
-			new BriefHistory(
+			new BriefHistoryDto(
 				brief.getId(),
 				brief.getCreatedAt(),
 				briefCategoryByBrief.get(brief.getId()).stream()

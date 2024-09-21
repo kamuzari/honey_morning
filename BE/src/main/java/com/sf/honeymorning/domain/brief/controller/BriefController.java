@@ -5,16 +5,14 @@ import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sf.honeymorning.domain.brief.dto.response.BriefHistory;
+import com.sf.honeymorning.domain.brief.dto.BriefHistoryDto;
 import com.sf.honeymorning.domain.brief.service.BriefService;
-import com.sf.honeymorning.domain.user.dto.CustomUserDetails;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -58,17 +56,15 @@ public class BriefController {
 		@ApiResponse(
 			responseCode = "200",
 			description = "전체 조회 성공",
-			content = @Content(schema = @Schema(implementation = BriefHistory.class))
+			content = @Content(schema = @Schema(implementation = BriefHistoryDto.class))
 		)
 	})
 	@GetMapping("/all")
-	public ResponseEntity<List<BriefHistory>> readAll(
-		@AuthenticationPrincipal CustomUserDetails auth,
-		@RequestParam(value = "page") Integer page,
+	public ResponseEntity<List<BriefHistoryDto>> readAll(@RequestParam(value = "page") Integer page,
 		@RequestParam(value = "size") Integer size) {
 
 		PageRequest demoRequest = PageRequest.of(page - 1, size, Sort.by("createdAt").descending());
-		List<BriefHistory> briefs = briefService.getBriefs(auth.getUsername(), demoRequest);
+		List<BriefHistoryDto> briefs = briefService.getBriefs(demoRequest);
 
 		return ResponseEntity.ok(briefs);
 	}
