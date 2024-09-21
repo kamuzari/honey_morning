@@ -41,8 +41,8 @@ services:
       SPRING_DATASOURCE_USERNAME: ssafy
       SPRING_DATASOURCE_PASSWORD: ssafy
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      SPRING_JWT_REDIS_HOST: hm-redis
-      SPRING_JWT_PORT: 6379
+      SPRING_DATA_REDIS_HOST: hm-redis
+      SPRING_DATA_REIDIS_PORT: 6379
     networks:
       - hm-network
 
