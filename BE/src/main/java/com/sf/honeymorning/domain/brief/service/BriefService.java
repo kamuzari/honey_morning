@@ -7,15 +7,14 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.sf.honeymorning.domain.auth.service.AuthService;
 import com.sf.honeymorning.domain.brief.dto.response.BriefDetailResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.BriefHistory;
 import com.sf.honeymorning.domain.brief.dto.response.breifdetail.BriefResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.breifdetail.QuizResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.breifdetail.SummaryResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.breifdetail.SummaryResponseDto.WordCloudResponseDto;
+import com.sf.honeymorning.domain.brief.dto.response.BriefHistoryDto;
 import com.sf.honeymorning.domain.brief.entity.Brief;
 import com.sf.honeymorning.domain.brief.entity.BriefCategory;
 import com.sf.honeymorning.domain.brief.entity.WordCloud;
@@ -30,7 +29,6 @@ import com.sf.honeymorning.domain.user.entity.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class BriefService {
@@ -40,7 +38,7 @@ public class BriefService {
 	private final WordCloudRepository wordCloudRepository;
 	private final QuizRepository quizRepository;
 
-	public List<BriefHistory> getBriefs(String authUsername, Pageable pageable) {
+	public List<BriefHistoryDto> getBriefs(Pageable pageable) {
 		User user = authService.getLoginUser();
 		Page<Brief> briefPage = briefRepository.findByUser(user, pageable);
 		List<Brief> briefs = briefPage.getContent();
@@ -98,7 +96,7 @@ public class BriefService {
 		);
 	}
 
-	private List<BriefHistory> toBriefHistoryDto(List<Brief> briefs, List<BriefCategory> briefCategories,
+	private List<BriefHistoryDto> toBriefHistoryDto(List<Brief> briefs, List<BriefCategory> briefCategories,
 		List<Quiz> quizzes) {
 		Map<Long, List<BriefCategory>> briefCategoryByBrief = briefCategories.stream()
 			.collect(Collectors.groupingBy(v -> v.getBrief().getId()));
@@ -106,7 +104,7 @@ public class BriefService {
 			.collect(Collectors.groupingBy(v -> v.getBrief().getId()));
 
 		return briefs.stream().map(brief ->
-			new BriefHistory(
+			new BriefHistoryDto(
 				brief.getId(),
 				brief.getCreatedAt(),
 				briefCategoryByBrief.get(brief.getId()).stream()
