@@ -1,24 +1,27 @@
 package com.sf.honeymorning.domain.auth.service;
 
+import com.sf.honeymorning.domain.alarm.entity.Alarm;
+import com.sf.honeymorning.domain.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.domain.auth.repository.RefreshTokenRepository;
 import com.sf.honeymorning.domain.auth.util.JWTUtil;
+import com.sf.honeymorning.domain.tag.entity.Tag;
+import com.sf.honeymorning.domain.tag.repository.TagRepository;
 import com.sf.honeymorning.domain.user.constant.LoginMessage;
 import com.sf.honeymorning.domain.user.dto.CustomUserDetails;
 import com.sf.honeymorning.domain.user.dto.response.UserDetailDto;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
-import com.sf.honeymorning.domain.user.service.UserStatusService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalTime;
 
 @Slf4j
 @Service
@@ -28,8 +31,9 @@ public class AuthService {
     private final JWTUtil jwtUtil;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
-    private final UserStatusService userStatusService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AlarmRepository alarmRepository;
+    private final TagRepository tagRepository;
 
     public UserDetailDto getUserInfo(HttpServletRequest request) {
         User loginUser = getLoginUser();
@@ -39,13 +43,16 @@ public class AuthService {
 
         return UserDetailDto.builder()
                 .id(loginUser.getId())
+                .role(loginUser.getRole())
                 .email(loginUser.getEmail())
+                .username(loginUser.getUsername())
                 .build();
     }
 
     public User getLoginUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!isLogin(principal)) {
+
             return null;
         }
         String email = ((CustomUserDetails) principal).getUsername();
@@ -56,28 +63,6 @@ public class AuthService {
 
     private boolean isLogin(Object principal) {
         return principal instanceof CustomUserDetails;
-    }
-
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = extractRefreshTokenFromCookie(request);
-        if (refreshToken == null) {
-            log.info("refreshToken을 쿠키에서 찾을 수 없습니다.");
-            return;
-        }
-
-        String email = jwtUtil.getUsername(refreshToken);
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 이메일의 유저가 없습니다"));
-        String userId = user.getId().toString();
-
-        // refreshToken 쿠키 제거
-        Cookie cookie = new Cookie("refreshToken", null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-
-        refreshTokenRepository.deleteById(refreshToken);
-//        userStatusService.setUserOffline(Long.parseLong(userId));
     }
 
     private String extractRefreshTokenFromCookie(HttpServletRequest request) {
@@ -92,17 +77,17 @@ public class AuthService {
         return null;
     }
 
-    public void saveUser(User user){
-        System.out.println("check2");
+    public void saveUser(User user) {
 
         String email = user.getEmail();
         String username = user.getUsername();
         String password = user.getPassword();
+        String role = "ROLE_USER";
 
         // 중복 체크
         Boolean isExist = userRepository.existsByEmail(email);
 
-        if(isExist){
+        if (isExist) {
             return;
         }
 
@@ -110,9 +95,32 @@ public class AuthService {
                 .password(bCryptPasswordEncoder.encode(password))
                 .username(username)
                 .email(email)
+                .role(role)
                 .build();
 
-        userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+
+        // 알람 entity 생성
+        Alarm alarm = Alarm.builder()
+                .user(savedUser)
+                .alarmTime(LocalTime.of(7, 0)) // 오전 7시 기본 설정
+                .daysOfWeek("1111111") // 모든 요일 기본 설정
+                .repeatFrequency(0) // 반복 없음 기본 설정
+                .repeatInterval(0) // 반복 없음 기본 설정
+                .isActive(0) // 비활성 상태 기본 설정
+                .build();
+
+        // database 저장
+        alarmRepository.save(alarm);
+
+        String[] wordList = {"정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"};
+        for (int i = 0; i < wordList.length; i++) {
+            Tag tag = Tag.builder()
+                    .word(wordList[i])
+                    .isCustom(0)
+                    .build();
+            tagRepository.save(tag);
+        }
 
     }
 

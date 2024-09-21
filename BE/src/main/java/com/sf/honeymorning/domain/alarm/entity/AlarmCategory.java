@@ -1,20 +1,15 @@
 package com.sf.honeymorning.domain.alarm.entity;
 
-import com.sf.honeymorning.domain.common.BaseEntity;
-import com.sf.honeymorning.domain.common.Tag;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.sf.honeymorning.domain.common.entity.BaseEntity;
+import com.sf.honeymorning.domain.tag.entity.Tag;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class AlarmCategory extends BaseEntity {
@@ -31,5 +26,10 @@ public class AlarmCategory extends BaseEntity {
     @JoinColumn(name = "tag_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Tag tag;
+
+    public AlarmCategory(Alarm alarm, Tag tag){
+        this.alarm = alarm;
+        this.tag = tag;
+    }
 
 }

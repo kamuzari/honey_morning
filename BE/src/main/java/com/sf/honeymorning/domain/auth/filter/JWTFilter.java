@@ -8,13 +8,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Slf4j
 public class JWTFilter extends OncePerRequestFilter {
@@ -27,7 +28,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+                                    FilterChain filterChain) throws ServletException, IOException {
 
         // 요청된 URL을 로그로 출력
         String requestUrl = request.getRequestURI();
@@ -42,12 +43,10 @@ public class JWTFilter extends OncePerRequestFilter {
 
             return;
         }
-
         // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
         try {
             jwtUtil.isExpired(accessToken);
         } catch (ExpiredJwtException e) {
-
             //response body
             PrintWriter writer = response.getWriter();
             writer.print("access token expired");
@@ -74,9 +73,8 @@ public class JWTFilter extends OncePerRequestFilter {
         // username, role 값을 획득
         String username = jwtUtil.getUsername(accessToken);
         String role = jwtUtil.getRole(accessToken);
-
         User userEntity = User.builder()
-                .username(username)
+                .email(username)
                 .role(role)
                 .build();
 

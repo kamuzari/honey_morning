@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import styled, {createGlobalStyle} from 'styled-components';
 import {useWatch, useForm, Controller, SubmitHandler} from 'react-hook-form';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 import {useQueryClient, useMutation} from '@tanstack/react-query';
 import {instance} from '@/api/axios';
 import Logout from '@/component/Logout';
@@ -58,6 +58,7 @@ const LoginProcess: React.FC = () => {
       queryClient.setQueryData(['userInfo'], data);
       console.log('data:', data);
       alert('로그인 성공');
+      navigate('/');
     },
     onError: (error: any) => {
       if (error.message) {
@@ -124,7 +125,7 @@ const LoginProcess: React.FC = () => {
         </form>
         <div className="signUpYet">
           <div>아직 회원이 아니신가요?</div>
-          <MoveToSignUp>회원가입 하기</MoveToSignUp>
+          <MoveToSignUp to="/signup">회원가입 하기</MoveToSignUp>
         </div>
       </Container>
       <Logout />
@@ -204,7 +205,7 @@ const SubmitButton = styled.button`
   cursor: pointer;
 `;
 
-const MoveToSignUp = styled.button`
+const MoveToSignUp = styled(Link)`
   color: var(--mediumblue-color);
   background-color: transparent;
   cursor: pointer;

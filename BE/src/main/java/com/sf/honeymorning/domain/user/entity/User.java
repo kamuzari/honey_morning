@@ -1,9 +1,8 @@
 package com.sf.honeymorning.domain.user.entity;
 
-import com.sf.honeymorning.domain.common.BaseEntity;
+import com.sf.honeymorning.domain.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

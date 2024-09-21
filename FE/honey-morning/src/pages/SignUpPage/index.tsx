@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import {useWatch, useForm, Controller} from 'react-hook-form';
+import {useNavigate} from 'react-router-dom';
+import {useMutation} from '@tanstack/react-query';
 import styled, {createGlobalStyle} from 'styled-components';
 import {instance} from '@/api/axios';
-import {useNavigate} from 'react-router-dom';
 import Modal from '@/component/Modal';
 
 interface SignUpFormData {
@@ -63,6 +64,36 @@ const SignUpProcess: React.FC = () => {
     return emailPattern.test(email) || '이메일의 형식이 올바르지 않습니다.';
   };
 
+  const checkEmailDuplicate = async (email: string) => {
+    if (!email) {
+      setError('email', {
+        message: '이메일을 입력해주세요.',
+      });
+      setEmailMessage('');
+      setEmailMessageType('');
+      return;
+    }
+
+    try {
+      const response = await instance.get(
+        `/api/users/check/email?email=${email}`,
+      );
+
+      if (response.data === true) {
+        setEmailMessage('이미 사용 중인 이메일입니다.');
+        setEmailMessageType('success');
+        setIsEmailChecked(true);
+      } else {
+        setEmailMessage('사용 가능한 이메일입니다.');
+        setEmailMessageType('error');
+        setIsEmailChecked(false);
+      }
+    } catch (error) {
+      setEmailMessage('이메일 확인에 실패했습니다.');
+      setEmailMessageType('error');
+    }
+  };
+
   // const validateForm = data => {
   //   let isValid = true;
 
@@ -70,6 +101,12 @@ const SignUpProcess: React.FC = () => {
   //     isValid = false;
   //   }
   // };
+
+  const handlePasswordChange = (value: string) => {
+    setConfirmPassword(value);
+  };
+
+  const passwordsMatch = confirmPassword === password;
 
   const handleSignUp = async (data: SignUpFormData) => {
     try {
@@ -117,7 +154,19 @@ const SignUpProcess: React.FC = () => {
                     />
                   )}
                 />
+                <button
+                  type="button"
+                  className="DuplicateButton"
+                  onClick={() => checkEmailDuplicate(email)}
+                >
+                  중복확인
+                </button>
               </div>
+              {emailMessage && (
+                <EmailMessage type={emailMessageType}>
+                  {emailMessage}
+                </EmailMessage>
+              )}
             </div>
             <div className="inputGroup">
               <label>Name</label>
@@ -165,11 +214,29 @@ const SignUpProcess: React.FC = () => {
                 render={({field}) => (
                   <Input
                     {...field}
+                    value={confirmPassword}
+                    onChange={e => {
+                      field.onChange(e);
+                      handlePasswordChange(e.target.value);
+                    }}
                     type="password"
                     placeholder="비밀번호를 다시 입력해주세요"
+                    style={{
+                      borderColor: confirmPassword
+                        ? passwordsMatch
+                          ? 'green'
+                          : 'red'
+                        : '',
+                    }}
                   />
                 )}
               />
+              {!passwordsMatch && confirmPassword && (
+                <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
+              )}
+              {passwordsMatch && confirmPassword && (
+                <SuccessText>비밀번호가 일치합니다.</SuccessText>
+              )}
             </div>
 
             <SubmitButton type="submit">회원가입</SubmitButton>
@@ -230,4 +297,20 @@ const SubmitButton = styled.button`
   justify-content: center;
   padding: 1em 5em;
   cursor: pointer;
+`;
+
+//prettier-ignore
+const EmailMessage = styled.p<{ type: string }>`
+  color: ${({ type }) => (type === 'success' ? 'var(--red-color)' : 'var(--darkgreen-color)')};
+  font-size: 14px;
+`;
+
+const ErrorText = styled.p`
+  color: red;
+  font-size: 14px;
+`;
+
+const SuccessText = styled.p`
+  color: green;
+  font-size: 14px;
 `;
