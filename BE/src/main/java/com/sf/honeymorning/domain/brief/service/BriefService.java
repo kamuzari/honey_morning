@@ -5,16 +5,17 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.sf.honeymorning.domain.auth.service.AuthService;
 import com.sf.honeymorning.domain.brief.dto.response.BriefDetailResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.breifdetail.BriefResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.breifdetail.QuizResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.breifdetail.SummaryResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.breifdetail.SummaryResponseDto.WordCloudResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.BriefHistoryDto;
+import com.sf.honeymorning.domain.brief.dto.response.BriefHistoryResponseDto;
+import com.sf.honeymorning.domain.brief.dto.response.briefs.BriefHistoryDto;
+import com.sf.honeymorning.domain.brief.dto.response.detail.BriefResponseDto;
+import com.sf.honeymorning.domain.brief.dto.response.detail.QuizResponseDto;
+import com.sf.honeymorning.domain.brief.dto.response.detail.SummaryResponseDto;
+import com.sf.honeymorning.domain.brief.dto.response.detail.WordCloudResponseDto;
 import com.sf.honeymorning.domain.brief.entity.Brief;
 import com.sf.honeymorning.domain.brief.entity.BriefCategory;
 import com.sf.honeymorning.domain.brief.entity.WordCloud;
@@ -38,84 +39,26 @@ public class BriefService {
 	private final WordCloudRepository wordCloudRepository;
 	private final QuizRepository quizRepository;
 
-	public List<BriefHistoryDto> getBriefs(Pageable pageable) {
+	public BriefHistoryResponseDto getBriefs(int page) {
 		User user = authService.getLoginUser();
-		Page<Brief> briefPage = briefRepository.findByUser(user, pageable);
+		Page<Brief> briefPage = briefRepository.findByUser(user, PageRequest.of(page - 1, 5));
 		List<Brief> briefs = briefPage.getContent();
 		List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(briefs);
 		List<Quiz> quizzes = quizRepository.findByBriefIn(briefs);
-
-		return toBriefHistoryDto(briefs, briefCategories, quizzes);
+		Map<Long, List<BriefCategory>> briefCategoryByBrief = briefCategories.stream().collect(Collectors.groupingBy(v -> v.getBrief().getId()));
+		Map<Long, List<Quiz>> quizzesByBrief = quizzes.stream().collect(Collectors.groupingBy(v -> v.getBrief().getId()));
+		return new BriefHistoryResponseDto(briefs.stream().map(brief -> new BriefHistoryDto(brief.getId(), brief.getCreatedAt(), briefCategoryByBrief.get(brief.getId()).stream().map(BriefCategory::getTag).map(Tag::getWord).toList(), brief.getSummary(), quizzesByBrief.get(brief.getId()).stream().filter(quiz -> quiz.getAnswer().equals(quiz.getSelection())).count())).toList(), briefPage.getTotalPages());
 	}
 
 	public BriefDetailResponseDto getBrief(Long briefId) {
 		User user = authService.getLoginUser();
-		Brief brief = briefRepository.findByUserAndId(user, briefId)
-			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
-
+		Brief brief = briefRepository.findByUserAndId(user, briefId).orElseThrow(() -> new EntityNotFoundException("not exist user"));
 		boolean canAccess = brief.getUser().getId().equals(user.getId());
-		if (!canAccess) {
-			throw new RuntimeException("not allowed service");
-		}
-
+		if (!canAccess) {throw new RuntimeException("not allowed service");}
 		List<WordCloud> wordClouds = wordCloudRepository.findByBrief(brief);
 		List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(brief);
 		List<Quiz> quizzes = quizRepository.findByBrief(brief);
-
-		return toBriefDetailResponseDto(briefId, wordClouds, briefCategories, brief, quizzes);
+		return new BriefDetailResponseDto(briefId, new SummaryResponseDto(wordClouds.stream().map(wordCloud -> new WordCloudResponseDto(wordCloud.getKeyword(), wordCloud.getFrequency())).toList(), briefCategories.stream().map(briefCategory -> briefCategory.getTag().getWord()).toList()), new BriefResponseDto(brief.getSummary(), brief.getContent()), quizzes.stream().map(quiz -> new QuizResponseDto(quiz.getQuestion(), quiz.getOption1(), quiz.getOption2(), quiz.getOption3(), quiz.getOption4(), quiz.getSelection(), quiz.getAnswer())).toList());
 	}
 
-	private BriefDetailResponseDto toBriefDetailResponseDto(Long briefId, List<WordCloud> wordClouds,
-		List<BriefCategory> briefCategories, Brief brief, List<Quiz> quizzes) {
-		return new BriefDetailResponseDto(
-			briefId,
-			new SummaryResponseDto(
-				wordClouds.stream()
-					.map(wordCloud -> new WordCloudResponseDto(
-						wordCloud.getKeyword(),
-						wordCloud.getFrequency()))
-					.toList(),
-				briefCategories.stream()
-					.map(briefCategory -> briefCategory.getTag().getWord())
-					.toList()
-			),
-			new BriefResponseDto(
-				brief.getSummary(),
-				brief.getContent()
-			)
-			,
-			quizzes.stream().map(quiz -> new QuizResponseDto(
-				quiz.getQuestion(),
-				quiz.getOption1(),
-				quiz.getOption2(),
-				quiz.getOption3(),
-				quiz.getOption4(),
-				quiz.getSelection(),
-				quiz.getAnswer()
-			)).toList()
-		);
-	}
-
-	private List<BriefHistoryDto> toBriefHistoryDto(List<Brief> briefs, List<BriefCategory> briefCategories,
-		List<Quiz> quizzes) {
-		Map<Long, List<BriefCategory>> briefCategoryByBrief = briefCategories.stream()
-			.collect(Collectors.groupingBy(v -> v.getBrief().getId()));
-		Map<Long, List<Quiz>> quizzesByBrief = quizzes.stream()
-			.collect(Collectors.groupingBy(v -> v.getBrief().getId()));
-
-		return briefs.stream().map(brief ->
-			new BriefHistoryDto(
-				brief.getId(),
-				brief.getCreatedAt(),
-				briefCategoryByBrief.get(brief.getId()).stream()
-					.map(BriefCategory::getTag)
-					.map(Tag::getWord)
-					.toList(),
-				brief.getSummary(),
-				quizzesByBrief.get(brief.getId()).stream()
-					.filter(quiz -> quiz.getAnswer().equals(quiz.getSelection()))
-					.count()
-			)
-		).toList();
-	}
 }
