@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sf.honeymorning.domain.auth.service.AuthService;
 import com.sf.honeymorning.domain.brief.dto.response.BriefDetailResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.BriefHistory;
 import com.sf.honeymorning.domain.brief.dto.response.breifdetail.BriefResponseDto;
@@ -22,10 +23,9 @@ import com.sf.honeymorning.domain.brief.repository.BriefCategoryRepository;
 import com.sf.honeymorning.domain.brief.repository.BriefRepository;
 import com.sf.honeymorning.domain.brief.repository.QuizRepository;
 import com.sf.honeymorning.domain.brief.repository.WordCloudRepository;
-import com.sf.honeymorning.domain.common.Tag;
 import com.sf.honeymorning.domain.quiz.entity.Quiz;
+import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.user.entity.User;
-import com.sf.honeymorning.domain.user.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -34,15 +34,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class BriefService {
-	private final UserRepository userRepository;
+	private final AuthService authService;
 	private final BriefRepository briefRepository;
 	private final BriefCategoryRepository briefCategoryRepository;
 	private final WordCloudRepository wordCloudRepository;
 	private final QuizRepository quizRepository;
 
 	public List<BriefHistory> getBriefs(String authUsername, Pageable pageable) {
-		User user = userRepository.findByEmail(authUsername)
-			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
+		User user = authService.getLoginUser();
 		Page<Brief> briefPage = briefRepository.findByUser(user, pageable);
 		List<Brief> briefs = briefPage.getContent();
 		List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(briefs);
@@ -51,9 +50,8 @@ public class BriefService {
 		return toBriefHistoryDto(briefs, briefCategories, quizzes);
 	}
 
-	public BriefDetailResponseDto getBrief(String authUsername, Long briefId) {
-		User user = userRepository.findUsername(authUsername)
-			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
+	public BriefDetailResponseDto getBrief(Long briefId) {
+		User user = authService.getLoginUser();
 		Brief brief = briefRepository.findByUserAndId(user, briefId)
 			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
 
@@ -69,7 +67,7 @@ public class BriefService {
 		return toBriefDetailResponseDto(briefId, wordClouds, briefCategories, brief, quizzes);
 	}
 
-	private static BriefDetailResponseDto toBriefDetailResponseDto(Long briefId, List<WordCloud> wordClouds,
+	private BriefDetailResponseDto toBriefDetailResponseDto(Long briefId, List<WordCloud> wordClouds,
 		List<BriefCategory> briefCategories, Brief brief, List<Quiz> quizzes) {
 		return new BriefDetailResponseDto(
 			briefId,

@@ -49,9 +49,8 @@ public class BriefController {
 	@GetMapping("/{brief_id}")
 	public ResponseEntity<BriefDetailResponseDto> read(
 		@Parameter(description = "조회할 브리핑의 ID", example = "12345")
-		@AuthenticationPrincipal CustomUserDetails auth,
 		@PathVariable(name = "brief_id") Long briefId) {
-		BriefDetailResponseDto data = briefService.getBrief(auth.getUsername(), briefId);
+		BriefDetailResponseDto data = briefService.getBrief(briefId);
 
 		return ResponseEntity.ok(data);
 	}
