@@ -6,7 +6,8 @@ from transformers import PreTrainedTokenizerFast
 from transformers import BartForConditionalGeneration
 
 
-app = FastAPI()
+app = FastAPI(root_path="/ai/briefing"
+)
 
 class JSON_Briefing(BaseModel):
     text: str
@@ -15,8 +16,8 @@ class JSON_Briefing_Out(BaseModel):
     data: str
 
 
-@app.post("/ai/briefing")
-def read_briefing(json: JSON_Briefing, response_model=JSON_Briefing_Out):
+@app.post("/", response_model=JSON_Briefing_Out)
+def read_briefing(json: JSON_Briefing):
 
     tokenizer = PreTrainedTokenizerFast.from_pretrained('gogamza/kobart-summarization')
     model = BartForConditionalGeneration.from_pretrained('gogamza/kobart-summarization')
