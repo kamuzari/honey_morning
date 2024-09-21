@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sf.honeymorning.domain.brief.dto.response.BriefHistoryDto;
 import com.sf.honeymorning.domain.brief.dto.response.BriefDetailResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.BriefHistory;
 import com.sf.honeymorning.domain.brief.service.BriefService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

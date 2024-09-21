@@ -1,4 +1,4 @@
-package com.sf.honeymorning.domain.brief.dto;
+package com.sf.honeymorning.domain.brief.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;
