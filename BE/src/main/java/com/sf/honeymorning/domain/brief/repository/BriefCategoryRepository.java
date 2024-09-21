@@ -12,4 +12,6 @@ import com.sf.honeymorning.domain.brief.entity.BriefCategory;
 public interface BriefCategoryRepository extends JpaRepository<BriefCategory, Long> {
 	@Query("SELECT distinct bc FROM BriefCategory bc JOIN FETCH bc.tag WHERE bc.brief IN :briefs")
 	List<BriefCategory> findByBrief(@Param("briefs") List<Brief> briefs);
+
+	List<BriefCategory> findByBrief(Brief briefs);
 }
