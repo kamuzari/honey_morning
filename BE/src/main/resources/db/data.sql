@@ -9,7 +9,7 @@ INSERT INTO honeymorning.user (created_at, updated_at, user_id, username, email,
 VALUES ('2024-09-20 15:26:50.000000', '2024-09-20 15:26:52.000000', 2, 'guest1', 'guest1@naver.com',
         '$2a$10$wJevCJqmRaXF7YpmMqz0H.v4cUofzZ3JljB/uwUCBrLNQhpuADD0e', 'ROLE_USER');
 INSERT INTO honeymorning.user (created_at, updated_at, user_id, username, email, password, role)
-VALUES ('2024-09-20 15:26:50.000000', '2024-09-20 15:26:52.000000', 3, 'guest1', 'guest1@naver.com',
+VALUES ('2024-09-20 15:26:50.000000', '2024-09-20 15:26:52.000000', 3, 'guest2', 'guest2@naver.com',
         '$2a$10$wJevCJqmRaXF7YpmMqz0H.v4cUofzZ3JljB/uwUCBrLNQhpuADD0e', 'ROLE_USER');
 
 INSERT INTO honeymorning.tag (is_custom, created_at, tag_id, updated_at, word)
