@@ -11,13 +11,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @Tag(name = "알람")
@@ -26,6 +26,11 @@ import java.util.List;
 @AllArgsConstructor
 public class AlarmController {
     private final AlarmService alarmService;
+
+    @GetMapping("/test")
+    public ResponseEntity<?> test(HttpServletRequest req, HttpServletResponse res) {
+        return ResponseEntity.ok("success");
+    }
 
     @Operation(
             summary = "설정 일부 수정"
@@ -52,11 +57,9 @@ public class AlarmController {
             )
     })
     @GetMapping
-    public ResponseEntity<AlarmResponseDto> read() {
+    public ResponseEntity<?> read() {
         // 사용자가 알람 설정창에 들어갈 때 알람 정보 조회
-        AlarmResponseDto alarm = alarmService.findAlarmByUsername();
-
-        return ResponseEntity.ok(alarm);
+        return alarmService.findAlarmByUsername();
     }
 
     // 알람 결과 조회
@@ -70,8 +73,7 @@ public class AlarmController {
     })
     @GetMapping("/result")
     public ResponseEntity<?> getAlarmResult() {
-        List<AlarmResultDto> alarmResultList = alarmService.findAlarmResult();
-        return ResponseEntity.ok(alarmResultList);
+        return alarmService.findAlarmResult();
     }
 
     // 알람 결과 저장
@@ -85,8 +87,7 @@ public class AlarmController {
     })
     @PostMapping("/result")
     public ResponseEntity<?> addAlarmResult(@RequestBody AlarmResultDto alarmResultDto) {
-        alarmService.saveAlarmResult(alarmResultDto);
-        return ResponseEntity.ok("알람 결과가 성공적으로 저장되었습니다.");
+        return alarmService.saveAlarmResult(alarmResultDto);
     }
 
     @Operation(
@@ -100,10 +101,9 @@ public class AlarmController {
             )
     })
     @GetMapping("/category")
-    public ResponseEntity<List<AlarmCategoryDto>> getAlarmCategory() {
+    public ResponseEntity<?> getAlarmCategory() {
         // 현재 선택된 카테고리(Tag) 리스트를 반환
-        List<AlarmCategoryDto> alarmCategoryDtoList = alarmService.findAlarmCategory();
-        return ResponseEntity.ok(alarmCategoryDtoList);
+        return alarmService.findAlarmCategory();
     }
 
     @Operation(
@@ -117,8 +117,7 @@ public class AlarmController {
     })
     @PostMapping("/category")
     public ResponseEntity<?> saveAlarmCategory(@RequestBody String word) {
-        alarmService.addAlarmCategory(word);
-        return ResponseEntity.ok("alarm category successfully saved");
+        return alarmService.addAlarmCategory(word);
     }
 
     @Operation(
@@ -136,6 +135,21 @@ public class AlarmController {
         alarmService.deleteAlarmCategory(word);
         return ResponseEntity.ok("alarm category successfully deleted");
     }
+
+    @Operation(
+            summary = "연속 출석일수 확인")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "삭제 성공",
+                    content = @Content(schema = @Schema(type = "integer", example = "success", implementation = Integer.class))
+            )
+    })
+    @GetMapping("/streak")
+    public ResponseEntity<?> getStreak() {
+        return alarmService.getStreak();
+    }
+
 
 //	@Operation(
 //		summary = "사용자 알람 시작"

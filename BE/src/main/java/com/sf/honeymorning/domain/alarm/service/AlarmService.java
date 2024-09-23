@@ -39,8 +39,13 @@ public class AlarmService {
     private final AlarmResultRepository alarmResultRepository;
     private final TagRepository tagRepository;
 
-    public AlarmResponseDto findAlarmByUsername() {
+    public ResponseEntity<?> findAlarmByUsername() {
         User user = authService.getLoginUser();
+
+        if (user == null) {
+            return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
+        }
+
         Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
 
         AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
@@ -52,7 +57,7 @@ public class AlarmService {
                 .isActive(alarm.getIsActive())
                 .build();
 
-        return alarmResponseDto;
+        return ResponseEntity.ok(alarmResponseDto);
 
     }
 
@@ -125,13 +130,21 @@ public class AlarmService {
     }
 
     // 알람 카테고리 조회
-    public List<AlarmCategoryDto> findAlarmCategory() {
+    public ResponseEntity<?> findAlarmCategory() {
 
         User user = authService.getLoginUser();
 
+        if (user == null) {
+            return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
+        }
+
+        // 알람 조회
         Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
+
+        // 알람 카테고리 조회
         List<AlarmCategory> alarmCategoryList = alarmCategoryRepository.findAllByAlarmId(alarm.getId());
         List<AlarmCategoryDto> alarmCategoryDtoList = new ArrayList<>();
+
         for (AlarmCategory alarmCategory : alarmCategoryList) {
             AlarmCategoryDto alarmCategoryDto = AlarmCategoryDto.builder()
                     .alarmCategoryId(alarmCategory.getId())
@@ -141,16 +154,14 @@ public class AlarmService {
                     .build();
             alarmCategoryDtoList.add(alarmCategoryDto);
         }
-        return alarmCategoryDtoList;
+        return ResponseEntity.ok(alarmCategoryDtoList);
 
     }
 
     // 알람 카테고리 추가
-    public void addAlarmCategory(String word) {
-
+    public ResponseEntity<?> addAlarmCategory(String word) {
 
         Tag tag = tagRepository.findTagByWord(word);
-
 
         // 해당 단어에 대한 tag 데이터가 존재하지 않다면 tag 데이터를 추가한다.
         if (tag == null) {
@@ -158,7 +169,7 @@ public class AlarmService {
 
             String[] wordList = {"정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"};
 
-            // 기본 태그인지 확인
+            // 기본 태그에 해당되는 단어라면 custom 되지 않았음을 명시해준다.
             for (String w : wordList) {
                 if (w.equals(word)) {
                     customNum = 0;
@@ -177,7 +188,7 @@ public class AlarmService {
         // 똑같은 알람 카테고리를 추가했는지 확인.
         AlarmCategory alarmCategory = alarmCategoryRepository.findByTagId(tag.getId());
         if (alarmCategory != null) {
-            return;
+            return new ResponseEntity<>("이미 같은 알람 카테고리를 유저가 갖고 있습니다.", HttpStatus.CONFLICT);
         }
 
         // alarmCategory 추가.
@@ -185,6 +196,7 @@ public class AlarmService {
         Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
         alarmCategoryRepository.save(new AlarmCategory(alarm, tag));
 
+        return ResponseEntity.ok("alarm category successfully saved");
     }
 
     // 알람 카테고리 삭제
@@ -197,8 +209,13 @@ public class AlarmService {
 
 
     // 알람 결과 조회
-    public List<AlarmResultDto> findAlarmResult() {
+    public ResponseEntity<?> findAlarmResult() {
         User user = authService.getLoginUser();
+
+        if (user == null) {
+            return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
+        }
+
         List<AlarmResult> alarmResultList = alarmResultRepository.findAllByUserId(user.getId());
         List<AlarmResultDto> alarmResultDtoList = new ArrayList<>();
         for (AlarmResult alarmResult : alarmResultList) {
@@ -208,12 +225,16 @@ public class AlarmService {
                     .build();
             alarmResultDtoList.add(alarmResultDto);
         }
-        return alarmResultDtoList;
+        return ResponseEntity.ok(alarmResultDtoList);
     }
 
     // 알람 결과 추가
-    public void saveAlarmResult(AlarmResultDto alarmResultDto) {
+    public ResponseEntity<?> saveAlarmResult(AlarmResultDto alarmResultDto) {
         User user = authService.getLoginUser();
+
+        if (user == null) {
+            return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
+        }
 
         AlarmResult alarmResult = AlarmResult.builder()
                 .user(user)
@@ -222,6 +243,28 @@ public class AlarmService {
                 .build();
 
         alarmResultRepository.save(alarmResult);
+
+        return ResponseEntity.ok("알람 결과가 성공적으로 추가되었습니다.");
+    }
+
+    public ResponseEntity<?> getStreak() {
+        User user = authService.getLoginUser();
+
+        // 유저의 모든 알람_결과 테이블 데이터를 가져온다.
+        List<AlarmResult> alarmResultList = alarmResultRepository.findAllByUserId(user.getId());
+
+        int streak = 0;
+
+        for (int i = alarmResultList.size() - 1; i >= 0; i--) {
+            if (alarmResultList.get(i).getIsAttended() == 1) {
+                streak++;
+            } else {
+                break;
+            }
+        }
+
+        return ResponseEntity.ok(streak);
+
     }
 
 }

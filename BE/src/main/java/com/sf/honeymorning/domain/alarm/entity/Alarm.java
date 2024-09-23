@@ -35,8 +35,9 @@ public class Alarm extends BaseEntity {
     /**
      * 한주의 알람을 비트마스킹으로 표현합니다. (총 7비트로 월요일부터 시작)
      * 예시)
-     * - 0000001 = Monday only
+     * - 0000001 = Sunday only
      * - 1000001 = Monday and Sunday
+     * - 0110010 = TuesDay and Thursday and Saturday
      * - 1111111 = Every day
      */
     @Column(nullable = false)
