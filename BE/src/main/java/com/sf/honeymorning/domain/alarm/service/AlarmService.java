@@ -256,7 +256,9 @@ public class AlarmService {
         int streak = 0;
 
         for (int i = alarmResultList.size() - 1; i >= 0; i--) {
-            if (alarmResultList.get(i).getIsAttended() == 1) {
+            AlarmResult alarmResult = alarmResultList.get(i);
+
+            if (alarmResult.getIsAttended() == 1 && alarmResult.getCount() >= 1) {
                 streak++;
             } else {
                 break;
