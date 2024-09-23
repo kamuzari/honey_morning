@@ -55,6 +55,22 @@ const fetchAlarmData = async (): Promise<AlarmData|null> => {
     throw error;
   }
 };
+
+const updateAlarmData = async (updatedAlarm: AlarmData) => {
+  try {
+    const token = sessionStorage.getItem('access');
+    const response = await instance.patch(`/api/alarms/${updatedAlarm.id}`, updatedAlarm, {
+      headers: {
+        access: token,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 function getAdjustedTime(inputHour: number, inputMinute: number) {
   // 현재 시간 가져오기
   const currentTime = new Date();
@@ -159,6 +175,18 @@ const AlarmSetting: React.FunctionComponent = () => {
   if (isError) {
     return <div>알람 데이터를 불러오는 중 오류가 발생했습니다.</div>;
   }
+
+  const { mutate: updateAlarm } = useMutation({
+    mutationFn: updateAlarmData,
+    onSuccess: () => {
+      console.log("알람이 성공적으로 수정되었습니다.");
+      setIsResultModalOpen(true);
+    },
+    onError: () => {
+      console.error("알람 수정에 실패했습니다.");
+    },
+  });
+  
   
 
   return (
@@ -312,7 +340,9 @@ const AlarmSetting: React.FunctionComponent = () => {
           <GlobalBtn
             text="저 장"
             $padding={10}
-            // onClick={handleSave}
+            onClick={()=> {
+              updateAlarm(alarmData);
+            }}
           ></GlobalBtn>
         </ButtonContainer>
       </ContentsContainer>
