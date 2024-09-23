@@ -1,6 +1,5 @@
 package com.sf.honeymorning.domain.quiz.dto;
 
-import com.sf.honeymorning.domain.brief.entity.Brief;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.Data;
 @Builder
 public class QuizDto {
     private Long id;
-    private Brief brief;
+    private Long briefId;
     private String question;
     private Integer answer;
     private String option1;
