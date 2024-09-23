@@ -1,12 +1,32 @@
 pipeline {
     agent any
 
+    environment {
+        APP_PROPS = credentials('application-properties')
+        FRONTEND_ENV = credentials('frontend-env')
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
                 git branch: 'develop',
                     url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git',
                     credentialsId: 'wngud1225'
+            }
+        }
+
+        stage('Prepare Application Properties') {
+            steps {
+                sh 'mkdir -p BE/src/main/resources'
+                sh 'cp $APP_PROPS BE/src/main/resources/application.properties'
+            }
+        }
+
+        stage('Prepare Frontend ENV') {
+            steps {
+                dir('FE/honey-morning') {
+                    writeFile file: '.env', text: env.FRONTEND_ENV
+                }
             }
         }
 
@@ -21,7 +41,10 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('FE/honey-morning') {
-                    sh 'docker build -t frontend:latest -f Dockerfile .'
+                    script {
+                        def viteBaseUrl = sh(script: "grep VITE_BASE_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
+                        sh "docker build -t frontend:latest --build-arg VITE_BASE_URL=${viteBaseUrl} -f Dockerfile ."
+                    }
                 }
             }
         }
@@ -29,10 +52,29 @@ pipeline {
         stage('Stop and Remove Existing Containers') {
             steps {
                 script {
-                    sh '''
-                    docker stop hm-backend || true && docker rm hm-backend || true
-                    docker stop hm-frontend || true && docker rm hm-frontend || true
-                    '''
+                    def containerNames = ['hm-backend', 'hm-frontend']
+                    
+                    containerNames.each { containerName ->
+                        sh "docker stop ${containerName} || true"
+                        
+                        sh "docker rm ${containerName} || true"
+                        
+                        def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep -q '^${containerName}\$'", returnStatus: true) == 0
+                        
+                        if (containerExists) {
+                            // 컨테이너가 여전히 존재하면 강제로 제거
+                            echo "Container ${containerName} still exists. Attempting force removal..."
+                            sh "docker rm -f ${containerName} || true"
+                            
+                            containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep -q '^${containerName}\$'", returnStatus: true) == 0
+                            
+                            if (containerExists) {
+                                error "Failed to remove ${containerName} container even after force removal"
+                            }
+                        }
+                        
+                        echo "Container ${containerName} successfully removed"
+                    }
                 }
             }
         }
@@ -44,12 +86,7 @@ pipeline {
                     --name hm-backend \
                     -p 8081:8081 \
                     --network hm-network \
-                    -e SPRING_DATASOURCE_URL="jdbc:mysql://hm-mysql:3306/honeymorning?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC" \
-                    -e SPRING_DATASOURCE_USERNAME=ssafy \
-                    -e SPRING_DATASOURCE_PASSWORD=ssafy \
-                    -e SPRING_JPA_HIBERNATE_DDL_AUTO=update \
-                    -e SPRING_DATA_REDIS_HOST=hm-redis \
-                    -e SPRING_DATA_REDIS_PORT=6379 \
+                    -v $APP_PROPS:/app/config/application.properties \
                     backend:latest
                 '''
             }
@@ -62,7 +99,7 @@ pipeline {
                     --name hm-frontend \
                     -p 5173:5173 \
                     --network hm-network \
-                    --link hm-backend:hm-backend \
+                    -e VITE_BASE_URL=$(grep VITE_BASE_URL $FRONTEND_ENV | cut -d '=' -f2) \
                     frontend:latest
                 '''
             }
@@ -75,9 +112,30 @@ pipeline {
         }
         success {
             echo '빌드 성공!'
+            script {
+                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                mattermostSend(
+                    color: 'good',
+                    message: "빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                    endpoint: 'https://meeting.ssafy.com/hooks/pw558un543fx9g8nmrc1o8rqyr',
+                    channel: 'A704-PR'
+                )
+            }
         }
         failure {
             echo '빌드 실패!'
+            script {
+                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                mattermostSend(
+                    color: 'danger',
+                    message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                    endpoint: 'https://meeting.ssafy.com/hooks/pw558un543fx9g8nmrc1o8rqyr',
+                    channel: 'A704-PR'
+                )
+            }
         }
+    
     }
 }
