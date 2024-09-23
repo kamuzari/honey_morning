@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {Link} from 'react-router-dom';
 import styled from 'styled-components';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {instance} from '@/api/axios';
@@ -34,7 +35,9 @@ const Header = () => {
       {userInfo ? (
         <p>{userInfo.username}님, 반갑습니다!</p>
       ) : (
-        <p>로그인해 주세요.</p>
+        <p>
+          <Link to="/signin">로그인</Link>해 주세요.
+        </p>
       )}
       {userInfo && <Logout />}
     </HeaderContainer>

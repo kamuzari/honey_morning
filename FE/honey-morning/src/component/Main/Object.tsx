@@ -1,12 +1,8 @@
 import styled from 'styled-components';
-import Header from '@/component/Header';
 
 const MainPage = () => {
   return (
     <>
-      <Head>
-        <Header />
-      </Head>
       <Container>
         <div>Object</div>
       </Container>

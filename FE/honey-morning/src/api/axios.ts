@@ -13,7 +13,8 @@ instance.interceptors.request.use(
   config => {
     const access = sessionStorage.getItem('access');
     if (access) {
-      config.headers['Authorization'] = `Bearer ${access}`;
+      //config.headers['Authorization'] = `Bearer ${access}`;
+      config.headers['access'] = access;
     }
     return config;
   },
