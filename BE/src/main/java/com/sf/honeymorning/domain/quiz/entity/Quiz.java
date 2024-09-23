@@ -1,5 +1,6 @@
 package com.sf.honeymorning.domain.quiz.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sf.honeymorning.domain.brief.entity.Brief;
 import com.sf.honeymorning.domain.common.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -20,6 +21,7 @@ public class Quiz extends BaseEntity {
 
     @JoinColumn(name = "brief_id")
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Brief brief;
 
     @Column(length = 200, nullable = false)
