@@ -23,7 +23,7 @@ public class QuizController {
     private final QuizService quizService;
 
     @Operation(
-            summary = "퀴즈 결과 확인"
+            summary = "퀴즈 전체 결과 확인"
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -32,10 +32,9 @@ public class QuizController {
                     content = @Content(schema = @Schema(type = "string", example = "success", implementation = QuizDto.class))
             )
     })
-    @GetMapping("/result")
-    public ResponseEntity<String> show() {
-        quizService.getQuiz();
-        return ResponseEntity.ok("success");
+    @GetMapping("/results")
+    public ResponseEntity<?> show() {
+        return quizService.getQuiz();
     }
 
 }
