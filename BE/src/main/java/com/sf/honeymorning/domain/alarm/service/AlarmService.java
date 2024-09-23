@@ -247,4 +247,24 @@ public class AlarmService {
         return ResponseEntity.ok("알람 결과가 성공적으로 추가되었습니다.");
     }
 
+    public ResponseEntity<?> getStreak() {
+        User user = authService.getLoginUser();
+
+        // 유저의 모든 알람_결과 테이블 데이터를 가져온다.
+        List<AlarmResult> alarmResultList = alarmResultRepository.findAllByUserId(user.getId());
+
+        int streak = 0;
+
+        for (int i = alarmResultList.size() - 1; i >= 0; i--) {
+            if (alarmResultList.get(i).getIsAttended() == 1) {
+                streak++;
+            } else {
+                break;
+            }
+        }
+
+        return ResponseEntity.ok(streak);
+
+    }
+
 }
