@@ -10,10 +10,11 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Builder
 public class AlarmRequestDto {
+    private Long id;
     private LocalTime alarmTime;
-    private int daysOfWeek;
-    private int repeatFrequency;
-    private int repeatInterval;
-    private Integer isActive;
+    private String daysOfWeek;
+    private Integer repeatFrequency;
+    private Integer repeatInterval;
     private String musicFilePath;
+    private Integer isActive;
 }

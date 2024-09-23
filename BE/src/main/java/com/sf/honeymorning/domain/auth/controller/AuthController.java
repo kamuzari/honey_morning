@@ -1,7 +1,6 @@
 package com.sf.honeymorning.domain.auth.controller;
 
 import com.sf.honeymorning.domain.auth.service.AuthService;
-import com.sf.honeymorning.domain.tag.service.TagService;
 import com.sf.honeymorning.domain.user.dto.response.UserDetailDto;
 import com.sf.honeymorning.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,13 +22,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final TagService tagService;
-
-    @GetMapping("/test")
-    public ResponseEntity<?> test(HttpServletRequest req, HttpServletResponse res) {
-        return ResponseEntity.ok("success");
-    }
-
 
     @Operation(
             summary = "회원가입"
@@ -73,7 +65,7 @@ public class AuthController {
             @ApiResponse(
                     responseCode = "200",
                     description = "로그인 유저 정보 조회 성공",
-                    content = @Content(schema = @Schema(type = "string", example = "success"))
+                    content = @Content(schema = @Schema(type = "string", example = "success", implementation = UserDetailDto.class))
             )
     })
     @GetMapping("/userInfo")

@@ -51,17 +51,11 @@ public class AuthService {
 
     public User getLoginUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(principal.toString());
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         if (!isLogin(principal)) {
-            System.out.println("null check");
 
             return null;
         }
         String email = ((CustomUserDetails) principal).getUsername();
-        System.out.println(email);
-        System.out.println("email check");
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException(
                         LoginMessage.WRONG_LOGIN_REQUEST.getValue()));
@@ -110,7 +104,7 @@ public class AuthService {
         Alarm alarm = Alarm.builder()
                 .user(savedUser)
                 .alarmTime(LocalTime.of(7, 0)) // 오전 7시 기본 설정
-                .daysOfWeek((1 << 7) - 1) // 모든 요일 기본 설정
+                .daysOfWeek("1111111") // 모든 요일 기본 설정
                 .repeatFrequency(0) // 반복 없음 기본 설정
                 .repeatInterval(0) // 반복 없음 기본 설정
                 .isActive(0) // 비활성 상태 기본 설정

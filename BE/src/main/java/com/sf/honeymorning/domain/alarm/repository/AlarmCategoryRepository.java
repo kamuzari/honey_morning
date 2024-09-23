@@ -15,4 +15,7 @@ public interface AlarmCategoryRepository extends JpaRepository<AlarmCategory, Lo
     @Modifying
     @Query("DELETE FROM AlarmCategory ac WHERE ac.alarm.id = :alarmId AND ac.tag.id = :tagId")
     void deleteByAlarmIdAndTagIds(@Param("alarmId") Long alarmId, @Param("tagId") Long tagId);
+
+    @Query("SELECT ac FROM AlarmCategory ac WHERE ac.tag.id = :tagId")
+    AlarmCategory findByTagId(@Param("tagId") Long tagId);
 }

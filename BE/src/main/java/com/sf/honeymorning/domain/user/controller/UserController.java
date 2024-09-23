@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-	
-	private final UserService userService;
-	private final AlarmService alarmService;
+
+    private final UserService userService;
+    private final AlarmService alarmService;
 
 //	@Operation(
 //		summary = "회원탈퇴"
@@ -43,19 +43,19 @@ public class UserController {
 //		return ResponseEntity.ok("탈퇴를 성공적으로 진행하였습니다.");
 //	}
 
-	@Operation(
-			summary = "이메일 중복 조회"
-	)
-	@ApiResponses(value = {
-			@ApiResponse(
-					responseCode = "200",
-					description = "이메일 중복 조회 성공",
-					content = @Content(schema = @Schema(type = "string", example = "success"))
-			)
-	})
-	@GetMapping("/check/email")
-	public ResponseEntity<?> emailCheck(@RequestParam("email") String email) {
-		boolean isDuplicated = userService.validateEmail(email);
-		return new ResponseEntity<>(isDuplicated, HttpStatus.OK);
-	}
+    @Operation(
+            summary = "이메일 중복 조회"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "이메일 중복 조회 성공",
+                    content = @Content(schema = @Schema(type = "string", example = "true or false"))
+            )
+    })
+    @GetMapping("/check/email")
+    public ResponseEntity<?> emailCheck(@RequestParam("email") String email) {
+        boolean isDuplicated = userService.validateEmail(email);
+        return new ResponseEntity<>(isDuplicated, HttpStatus.OK);
+    }
 }
