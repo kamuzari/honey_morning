@@ -7,6 +7,15 @@ pipeline {
     }
 
     stages {
+        stage('Prepare Git Info') {
+            steps {
+                script {
+                    env.GIT_AUTHOR_NAME = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                    env.GIT_AUTHOR_EMAIL = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                }
+            }
+        }
+
         stage('Checkout Code') {
             steps {
                 git branch: 'develop',
@@ -56,13 +65,11 @@ pipeline {
                     
                     containerNames.each { containerName ->
                         sh "docker stop ${containerName} || true"
-                        
                         sh "docker rm ${containerName} || true"
                         
                         def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep -q '^${containerName}\$'", returnStatus: true) == 0
                         
                         if (containerExists) {
-                            // 컨테이너가 여전히 존재하면 강제로 제거
                             echo "Container ${containerName} still exists. Attempting force removal..."
                             sh "docker rm -f ${containerName} || true"
                             
@@ -111,31 +118,24 @@ pipeline {
             cleanWs()
         }
         success {
-            echo '빌드 성공!'
             script {
-                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
-                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
                 mattermostSend(
                     color: 'good',
-                    message: "빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                    message: "빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${env.GIT_AUTHOR_NAME}(${env.GIT_AUTHOR_EMAIL})\n(<${env.BUILD_URL}|Details>)",
                     endpoint: 'https://meeting.ssafy.com/hooks/pw558un543fx9g8nmrc1o8rqyr',
                     channel: 'A704-PR'
                 )
             }
         }
         failure {
-            echo '빌드 실패!'
             script {
-                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
-                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
                 mattermostSend(
                     color: 'danger',
-                    message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                    message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${env.GIT_AUTHOR_NAME}(${env.GIT_AUTHOR_EMAIL})\n(<${env.BUILD_URL}|Details>)",
                     endpoint: 'https://meeting.ssafy.com/hooks/pw558un543fx9g8nmrc1o8rqyr',
                     channel: 'A704-PR'
                 )
             }
         }
-    
     }
 }
