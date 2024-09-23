@@ -1,10 +1,312 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import styled from 'styled-components';
-import {useState} from 'react';
+import {useQuery, useMutation} from '@tanstack/react-query'
 import GlobalBtn from '@/component/GlobalBtn';
 import {useNavigate} from 'react-router-dom';
 import NavBar from '@/component/NavBar/NavBar';
 import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
+
+// Typescript
+interface AlarmData {
+  id: number,
+  alarmTime: string,
+  daysOfWeek: string,
+  repeatFrequency: number,
+  repeatInterval: number,
+  musicFilePath: string,
+  isActive: number,
+}
+
+
+const week = ['월', '화', '수', '목', '금', '토', '일'];
+const timeIntervalList = [1, 5, 10, 15, 20, 25, 30];
+const repeatCntList = [1, 2, 3, 5, 10];
+
+// "00"부터 "23"까지의 시간 배열 생성
+const hours = Array.from({length: 24}, (_, i) => String(i).padStart(2, '0'));
+
+// "00"부터 "59"까지의 분 배열 생성
+const minutes = Array.from({length: 60}, (_, i) => String(i).padStart(2, '0'));
+
+function getAdjustedTime(inputHour: number, inputMinute: number) {
+  // 현재 시간 가져오기
+  const currentTime = new Date();
+
+  // 입력된 시와 분을 기반으로 오늘 날짜에 해당하는 Date 객체 생성
+  let inputTime = new Date(
+    currentTime.getFullYear(),
+    currentTime.getMonth(),
+    currentTime.getDate(),
+    inputHour,
+    inputMinute,
+  );
+
+  // 입력된 시간이 현재 시간보다 과거인 경우 (즉, 입력된 시간이 이미 지난 시간인 경우)
+  if (inputTime < currentTime) {
+    // 입력된 시간에 하루를 더해서 다음 날로 이동
+    inputTime.setDate(inputTime.getDate() + 1);
+  }
+  
+  // 입력된 시간과 현재 시간의 차이를 계산 (밀리초 단위)
+  const timeDifference = inputTime.getTime() - currentTime.getTime();
+  
+  // 5시간을 밀리초로 계산 (5 * 60 * 60 * 1000 밀리초)
+  const fiveHoursInMs = 5 * 60 * 60 * 1000;
+  
+  // 입력된 시간과 현재 시간의 차이가 5시간 이하인 경우
+  if (timeDifference <= fiveHoursInMs) {
+    // 입력된 시간에 다시 하루를 더함
+    inputTime.setDate(inputTime.getDate() + 1);
+  }
+
+  return inputTime;
+}
+
+const AlarmSetting: React.FunctionComponent = () => {
+
+  const navigate = useNavigate();
+
+   // 알람 데이터 - react query
+   const {
+    data: alarmData,
+    isLoading,
+    isError,
+    } = useQuery<AlarmData>({
+      queryKey: ['alarmData'],
+      // queryFn: fetchAlarmData,
+    })
+
+
+  // const [isAlarmOn, setIsAlarmOn] = useState(true);
+  // const [timeInterval, setTimeInterval] = useState(init.time);
+  // const [repeatCnt, setRepeatCnt] = useState(init.repeat);
+  // const [selectedWeak, setSelectedWeak] = useState(init.selectedWeek);
+  // const [reservedTime, setReservedTime] = useState(new Date());
+  const [isTimeDropDownOpen, setIsTimeDropDownOpen] = useState(false);
+  const [isRepeatDropDownOpen, setIsRepeatDropDownOpen] = useState(false);
+  const [isHourDropDownOpen, setIsHourDropDownOpen] = useState(false);
+  const [isMinuteDropDownOpen, setIsMinuteDropDownOpen] = useState(false);
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+  const [hour, setHour] = useState('00');
+  const [minute, setMinute] = useState('00');
+  const [alarmState, setAlarmState] = useState<AlarmData>({
+    id: 0,
+    alarmTime: '',
+    daysOfWeek: '',
+    repeatFrequency: 0,
+    repeatInterval: 0,
+    musicFilePath: '',
+    isActive: 0,
+  });
+
+
+  const handleInputChange = (field: keyof AlarmData, value: any) => {
+    if (alarmState) {
+      setAlarmState({
+        ...alarmState,
+        [field]: value,
+      });
+    }
+  };
+  
+  const handleSelectWeek = (dayIndex: number) => {
+    let daysArray = alarmState.daysOfWeek.split('');  
+    if (daysArray.length === 0) {
+      daysArray = ['0', '0', '0', '0', '0', '0', '0']; 
+    }
+    daysArray[dayIndex] = daysArray[dayIndex] === '1' ? '0' : '1';  
+    handleInputChange('daysOfWeek', daysArray.join('')); 
+  };
+  
+  
+
+  return (
+    <Container
+      onClick={() => {
+        if (isRepeatDropDownOpen) setIsRepeatDropDownOpen(false);
+        if (isTimeDropDownOpen) setIsTimeDropDownOpen(false);
+      }}
+    >
+      <ContentsContainer>
+        <ToggleContainer $isAlarmOn={alarmState.isActive === 1}>
+          <div
+            className="toggleBackground"
+            onClick={() => {
+              handleInputChange('isActive', alarmState.isActive === 1 ? 0 : 1);
+            }}
+          >
+            <div className="circle"></div>
+          </div>
+        </ToggleContainer>
+        <TimeContainer>
+          {!isHourDropDownOpen ? (
+            <Time>{hour}</Time>
+          ) : (
+            <TimePicker>
+              {hours.map(item => {
+                return (
+                  <li
+                    onClick={() => {
+                      setHour(item);
+                      setIsHourDropDownOpen(false);
+                    }}
+                  >
+                    {item}
+                  </li>
+                );
+              })}
+            </TimePicker>
+          )}
+          <hr></hr>
+          {!isMinuteDropDownOpen ? (
+            <Time>{minute}</Time>
+          ) : (
+            <TimePicker>
+              {minutes.map(item => {
+                return (
+                  <li
+                    onClick={() => {
+                      setMinute(item);
+                      setIsMinuteDropDownOpen(false);
+                    }}
+                  >
+                    {item}
+                  </li>
+                );
+              })}
+            </TimePicker>
+          )}
+        </TimeContainer>
+        <ButtonContainer>
+          <GlobalBtn
+            text="알람 수정"
+            onClick={() => {
+              setIsHourDropDownOpen(true);
+              setIsMinuteDropDownOpen(true);
+            }}
+            $padding={8}
+          ></GlobalBtn>
+        </ButtonContainer>
+        <SettingContainer>
+          <div className="settingItem">
+            <h1>요일반복</h1>
+            <ul className="optionContainer">
+              {week.map((item, index) => {
+                return (
+                  <li
+                  key={index}
+                  className={alarmState.daysOfWeek[index] === '1' ? 'selected' : ''}
+                  onClick={() => handleSelectWeek(index)}
+                >
+                    {item}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          <div className="settingItem">
+            <h1>다시 울리기</h1>
+            <div className="optionContainer">
+              {!isTimeDropDownOpen ? (
+                <button
+                  onClick={() => {
+                    console.log('발동');
+                    setIsTimeDropDownOpen(true);
+                  }}
+                >
+                  {alarmState.repeatFrequency}
+                </button>
+              ) : (
+                <button></button>
+              )}{' '}
+              분 마다
+              {!isRepeatDropDownOpen ? (
+                <button
+                  onClick={() => {
+                    setIsRepeatDropDownOpen(true);
+                  }}
+                >
+                  {alarmState.repeatInterval}
+                </button>
+              ) : (
+                <button />
+              )}{' '}
+              번
+            </div>
+            {isTimeDropDownOpen && (
+              <ul className="dropDown timeDropDown">
+                {timeIntervalList.map(item => {
+                  return (
+                    <li
+                      onClick={() => {
+                      handleInputChange('repeatFrequency', item);
+                      setIsTimeDropDownOpen(false);
+                      }}
+                    >
+                      {item}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            {isRepeatDropDownOpen && (
+              <ul className="dropDown repeatDropDown">
+                {repeatCntList.map(item => {
+                  return (
+                    <li
+                      onClick={() => {
+                      handleInputChange('repeatInterval', item);
+                      setIsRepeatDropDownOpen(false);
+                      }}
+                    >
+                      {item}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </SettingContainer>
+        <ButtonContainer>
+          <GlobalBtn
+            text="저 장"
+            $padding={10}
+            // onClick={handleSave}
+          ></GlobalBtn>
+        </ButtonContainer>
+      </ContentsContainer>
+      {isResultModalOpen && (
+        <ModalOverlay>
+          <Modal>
+            <div className="description">
+              {/* <span>
+                {reservedTime.getMonth() + 1}월 {reservedTime.getDate()}일,{' '}
+                {reservedTime.getHours()}시 {reservedTime.getMinutes()}분{' '}
+              </span> */}
+
+              <span>알람이 설정되었습니다.</span>
+            </div>
+            <div className="buttonContainer">
+              <GlobalBtn
+                text="확인"
+                onClick={() => {
+                  navigate('/main');
+                }}
+                $bgColor="var(--darkblue-color)"
+                $textColor="var(--white-color)"
+                $padding={5}
+              ></GlobalBtn>
+            </div>
+          </Modal>
+        </ModalOverlay>
+      )}
+      <NavBar props={SoleMainNavBarProps}></NavBar>
+    </Container>
+  );
+};
+
+export default AlarmSetting;
+
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -249,268 +551,3 @@ const Modal = styled.div`
     height: 14%;
   }
 `;
-
-const week = ['일', '월', '화', '수', '목', '금', '토'];
-const timeIntervalList = [1, 5, 10, 15, 20, 25, 30];
-const repeatCntList = [1, 2, 3, 5, 10];
-const init = {
-  selectedWeek: ['화', '목', '토'],
-  hour: '12',
-  minute: '17',
-  time: 1,
-  repeat: 10,
-};
-// "00"부터 "23"까지의 시간 배열 생성
-const hours = Array.from({length: 24}, (_, i) => String(i).padStart(2, '0'));
-
-// "00"부터 "59"까지의 분 배열 생성
-const minutes = Array.from({length: 60}, (_, i) => String(i).padStart(2, '0'));
-
-function getAdjustedTime(inputHour: number, inputMinute: number) {
-  // 현재 시간 가져오기
-  const currentTime = new Date();
-
-  // 입력된 시와 분을 기반으로 오늘 날짜에 해당하는 Date 객체 생성
-  let inputTime = new Date(
-    currentTime.getFullYear(),
-    currentTime.getMonth(),
-    currentTime.getDate(),
-    inputHour,
-    inputMinute,
-  );
-
-  // 입력된 시간이 현재 시간보다 과거인 경우 (즉, 입력된 시간이 이미 지난 시간인 경우)
-  if (inputTime < currentTime) {
-    // 입력된 시간에 하루를 더해서 다음 날로 이동
-    inputTime.setDate(inputTime.getDate() + 1);
-  }
-
-  // 입력된 시간과 현재 시간의 차이를 계산 (밀리초 단위)
-  const timeDifference = inputTime.getTime() - currentTime.getTime();
-
-  // 5시간을 밀리초로 계산 (5 * 60 * 60 * 1000 밀리초)
-  const fiveHoursInMs = 5 * 60 * 60 * 1000;
-
-  // 입력된 시간과 현재 시간의 차이가 5시간 이하인 경우
-  if (timeDifference <= fiveHoursInMs) {
-    // 입력된 시간에 다시 하루를 더함
-    inputTime.setDate(inputTime.getDate() + 1);
-  }
-
-  return inputTime;
-}
-
-const AlarmSetting: React.FunctionComponent = () => {
-  const [isAlarmOn, setIsAlarmOn] = useState(true);
-  const [timeInterval, setTimeInterval] = useState(init.time);
-  const [repeatCnt, setRepeatCnt] = useState(init.repeat);
-  const [isTimeDropDownOpen, setIsTimeDropDownOpen] = useState(false);
-  const [isRepeatDropDownOpen, setIsRepeatDropDownOpen] = useState(false);
-  const [isHourDropDownOpen, setIsHourDropDownOpen] = useState(false);
-  const [isMinuteDropDownOpen, setIsMinuteDropDownOpen] = useState(false);
-  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
-  const [selectedWeak, setSelectedWeak] = useState(init.selectedWeek);
-  const [hour, setHour] = useState(init.hour);
-  const [minute, setMinute] = useState(init.minute);
-  const [reservedTime, setReservedTime] = useState(new Date());
-
-  const navigate = useNavigate();
-
-  const handleSelectWeak = (item: string) => {
-    if (selectedWeak.includes(item)) {
-      setSelectedWeak(prevItems => prevItems.filter(i => i !== item));
-    } else {
-      setSelectedWeak([item, ...selectedWeak]);
-    }
-  };
-
-  return (
-    <Container
-      onClick={() => {
-        if (isRepeatDropDownOpen) setIsRepeatDropDownOpen(false);
-        if (isTimeDropDownOpen) setIsTimeDropDownOpen(false);
-      }}
-    >
-      <ContentsContainer>
-        <ToggleContainer $isAlarmOn={isAlarmOn}>
-          <div
-            className="toggleBackground"
-            onClick={() => {
-              setIsAlarmOn(!isAlarmOn);
-            }}
-          >
-            <div className="circle"></div>
-          </div>
-        </ToggleContainer>
-        <TimeContainer>
-          {!isHourDropDownOpen ? (
-            <Time>{hour}</Time>
-          ) : (
-            <TimePicker>
-              {hours.map(item => {
-                return (
-                  <li
-                    onClick={() => {
-                      setHour(item);
-                      setIsHourDropDownOpen(false);
-                    }}
-                  >
-                    {item}
-                  </li>
-                );
-              })}
-            </TimePicker>
-          )}
-          <hr></hr>
-          {!isMinuteDropDownOpen ? (
-            <Time>{minute}</Time>
-          ) : (
-            <TimePicker>
-              {minutes.map(item => {
-                return (
-                  <li
-                    onClick={() => {
-                      setMinute(item);
-                      setIsMinuteDropDownOpen(false);
-                    }}
-                  >
-                    {item}
-                  </li>
-                );
-              })}
-            </TimePicker>
-          )}
-        </TimeContainer>
-        <ButtonContainer>
-          <GlobalBtn
-            text="알람 수정"
-            onClick={() => {
-              setIsHourDropDownOpen(true);
-              setIsMinuteDropDownOpen(true);
-            }}
-            $padding={8}
-          ></GlobalBtn>
-        </ButtonContainer>
-        <SettingContainer>
-          <div className="settingItem">
-            <h1>요일반복</h1>
-            <ul className="optionContainer">
-              {week.map(item => {
-                return (
-                  <li
-                    className={selectedWeak.includes(item) ? 'selected' : ''}
-                    onClick={() => {
-                      handleSelectWeak(item);
-                    }}
-                  >
-                    {item}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          <div className="settingItem">
-            <h1>다시 울리기</h1>
-            <div className="optionContainer">
-              {!isTimeDropDownOpen ? (
-                <button
-                  onClick={() => {
-                    console.log('발동');
-                    setIsTimeDropDownOpen(true);
-                  }}
-                >
-                  {timeInterval}
-                </button>
-              ) : (
-                <button></button>
-              )}{' '}
-              분 마다
-              {!isRepeatDropDownOpen ? (
-                <button
-                  onClick={() => {
-                    setIsRepeatDropDownOpen(true);
-                  }}
-                >
-                  {repeatCnt}
-                </button>
-              ) : (
-                <button />
-              )}{' '}
-              번
-            </div>
-            {isTimeDropDownOpen && (
-              <ul className="dropDown timeDropDown">
-                {timeIntervalList.map(item => {
-                  return (
-                    <li
-                      onClick={() => {
-                        setTimeInterval(item);
-                      }}
-                    >
-                      {item}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-            {isRepeatDropDownOpen && (
-              <ul className="dropDown repeatDropDown">
-                {repeatCntList.map(item => {
-                  return (
-                    <li
-                      onClick={() => {
-                        setRepeatCnt(item);
-                      }}
-                    >
-                      {item}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
-        </SettingContainer>
-        <ButtonContainer>
-          <GlobalBtn
-            text="저 장"
-            $padding={10}
-            onClick={() => {
-              setReservedTime(
-                getAdjustedTime(parseInt(hour, 10), parseInt(minute, 10)),
-              );
-              setIsResultModalOpen(true);
-            }}
-          ></GlobalBtn>
-        </ButtonContainer>
-      </ContentsContainer>
-      {isResultModalOpen && (
-        <ModalOverlay>
-          <Modal>
-            <div className="description">
-              <span>
-                {reservedTime.getMonth() + 1}월 {reservedTime.getDate()}일,{' '}
-                {reservedTime.getHours()}시 {reservedTime.getMinutes()}분{' '}
-              </span>
-
-              <span>알람이 설정되었습니다.</span>
-            </div>
-            <div className="buttonContainer">
-              <GlobalBtn
-                text="확인"
-                onClick={() => {
-                  navigate('/main');
-                }}
-                $bgColor="var(--darkblue-color)"
-                $textColor="var(--white-color)"
-                $padding={5}
-              ></GlobalBtn>
-            </div>
-          </Modal>
-        </ModalOverlay>
-      )}
-      <NavBar props={SoleMainNavBarProps}></NavBar>
-    </Container>
-  );
-};
-
-export default AlarmSetting;
