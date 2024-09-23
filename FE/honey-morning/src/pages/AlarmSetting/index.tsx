@@ -1,8 +1,9 @@
 import React,{useState, useEffect} from 'react';
-import styled from 'styled-components';
 import {useQuery, useMutation} from '@tanstack/react-query'
-import GlobalBtn from '@/component/GlobalBtn';
 import {useNavigate} from 'react-router-dom';
+import styled from 'styled-components';
+import {instance} from '@/api/axios';
+import GlobalBtn from '@/component/GlobalBtn';
 import NavBar from '@/component/NavBar/NavBar';
 import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
 
@@ -28,6 +29,32 @@ const hours = Array.from({length: 24}, (_, i) => String(i).padStart(2, '0'));
 // "00"부터 "59"까지의 분 배열 생성
 const minutes = Array.from({length: 60}, (_, i) => String(i).padStart(2, '0'));
 
+// 알람 데이터 가져오기(조회)
+const fetchAlarmData = async (): Promise<AlarmData|null> => {
+  try {
+    const token = sessionStorage.getItem('access');
+    const response = await instance.get(`/api/alarms`, {
+      headers: {
+        access: token,
+      },
+    });
+    return response.data;
+  }   catch (error: any) {
+    if (error.response?.status === 500) {
+      console.error("서버 오류 발생, 기본값을 반환합니다.");
+      return {
+        id: 0,
+        alarmTime: '07:00',
+        daysOfWeek: '0000000',  
+        repeatFrequency: 0,
+        repeatInterval: 0,
+        musicFilePath: '',
+        isActive: 0,
+      };
+    }
+    throw error;
+  }
+};
 function getAdjustedTime(inputHour: number, inputMinute: number) {
   // 현재 시간 가져오기
   const currentTime = new Date();
@@ -71,9 +98,9 @@ const AlarmSetting: React.FunctionComponent = () => {
     data: alarmData,
     isLoading,
     isError,
-    } = useQuery<AlarmData>({
+    } = useQuery<AlarmData|null>({
       queryKey: ['alarmData'],
-      // queryFn: fetchAlarmData,
+      queryFn: fetchAlarmData,
     })
 
 
@@ -92,7 +119,7 @@ const AlarmSetting: React.FunctionComponent = () => {
   const [alarmState, setAlarmState] = useState<AlarmData>({
     id: 0,
     alarmTime: '',
-    daysOfWeek: '',
+    daysOfWeek: '0000000',
     repeatFrequency: 0,
     repeatInterval: 0,
     musicFilePath: '',
@@ -100,24 +127,38 @@ const AlarmSetting: React.FunctionComponent = () => {
   });
 
 
-  const handleInputChange = (field: keyof AlarmData, value: any) => {
-    if (alarmState) {
-      setAlarmState({
-        ...alarmState,
-        [field]: value,
-      });
+  useEffect(() => {
+    if (alarmData) {
+      setAlarmState(alarmData);
+      const [alarmHour, alarmMinute] = alarmData.alarmTime.split(':');
+      setHour(alarmHour);
+      setMinute(alarmMinute);
     }
+  }, [alarmData]);
+
+  const handleInputChange = (field: keyof AlarmData, value: any) => {
+    setAlarmState((prevState) => ({
+      ...prevState,
+      [field]: value,
+    }));
   };
   
   const handleSelectWeek = (dayIndex: number) => {
     let daysArray = alarmState.daysOfWeek.split('');  
-    if (daysArray.length === 0) {
+    if (daysArray.length !== 7) {
       daysArray = ['0', '0', '0', '0', '0', '0', '0']; 
     }
     daysArray[dayIndex] = daysArray[dayIndex] === '1' ? '0' : '1';  
     handleInputChange('daysOfWeek', daysArray.join('')); 
   };
-  
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (isError) {
+    return <div>알람 데이터를 불러오는 중 오류가 발생했습니다.</div>;
+  }
   
 
   return (
@@ -157,7 +198,7 @@ const AlarmSetting: React.FunctionComponent = () => {
               })}
             </TimePicker>
           )}
-          <hr></hr>
+          <hr/>
           {!isMinuteDropDownOpen ? (
             <Time>{minute}</Time>
           ) : (
