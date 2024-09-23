@@ -136,6 +136,21 @@ public class AlarmController {
         return ResponseEntity.ok("alarm category successfully deleted");
     }
 
+    @Operation(
+            summary = "연속 출석일수 확인")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "삭제 성공",
+                    content = @Content(schema = @Schema(type = "integer", example = "success", implementation = Integer.class))
+            )
+    })
+    @GetMapping("/streak")
+    public ResponseEntity<?> getStreak() {
+        return alarmService.getStreak();
+    }
+
+
 //	@Operation(
 //		summary = "사용자 알람 시작"
 //	)
