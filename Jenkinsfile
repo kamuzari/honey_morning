@@ -52,10 +52,29 @@ pipeline {
         stage('Stop and Remove Existing Containers') {
             steps {
                 script {
-                    sh '''
-                    docker stop hm-backend || true && docker rm hm-backend || true
-                    docker stop hm-frontend || true && docker rm hm-frontend || true
-                    '''
+                    def containerNames = ['hm-backend', 'hm-frontend']
+                    
+                    containerNames.each { containerName ->
+                        sh "docker stop ${containerName} || true"
+                        
+                        sh "docker rm ${containerName} || true"
+                        
+                        def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep -q '^${containerName}\$'", returnStatus: true) == 0
+                        
+                        if (containerExists) {
+                            // 컨테이너가 여전히 존재하면 강제로 제거
+                            echo "Container ${containerName} still exists. Attempting force removal..."
+                            sh "docker rm -f ${containerName} || true"
+                            
+                            containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep -q '^${containerName}\$'", returnStatus: true) == 0
+                            
+                            if (containerExists) {
+                                error "Failed to remove ${containerName} container even after force removal"
+                            }
+                        }
+                        
+                        echo "Container ${containerName} successfully removed"
+                    }
                 }
             }
         }
