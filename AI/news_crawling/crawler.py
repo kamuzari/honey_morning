@@ -13,7 +13,7 @@ def crawl_news_articles(section_num, target_time, max_pages=10):
     page = 1
 
     while True:
-        times.sleep(1)
+        time.sleep(1)
         # AJAX 요청에 필요한 파라미터 설정
         params = {
             'sid': section_num,
