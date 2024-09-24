@@ -11,8 +11,8 @@
     "postinstall": "npm install rollup @rollup/plugin-node-resolve @rollup/plugin-commonjs"
   },
   "dependencies": {
-    "@rollup/plugin-commonjs": "^26.0.1",
-    "@rollup/plugin-node-resolve": "^15.2.4",
+    "@rollup/plugin-commonjs": "^26.0.3",
+    "@rollup/plugin-node-resolve": "^15.3.0",
     "@swc/core": "^1.7.26",
     "@tanstack/react-query": "^5.55.2",
     "@types/styled-components": "^5.1.34",

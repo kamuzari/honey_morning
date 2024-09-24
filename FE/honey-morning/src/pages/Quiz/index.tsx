@@ -1,13 +1,19 @@
 // import QuizOption from '@/component/QuizOption'
-import {useState, useEffect, useDebugValue, useRef} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
 // ??? question과 같은 변수명 뭔지, 정답은 어떤 방식으로 넘겨주는지
 interface QuizData {
-  question: string;
-  options: string[];
-  correctAnswer: number;
+  "id": number,
+  "briefId": number,
+  "question": string,
+  "answer": number,
+  "option1": string,
+  "option2": string,
+  "option3": string,
+  "option4": string,
+  "selection": number,
 }
 
 interface ProgressBarProps {
@@ -49,16 +55,28 @@ useEffect(() => {
   const fetchQuizData = async() => {
     const data: QuizData[] = [
       {
+        id: 1,
+        briefId: 1,
         question: "우리팀의 이름은?",
-        options: ["이세돌", "징버거", "플레이브", "싸피니까"],
-        correctAnswer: 3
+        option1: "이세돌",
+        option2: "징버거",
+        option3: "플레이브",
+        option4: "싸피니까",
+        answer: 3,
+        selection: 0
       },
       {
+        id: 2,
+        briefId: 1,
         question: "우리팀 팀장의 이름은?",
-        options: ["송창용", "한도형", "김병연", "김윤홍"],
-        correctAnswer: 0,
+        option1: "송창용",
+        option2: "한도형",
+        option3: "김병연",
+        option4: "김윤홍",
+        answer: 0,
+        selection: 0
       }
-    ]
+    ];
     setQuizData(data);
   }
   fetchQuizData();
@@ -96,7 +114,7 @@ const speakQuestion = () => {
 const handleTimeUp = () => {
   setIsQuizActive(false);
 
-  const isAnswerCorrect = selectedAnswer === quizData[currentQuizIndex].correctAnswer;
+  const isAnswerCorrect = selectedAnswer === quizData[currentQuizIndex].answer;
   setIsCorrect(isAnswerCorrect);
 
   if (isAnswerCorrect) {
@@ -134,6 +152,13 @@ const handleAnswer = (index: number ) => {
   setSelectedAnswer(index);
 }
 
+const currentOptions = [
+  quizData[currentQuizIndex]?.option1,
+  quizData[currentQuizIndex]?.option2,
+  quizData[currentQuizIndex]?.option3,
+  quizData[currentQuizIndex]?.option4,
+];
+
 const progress = (currentQuizIndex / quizData.length) * 100 + 50;
 
   return (
@@ -156,7 +181,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
       <NoticeArea>정답을 선택하거나 말하세요.</NoticeArea>
       <div>남은 시간: {timeLeft} 초</div>
       <SelectArea>
-        {quizData[currentQuizIndex]?.options.map((option, index) => (
+        {currentOptions.map((option, index) => (
           <SelectionBox 
           key={index} 
           onClick={() => !showModal && handleAnswer(index)}
@@ -172,7 +197,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
           <ModalContent>
             {isCorrect ? '정답입니다!' : '오답입니다.'}
             <br />
-            정답: {quizData[currentQuizIndex].options[quizData[currentQuizIndex].correctAnswer]}
+            정답: {currentOptions[quizData[currentQuizIndex].answer]}
           </ModalContent>
         </Modal>
       )}
