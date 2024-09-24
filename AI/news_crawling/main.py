@@ -1,12 +1,13 @@
 from crawler import crawl_news_articles
-from parser import get_article_content
+from custom_parser import get_article_content
 from datetime import datetime, timedelta
 import os
 import pickle
 
+
 def save_articles_pickle(section_num, articles):
     """기사들을 섹션 번호에 따라 Pickle 파일로 저장"""
-    base_dir = f"data/{section_num}"
+    base_dir = f"/var/data/{section_num}"
     os.makedirs(base_dir, exist_ok=True)
 
     # 현재 시간을 기반으로 파일명 생성
