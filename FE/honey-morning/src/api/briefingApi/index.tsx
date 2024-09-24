@@ -1,13 +1,13 @@
 import {instance} from '@/api/axios';
 
-const getFullBriefing = async () => {
-  const response = await instance.get(`/api/briefs/all`);
-  return response.data;
+const getBriefs = async (page: number) => {
+    const response = await instance.get(`/api/briefs/all?page=${page}`);
+    return response.data;
 };
 
-const getOneBriefing = async payload => {
-  const response = await instance.get(`/api/briefs/${payload.brief_id}`);
-  return response.data;
+const getBrief = async (briefId: string) => {
+    const response = await instance.get(`/api/briefs/${briefId}`);
+    return response.data;
 };
 
-export {getFullBriefing, getOneBriefing};
+export {getBriefs, getBrief};
