@@ -1,5 +1,6 @@
 package com.sf.honeymorning.domain.brief.dto.response;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.sf.honeymorning.domain.brief.dto.response.detail.BriefResponseDto;
@@ -26,4 +27,7 @@ public class BriefDetailResponseDto {
 
 	@Schema(name = "[TAP] 퀴즈 목록 (최대 2문제)")
 	private List<QuizResponseDto> quizDto;
+
+	@Schema(name = "title 앞에 쓰일 생성일자")
+	private LocalDateTime createdAt;
 }
