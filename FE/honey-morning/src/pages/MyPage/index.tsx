@@ -1,6 +1,8 @@
 import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
 import styled from 'styled-components';
+import {instance} from '@/api/axios';
 import {findAlarmCategory} from '@/api/alarmApi';
 import HashTag from '@/component/MyPage/HashTag';
 import Pagination from '@/component/MyPage/Pagination';
@@ -35,7 +37,23 @@ const dataSample: Data = {
   content: '이것은 아무 내용이 들어있는 아무 샘플이지요.',
 };
 
+//유저 정보
+const fetchUserInfo = async () => {
+  const {data} = await instance.get(`/api/auth/userInfo`);
+  return data;
+};
+
 const MyPage: React.FC = () => {
+  // useQuery를 사용하여 userInfo 가져오기
+  const {
+    data: userInfo,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: fetchUserInfo,
+  });
+
   //Pagination
   var data: Data[] = [
     dataSample,
@@ -62,26 +80,26 @@ const MyPage: React.FC = () => {
   const NavIcons = SoleMainNavBarProps;
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchAlarmCategories = async () => {
-      try {
-        const data = await findAlarmCategory();
-        console.log('알람 카테고리 데이터:', data);
-        // 데이터를 상태로 저장하거나 처리하는 로직 추가
-      } catch (error) {
-        console.error('알람 카테고리 데이터를 가져오는 중 오류 발생:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchAlarmCategories = async () => {
+  //     try {
+  //       const data = await findAlarmCategory();
+  //       console.log('알람 카테고리 데이터:', data);
+  //       // 데이터를 상태로 저장하거나 처리하는 로직 추가
+  //     } catch (error) {
+  //       console.error('알람 카테고리 데이터를 가져오는 중 오류 발생:', error);
+  //     }
+  //   };
 
-    fetchAlarmCategories();
-  }, []);
+  //   fetchAlarmCategories();
+  // }, []);
 
   return (
     <Container>
       <WhiteContainer>
         <Content>
           <div className="titleContainer">
-            <Title>내 관심사</Title>
+            <Title>{userInfo.username}님 관심사</Title>
             <BtnContainer>
               {isSelectOpen ? (
                 <GlobalBtn

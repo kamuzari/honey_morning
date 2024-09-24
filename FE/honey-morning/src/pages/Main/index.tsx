@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {Container} from '../MyPage';
+import Header from '@/component/Header';
 import Object from '@/component/Main/Object';
 import NavBar from '@/component/NavBar/NavBar';
 import {NavIconProps} from '@/component/NavBar/NavIcon';
@@ -23,6 +24,7 @@ const Main = () => {
   ];
   return (
     <Container>
+      <Header />
       <Object></Object>
       <NavBar props={NavIcons}></NavBar>
     </Container>

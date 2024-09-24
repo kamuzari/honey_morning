@@ -2,7 +2,7 @@ import {instance} from '@/api/axios';
 
 const fetchUserByAccess = async () => {
   try {
-    const res = await instance.get('/api/users/user-info');
+    const res = await instance.get('/api/auth/userInfo');
     return res.data.result;
   } catch (error) {
     console.error('Failed to fetch user info:', error);

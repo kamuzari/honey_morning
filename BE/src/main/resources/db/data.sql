@@ -29,6 +29,8 @@ VALUES (0, '2024-09-20 15:34:43.000000', 7, '2024-09-20 15:34:43.000000', '연�
 INSERT INTO honeymorning.tag (is_custom, created_at, tag_id, updated_at, word)
 VALUES (0, '2024-09-20 15:34:43.000000', 8, '2024-09-20 15:34:43.000000', '스포츠');
 
+
+
 INSERT INTO honeymorning.brief (created_at, id, updated_at, user_id, content, summary)
 VALUES ('2024-09-20 15:29:26.000000', 1, '2024-09-20 15:29:24.000000', 1, '연애, 마음의 언어를 찾는 여정
 
@@ -180,6 +182,32 @@ VALUES ('2024-09-20 15:29:24.000000', 8, '2024-09-20 15:29:24.000000', 1, '현�
 결론적으로, 현대 사회는 기술 발전, 사회적 불평등, 가족 구조의 변화, 환경 문제, 심리적 건강 문제 등 다양한 도전 과제에 직면해 있다. 이러한 문제들을 해결하기 위해서는 사회 구성원 간의 협력과 지속적인 정책적 노력이 필요하다. 정부와 기업, 개인 모두가 이러한 문제를 인식하고 함께 대응하는 것이 현대 사회의 안정적 발전을 위한 필수 요소다.
 ',
         '현대 사회는 기술 발전, 사회적 불평등, 가족 구조의 변화, 환경 문제, 심리적 건강 문제 등 다양한 변화를 겪고 있다. 자동화와 인공지능의 도입은 일자리 변화와 불평등 문제를 심화시키고 있으며, 결혼과 출산율 감소, 1인 가구 증가 등 가족 구조의 변화도 중요한 이슈로 대두되고 있다. 또한, 기후 변화와 환경 오염 문제는 각국이 해결해야 할 주요 과제로 자리 잡고 있다. 이러한 문제들을 해결하기 위해서는 사회적 협력과 정책적 노력이 요구된다.');
+INSERT INTO honeymorning.brief (created_at, id, updated_at, user_id, content, summary)
+VALUES ('2024-09-20 16:00:00.000000', 9, '2024-09-20 16:00:00.000000', 1,
+        '인공지능과 인간의 공존
+
+        인공지능(AI)은 이제 단순한 기술 혁신을 넘어, 우리의 일상과 사회 전반에 큰 변화를 일으키고 있습니다. 특히 자율주행차, 의료 AI, 금융 분석 등 다양한 분야에서 그 활용도가 증가하면서, AI는 더 이상 미래의 기술이 아닌 현재의 필수적인 도구로 자리 잡았습니다. 그러나 인공지능의 발전은 인간의 일자리, 윤리적 문제와 같은 새로운 도전 과제를 함께 가져오고 있습니다.
+
+        AI의 발전과 가능성
+
+        인공지능의 발전은 주로 딥러닝과 같은 고도화된 머신러닝 기술 덕분에 가능해졌습니다. 이는 대량의 데이터를 처리하고 학습할 수 있는 능력을 제공하여, 이전에 불가능했던 문제들을 해결하게 만들었습니다. 예를 들어, 자율주행차는 도로의 환경을 실시간으로 인식하고 판단하여 사고를 줄일 수 있으며, 의료 AI는 방대한 의료 데이터를 분석해 질병을 조기에 발견하는 데 도움을 줄 수 있습니다.
+
+        특히 인공지능의 가능성은 인간의 한계를 넘어서는 부분에서 두드러집니다. 금융 시장에서 AI는 복잡한 경제 데이터를 분석해 최적의 투자 전략을 도출할 수 있고, 기후 변화 연구에서는 방대한 기후 데이터를 처리해 미래의 기후 변화를 예측하는 데 기여하고 있습니다. 이러한 발전은 산업계 전반에 걸쳐 생산성과 효율성을 크게 향상시키는 효과를 가져왔습니다.
+
+        AI와 윤리적 문제
+
+        그러나 인공지능의 발전이 가져오는 이점 이면에는 다양한 윤리적 문제도 존재합니다. 가장 큰 이슈 중 하나는 일자리 문제입니다. AI의 도입으로 인해 자동화가 이루어지면서 일부 직종은 급격히 감소할 가능성이 큽니다. 예를 들어, 제조업과 물류업에서는 로봇과 AI 시스템이 사람을 대체하고 있으며, 이는 대규모 실업 문제를 야기할 수 있습니다. 이에 대한 해결책으로는 새로운 직업 교육과 일자리 전환 프로그램이 제시되고 있지만, 사회 전반적인 준비가 필요합니다.
+
+        또한 AI가 인간의 결정에 영향을 미치는 분야에서 발생하는 윤리적 문제도 중요한 이슈입니다. 예를 들어, 의료 AI가 진단이나 치료 방안을 제시할 때, 그 결정이 얼마나 신뢰할 수 있는지, 그리고 이러한 AI 결정에 대해 누가 책임을 져야 하는지에 대한 명확한 규정이 필요합니다. 자율주행차와 같은 기술에서도 사고 발생 시 책임 소재를 명확히 하는 법적 체계가 갖추어져야 합니다.
+
+        인공지능과 인간의 공존
+
+        인공지능의 발전은 분명히 우리 삶의 많은 부분을 개선할 수 있지만, 이와 함께 우리는 인간과 AI의 공존을 위해 새로운 규범과 기준을 마련해야 합니다. 전문가들은 "AI는 인간의 삶을 보완하는 기술이어야 하며, 기술이 인간의 가치를 넘어서는 일이 없어야 한다"고 강조합니다. 이를 위해 인공지능의 개발과 활용 과정에서 윤리적 고려와 인간 중심의 접근이 필요합니다.
+
+        결론적으로, AI는 우리의 미래를 크게 바꿔놓을 잠재력을 가지고 있지만, 그 발전 속도에 맞춰 우리는 함께 직면하는 도전 과제를 해결해 나가야 합니다. AI와 인간의 공존은 기술 발전을 올바르게 이끌기 위한 핵심적인 과제가 될 것입니다.',
+        '인공지능과 인간의 공존
+
+        인공지능(AI)은 자율주행차, 의료 AI, 금융 분석 등 다양한 분야에서 활용되며 우리의 일상에 깊숙이 자리 잡고 있다. AI의 발전은 머신러닝과 딥러닝을 통해 가능해졌으며, 이는 복잡한 문제를 해결하는 데 중요한 역할을 한다. 하지만 AI의 발전과 함께 일자리 감소, 윤리적 문제 등의 도전 과제도 발생하고 있다. 전문가들은 "AI는 인간의 삶을 보완하는 기술로 남아야 한다"고 강조하며, 인공지능과 인간의 공존을 위한 윤리적 고려가 필요함을 지적한다.');
 
 INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
 VALUES (1, 1, '2024-09-20 15:34:43.000000', 7, '2024-09-20 15:34:43.000000');
@@ -197,7 +225,8 @@ INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at
 VALUES (7, 7, '2024-09-20 15:29:24.000000', 2, '2024-09-20 15:29:24.000000');
 INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
 VALUES (8, 8, '2024-09-20 15:29:24.000000', 3, '2024-09-20 15:29:24.000000');
-
+INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
+VALUES (9, 9, '2024-09-23 06:15:00.000000', 5, '2024-09-23 06:15:00.000000');
 
 INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
                                option4, question)
@@ -270,6 +299,14 @@ VALUES (2, 2, 8, '2024-09-20 15:34:43.000000', 16, '2024-09-20 15:34:43.000000',
 ', '교육 격차
 ', '기후 변화
 ', '고령화 사회에서 중요한 이슈로 떠오른 문제는 무엇인가?');
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+                               option4, question)
+VALUES (1, null, 9, '2024-09-23 16:05:00.000000', 17, '2024-09-23 16:05:00.000000', '딥러닝과 머신러닝', '데이터베이스 기술', '웹 프레임워크',
+        '네트워크 프로토콜', '다음 중 인공지능(AI)의 발전을 이끈 주요 기술로 언급된 것은 무엇인가요?');
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+                               option4, question)
+VALUES (3, null, 9, '2024-09-23 06:15:00.000000', 18, '2024-09-23 06:15:00.000000', '자율주행차', '클라우드 컴퓨팅', '의료 AI',
+        '로봇 공학', '다음 중 AI가 특히 활용되는 분야로 언급된 것은 무엇인가요?');
 
 
 INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
@@ -752,12 +789,66 @@ INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at
 VALUES (8, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 329, '기업 역할');
 INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
 VALUES (7, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 330, '협력 필요성');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (10, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 331, '인공지능');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (9, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 332, '딥러닝');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (8, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 333, '머신러닝');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (7, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 334, '자율주행차');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (6, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 335, '윤리');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (6, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 336, '의료AI');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (5, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 337, '자동화');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (5, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 338, '데이터 분석');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (5, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 339, 'AI 윤리');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (4, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 340, '기술 발전');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (4, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 341, '일자리');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (3, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 342, '금융AI');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (3, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 343, '기후 변화');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (2, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 344, 'AI 책임');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (2, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 345, '인간과 AI');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (1, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 346, '의사 결정');
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+VALUES (1, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 347, '법적 책임');
 
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended) VALUES (5, '2024-09-20 15:34:43.000000', '2024-09-20 15:34:43.000000', 1, 1, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended) VALUES (8, '2024-09-21 15:34:43.000000', '2024-09-21 15:34:43.000000', 1, 1, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended) VALUES (11, '2024-09-22 15:34:43.000000', '2024-09-22 15:34:43.000000', 1, 1, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended) VALUES (12, '2024-09-23 15:34:43.000000', '2024-09-23 15:34:43.000000', 1, 1, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended) VALUES (6, '2024-09-20 15:34:43.000000', '2024-09-20 15:34:43.000000', 2, 0, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended) VALUES (9, '2024-09-21 15:34:43.000000', '2024-09-21 15:34:43.000000', 2, 0, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended) VALUES (7, '2024-09-20 15:34:43.000000', '2024-09-20 15:34:43.000000', 3, 2, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended) VALUES (10, '2024-09-21 15:34:43.000000', '2024-09-21 15:34:43.000000', 3, 2, 1);
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+VALUES (5, '2024-09-20 15:34:43.000000', '2024-09-20 15:34:43.000000', 1, 1, 1);
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+VALUES (8, '2024-09-21 15:34:43.000000', '2024-09-21 15:34:43.000000', 1, 1, 1);
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+VALUES (11, '2024-09-22 15:34:43.000000', '2024-09-22 15:34:43.000000', 1, 1, 1);
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+VALUES (12, '2024-09-23 15:34:43.000000', '2024-09-23 15:34:43.000000', 1, 1, 1);
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+VALUES (6, '2024-09-20 15:34:43.000000', '2024-09-20 15:34:43.000000', 2, 0, 1);
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+VALUES (9, '2024-09-21 15:34:43.000000', '2024-09-21 15:34:43.000000', 2, 0, 1);
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+VALUES (7, '2024-09-20 15:34:43.000000', '2024-09-20 15:34:43.000000', 3, 2, 1);
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+VALUES (10, '2024-09-21 15:34:43.000000', '2024-09-21 15:34:43.000000', 3, 2, 1);
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+VALUES (13, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 1, 0, 0);
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+VALUES (14, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 1, 0, 0);
+
+
+INSERT INTO honeymorning.alarm (alarm_time, created_at, updated_at, user_id, music_file_path, days_of_week)
+VALUES ('06:15:00.000000', '2024-09-20 15:26:50.000000', '2024-09-20 15:26:50.000000', 1, null, '1111111')
+INSERT INTO honeymorning.alarm (alarm_time, created_at, updated_at, user_id, music_file_path, days_of_week)
+VALUES ('06:15:00.000000', '2024-09-20 15:26:50.000000', '2024-09-20 15:26:50.000000', 2, null, '1111111')
+INSERT INTO honeymorning.alarm (alarm_time, created_at, updated_at, user_id, music_file_path, days_of_week)
+VALUES ('06:15:00.000000', '2024-09-20 15:26:50.000000', '2024-09-20 15:26:50.000000', 3, null, '1111111')

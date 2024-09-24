@@ -37,35 +37,87 @@ const LoginProcess: React.FC = () => {
       });
 
       const accessToken = res.headers['access'];
-      console.log('res:', res);
+      console.log('로그인 응답:', res);
 
       if (accessToken) {
         sessionStorage.setItem('access', accessToken);
-        console.log('access:', accessToken);
-      } else {
-        console.warn('Access token이 응답에 존재하지 않습니다.');
+        return accessToken;
       }
-      return res.data.result;
+      if (res.data && res.data.result) {
+        return res.data.result;
+      } else {
+        throw new Error('로그인 응답에 사용자 정보가 없습니다.');
+      }
     } catch (error) {
       console.error('로그인 실패', error);
       throw error;
     }
   };
 
+  // 유저 정보 가져오기
+  const fetchUserInfo = async () => {
+    const token = sessionStorage.getItem('access');
+
+    if (!token) {
+      throw new Error('토큰이 존재하지 않습니다.');
+    }
+
+    const res = await instance.get('/api/auth/userInfo', {
+      headers: {
+        // Authorization: `Bearer ${token}`,
+        access: token,
+      },
+    });
+
+    console.log('유저 정보 응답111: ', res.data);
+
+    if (res.data && res.data.username) {
+      console.log('유저 정보 응답: ', res);
+      return res.data;
+    } else {
+      console.error('유저 정보가 비어 있습니다.');
+      throw new Error('유저 정보가 비어 있습니다.');
+    }
+  };
+
+  // const {mutate: signMutate} = useMutation({
+  //   mutationFn: loginUser,
+  //   onSuccess: data => {
+  //     queryClient.setQueryData(['userInfo'], data);
+  //     console.log('data:', data);
+  //     alert('로그인 성공');
+  //     navigate('/');
+  //   },
+  //   onError: (error: any) => {
+  //     if (error.message) {
+  //       alert(`로그인 실패: ${error.message}`);
+  //     } else {
+  //       alert('로그인 실패');
+  //     }
+  //     reset({email: '', password: ''});
+  //   },
+  // });
+
+  // mutation 사용
   const {mutate: signMutate} = useMutation({
     mutationFn: loginUser,
-    onSuccess: data => {
-      queryClient.setQueryData(['userInfo'], data);
-      console.log('data:', data);
-      alert('로그인 성공');
-      navigate('/');
+    onSuccess: async accessToken => {
+      try {
+        if (accessToken) {
+          const userInfo = await fetchUserInfo();
+          queryClient.setQueryData(['userInfo'], userInfo);
+          console.log('유저 정보:', userInfo);
+          alert('로그인 성공');
+          navigate('/');
+        } else {
+          console.error('토큰이 존재하지 않습니다.');
+        }
+      } catch (error) {
+        console.error('유저 정보 가져오기 실패', error);
+      }
     },
     onError: (error: any) => {
-      if (error.message) {
-        alert(`로그인 실패: ${error.message}`);
-      } else {
-        alert('로그인 실패');
-      }
+      alert('로그인 실패');
       reset({email: '', password: ''});
     },
   });
