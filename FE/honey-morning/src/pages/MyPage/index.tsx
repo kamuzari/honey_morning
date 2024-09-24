@@ -16,6 +16,7 @@ import NavBar from '@/component/NavBar/NavBar';
 import {NavBarProps} from '@/component/NavBar/NavBar';
 import {NavIconProps} from '@/component/NavBar/NavIcon';
 import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
+import {getBriefs} from "@/api/briefingApi";
 
 export const categoryList = [
   '정치',
@@ -28,10 +29,24 @@ export const categoryList = [
   '스포츠',
 ];
 
-interface Data {
-  date: string;
+interface Data{
+  date: string,
   content: string;
 }
+
+// interface Data {
+//   id: number;
+//   categories: string[];
+//   date: string;
+//   content: string;
+//   correctAnswer: number
+// }
+
+interface Response{
+  dates: Data[];
+  totalPage: number;
+}
+
 const dataSample: Data = {
   date: '8/30',
   content: '이것은 아무 내용이 들어있는 아무 샘플이지요.',
@@ -54,28 +69,33 @@ const MyPage: React.FC = () => {
     queryFn: fetchUserInfo,
   });
 
-  //Pagination
-  var data: Data[] = [
-    dataSample,
-    dataSample,
-    dataSample,
-    dataSample,
-    dataSample,
-    dataSample,
-  ]; // 임시 데이터 100개
 
   const itemsPerPage = 5;
-
+  const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [briefingData, setBriefingData] = useState([]);
 
-  // 페이지에 따라 데이터 슬라이싱
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  useEffect(() => {
+    const fetchBriefs = async () => {
+      try {
+        const data = await getBriefs(currentPage);
+        setBriefingData(data.histories);
+        setTotalPages(data.totalPage);
+      } catch (error) {
+        console.error(`[Error] data: ${error}`);
+      }
+    };
+
+    fetchBriefs();
+  }, [currentPage]);
+
+  const currentItems = briefingData;
+
+
+
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const {selectedCategory, selectedCustomCategory, addCustomCategory} =
-    useInterestStore();
+  useInterestStore();
   const selectedList = selectedCategory;
   const NavIcons = SoleMainNavBarProps;
   const navigate = useNavigate();
@@ -93,6 +113,11 @@ const MyPage: React.FC = () => {
 
   //   fetchAlarmCategories();
   // }, []);
+
+  // 로딩 상태 처리
+  if (!briefingData.length) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container>
@@ -186,11 +211,11 @@ const MyPage: React.FC = () => {
               <PaginationItem
                 key={index}
                 onClick={() => {
-                  navigate('/briefingdetail');
+                  navigate(`/briefingdetail/${item.briefId}`);
                 }}
               >
-                <span className="date">{item.date}</span>
-                <span className="content">{item.content}</span>
+                <span className="date">{item.createdAt.split('T')[0]}</span>
+                <span className="content">{item.summary}</span>
               </PaginationItem>
             ))}
           </PaginationContainer>
