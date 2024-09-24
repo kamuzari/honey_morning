@@ -59,13 +59,14 @@ const fetchAlarmData = async (): Promise<AlarmData|null> => {
 const updateAlarmData = async (updatedAlarm: AlarmData) => {
   try {
     const token = sessionStorage.getItem('access');
-    const response = await instance.patch(`/api/alarms/${updatedAlarm.id}`, updatedAlarm, {
+    const response = await instance.patch(`/api/alarms`, updatedAlarm, {
       headers: {
         access: token,
       },
     });
     return response.data;
   } catch (error) {
+    console.error("알람 업데이트 중 오류 발생:", error);
     throw error;
   }
 };
@@ -124,7 +125,7 @@ const AlarmSetting: React.FunctionComponent = () => {
   // const [timeInterval, setTimeInterval] = useState(init.time);
   // const [repeatCnt, setRepeatCnt] = useState(init.repeat);
   // const [selectedWeak, setSelectedWeak] = useState(init.selectedWeek);
-  // const [reservedTime, setReservedTime] = useState(new Date());
+  const [reservedTime, setReservedTime] = useState(new Date());
   const [isTimeDropDownOpen, setIsTimeDropDownOpen] = useState(false);
   const [isRepeatDropDownOpen, setIsRepeatDropDownOpen] = useState(false);
   const [isHourDropDownOpen, setIsHourDropDownOpen] = useState(false);
@@ -142,6 +143,16 @@ const AlarmSetting: React.FunctionComponent = () => {
     isActive: 0,
   });
 
+  const { mutate: updateAlarm } = useMutation({
+    mutationFn: updateAlarmData,
+    onSuccess: () => {
+      console.log("알람이 성공적으로 수정되었습니다.");
+      setIsResultModalOpen(true);
+    },
+    onError: () => {
+      console.error("알람 수정에 실패했습니다.");
+    },
+  });
 
   useEffect(() => {
     if (alarmData) {
@@ -176,16 +187,6 @@ const AlarmSetting: React.FunctionComponent = () => {
     return <div>알람 데이터를 불러오는 중 오류가 발생했습니다.</div>;
   }
 
-  const { mutate: updateAlarm } = useMutation({
-    mutationFn: updateAlarmData,
-    onSuccess: () => {
-      console.log("알람이 성공적으로 수정되었습니다.");
-      setIsResultModalOpen(true);
-    },
-    onError: () => {
-      console.error("알람 수정에 실패했습니다.");
-    },
-  });
   
   
 
@@ -215,9 +216,10 @@ const AlarmSetting: React.FunctionComponent = () => {
               {hours.map(item => {
                 return (
                   <li
+                    key={item}
                     onClick={() => {
-                      setHour(item);
-                      setIsHourDropDownOpen(false);
+                    setHour(item);
+                    setIsHourDropDownOpen(false);
                     }}
                   >
                     {item}
@@ -234,9 +236,10 @@ const AlarmSetting: React.FunctionComponent = () => {
               {minutes.map(item => {
                 return (
                   <li
+                    key={item}
                     onClick={() => {
-                      setMinute(item);
-                      setIsMinuteDropDownOpen(false);
+                    setMinute(item);
+                    setIsMinuteDropDownOpen(false);
                     }}
                   >
                     {item}
@@ -341,7 +344,12 @@ const AlarmSetting: React.FunctionComponent = () => {
             text="저 장"
             $padding={10}
             onClick={()=> {
-              updateAlarm(alarmData);
+              const updatedAlarmState = {
+                ...alarmState,
+                alarmTime: `${hour}:${minute}`
+              };
+              console.log("Updating alarm with:", updatedAlarmState);
+              updateAlarm(updatedAlarmState);
             }}
           ></GlobalBtn>
         </ButtonContainer>
@@ -350,10 +358,10 @@ const AlarmSetting: React.FunctionComponent = () => {
         <ModalOverlay>
           <Modal>
             <div className="description">
-              {/* <span>
+              <span>
                 {reservedTime.getMonth() + 1}월 {reservedTime.getDate()}일,{' '}
                 {reservedTime.getHours()}시 {reservedTime.getMinutes()}분{' '}
-              </span> */}
+              </span>
 
               <span>알람이 설정되었습니다.</span>
             </div>
@@ -361,7 +369,7 @@ const AlarmSetting: React.FunctionComponent = () => {
               <GlobalBtn
                 text="확인"
                 onClick={() => {
-                  navigate('/main');
+                  navigate('/');
                 }}
                 $bgColor="var(--darkblue-color)"
                 $textColor="var(--white-color)"
