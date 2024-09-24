@@ -844,3 +844,11 @@ INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, u
 VALUES (13, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 1, 0, 0);
 INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
 VALUES (14, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 1, 0, 0);
+
+
+INSERT INTO honeymorning.alarm (alarm_time, created_at, updated_at, user_id, music_file_path, days_of_week)
+VALUES ('06:15:00.000000', '2024-09-20 15:26:50.000000', '2024-09-20 15:26:50.000000', 1, null, '1111111')
+INSERT INTO honeymorning.alarm (alarm_time, created_at, updated_at, user_id, music_file_path, days_of_week)
+VALUES ('06:15:00.000000', '2024-09-20 15:26:50.000000', '2024-09-20 15:26:50.000000', 2, null, '1111111')
+INSERT INTO honeymorning.alarm (alarm_time, created_at, updated_at, user_id, music_file_path, days_of_week)
+VALUES ('06:15:00.000000', '2024-09-20 15:26:50.000000', '2024-09-20 15:26:50.000000', 3, null, '1111111')
