@@ -6,7 +6,7 @@ import Briefing from '@/component/BriefingDetail/Briefing';
 import Summary from '@/component/BriefingDetail/Summary';
 import Quiz from '@/component/BriefingDetail/Quiz';
 import NavBar, {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
-import {getOneBriefing} from "@/api/briefingApi";
+import {getBrief} from "@/api/briefingApi";
 
 function toLocalDate(localDateTime: string): string {
     return new Date(localDateTime).toISOString().split('T')[0];
@@ -21,7 +21,7 @@ const BriefingDetail = () => {
     useEffect(() => {
         const getBriefingDetail = async () => {
             try {
-                const response = await getOneBriefing(brief_id);
+                const response = await getBrief(brief_id);
                 setBriefingData(response);
                 setLoading(false);
             } catch (error) {
@@ -29,11 +29,7 @@ const BriefingDetail = () => {
             }
         };
 
-        function toLocalDate(localDateTime: string): string {
-            return new Date(localDateTime).toISOString().split('T')[0];
-        }
-
-        getBriefingDetail().then(response => console.log(response));
+        getBriefingDetail();
     }, [brief_id]);
 
     if (loading) {
