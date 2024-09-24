@@ -7,9 +7,6 @@ const getFullBriefing = async () => {
 };
 
 const getOneBriefing = async (briefId: string) => {
-    console.log('axios info');
-    console.log(axios);
-    instance
     const response = await instance.get(`/api/briefs/${briefId}`);
     return response.data;
 };
