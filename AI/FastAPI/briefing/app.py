@@ -4,7 +4,7 @@ from pydantic import BaseModel
 import torch
 from transformers import PreTrainedTokenizerFast
 from transformers import BartForConditionalGeneration
-from utils import get_file_names, get_merged_document
+from utils import get_file_patterns, get_merged_document
 
 app = FastAPI(root_path="/ai/briefing")
 
@@ -32,7 +32,7 @@ def read_briefing(json: JSON_Briefing):
     model = BartForConditionalGeneration.from_pretrained('gogamza/kobart-summarization')
 
     for tag in json.tags:    
-        file_names = get_file_names(tag)
+        file_names = get_file_patterns(tag)
         merged_document = get_merged_document(tag, file_names)
         raw_input_ids = tokenizer.encode(merged_document)
         input_ids = [tokenizer.bos_token_id] + raw_input_ids + [tokenizer.eos_token_id]
