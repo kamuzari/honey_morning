@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import json
 from utils import get_article_time_from_text
+import time
 
 def crawl_news_articles(section_num, target_time, max_pages=10):
     base_url = 'https://news.naver.com/section/template/SECTION_ARTICLE_LIST'
@@ -12,6 +13,7 @@ def crawl_news_articles(section_num, target_time, max_pages=10):
     page = 1
 
     while True:
+        times.sleep(1)
         # AJAX 요청에 필요한 파라미터 설정
         params = {
             'sid': section_num,
