@@ -57,7 +57,8 @@ public class BriefService {
         }
         List<WordCloud> wordClouds = wordCloudRepository.findByBrief(brief);
         List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(brief);
-        List<Quiz> quizzes = quizRepository.findByBrief(brief);
+        List<Quiz> quizzes = quizRepository.findByBrief(brief)
+                .orElseThrow(() -> new EntityNotFoundException("브리핑에 해당하는 퀴즈가 존재하지 않습니다."));
         return new BriefDetailResponseDto(briefId, new SummaryResponseDto(wordClouds.stream().map(wordCloud -> new WordCloudResponseDto(wordCloud.getKeyword(), wordCloud.getFrequency())).toList(), briefCategories.stream().map(briefCategory -> briefCategory.getTag().getWord()).toList()), new BriefResponseDto(brief.getSummary(), brief.getContent()), quizzes.stream().map(quiz -> new QuizResponseDto(quiz.getQuestion(), quiz.getOption1(), quiz.getOption2(), quiz.getOption3(), quiz.getOption4(), quiz.getSelection(), quiz.getAnswer())).toList());
     }
 
