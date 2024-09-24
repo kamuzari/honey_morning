@@ -44,7 +44,7 @@ const routerInfo: RouteObject[] = [
     element: <BriefingPage />,
   },
   {
-    path: '/briefingdetail',
+    path: '/briefingdetail/:brief_id',
     element: <BriefingDetail />,
   },
   {
