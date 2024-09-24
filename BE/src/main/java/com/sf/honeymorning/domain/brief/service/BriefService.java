@@ -2,14 +2,6 @@ package com.sf.honeymorning.domain.brief.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
-
 import com.sf.honeymorning.domain.auth.service.AuthService;
 import com.sf.honeymorning.domain.brief.dto.response.BriefDetailResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.BriefHistoryResponseDto;
@@ -28,7 +20,6 @@ import com.sf.honeymorning.domain.quiz.entity.Quiz;
 import com.sf.honeymorning.domain.quiz.repository.QuizRepository;
 import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.user.entity.User;
-
 import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -45,7 +36,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import lombok.RequiredArgsConstructor;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -91,7 +81,8 @@ public class BriefService {
         }
         List<WordCloud> wordClouds = wordCloudRepository.findByBrief(brief);
         List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(brief);
-        List<Quiz> quizzes = quizRepository.findByBrief(brief);
+        List<Quiz> quizzes = quizRepository.findByBrief(brief)
+                .orElseThrow(() -> new EntityNotFoundException("not exist user"));
         return new BriefDetailResponseDto(briefId, new SummaryResponseDto(wordClouds.stream()
                 .map(wordCloud -> new WordCloudResponseDto(wordCloud.getKeyword(),
                         wordCloud.getFrequency())).toList(),
@@ -100,7 +91,8 @@ public class BriefService {
                 quizzes.stream()
                         .map(quiz -> new QuizResponseDto(quiz.getQuestion(), quiz.getOption1(),
                                 quiz.getOption2(), quiz.getOption3(), quiz.getOption4(),
-                                quiz.getSelection(), quiz.getAnswer())).toList());
+                                quiz.getSelection(), quiz.getAnswer())).toList(),
+                brief.getCreatedAt());
     }
 
     public String storeBriefFromAi(String input) {
@@ -134,10 +126,5 @@ public class BriefService {
         log.info("브리핑 AI에 대한 응답 내용: {}", response);
 
         return response;
-    }
-
-        List<Quiz> quizzes = quizRepository.findByBrief(brief)
-                .orElseThrow(() -> new EntityNotFoundException("브리핑에 해당하는 퀴즈가 존재하지 않습니다."));
-        return new BriefDetailResponseDto(briefId, new SummaryResponseDto(wordClouds.stream().map(wordCloud -> new WordCloudResponseDto(wordCloud.getKeyword(), wordCloud.getFrequency())).toList(), briefCategories.stream().map(briefCategory -> briefCategory.getTag().getWord()).toList()), new BriefResponseDto(brief.getSummary(), brief.getContent()), quizzes.stream().map(quiz -> new QuizResponseDto(quiz.getQuestion(), quiz.getOption1(), quiz.getOption2(), quiz.getOption3(), quiz.getOption4(), quiz.getSelection(), quiz.getAnswer())).toList());
     }
 }
