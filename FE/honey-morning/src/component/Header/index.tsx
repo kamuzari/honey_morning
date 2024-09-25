@@ -18,6 +18,7 @@ const Header = () => {
   } = useQuery({
     queryKey: ['userInfo'],
     queryFn: fetchUserInfo,
+    retry: 1,
   });
 
   console.log(userInfo);
@@ -27,13 +28,18 @@ const Header = () => {
   }
 
   if (isError) {
-    return <HeaderContainer>Error fetching user info</HeaderContainer>;
+    return (
+      <HeaderContainer>
+        {' '}
+        <Link to="/signin">로그인</Link>해 주세요.
+      </HeaderContainer>
+    );
   }
 
   return (
     <HeaderContainer>
       {userInfo ? (
-        <p>{userInfo.username}님, 반갑습니다!</p>
+        <p>{userInfo.username}님, 반갑습니다!@</p>
       ) : (
         <p>
           <Link to="/signin">로그인</Link>해 주세요.
