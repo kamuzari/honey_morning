@@ -24,8 +24,10 @@ public class QuizService {
 
     // 하나의 브리핑에 묶인 두 개의 퀴즈 반환
     public ResponseEntity<?> getQuiz(Long briefId) {
-        Brief brief = briefRepository.findById(briefId).orElseThrow(() -> new EntityNotFoundException("not exist user"));
-        List<Quiz> quiz = quizRepository.findByBrief(brief);
+        Brief brief = briefRepository.findById(briefId)
+                .orElseThrow(() -> new EntityNotFoundException("id에 해당하는 브리핑이 존재하지 않습니다."));
+        List<Quiz> quiz = quizRepository.findByBrief(brief)
+                .orElseThrow(() -> new EntityNotFoundException("브리핑에 해당하는 퀴즈가 존재하지 않습니다."));
         return ResponseEntity.ok(quiz);
     }
 
@@ -40,7 +42,8 @@ public class QuizService {
 
         Long quizId = quizDto.getId();
 
-        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new EntityNotFoundException("not exist quiz"));
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new EntityNotFoundException("id와 일치하는 퀴즈가 존재하지 않습니다."));
 
         quiz.setSelection(quizDto.getSelection());
 

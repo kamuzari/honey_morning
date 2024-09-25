@@ -3,7 +3,7 @@ from custom_parser import get_article_content
 from datetime import datetime, timedelta
 import os
 import pickle
-
+import time
 
 def save_articles_pickle(section_num, articles):
     """기사들을 섹션 번호에 따라 Pickle 파일로 저장"""
@@ -35,6 +35,7 @@ def main():
         # articles 리스트를 구성 (각 article은 딕셔너리로 구성)
         structured_articles = []
         for title, link, _ in articles:
+            time.sleep(1)
             content = get_article_content(link)
             if content:
                 article_dict = {

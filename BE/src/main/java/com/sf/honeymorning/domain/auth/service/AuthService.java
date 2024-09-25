@@ -4,13 +4,14 @@ import com.sf.honeymorning.domain.alarm.entity.Alarm;
 import com.sf.honeymorning.domain.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.domain.auth.repository.RefreshTokenRepository;
 import com.sf.honeymorning.domain.auth.util.JWTUtil;
-import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.tag.repository.TagRepository;
 import com.sf.honeymorning.domain.user.constant.LoginMessage;
 import com.sf.honeymorning.domain.user.dto.CustomUserDetails;
 import com.sf.honeymorning.domain.user.dto.response.UserDetailDto;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
+import com.sf.honeymorning.exception.user.DuplicateException;
+import com.sf.honeymorning.exception.user.UserNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,8 +53,7 @@ public class AuthService {
     public User getLoginUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!isLogin(principal)) {
-
-            return null;
+            throw new UserNotFoundException("현재 로그인한 유저가 없습니다.");
         }
         String email = ((CustomUserDetails) principal).getUsername();
         return userRepository.findByEmail(email)
@@ -88,7 +88,7 @@ public class AuthService {
         Boolean isExist = userRepository.existsByEmail(email);
 
         if (isExist) {
-            return;
+            throw new DuplicateException("해당 이메일을 사용하는 유저가 존재합니다.");
         }
 
         User newUser = User.builder()
@@ -112,16 +112,6 @@ public class AuthService {
 
         // database 저장
         alarmRepository.save(alarm);
-
-        String[] wordList = {"정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"};
-        for (int i = 0; i < wordList.length; i++) {
-            Tag tag = Tag.builder()
-                    .word(wordList[i])
-                    .isCustom(0)
-                    .build();
-            tagRepository.save(tag);
-        }
-
     }
 
     public void reissueToken(HttpServletRequest request, HttpServletResponse response) {

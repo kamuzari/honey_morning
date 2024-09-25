@@ -1,24 +1,5 @@
 package com.sf.honeymorning.domain.alarm.service;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.domain.alarm.dto.AlarmCategoryDto;
@@ -37,49 +18,72 @@ import com.sf.honeymorning.domain.brief.entity.Brief;
 import com.sf.honeymorning.domain.brief.repository.BriefRepository;
 import com.sf.honeymorning.domain.quiz.entity.Quiz;
 import com.sf.honeymorning.domain.quiz.repository.QuizRepository;
+import com.sf.honeymorning.domain.brief.repository.BriefRepository;
+import com.sf.honeymorning.domain.quiz.repository.QuizRepository;
 import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.tag.repository.TagRepository;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
-
+import com.sf.honeymorning.exception.user.AlarmCategoryNotFoundException;
+import com.sf.honeymorning.exception.user.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class AlarmService {
 
-	private final AlarmRepository alarmRepository;
-	private final UserRepository userRepository;
-	private final AuthService authService;
-	private final AlarmCategoryRepository alarmCategoryRepository;
-	private final AlarmResultRepository alarmResultRepository;
-	private final TagRepository tagRepository;
+    private final AlarmRepository alarmRepository;
+    private final UserRepository userRepository;
+    private final AuthService authService;
+    private final AlarmCategoryRepository alarmCategoryRepository;
+    private final AlarmResultRepository alarmResultRepository;
+    private final TagRepository tagRepository;
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final BriefRepository briefRepository;
 	private final QuizRepository quizRepository;
 
+
 	public ResponseEntity<?> findAlarmByUsername() {
-		User user = authService.getLoginUser();
+        User user = authService.getLoginUser();
 
-		if (user == null) {
-			return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
-		}
+        if (user == null) {
+            return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
+        }
 
-		Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
+        Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
 
-		AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
-			.id(alarm.getId())
-			.alarmTime(alarm.getAlarmTime())
-			.daysOfWeek(alarm.getDaysOfWeek())
-			.repeatFrequency(alarm.getRepeatFrequency())
-			.repeatInterval(alarm.getRepeatInterval())
-			.isActive(alarm.getIsActive())
-			.build();
+        AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
+                .id(alarm.getId())
+                .alarmTime(alarm.getAlarmTime())
+                .daysOfWeek(alarm.getDaysOfWeek())
+                .repeatFrequency(alarm.getRepeatFrequency())
+                .repeatInterval(alarm.getRepeatInterval())
+                .isActive(alarm.getIsActive())
+                .build();
 
-		return ResponseEntity.ok(alarmResponseDto);
+        return ResponseEntity.ok(alarmResponseDto);
 
-	}
+    }
 
 	@Transactional
 	public ResponseEntity<?> updateAlarm(AlarmRequestDto alarmRequestDto) {
@@ -116,28 +120,21 @@ public class AlarmService {
 		// 설정한 알람 요일
 		String alarmWeek = alarmRequestDto.getDaysOfWeek();
 
-		System.out.println(binary);
-		System.out.println(alarmWeek);
-		System.out.println(ChronoUnit.SECONDS.between(nowTime, alarmTime));
 
 		// 알람이 현재 요일만 설정 되어 있고, 이후 시간이며, 5시간 이전에 설정되어 있을 때.
-		if (binary.equals(alarmWeek) && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0
-			&& ChronoUnit.HOURS.between(nowTime, alarmTime) < 5) {
-			System.out.println("same day and less 5 hours difference");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
+
+		if (binary.equals(alarmWeek) && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0 && ChronoUnit.HOURS.between(nowTime, alarmTime) < 5) {
+			throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
 		}
 
 		// 알람이 내일 요일만 설정 되어 있고, 5시간 이전에 설정되어 있을 때.
 		if (nextBinary.equals(alarmWeek) && ChronoUnit.HOURS.between(nowTime, alarmTime) + 24 <= 5) {
-			System.out.println("next day and less 5 hours difference");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-				.body("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
+			throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
 		}
 
 		String email = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepository.findByEmail(email)
-			.orElseThrow(() -> new IllegalArgumentException("해당하는 이메일의 유저가 없습니다"));
+			.orElseThrow(() -> new UserNotFoundException("해당 알람의 유저가 없습니다"));
 		Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
 
 		alarm.setAlarmTime(alarmRequestDto.getAlarmTime());
@@ -154,15 +151,16 @@ public class AlarmService {
 
 		User user = authService.getLoginUser();
 
-		if (user == null) {
-			return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
-		}
-
 		// 알람 조회
 		Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
 
 		// 알람 카테고리 조회
 		List<AlarmCategory> alarmCategoryList = alarmCategoryRepository.findAllByAlarmId(alarm.getId());
+		if (alarmCategoryList.size() == 0) {
+			throw new AlarmCategoryNotFoundException("해당 알람이 카테고리를 가지고 있지 않습니다.");
+		}
+
+
 		List<AlarmCategoryDto> alarmCategoryDtoList = new ArrayList<>();
 
 		for (AlarmCategory alarmCategory : alarmCategoryList) {
@@ -227,15 +225,14 @@ public class AlarmService {
 		alarmCategoryRepository.deleteByAlarmIdAndTagIds(user.getId(), tag.getId());
 	}
 
+
 	// 알람 결과 조회
 	public ResponseEntity<?> findAlarmResult() {
 		User user = authService.getLoginUser();
 
-		if (user == null) {
-			return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
-		}
-
 		List<AlarmResult> alarmResultList = alarmResultRepository.findAllByUserId(user.getId());
+
+
 		List<AlarmResultDto> alarmResultDtoList = new ArrayList<>();
 		for (AlarmResult alarmResult : alarmResultList) {
 			AlarmResultDto alarmResultDto = AlarmResultDto.builder()
@@ -250,10 +247,6 @@ public class AlarmService {
 	// 알람 결과 추가
 	public ResponseEntity<?> saveAlarmResult(AlarmResultDto alarmResultDto) {
 		User user = authService.getLoginUser();
-
-		if (user == null) {
-			return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
-		}
 
 		AlarmResult alarmResult = AlarmResult.builder()
 			.user(user)
@@ -274,6 +267,7 @@ public class AlarmService {
 
 		int streak = 0;
 
+		// 최신 알람 결과 데이터를 조회하여 연속 출석일을 계산한다.
 		for (int i = alarmResultList.size() - 1; i >= 0; i--) {
 			AlarmResult alarmResult = alarmResultList.get(i);
 
@@ -426,4 +420,5 @@ public class AlarmService {
 			""
 		);
 	}
+
 }
