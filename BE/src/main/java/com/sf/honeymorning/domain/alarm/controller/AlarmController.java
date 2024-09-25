@@ -1,9 +1,7 @@
 package com.sf.honeymorning.domain.alarm.controller;
 
-import com.sf.honeymorning.domain.alarm.dto.AlarmCategoryDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmRequestDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
-import com.sf.honeymorning.domain.alarm.dto.AlarmResultDto;
 import com.sf.honeymorning.domain.alarm.service.AlarmService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,9 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,8 +40,9 @@ public class AlarmController {
             )
     })
     @PatchMapping
-    public ResponseEntity<?> update(@RequestBody AlarmRequestDto alarmRequestDto) {
-        return alarmService.updateAlarm(alarmRequestDto);
+    public ResponseEntity<String> update(@RequestBody AlarmRequestDto alarmRequestDto) {
+        alarmService.updateAlarm(alarmRequestDto);
+        return new ResponseEntity<>("알람이 성공적으로 갱신되었습니다.", HttpStatus.OK);
     }
 
     @Operation(
@@ -57,97 +56,10 @@ public class AlarmController {
             )
     })
     @GetMapping
-    public ResponseEntity<?> read() {
+    public ResponseEntity<AlarmResponseDto> read() {
         // 사용자가 알람 설정창에 들어갈 때 알람 정보 조회
-        return alarmService.findAlarmByUsername();
-    }
-
-    // 알람 결과 조회
-    @Operation(summary = "알람 결과 조회")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "알람 결과 조회 성공",
-                    content = @Content(schema = @Schema(type = "string", example = "success", implementation = AlarmResponseDto.class))
-            )
-    })
-    @GetMapping("/result")
-    public ResponseEntity<?> getAlarmResult() {
-        return alarmService.findAlarmResult();
-    }
-
-    // 알람 결과 저장
-    @Operation(summary = "알람 결과 저장")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "알람 결과 저장 성공",
-                    content = @Content(schema = @Schema(type = "string", example = "success"))
-            )
-    })
-    @PostMapping("/result")
-    public ResponseEntity<?> addAlarmResult(@RequestBody AlarmResultDto alarmResultDto) {
-        return alarmService.saveAlarmResult(alarmResultDto);
-    }
-
-    @Operation(
-            summary = "알람 카테고리 조회"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "조회 성공",
-                    content = @Content(schema = @Schema(type = "string", example = "success", implementation = AlarmCategoryDto.class))
-            )
-    })
-    @GetMapping("/category")
-    public ResponseEntity<?> getAlarmCategory() {
-        // 현재 선택된 카테고리(Tag) 리스트를 반환
-        return alarmService.findAlarmCategory();
-    }
-
-    @Operation(
-            summary = "알람 카테고리 추가")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "저장 성공",
-                    content = @Content(schema = @Schema(type = "string", example = "success", implementation = AlarmCategoryDto.class))
-            )
-    })
-    @PostMapping("/category")
-    public ResponseEntity<?> saveAlarmCategory(@RequestBody String word) {
-        return alarmService.addAlarmCategory(word);
-    }
-
-    @Operation(
-            summary = "카테고리 문자를 통한 알람 카테고리 삭제")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "삭제 성공",
-                    content = @Content(schema = @Schema(type = "string", example = "success", implementation = AlarmCategoryDto.class))
-            )
-    })
-    @Transactional
-    @DeleteMapping("/category")
-    public ResponseEntity<?> removeAlarmCategory(@RequestBody String word) {
-        alarmService.deleteAlarmCategory(word);
-        return ResponseEntity.ok("alarm category successfully deleted");
-    }
-
-    @Operation(
-            summary = "연속 출석일수 확인")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "삭제 성공",
-                    content = @Content(schema = @Schema(type = "integer", example = "success", implementation = Integer.class))
-            )
-    })
-    @GetMapping("/streak")
-    public ResponseEntity<?> getStreak() {
-        return alarmService.getStreak();
+        AlarmResponseDto alarmResponseDto = alarmService.findAlarmByUsername();
+        return new ResponseEntity<>(alarmResponseDto, HttpStatus.OK);
     }
 
 

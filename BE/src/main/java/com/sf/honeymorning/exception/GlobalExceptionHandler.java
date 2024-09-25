@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     // 유저가 존재하지 않는 오류
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     // 중복값 오류
