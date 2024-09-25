@@ -209,640 +209,950 @@ VALUES ('2024-09-20 16:00:00.000000', 9, '2024-09-20 16:00:00.000000', 1,
 
         인공지능(AI)은 자율주행차, 의료 AI, 금융 분석 등 다양한 분야에서 활용되며 우리의 일상에 깊숙이 자리 잡고 있다. AI의 발전은 머신러닝과 딥러닝을 통해 가능해졌으며, 이는 복잡한 문제를 해결하는 데 중요한 역할을 한다. 하지만 AI의 발전과 함께 일자리 감소, 윤리적 문제 등의 도전 과제도 발생하고 있다. 전문가들은 "AI는 인간의 삶을 보완하는 기술로 남아야 한다"고 강조하며, 인공지능과 인간의 공존을 위한 윤리적 고려가 필요함을 지적한다.');
 
-INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
+INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id,
+                                         updated_at)
 VALUES (1, 1, '2024-09-20 15:34:43.000000', 7, '2024-09-20 15:34:43.000000');
-INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
+INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id,
+                                         updated_at)
 VALUES (2, 2, '2024-09-20 15:34:43.000000', 1, '2024-09-20 15:34:43.000000');
-INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
+INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id,
+                                         updated_at)
 VALUES (3, 3, '2024-09-20 15:34:43.000000', 4, '2024-09-20 15:34:43.000000');
-INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
+INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id,
+                                         updated_at)
 VALUES (4, 4, '2024-09-20 15:29:24.000000', 5, '2024-09-20 15:29:24.000000');
-INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
+INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id,
+                                         updated_at)
 VALUES (5, 5, '2024-09-20 15:29:24.000000', 6, '2024-09-20 15:29:24.000000');
-INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
+INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id,
+                                         updated_at)
 VALUES (6, 6, '2024-09-20 15:29:24.000000', 8, '2024-09-20 15:29:24.000000');
-INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
+INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id,
+                                         updated_at)
 VALUES (7, 7, '2024-09-20 15:29:24.000000', 2, '2024-09-20 15:29:24.000000');
-INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
+INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id,
+                                         updated_at)
 VALUES (8, 8, '2024-09-20 15:29:24.000000', 3, '2024-09-20 15:29:24.000000');
-INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id, updated_at)
+INSERT INTO honeymorning.brief_category (brief_category_id, brief_id, created_at, tag_id,
+                                         updated_at)
 VALUES (9, 9, '2024-09-23 06:15:00.000000', 5, '2024-09-23 06:15:00.000000');
 
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (2, 2, 1, '2024-09-20 15:34:43.000000', 1, '2024-09-20 15:34:43.000000', '경제적 어려움', '소통의 부족', '서로의 취미 차이',
+VALUES (2, 2, 1, '2024-09-20 15:34:43.000000', 1, '2024-09-20 15:34:43.000000', '경제적 어려움', '소통의 부족',
+        '서로의 취미 차이',
         '물리적 거리', '다음 중 연애 관계에서 발생할 수 있는 주요 문제로 언급된 것은 무엇인가요?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (3, 2, 1, '2024-09-20 15:34:43.000000', 2, '2024-09-20 15:34:43.000000', '오프라인 데이트 증가', '짧은 만남 선호',
+VALUES (3, 2, 1, '2024-09-20 15:34:43.000000', 2, '2024-09-20 15:34:43.000000', '오프라인 데이트 증가',
+        '짧은 만남 선호',
         '메타버스 데이트와 같은 온라인 소통의 중요성 증가', '감정 일기를 쓰는 사람 감소', '코로나19 팬데믹 이후로 데이트 방식에 어떤 변화가 나타났나요?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (3, 1, 2, '2024-09-20 15:34:43.000000', 3, '2024-09-20 15:34:43.000000', '시민과 정치인의 직접적인 대화가 늘어나기 때문이다.',
+VALUES (3, 1, 2, '2024-09-20 15:34:43.000000', 3, '2024-09-20 15:34:43.000000',
+        '시민과 정치인의 직접적인 대화가 늘어나기 때문이다.',
         '정치인들이 타협을 시도하지 않기 때문이다.', '사람들이 자신이 믿고 싶은 정보만 선택적으로 받아들이기 때문이다.', '정치적 신뢰가 완전히 사라졌기 때문이다.',
         '정치적 양극화와 확증 편향은 어떤 방식으로 현대 정치에서 갈등을 심화시키나요?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (3, 2, 2, '2024-09-20 15:34:43.000000', 4, '2024-09-20 15:34:43.000000', '정책 결정 과정이 더욱 복잡해졌기 때문이다.',
+VALUES (3, 2, 2, '2024-09-20 15:34:43.000000', 4, '2024-09-20 15:34:43.000000',
+        '정책 결정 과정이 더욱 복잡해졌기 때문이다.',
         '소셜 미디어가 주요 정보 전달 수단이 되었기 때문이다.', '정치적 신뢰를 형성하고 갈등을 줄이기 위해서다.', '정당 간 협력이 더 이상 불가능하기 때문이다.',
         '현대 정치에서 소통이 중요한 이유는 무엇인가요?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (1, 1, 3, '2024-09-20 15:34:43.000000', 5, '2024-09-20 15:34:43.000000', '인터넷과 스마트폰 보급', '전통 시장의 활성화',
+VALUES (1, 1, 3, '2024-09-20 15:34:43.000000', 5, '2024-09-20 15:34:43.000000', '인터넷과 스마트폰 보급',
+        '전통 시장의 활성화',
         '농업 기술의 발달', '연예 산업의 성장
 ', '최근 생활 문화에서 변화한 소비 패턴의 주요 원인은 무엇인가요?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (3, 3, 3, '2024-09-20 15:34:43.000000', 6, '2024-09-20 15:34:43.000000', '종교 활동의 증가', '대면 소통의 확대',
+VALUES (3, 3, 3, '2024-09-20 15:34:43.000000', 6, '2024-09-20 15:34:43.000000', '종교 활동의 증가',
+        '대면 소통의 확대',
         '비대면 활동과 온라인 소통의 증가', '전통적인 직업 형태의 복귀', '펜데믹 이후 중요해진 생활 문화의 변화는 무엇인가요?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
 VALUES (3, 4, 4, '2024-09-20 15:34:43.000000', 7, '2024-09-20 15:34:43.000000', '금융', '의료
 ', '건설
 ', '교육
 ', '인공지능(AI)이 적용되지 않은 산업 분야는?    ');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (2, 2, 4, '2024-09-20 15:34:43.000000', 8, '2024-09-20 15:34:43.000000', '데이터 손실 방지', '비용 절감 및 유연한 컴퓨팅 자원 사용',
+VALUES (2, 2, 4, '2024-09-20 15:34:43.000000', 8, '2024-09-20 15:34:43.000000', '데이터 손실 방지',
+        '비용 절감 및 유연한 컴퓨팅 자원 사용',
         '보안 강화', '느린 데이터 처리', '클라우드 컴퓨팅의 주요 이점은 무엇인가?   ');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (2, 3, 5, '2024-09-20 15:34:43.000000', 9, '2024-09-20 15:34:43.000000', '기술 발전의 둔화', '국제 간 상호 의존성 강화',
+VALUES (2, 3, 5, '2024-09-20 15:34:43.000000', 9, '2024-09-20 15:34:43.000000', '기술 발전의 둔화',
+        '국제 간 상호 의존성 강화',
         '국가 간 무역의 감소', '환경 오염의 감소', '글로벌화가 촉발한 주요 변화는 무엇인가?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (1, 2, 5, '2024-09-20 15:34:43.000000', 10, '2024-09-20 15:34:43.000000', '브렉시트', '산업 혁명', '중세 봉건제도',
+VALUES (1, 2, 5, '2024-09-20 15:34:43.000000', 10, '2024-09-20 15:34:43.000000', '브렉시트', '산업 혁명',
+        '중세 봉건제도',
         '제1차 세계 대전', '최근 세계 경제에 큰 영향을 미친 사건은 무엇인가?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (2, 2, 6, '2024-09-20 15:34:43.000000', 11, '2024-09-20 15:34:43.000000', '전통 미디어의 역할 확대', '데이터 분석을 통한 경기 전략 수립',
+VALUES (2, 2, 6, '2024-09-20 15:34:43.000000', 11, '2024-09-20 15:34:43.000000', '전통 미디어의 역할 확대',
+        '데이터 분석을 통한 경기 전략 수립',
         '팬들의 스포츠 경기장 방문 감소', '신체 건강을 위한 운동의 감소', '데이터 분석을 통한 경기 전략 수립');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (3, 3, 6, '2024-09-20 15:34:43.000000', 12, '2024-09-20 15:34:43.000000', '경제적 부담 증가', '신체 활동 감소',
+VALUES (3, 3, 6, '2024-09-20 15:34:43.000000', 12, '2024-09-20 15:34:43.000000', '경제적 부담 증가',
+        '신체 활동 감소',
         '건강 증진과 사회적 연결 강화', '기술 혁신의 저해', '스포츠가 현대 사회에서 중요한 역할을 하는 이유로 적절한 것은 무엇인가?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (3, 1, 7, '2024-09-20 15:34:43.000000', 13, '2024-09-20 15:34:43.000000', '중앙은행의 역할 감소', '재생 가능 에너지의 발전',
+VALUES (3, 1, 7, '2024-09-20 15:34:43.000000', 13, '2024-09-20 15:34:43.000000', '중앙은행의 역할 감소',
+        '재생 가능 에너지의 발전',
         '기업의 생산성 향상과 새로운 시장 개척', '무역 의존도의 감소', '다음 중 디지털 경제의 확산으로 인해 발생한 변화로 적절한 것은 무엇인가?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (2, 2, 7, '2024-09-20 15:34:43.000000', 14, '2024-09-20 15:34:43.000000', '무역 감소', '재생 가능 에너지와 탄소 배출 감소',
+VALUES (2, 2, 7, '2024-09-20 15:34:43.000000', 14, '2024-09-20 15:34:43.000000', '무역 감소',
+        '재생 가능 에너지와 탄소 배출 감소',
         '소득 불평등 확대', '디지털 마케팅 강화', '경제성장과 환경 보호를 동시에 달성하기 위한 새로운 경제 모델은 무엇을 목표로 하고 있는가?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (2, 4, 8, '2024-09-20 15:34:43.000000', 15, '2024-09-20 15:34:43.000000', '환경 문제 해결', '일자리 감소와 노동시장 변화',
+VALUES (2, 4, 8, '2024-09-20 15:34:43.000000', 15, '2024-09-20 15:34:43.000000', '환경 문제 해결',
+        '일자리 감소와 노동시장 변화',
         '가족 구조의 안정성 강화', '사회적 불평등 해소', '현대 사회에서 자동화와 인공지능의 도입은 무엇을 초래했는가?  ');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
 VALUES (2, 2, 8, '2024-09-20 15:34:43.000000', 16, '2024-09-20 15:34:43.000000', '기술 발전', '노인 부양
 ', '교육 격차
 ', '기후 변화
 ', '고령화 사회에서 중요한 이슈로 떠오른 문제는 무엇인가?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (1, null, 9, '2024-09-23 16:05:00.000000', 17, '2024-09-23 16:05:00.000000', '딥러닝과 머신러닝', '데이터베이스 기술', '웹 프레임워크',
+VALUES (1, null, 9, '2024-09-23 16:05:00.000000', 17, '2024-09-23 16:05:00.000000', '딥러닝과 머신러닝',
+        '데이터베이스 기술', '웹 프레임워크',
         '네트워크 프로토콜', '다음 중 인공지능(AI)의 발전을 이끈 주요 기술로 언급된 것은 무엇인가요?');
-INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at, option1, option2, option3,
+INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, quiz_id, updated_at,
+                               option1, option2, option3,
                                option4, question)
-VALUES (3, null, 9, '2024-09-23 06:15:00.000000', 18, '2024-09-23 06:15:00.000000', '자율주행차', '클라우드 컴퓨팅', '의료 AI',
+VALUES (3, null, 9, '2024-09-23 06:15:00.000000', 18, '2024-09-23 06:15:00.000000', '자율주행차',
+        '클라우드 컴퓨팅', '의료 AI',
         '로봇 공학', '다음 중 AI가 특히 활용되는 분야로 언급된 것은 무엇인가요?');
 
 
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 91, '문화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 92, '생활');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 93, '트렌드');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 94, '습관');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 95, '소통');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 96, '변화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 97, '공유');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 98, '전통');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 99, '혁신');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 100, '건강');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 101, '스트레스');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (3, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 102, '여가');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (3, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 103, '식생활');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (2, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 104, '건축');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (2, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 105, '디지털');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (1, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 106, '자연');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (1, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 107, '환경');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (1, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 108, '교류');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (3, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 109, '가족');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 110, '리더십');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (2, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 111, '취미');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 112, '운동');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 113, '취향');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 114, '행복');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 115, '즐거움');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 116, '여행');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 117, '음악');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 118, '음식');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 119, '패션');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 3, '2024-09-22 05:18:08.000000', '2024-09-22 05:18:08.000000', 120, '주거');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 121, '경제');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 122, '금융');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 123, '성장');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 124, '투자');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 125, '소득');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 126, '자산');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 127, '지출');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 128, '물가');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 129, '수익');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 130, '채권');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 131, '주식');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 132, '환율');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 133, '부동산');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 134, '예산');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (3, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 135, '세금');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 136, '통화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 137, '거시경제');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 138, '경제정책');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 139, '금리');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (3, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 140, '소비');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 141, '경기');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 142, '국제무역');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 143, '산업');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 144, '재정');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (3, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 145, '노동');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 146, '무역수지');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 147, '인플레이션');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 148, 'GDP');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 149, '비용');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 2, '2024-09-22 05:20:18.000000', '2024-09-22 05:20:18.000000', 150, '리스크');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 151, '연애');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 152, '사랑');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 153, '데이트');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 154, '감정');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 155, '이별');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 156, '소통');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 157, '관계');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 158, '커플');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 159, '호감');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 160, '짝사랑');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 161, '고백');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 162, '첫사랑');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 163, '설렘');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 164, '연인');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 165, '행복');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (3, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 166, '신뢰');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 167, '존중');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 168, '대화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 169, '서로');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 170, '오해');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 171, '마음');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 172, '애정');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (3, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 173, '소중함');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 174, '기대');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 175, '추억');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 176, '헤어짐');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 177, '연락');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 178, '눈빛');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 179, '선물');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 1, '2024-09-22 05:21:32.000000', '2024-09-22 05:21:32.000000', 180, '의지');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (15, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 181, '인공지능');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 182, '빅데이터');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 183, '사물인터넷');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 184, '클라우드');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 185, '자율주행차');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 186, '의료');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 187, '금융');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 188, '스마트홈');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 189, '스마트시티');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 190, '헬스케어');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 191, '데이터 분석');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 192, 'AI');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 193, '보안');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 194, '사이버 보안');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 195, '개인정보 보호');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 196, '디지털 격차');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 197, '인터넷');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 198, '컴퓨팅 자원');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 199, '데이터 저장');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 200, '서버');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 201, '협업');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 202, '비용 절감');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 203, '미래 기술');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 204, '스마트 기술');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 205, '사물');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 206, '네트워크');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 207, '에너지 효율');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 208, '교통 관리');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 209, '건강 모니터링');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 4, '2024-09-22 05:26:01.000000', '2024-09-22 05:26:01.000000', 210, '질병 예측');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (15, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 211, '글로벌화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 212, '무역');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 213, '경제');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 214, '정치');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 215, '문화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 216, '다문화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 217, '환경 문제');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 218, '기후 변화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 219, '국제 협력');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 220, '국제기구');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 221, '팬데믹');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 222, '상호 의존');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 223, '브렉시트');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 224, '재생 에너지');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 225, '지속 가능한 발전');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 226, '미국과 중국');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 227, '중동 불안정');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 228, '외교 관계');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 229, '국가 간 갈등');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 230, '경제 발전');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 231, '산업화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 232, '도시화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 233, '환경 오염');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 234, '국제 질서');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 235, '국제 정치');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 236, '세계 경제');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 237, '글로벌 공급망');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 238, '국제 무역');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 239, '기술 교류');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 5, '2024-09-22 05:38:25.000000', '2024-09-22 05:38:25.000000', 240, '다양성');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (15, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 241, '스포츠');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 242, '신체 건강');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 243, '사회적 연결');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 244, '프로 스포츠');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 245, '경제적 발전');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 246, '미디어');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 247, '기술 혁신');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 248, '올림픽');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 249, '스포츠 데이터 분석');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 250, '팀워크');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 251, '여성 스포츠');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 252, '성별 평등');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 253, '가상 현실');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 254, '증강 현실');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 255, '스포츠 산업');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 256, '국제 대회');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 257, '스포츠 관람');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 258, '데이터 분석');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 259, '경기 전략');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 260, '정신적 건강');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 261, '스포츠 외교');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 262, '팬 문화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 263, '스포츠 리그');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 264, '경제적 영향');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 265, '스포츠 관광');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 266, '스포츠 문화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 267, '스포츠 이벤트');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 268, '건강');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 269, '체력 향상');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 6, '2024-09-22 05:52:50.000000', '2024-09-22 05:52:50.000000', 270, '경기력 향상');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (15, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 271, '글로벌화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 272, '디지털화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 273, '경제성장');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 274, '불평등');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (14, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 275, '무역');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 276, '투자');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 277, '통화정책');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 278, '재정정책');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (13, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 279, '중앙은행');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 280, '일자리 창출');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 281, '경제 회복');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 282, '디지털 경제');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (14, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 283, '전자상거래');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 284, '팬데믹');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 285, '재생 가능 에너지');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 286, '탄소 배출 감소');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 287, '지속 가능성');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 288, '친환경 기술');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 289, '고객 맞춤형 서비스');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 290, '디지털 마케팅');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 291, '소비자');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 292, '부의 불균형');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 293, '세제 개혁');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 294, '사회적 안전망');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 295, '정책적 대응');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 296, '경제 불평등');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 297, '소득 불평등');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 298, '글로벌 경제');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 299, '경제 충격');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 7, '2024-09-22 06:13:42.000000', '2024-09-22 06:13:42.000000', 300, '기업 생산성');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (15, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 301, '기술 발전');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 302, '사회적 불평등');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 303, '일자리 변화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 304, '자동화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (14, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 305, '인공지능');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 306, '노동시장');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 307, '직업 재교육');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 308, '빈곤층');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (13, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 309, '부유층');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 310, '교육 격차');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 311, '사회적 이동성');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 312, '정치적 갈등');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (14, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 313, '가족 구조 변화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 314, '출산율 감소');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 315, '고령화 사회');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 316, '노인 부양');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 317, '환경 문제');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 318, '기후 변화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 319, '환경 오염');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 320, '지속 가능한 발전');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 321, '경제 성장');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 322, '심리적 건강');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 323, '스트레스 증가');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (12, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 324, '우울증');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 325, '정신건강 지원');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 326, '사회적 고립');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 327, '정책적 노력');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (11, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 328, '경제적 부담');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 329, '기업 역할');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 8, '2024-09-22 06:28:10.000000', '2024-09-22 06:28:10.000000', 330, '협력 필요성');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (10, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 331, '인공지능');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (9, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 332, '딥러닝');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (8, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 333, '머신러닝');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (7, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 334, '자율주행차');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 335, '윤리');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (6, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 336, '의료AI');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 337, '자동화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 338, '데이터 분석');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (5, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 339, 'AI 윤리');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 340, '기술 발전');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (4, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 341, '일자리');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (3, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 342, '금융AI');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (3, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 343, '기후 변화');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (2, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 344, 'AI 책임');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (2, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 345, '인간과 AI');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (1, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 346, '의사 결정');
-INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id, keyword)
+INSERT INTO honeymorning.word_cloud (frequency, brief_id, created_at, updated_at, word_cloud_id,
+                                     keyword)
 VALUES (1, 9, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 347, '법적 책임');
 
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count,
+                                       is_attended)
 VALUES (5, '2024-09-20 15:34:43.000000', '2024-09-20 15:34:43.000000', 1, 1, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count,
+                                       is_attended)
 VALUES (8, '2024-09-21 15:34:43.000000', '2024-09-21 15:34:43.000000', 1, 1, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count,
+                                       is_attended)
 VALUES (11, '2024-09-22 15:34:43.000000', '2024-09-22 15:34:43.000000', 1, 1, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count,
+                                       is_attended)
 VALUES (12, '2024-09-23 15:34:43.000000', '2024-09-23 15:34:43.000000', 1, 1, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count,
+                                       is_attended)
 VALUES (6, '2024-09-20 15:34:43.000000', '2024-09-20 15:34:43.000000', 2, 0, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count,
+                                       is_attended)
 VALUES (9, '2024-09-21 15:34:43.000000', '2024-09-21 15:34:43.000000', 2, 0, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count,
+                                       is_attended)
 VALUES (7, '2024-09-20 15:34:43.000000', '2024-09-20 15:34:43.000000', 3, 2, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count,
+                                       is_attended)
 VALUES (10, '2024-09-21 15:34:43.000000', '2024-09-21 15:34:43.000000', 3, 2, 1);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count,
+                                       is_attended)
 VALUES (13, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 1, 0, 0);
-INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count, is_attended)
+INSERT INTO honeymorning.alarm_result (quiz_result_id, created_at, updated_at, user_id, count,
+                                       is_attended)
 VALUES (14, '2024-09-23 06:15:00.000000', '2024-09-23 06:15:00.000000', 1, 0, 0);
 
 
