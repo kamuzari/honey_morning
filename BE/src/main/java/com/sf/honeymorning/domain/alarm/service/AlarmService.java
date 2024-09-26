@@ -162,7 +162,7 @@ public class AlarmService {
 		for (int j = 0; j < alarms.size(); j++) {
 			Alarm alarm = alarms.get(j);
 			User user = alarm.getUser();
-			List<AlarmCategory> alarmCategoryList = alarmCategoryRepository.findAllByAlarmId(alarm.getId());
+			List<AlarmCategory> alarmCategoryList = alarmCategoryRepository.findByAlarm(alarm);
 			List<Integer> tagIds = new ArrayList<>();
 			for (int i = 0; i < alarmCategoryList.size(); i++) {
 				AlarmCategory alarmCategory = alarmCategoryList.get(i);
@@ -201,7 +201,7 @@ public class AlarmService {
 					headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 					body = new HashMap<>();
 					ArrayList<String> tagList = new ArrayList<>();
-					List<AlarmCategory> alarmCategories = alarmCategoryRepository.findAllByAlarmId(alarm.getId());
+					List<AlarmCategory> alarmCategories = alarmCategoryRepository.findByAlarm(alarm);
 					for (int i = 0; i < alarmCategories.size(); i++) {
 						AlarmCategory alarmCategory = alarmCategories.get(i);
 						Tag tag = alarmCategory.getTag();
@@ -299,7 +299,7 @@ public class AlarmService {
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		List<Quiz> quizzes = quizRepository.findByBrief(brief)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
-		Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
+		Alarm alarm = alarmRepository.findByUser(user);
 		brief.getSummary();
 		List<QuizDto> quizDtos = new ArrayList<>();
 		for (int i = 0; i < quizzes.size(); i++) {
