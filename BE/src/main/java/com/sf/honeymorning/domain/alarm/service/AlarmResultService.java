@@ -22,7 +22,7 @@ public class AlarmResultService {
     public List<AlarmResultDto> findAlarmResult() {
         User user = authService.getLoginUser();
 
-        List<AlarmResult> alarmResultList = alarmResultRepository.findAllByUserId(user.getId());
+        List<AlarmResult> alarmResultList = alarmResultRepository.findByUser(user);
 
 
         List<AlarmResultDto> alarmResultDtoList = new ArrayList<>();
@@ -53,7 +53,7 @@ public class AlarmResultService {
         User user = authService.getLoginUser();
 
         // 유저의 모든 알람_결과 테이블 데이터를 가져온다.
-        List<AlarmResult> alarmResultList = alarmResultRepository.findAllByUserId(user.getId());
+        List<AlarmResult> alarmResultList = alarmResultRepository.findByUser(user);
 
         int streak = 0;
 

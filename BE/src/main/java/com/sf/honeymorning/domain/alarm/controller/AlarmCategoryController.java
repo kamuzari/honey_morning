@@ -17,7 +17,7 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/category")
+@RequestMapping("/api/alarms/category")
 @RestController
 public class AlarmCategoryController {
 

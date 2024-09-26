@@ -32,10 +32,10 @@ public class AlarmCategoryService {
         User user = authService.getLoginUser();
 
         // 알람 조회
-        Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
+        Alarm alarm = alarmRepository.findByUser(user);
 
         // 알람 카테고리 조회
-        List<AlarmCategory> alarmCategoryList = alarmCategoryRepository.findAllByAlarmId(alarm.getId());
+        List<AlarmCategory> alarmCategoryList = alarmCategoryRepository.findByAlarm(alarm);
         if (alarmCategoryList.size() == 0) {
             throw new AlarmCategoryNotFoundException("해당 알람이 카테고리를 가지고 있지 않습니다.");
         }
@@ -59,7 +59,7 @@ public class AlarmCategoryService {
     // 알람 카테고리 추가
     public void addAlarmCategory(String word) {
 
-        Tag tag = tagRepository.findTagByWord(word);
+        Tag tag = tagRepository.findByWord(word);
 
         // 해당 단어에 대한 tag 데이터가 존재하지 않다면 tag 데이터를 추가한다.
         if (tag == null) {
@@ -83,14 +83,14 @@ public class AlarmCategoryService {
         }
 
         // 똑같은 알람 카테고리를 추가했는지 확인.
-        AlarmCategory alarmCategory = alarmCategoryRepository.findByTagId(tag.getId());
+        AlarmCategory alarmCategory = alarmCategoryRepository.findByTag(tag);
         if (alarmCategory != null) {
             throw new DuplicateException("이미 존재하는 알람 카테고리입니다.");
         }
 
         // alarmCategory 추가.
         User user = authService.getLoginUser();
-        Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
+        Alarm alarm = alarmRepository.findByUser(user);
         alarmCategoryRepository.save(new AlarmCategory(alarm, tag));
     }
 
@@ -98,7 +98,8 @@ public class AlarmCategoryService {
     public void deleteAlarmCategory(String word) {
         // tag는 공유되는 것이기 때문에 alarmCategory만 삭제한다.
         User user = authService.getLoginUser();
-        Tag tag = tagRepository.findTagByWord(word);
-        alarmCategoryRepository.deleteByAlarmIdAndTagIds(user.getId(), tag.getId());
+        Alarm alarm = alarmRepository.findByUser(user);
+        Tag tag = tagRepository.findByWord(word);
+        alarmCategoryRepository.deleteByAlarmAndTag(alarm, tag);
     }
 }

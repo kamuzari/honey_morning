@@ -30,7 +30,7 @@ public class AlarmService {
     public AlarmResponseDto findAlarmByUsername() {
         User user = authService.getLoginUser();
 
-        Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
+        Alarm alarm = alarmRepository.findByUser(user);
 
         AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
                 .id(alarm.getId())
@@ -98,7 +98,7 @@ public class AlarmService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("해당 알람의 유저가 없습니다"));
-        Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
+        Alarm alarm = alarmRepository.findByUser(user);
 
         alarm.setAlarmTime(alarmRequestDto.getAlarmTime());
         alarm.setDaysOfWeek(alarmRequestDto.getDaysOfWeek());
