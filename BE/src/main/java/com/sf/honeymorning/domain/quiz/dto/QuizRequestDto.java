@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class QuizDto {
+public class QuizRequestDto {
     private Long id;
     private Long briefId;
     private String question;

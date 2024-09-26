@@ -41,6 +41,4 @@ public class Quiz extends BaseEntity {
 
     private Integer selection;
 
-
-
 }
