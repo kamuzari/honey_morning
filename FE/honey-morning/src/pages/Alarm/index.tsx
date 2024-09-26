@@ -102,7 +102,7 @@ const AlarmPage = () => {
           <h2>알람이 울리고 있습니다!</h2>
           <audio autoPlay>
             <source
-              src="sample_alarm.mp3"
+              src="https://cdn1.suno.ai/dc1d94fa-975b-4eab-a391-dc55eb4cdcc5.mp3"
               type="audio/mpeg"
             />
           </audio>

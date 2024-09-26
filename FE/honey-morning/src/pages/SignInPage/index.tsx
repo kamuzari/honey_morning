@@ -1,10 +1,10 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import styled, {createGlobalStyle} from 'styled-components';
 import {useWatch, useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {useNavigate, Link} from 'react-router-dom';
 import {useQueryClient, useMutation} from '@tanstack/react-query';
 import {instance} from '@/api/axios';
-import Logout from '@/component/Logout';
+import Footer from '@/component/Footer';
 
 interface LoginFormData {
   email: string;
@@ -14,12 +14,27 @@ interface LoginFormData {
 const LoginProcess: React.FC = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [isPortrait, setIsPortrait] = useState(true);
+
+  // 가로/세로 모드
+  useEffect(() => {
+    const handleResize = () => {
+      const isPortraitMode = window.innerHeight > window.innerWidth;
+      setIsPortrait(isPortraitMode);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   //prettier-ignore
   const {
     handleSubmit,
     control,
-    watch,
     formState: {errors},
     reset,
   } = useForm<LoginFormData>({mode: 'onChange'});
@@ -37,7 +52,6 @@ const LoginProcess: React.FC = () => {
       });
 
       const accessToken = res.headers['access'];
-      console.log('로그인 응답:', res);
 
       if (accessToken) {
         sessionStorage.setItem('access', accessToken);
@@ -67,8 +81,6 @@ const LoginProcess: React.FC = () => {
         access: token,
       },
     });
-
-    console.log('유저 정보 응답111: ', res.data);
 
     if (res.data && res.data.username) {
       console.log('유저 정보 응답: ', res);
@@ -114,15 +126,15 @@ const LoginProcess: React.FC = () => {
 
   return (
     <>
-      <GlobalStyle />
-      <Title>Sign In</Title>
-      <Container>
+      <GlobalStyle isPortrait={isPortrait} />
+      <Container isPortrait={isPortrait}>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="loginForm"
         >
+          <Title isPortrait={isPortrait}>Sign In</Title>
           <div className="inputGroup">
-            <label>Name</label>
+            <label>Email</label>
             <Controller
               name="email"
               control={control}
@@ -133,6 +145,7 @@ const LoginProcess: React.FC = () => {
                   {...field}
                   type="email"
                   placeholder="이메일을 입력해주세요"
+                  isPortrait={isPortrait}
                 />
               )}
             />
@@ -143,98 +156,142 @@ const LoginProcess: React.FC = () => {
               name="password"
               control={control}
               defaultValue=""
-              rules={{required: '이메일은 필수 입력 항목입니다.'}}
+              rules={{required: '비밀번호 필수 입력 항목입니다.'}}
               render={({field}) => (
                 <Input
                   {...field}
                   type="password"
-                  placeholder="이메일을 입력해주세요"
+                  placeholder="비밀번호를 입력해주세요"
+                  isPortrait={isPortrait}
                 />
               )}
             />
           </div>
 
-          <SubmitButton type="submit">로그인</SubmitButton>
+          <SubmitButton
+            type="submit"
+            isPortrait={isPortrait}
+          >
+            로그인
+          </SubmitButton>
+          <div className="signUpYet">
+            <div>아직 회원이 아니신가요?</div>
+            <MoveToSignUp to="/signup">회원가입 하기</MoveToSignUp>
+          </div>
         </form>
-        <div className="signUpYet">
-          <div>아직 회원이 아니신가요?</div>
-          <MoveToSignUp to="/signup">회원가입 하기</MoveToSignUp>
-        </div>
+        <Footer />
       </Container>
-      <Logout />
     </>
   );
 };
 
 export default LoginProcess;
 
-const GlobalStyle = createGlobalStyle`
- body {
-  display: flex;
-  justify-content: center;
-  width: 100%;
- }
+//prettier-ignore
+const GlobalStyle = createGlobalStyle<{isPortrait: boolean}>`
+ body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  #root {
+    height: 100%;
+    width: 100%;
+  }
 `;
 
-const Title = styled.div`
+const Title =
+  styled.div <
+  {isPortrait: boolean} >
+  `
   display: flex;
   justify-content: center;
-
-  font-size: 50px;
+  font-size: ${({isPortrait}) => (isPortrait ? '5vw' : '3vw')}; 
+  margin-bottom: ${({isPortrait}) => (isPortrait ? '3vw' : '4vw')}; 
 `;
 
-const Container = styled.div`
+//prettier-ignore
+const Container = styled.div<{isPortrait: boolean}>`
   display: flex;
   flex-direction: column;
-
   align-items: center;
   justify-content: center;
 
-  padding: 10px;
-  border: solid 1px black;
-  background-color: white;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
 
-  width: 700px;
+  background-image: ${({ isPortrait }) =>
+    isPortrait ? "url('/images/login1.png')" : "url('/images/loginDesktop.png')"};
+  background-size: 100vw auto;
+  background-position: top;
+  background-repeat: no-repeat;
+  overflow: hidden;
+
 
   .loginForm {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    width: ${({ isPortrait }) => (isPortrait ? '50vw' : '35vw')};
 
-  border: solid 1px red;
-  padding: 20px;
-  box-shadow: 5px 5px 3px #666;
+    padding: 3vh;
+    margin: 0 auto;
+    border-radius: 20px;
+    background-color: white;
+    
+    box-shadow: 0 0 1vh rgba(0, 0, 0, 0.5);
 
   
-    .inputGroup {
-    background-color: blue;
+   .inputGroup {
+      margin-bottom: 1vh;
+      font-size: ${({ isPortrait }) => (isPortrait ? '2.5vw' : '1.5vw')};
     }
   }
 
 
   .signUpYet {
-  display: flex;
-  align-items: center;
-  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2vh;
+    gap: 1vw;
+    font-size: ${({ isPortrait }) => (isPortrait ? '2vw' : '1vw')};
   }
   }
 `;
 
-const Input = styled.input`
-  padding: 10px;
-  margin: 10px 0;
+const Input =
+  styled.input <
+  {isPortrait: boolean} >
+  `
+  width: 100%;
+  padding: ${({isPortrait}) => (isPortrait ? '1vh 0' : '2vh 0')};
+  margin: ${({isPortrait}) => (isPortrait ? '0.5vh 0' : '1vh 0')};
   border-radius: 5px;
   border: 1px solid black;
+  font-size: ${({isPortrait}) => (isPortrait ? '1vh' : '2vh')};
 `;
 
-const SubmitButton = styled.button`
+const SubmitButton =
+  styled.button <
+  {isPortrait: boolean} >
+  `
   background-color: var(--yellow-color);
   color: white;
   border: none;
-  border-radius: 10%;
+  border-radius: 20px;
+  font-size: ${({isPortrait}) => (isPortrait ? '2vw' : '1.3vw')};
 
   display: flex;
   justify-content: center;
-  padding: 1em 5em;
+  padding: 1vw 1vh;
+  margin: 1vw auto;
+  width: 100%;
+
   cursor: pointer;
 `;
 
