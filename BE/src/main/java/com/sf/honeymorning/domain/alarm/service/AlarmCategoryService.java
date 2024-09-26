@@ -14,8 +14,7 @@ import com.sf.honeymorning.exception.user.DuplicateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +24,7 @@ public class AlarmCategoryService {
     private final AlarmRepository alarmRepository;
     private final TagRepository tagRepository;
     private final AlarmCategoryRepository alarmCategoryRepository;
+    private final Set<String> wordList = new HashSet<>(Arrays.asList("정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"));
 
     // 알람 카테고리 조회
     public List<AlarmCategoryDto> findAlarmCategory() {
@@ -65,7 +65,6 @@ public class AlarmCategoryService {
         if (tag == null) {
             int customNum = 1;
 
-            String[] wordList = {"정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"};
 
             // 기본 태그에 해당되는 단어라면 custom 되지 않았음을 명시해준다.
             for (String w : wordList) {
