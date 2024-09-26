@@ -14,12 +14,12 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class AlarmStartDto {
-	@Schema(name = " AI 모닝콜")
+	@Schema(example = "AI 모닝콜 경로")
 	private String songUrl;
 
 	@ArraySchema(schema = @Schema(implementation = QuizDto.class))
 	private List<QuizDto> quizzes;
 
-	@Schema(name = " AI 모닝콜")
+	@Schema(example = " 브리핑 내용")
 	private String content;
 }
