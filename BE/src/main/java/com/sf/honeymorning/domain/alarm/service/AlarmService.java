@@ -1,25 +1,5 @@
 package com.sf.honeymorning.domain.alarm.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.domain.alarm.dto.AlarmCategoryDto;
@@ -27,7 +7,6 @@ import com.sf.honeymorning.domain.alarm.dto.AlarmRequestDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmResultDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
-import com.sf.honeymorning.domain.alarm.dto.QuizDto;
 import com.sf.honeymorning.domain.alarm.entity.Alarm;
 import com.sf.honeymorning.domain.alarm.entity.AlarmCategory;
 import com.sf.honeymorning.domain.alarm.entity.AlarmResult;
@@ -43,49 +22,67 @@ import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.tag.repository.TagRepository;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
-import com.sf.honeymorning.domain.user.service.UserService;
 import com.sf.honeymorning.exception.user.AlarmCategoryNotFoundException;
 import com.sf.honeymorning.exception.user.UserNotFoundException;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class AlarmService {
 
-	private final AlarmRepository alarmRepository;
-	private final UserRepository userRepository;
-	private final AuthService authService;
-	private final AlarmCategoryRepository alarmCategoryRepository;
-	private final AlarmResultRepository alarmResultRepository;
-	private final TagRepository tagRepository;
+    private final AlarmRepository alarmRepository;
+    private final UserRepository userRepository;
+    private final AuthService authService;
+    private final AlarmCategoryRepository alarmCategoryRepository;
+    private final AlarmResultRepository alarmResultRepository;
+    private final TagRepository tagRepository;
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final BriefRepository briefRepository;
 	private final QuizRepository quizRepository;
-	private final UserService userService;
+
 
 	public ResponseEntity<?> findAlarmByUsername() {
-		User user = authService.getLoginUser();
+        User user = authService.getLoginUser();
 
-		if (user == null) {
-			return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
-		}
+        if (user == null) {
+            return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
+        }
 
-		Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
+        Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
 
-		AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
-			.id(alarm.getId())
-			.alarmTime(alarm.getAlarmTime())
-			.daysOfWeek(alarm.getDaysOfWeek())
-			.repeatFrequency(alarm.getRepeatFrequency())
-			.repeatInterval(alarm.getRepeatInterval())
-			.isActive(alarm.getIsActive())
-			.build();
+        AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
+                .id(alarm.getId())
+                .alarmTime(alarm.getAlarmTime())
+                .daysOfWeek(alarm.getDaysOfWeek())
+                .repeatFrequency(alarm.getRepeatFrequency())
+                .repeatInterval(alarm.getRepeatInterval())
+                .isActive(alarm.getIsActive())
+                .build();
 
-		return ResponseEntity.ok(alarmResponseDto);
+        return ResponseEntity.ok(alarmResponseDto);
 
-	}
+    }
 
 	@Transactional
 	public ResponseEntity<?> updateAlarm(AlarmRequestDto alarmRequestDto) {
@@ -226,11 +223,13 @@ public class AlarmService {
 		alarmCategoryRepository.deleteByAlarmIdAndTagIds(user.getId(), tag.getId());
 	}
 
+
 	// 알람 결과 조회
 	public ResponseEntity<?> findAlarmResult() {
 		User user = authService.getLoginUser();
 
 		List<AlarmResult> alarmResultList = alarmResultRepository.findAllByUserId(user.getId());
+
 
 		List<AlarmResultDto> alarmResultDtoList = new ArrayList<>();
 		for (AlarmResult alarmResult : alarmResultList) {
