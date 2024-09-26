@@ -1,5 +1,8 @@
 package com.sf.honeymorning.domain.alarm.repository;
 
+import java.time.LocalTime;
+import java.util.List;
+
 import com.sf.honeymorning.domain.alarm.entity.Alarm;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,4 +15,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 
     @Query("DELETE FROM Alarm a WHERE a.user.id = :userId")
     Alarm deleteAlarmsByUserId(@Param("userId") Long userId);
+
+
+    List<Alarm> findByAlarmTime(@Param("alarmTime") LocalTime alarmTime);
 }

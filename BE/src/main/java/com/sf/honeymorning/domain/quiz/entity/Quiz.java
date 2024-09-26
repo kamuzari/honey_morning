@@ -8,7 +8,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
 @Builder
 @AllArgsConstructor
@@ -40,6 +40,7 @@ public class Quiz extends BaseEntity {
     private String option4;
 
     private Integer selection;
+
 
 
 }
