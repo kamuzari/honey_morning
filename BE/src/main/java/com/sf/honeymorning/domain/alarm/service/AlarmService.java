@@ -1,5 +1,26 @@
 package com.sf.honeymorning.domain.alarm.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.domain.alarm.dto.AlarmCategoryDto;
@@ -30,62 +51,53 @@ import com.sf.honeymorning.exception.user.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Service
 @RequiredArgsConstructor
 public class AlarmService {
 
-    private final AlarmRepository alarmRepository;
-    private final UserRepository userRepository;
-    private final AuthService authService;
-    private final AlarmCategoryRepository alarmCategoryRepository;
-    private final AlarmResultRepository alarmResultRepository;
-    private final TagRepository tagRepository;
+	@Value("${ai.url.briefing}")
+	private String briefingAi ;
+
+	@Value("${ai.url.quiz}")
+	private String quizAi ;
+
+	@Value("${ai.url.music}")
+	private String musicAi ;
+
+	@Value("${ai.url.topic-model}")
+	private String topicModelAi;
+
+	private final AlarmRepository alarmRepository;
+	private final UserRepository userRepository;
+	private final AuthService authService;
+	private final AlarmCategoryRepository alarmCategoryRepository;
+	private final AlarmResultRepository alarmResultRepository;
+	private final TagRepository tagRepository;
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final BriefRepository briefRepository;
 	private final QuizRepository quizRepository;
 
-
 	public ResponseEntity<?> findAlarmByUsername() {
-        User user = authService.getLoginUser();
+		User user = authService.getLoginUser();
 
-        if (user == null) {
-            return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
-        }
+		if (user == null) {
+			return new ResponseEntity<>("현재 로그인된 유저 정보가 없습니다.", HttpStatus.UNAUTHORIZED);
+		}
 
-        Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
+		Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
 
-        AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
-                .id(alarm.getId())
-                .alarmTime(alarm.getAlarmTime())
-                .daysOfWeek(alarm.getDaysOfWeek())
-                .repeatFrequency(alarm.getRepeatFrequency())
-                .repeatInterval(alarm.getRepeatInterval())
-                .isActive(alarm.getIsActive())
-                .build();
+		AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
+			.id(alarm.getId())
+			.alarmTime(alarm.getAlarmTime())
+			.daysOfWeek(alarm.getDaysOfWeek())
+			.repeatFrequency(alarm.getRepeatFrequency())
+			.repeatInterval(alarm.getRepeatInterval())
+			.isActive(alarm.getIsActive())
+			.build();
 
-        return ResponseEntity.ok(alarmResponseDto);
+		return ResponseEntity.ok(alarmResponseDto);
 
-    }
+	}
 
 	@Transactional
 	public ResponseEntity<?> updateAlarm(AlarmRequestDto alarmRequestDto) {
@@ -226,13 +238,11 @@ public class AlarmService {
 		alarmCategoryRepository.deleteByAlarmIdAndTagIds(user.getId(), tag.getId());
 	}
 
-
 	// 알람 결과 조회
 	public ResponseEntity<?> findAlarmResult() {
 		User user = authService.getLoginUser();
 
 		List<AlarmResult> alarmResultList = alarmResultRepository.findAllByUserId(user.getId());
-
 
 		List<AlarmResultDto> alarmResultDtoList = new ArrayList<>();
 		for (AlarmResult alarmResult : alarmResultList) {
@@ -313,7 +323,7 @@ public class AlarmService {
 			HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 			try {
 				ResponseEntity<String> briefResponse = restTemplate.exchange(
-					"https://www.honeymorning.store/ai/briefing/", HttpMethod.POST, requestEntity,
+					briefingAi, HttpMethod.POST, requestEntity,
 					String.class);
 				if (briefResponse.getStatusCode().is2xxSuccessful()) {
 					String data = briefResponse.getBody();
@@ -323,7 +333,6 @@ public class AlarmService {
 					String longBriefing = jsonNode.get("data").get("longBriefing").asText();
 					System.out.println("Short Briefing: " + shortBriefing);
 					System.out.println("Long Briefing: " + longBriefing);
-
 					Brief save = briefRepository.save(
 						Brief.builder()
 							.user(user)
@@ -331,9 +340,22 @@ public class AlarmService {
 							.content(longBriefing)
 							.build()
 					);
-					ResponseEntity<String> topicModelResponse = restTemplate.exchange(
-						"https://www.honeymorning.store/ai/topic/", HttpMethod.POST, requestEntity, String.class);
-
+					headers = new HttpHeaders();
+					headers.setContentType(MediaType.APPLICATION_JSON);
+					headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+					body = new HashMap<>();
+					ArrayList<String> tagList = new ArrayList<>();
+					List<AlarmCategory> alarmCategories = alarmCategoryRepository.findAllByAlarmId(alarm.getId());
+					for (int i = 0; i < alarmCategories.size(); i++) {
+						AlarmCategory alarmCategory = alarmCategories.get(i);
+						Tag tag = alarmCategory.getTag();
+						if(tag.getIsCustom()==1) continue;
+						tagList.add(tag.getWord());
+					}
+					body.put("tags", tagList);
+					requestEntity = new HttpEntity<>(body, headers);
+					ResponseEntity<String> topicModelResponse = restTemplate.exchange(topicModelAi, HttpMethod.POST,
+						requestEntity, String.class);
 					if (topicModelResponse.getStatusCode().is2xxSuccessful()) {
 						data = briefResponse.getBody();
 						objectMapper = new ObjectMapper();
@@ -352,7 +374,7 @@ public class AlarmService {
 					body.put("briefing", save.getSummary());
 					requestEntity = new HttpEntity<>(body, headers);
 					ResponseEntity<String> songResponse = restTemplate.exchange(
-						"https://www.honeymorning.store/ai/music/music/", HttpMethod.POST, requestEntity, String.class);
+						musicAi, HttpMethod.POST, requestEntity, String.class);
 					if (songResponse.getStatusCode().is2xxSuccessful()) {
 						data = songResponse.getBody();
 						objectMapper = new ObjectMapper();
@@ -371,14 +393,12 @@ public class AlarmService {
 					body.put("text", save.getSummary());
 					requestEntity = new HttpEntity<>(body, headers);
 					ResponseEntity<String> quizResponse = restTemplate.exchange(
-						"https://www.honeymorning.store/ai/quiz/", HttpMethod.POST, requestEntity, String.class);
+						quizAi, HttpMethod.POST, requestEntity, String.class);
 					if (quizResponse.getStatusCode().is2xxSuccessful()) {
-
 						String body1 = quizResponse.getBody();
 						objectMapper = new ObjectMapper();
 						JsonNode rootNode = objectMapper.readTree(body1);
 						JsonNode dataArray = rootNode.get("data");
-
 						for (JsonNode quiz : dataArray) {
 							String problem = quiz.get("problem").asText();
 							System.out.println("문제: " + problem);
