@@ -9,8 +9,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class WordCloudResponseDto {
-	@Schema(name = "키워드", example = "고냥이")
+	@Schema( example = "키워드- 고냥이")
 	private String word;
-	@Schema(name = "출현 빈도수", example = "20303")
+	@Schema(example = "20303")
 	private Integer frequency;
 }

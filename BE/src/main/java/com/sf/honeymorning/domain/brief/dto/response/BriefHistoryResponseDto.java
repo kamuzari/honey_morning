@@ -18,6 +18,6 @@ public class BriefHistoryResponseDto {
 	@ArraySchema(schema = @Schema(implementation = BriefHistoryDto.class))
 	List<BriefHistoryDto> histories;
 
-	@Schema(description = "총 페이지 개수", example = "보여주는 ")
+	@Schema(example = "숫자 -총 페이지 개수 ")
 	int totalPage;
 }
