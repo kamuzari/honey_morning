@@ -1,9 +1,10 @@
 package com.sf.honeymorning.domain.quiz.service;
 
 import com.sf.honeymorning.domain.auth.service.AuthService;
+import com.sf.honeymorning.domain.brief.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.domain.brief.entity.Brief;
 import com.sf.honeymorning.domain.brief.repository.BriefRepository;
-import com.sf.honeymorning.domain.quiz.dto.QuizDto;
+import com.sf.honeymorning.domain.quiz.dto.QuizRequestDto;
 import com.sf.honeymorning.domain.quiz.entity.Quiz;
 import com.sf.honeymorning.domain.quiz.repository.QuizRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,12 +25,29 @@ public class QuizService {
     BriefRepository briefRepository;
 
     // 하나의 브리핑에 묶인 두 개의 퀴즈 반환
-    public ResponseEntity<?> getQuiz(Long briefId) {
+    public List<QuizResponseDto> getQuiz(Long briefId) {
         Brief brief = briefRepository.findById(briefId)
                 .orElseThrow(() -> new EntityNotFoundException("id에 해당하는 브리핑이 존재하지 않습니다."));
-        List<Quiz> quiz = quizRepository.findByBrief(brief)
+        List<Quiz> quizList = quizRepository.findByBrief(brief)
                 .orElseThrow(() -> new EntityNotFoundException("브리핑에 해당하는 퀴즈가 존재하지 않습니다."));
-        return ResponseEntity.ok(quiz);
+
+        List<QuizResponseDto> quizResponseDtoList = new ArrayList<>();
+
+        for (Quiz quiz : quizList) {
+            QuizResponseDto quizResponseDto = QuizResponseDto.builder()
+                    .question(quiz.getQuestion())
+                    .option1(quiz.getOption1())
+                    .option2(quiz.getOption2())
+                    .option3(quiz.getOption3())
+                    .option4(quiz.getOption4())
+                    .selectedOption(quiz.getSelection())
+                    .answerNumber(quiz.getAnswer())
+                    .build();
+
+            quizResponseDtoList.add(quizResponseDto);
+        }
+
+        return quizResponseDtoList;
     }
 
     // ai에서 가져온 quiz를 저장하는 메서드
@@ -38,14 +57,14 @@ public class QuizService {
 
     // 퀴즈가 끝난 이후, 선택한 보기를 등록할 메서드
     @Transactional
-    public ResponseEntity<?> updateQuiz(QuizDto quizDto) {
+    public ResponseEntity<?> updateQuiz(QuizRequestDto quizRequestDto) {
 
-        Long quizId = quizDto.getId();
+        Long quizId = quizRequestDto.getId();
 
         Quiz quiz = quizRepository.findById(quizId)
                 .orElseThrow(() -> new EntityNotFoundException("id와 일치하는 퀴즈가 존재하지 않습니다."));
 
-        quiz.setSelection(quizDto.getSelection());
+        quiz.setSelection(quizRequestDto.getSelection());
 
         quizRepository.save(quiz);
 

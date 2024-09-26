@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
-import {useWatch, useForm, Controller} from 'react-hook-form';
+import React, {useState, useEffect} from 'react';
+import {useForm, Controller} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {useMutation} from '@tanstack/react-query';
 import styled, {createGlobalStyle} from 'styled-components';
 import {instance} from '@/api/axios';
 import Modal from '@/component/Modal';
+import Footer from '@/component/Footer';
 
 interface SignUpFormData {
   email: string;
@@ -15,6 +16,21 @@ interface SignUpFormData {
 
 const SignUpProcess: React.FC = () => {
   const navigate = useNavigate();
+  const [isPortrait, setIsPortrait] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isPortraitMode = window.innerHeight > window.innerWidth;
+      setIsPortrait(isPortraitMode);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   //prettier-ignore
   const [isEmailChecked, setIsEmailChecked] = useState<boolean>(false);
@@ -132,118 +148,139 @@ const SignUpProcess: React.FC = () => {
 
   return (
     <>
-      <Title>Sign Up</Title>
-      <Container>
-        <div className="SubContainer">
-          <form
-            onSubmit={handleSubmit(handleSignUp)}
-            className="loginForm"
-          >
-            <div className="inputGroup">
-              <label>Email</label>
-              <div>
-                <Controller
-                  name="email"
-                  control={control}
-                  defaultValue=""
-                  rules={{required: '이메일은 필수 입력 항목입니다.'}}
-                  render={({field}) => (
-                    <Input
-                      {...field}
-                      type="email"
-                      placeholder="이메일을 입력해주세요"
-                    />
-                  )}
+      <GlobalStyle isPortrait={isPortrait} />
+      <Container isPortrait={isPortrait}>
+        <form
+          onSubmit={handleSubmit(handleSignUp)}
+          className="signUpForm"
+        >
+          <Title isPortrait={isPortrait}>Sign Up</Title>
+          <div className="inputGroup">
+            <label>Email</label>
+            <div className="emailInputGroup">
+              <Controller
+                name="email"
+                control={control}
+                defaultValue=""
+                rules={{required: '이메일은 필수 입력 항목입니다.'}}
+                render={({field}) => (
+                  <Input
+                    {...field}
+                    type="email"
+                    placeholder="이메일을 입력해주세요"
+                    isPortrait={isPortrait}
+                    className="inputField"
+                  />
+                )}
+              />
+              <button
+                type="button"
+                className="duplicateButton"
+                onClick={() => checkEmailDuplicate(email)}
+              >
+                중복확인
+              </button>
+            </div>
+            {emailMessage && (
+              <EmailMessage
+                type={emailMessageType}
+                isPortrait={isPortrait}
+              >
+                {emailMessage}
+              </EmailMessage>
+            )}
+          </div>
+          <div className="inputGroup">
+            <label>Name</label>
+            <Controller
+              name="username"
+              control={control}
+              defaultValue=""
+              rules={{required: '이름은 필수 입력 항목입니다.'}}
+              render={({field}) => (
+                <Input
+                  {...field}
+                  type="username"
+                  placeholder="이름을 입력해주세요"
+                  isPortrait={isPortrait}
+                  className="inputField"
                 />
-                <button
-                  type="button"
-                  className="DuplicateButton"
-                  onClick={() => checkEmailDuplicate(email)}
-                >
-                  중복확인
-                </button>
-              </div>
-              {emailMessage && (
-                <EmailMessage type={emailMessageType}>
-                  {emailMessage}
-                </EmailMessage>
               )}
-            </div>
-            <div className="inputGroup">
-              <label>Name</label>
-              <Controller
-                name="username"
-                control={control}
-                defaultValue=""
-                rules={{required: '이름은 필수 입력 항목입니다.'}}
-                render={({field}) => (
-                  <Input
-                    {...field}
-                    type="username"
-                    placeholder="이름을 입력해주세요"
-                  />
-                )}
-              />
-            </div>
-            <div className="inputGroup">
-              <label>Password</label>
-              <Controller
-                name="password"
-                control={control}
-                defaultValue=""
-                rules={{required: '비밀번호는 필수 입력 항목입니다.'}}
-                render={({field}) => (
-                  <Input
-                    {...field}
-                    type="password"
-                    placeholder="비밀번호를 입력해주세요"
-                  />
-                )}
-              />
-            </div>
-            <div className="inputGroup">
-              <label>Confirm Password</label>
-              <Controller
-                name="confirmPassword"
-                control={control}
-                defaultValue=""
-                rules={{
-                  required: '비밀번호를 다시 입력해주세요.',
-                  validate: value =>
-                    value === password || '비밀번호가 일치하지 않습니다.',
-                }}
-                render={({field}) => (
-                  <Input
-                    {...field}
-                    value={confirmPassword}
-                    onChange={e => {
-                      field.onChange(e);
-                      handlePasswordChange(e.target.value);
-                    }}
-                    type="password"
-                    placeholder="비밀번호를 다시 입력해주세요"
-                    style={{
-                      borderColor: confirmPassword
-                        ? passwordsMatch
-                          ? 'green'
-                          : 'red'
-                        : '',
-                    }}
-                  />
-                )}
-              />
-              {!passwordsMatch && confirmPassword && (
-                <ErrorText>비밀번호가 일치하지 않습니다.</ErrorText>
+            />
+          </div>
+          <div className="inputGroup">
+            <label>Password</label>
+            <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              rules={{required: '비밀번호는 필수 입력 항목입니다.'}}
+              render={({field}) => (
+                <Input
+                  {...field}
+                  type="password"
+                  placeholder="비밀번호를 입력해주세요"
+                  isPortrait={isPortrait}
+                  className="inputField"
+                />
               )}
-              {passwordsMatch && confirmPassword && (
-                <SuccessText>비밀번호가 일치합니다.</SuccessText>
+            />
+          </div>
+          <div className="inputGroup">
+            <label>Confirm Password</label>
+            <Controller
+              name="confirmPassword"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: '비밀번호를 다시 입력해주세요.',
+                validate: value =>
+                  value === password || '비밀번호가 일치하지 않습니다.',
+              }}
+              render={({field}) => (
+                <Input
+                  {...field}
+                  value={confirmPassword}
+                  onChange={e => {
+                    field.onChange(e);
+                    handlePasswordChange(e.target.value);
+                  }}
+                  type="password"
+                  placeholder="비밀번호를 다시 입력해주세요"
+                  isPortrait={isPortrait}
+                  className="inputField"
+                  style={{
+                    borderColor: confirmPassword
+                      ? passwordsMatch
+                        ? 'green'
+                        : 'red'
+                      : '',
+                  }}
+                />
               )}
-            </div>
+            />
+            {confirmPassword && (passwordsMatch !== undefined) ? (
+              !passwordsMatch ? (
+                <MessageText isPortrait={isPortrait} isError={true}>
+                  비밀번호가 일치하지 않습니다.
+                </MessageText>
+              ) : (
+                <MessageText isPortrait={isPortrait} isError={false}>
+                  비밀번호가 일치합니다.
+                </MessageText>
+              )
+            ) : null}
+          </div>
 
-            <SubmitButton type="submit">회원가입</SubmitButton>
-          </form>
-        </div>
+          <SubmitButton
+            type="submit"
+            isPortrait={isPortrait}
+          >
+            회원가입
+          </SubmitButton>
+        </form>
       </Container>
+      <Footer />
 
       <Modal
         isOpen={isModalOpen}
@@ -258,60 +295,135 @@ const SignUpProcess: React.FC = () => {
 
 export default SignUpProcess;
 
-const Title = styled.div`
-  display: flex;
-  justify-content: center;
-  font-size: 50px;
-`;
+//prettier-ignore
+const GlobalStyle = createGlobalStyle<{isPortrait: boolean}>`
+ body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
 
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-
-  .SubContainer {
-    display: flex;
-    fix-direction: column;
-    justify-content: center;
-
-    width: 600px;
-    height: 1000px;
-
-    border: solid 1px black;
-    background-color: white;
+  #root {
+    height: 100%;
+    width: 100%;
   }
 `;
 
-const Input = styled.input`
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-  border: 1px solid black;
+//prettier-ignore
+const Title = styled.div<{isPortrait: boolean}>`
+  display: flex;
+  justify-content: center;
+  font-size: ${({isPortrait}) => (isPortrait ? '5vw' : '3vw')}; 
+  margin-bottom: ${({isPortrait}) => (isPortrait ? '3vw' : '4vw')}; 
 `;
 
-const SubmitButton = styled.button`
+//prettier-ignore
+const Container = styled.div<{isPortrait: boolean}>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+
+  background-image: ${({ isPortrait }) =>
+    isPortrait ? "url('/images/login3.png')" : "url('/images/loginDesktop.png')"};
+  background-size: 100vw auto;
+  background-position: top;
+  background-repeat: no-repeat;
+  overflow: hidden;
+
+  .signUpForm {
+    display: flex;
+    flex-direction: column;
+    width: ${({ isPortrait }) => (isPortrait ? '50vw' : '40vw')};
+
+    padding: ${({ isPortrait }) => (isPortrait ? '3vw' : '5vw')};
+    margin: 0 auto;
+    border-radius: 20px;
+    background-color: white;
+    
+    box-shadow: 0 0 1vh rgba(0, 0, 0, 0.5);
+
+  
+   .inputGroup {
+      margin-bottom: 1vh;
+      font-size: ${({ isPortrait }) => (isPortrait ? '2.5vw' : '1.5vw')};
+
+      .emailInputGroup {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+
+        .duplicateButton {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 15vw;
+          height: ${({ isPortrait }) => (isPortrait ? '5.5vw' : '3.5vw')};
+          border-radius: 10px;
+          background-color: var(--yellow-color);
+          color: white;
+          border: none;
+          padding: 1vh 1vw;
+          font-size: ${({ isPortrait }) => (isPortrait ? '2vw' : '1.5vw')};
+        }
+      }
+
+      .inputField {
+      }   
+    }
+  }
+`;
+
+const Input =
+  styled.input <
+  {isPortrait: boolean} >
+  `
+  width: 100%;
+  padding: ${({isPortrait}) => (isPortrait ? '1vh 0.5vw' : '2vh 0.5vw')};
+  margin: ${({isPortrait}) => (isPortrait ? '0.5vh 0' : '1vh 0')};
+  border-radius: 5px;
+  border: 1px solid black;
+  font-size: ${({isPortrait}) => (isPortrait ? '1vh' : '2vh')};
+
+   &::placeholder {
+      color: grey;
+      padding-left: 10px; 
+    }
+`;
+
+const SubmitButton =
+  styled.button <
+  {isPortrait: boolean} >
+  `
   background-color: var(--yellow-color);
   color: white;
   border: none;
-  border-radius: 10%;
+  border-radius: 20px;
+  font-size: ${({isPortrait}) => (isPortrait ? '2vw' : '1.3vw')};
 
   display: flex;
   justify-content: center;
-  padding: 1em 5em;
+  padding: 1.5vw 1vh;
+  margin: 2vh auto 1vh;
+  width: 100%;
+
   cursor: pointer;
 `;
 
 //prettier-ignore
-const EmailMessage = styled.p<{ type: string }>`
-  color: ${({ type }) => (type === 'success' ? 'var(--red-color)' : 'var(--darkgreen-color)')};
-  font-size: 14px;
+const EmailMessage = styled.p<{ type: string, isPortrait: boolean}>`
+  color: ${({ type }) => (type === 'success' ? 'var(--darkgreen-color)' : 'var(--red-color)')};
+  font-size: ${({isPortrait}) => (isPortrait ? '1vh' : '1vw')};
 `;
 
-const ErrorText = styled.p`
-  color: red;
-  font-size: 14px;
-`;
-
-const SuccessText = styled.p`
-  color: green;
-  font-size: 14px;
+//prettier-ignore
+const MessageText = styled.div<{ isPortrait: boolean; isError: boolean }>`
+  font-size: ${({ isPortrait }) => (isPortrait ? '1vh' : '1vh')};
+  color: ${({ isError }) => (isError ? 'var(--red-color)' : 'var(--darkgreen-color)')};
 `;

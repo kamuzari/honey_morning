@@ -36,7 +36,7 @@ public class AuthService {
     private final AlarmRepository alarmRepository;
     private final TagRepository tagRepository;
 
-    public UserDetailDto getUserInfo(HttpServletRequest request) {
+    public UserDetailDto getUserInfo() {
         User loginUser = getLoginUser();
         if (loginUser == null) {
             return null;
