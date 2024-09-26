@@ -7,6 +7,7 @@ import com.sf.honeymorning.domain.alarm.dto.AlarmRequestDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmResultDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
+import com.sf.honeymorning.domain.alarm.dto.QuizDto;
 import com.sf.honeymorning.domain.alarm.entity.Alarm;
 import com.sf.honeymorning.domain.alarm.entity.AlarmCategory;
 import com.sf.honeymorning.domain.alarm.entity.AlarmResult;
