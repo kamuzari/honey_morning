@@ -23,6 +23,7 @@ import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.tag.repository.TagRepository;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
+import com.sf.honeymorning.exception.alarm.AlarmFatalException;
 import com.sf.honeymorning.exception.user.AlarmCategoryNotFoundException;
 import com.sf.honeymorning.exception.user.UserNotFoundException;
 
@@ -40,6 +41,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -413,6 +415,30 @@ public class AlarmService {
 	}
 
 	public AlarmStartDto getThings() {
+		User user = authService.getLoginUser();
+		LocalDate today = LocalDate.now();
+		LocalDateTime startOfDay = today.atStartOfDay();
+		LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();  // Midnight of next day
+		Brief brief = briefRepository.findByUserAndCreatedAtToday(user, startOfDay, endOfDay)
+			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+		List<Quiz> quizzes = quizRepository.findByBrief(brief)
+			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+		Alarm alarm = alarmRepository.findAlarmsByUserId(user.getId());
+		brief.getSummary();
+		List<QuizDto> quizDtos = new ArrayList<>();
+		for (int i = 0; i < quizzes.size(); i++) {
+			Quiz quiz = quizzes.get(i);
+			quizDtos.add(new QuizDto(
+				quiz.getId(),
+				quiz.getQuestion(),
+				quiz.getAnswer(),
+				quiz.getOption1(),
+				quiz.getOption2(),
+				quiz.getOption3(),
+				quiz.getOption4()
+			));
+		}
+		alarm.getMusicFilePath();
 		ArrayList<QuizDto> list = new ArrayList<>();
 		list.add(new QuizDto(
 			1L,
