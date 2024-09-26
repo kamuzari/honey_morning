@@ -3,11 +3,8 @@ package com.sf.honeymorning.domain.alarm.service;
 import com.sf.honeymorning.domain.alarm.dto.AlarmRequestDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
 import com.sf.honeymorning.domain.alarm.entity.Alarm;
-import com.sf.honeymorning.domain.alarm.repository.AlarmCategoryRepository;
 import com.sf.honeymorning.domain.alarm.repository.AlarmRepository;
-import com.sf.honeymorning.domain.alarm.repository.AlarmResultRepository;
 import com.sf.honeymorning.domain.auth.service.AuthService;
-import com.sf.honeymorning.domain.tag.repository.TagRepository;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
 import com.sf.honeymorning.exception.user.UserNotFoundException;
@@ -28,9 +25,7 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
     private final UserRepository userRepository;
     private final AuthService authService;
-    private final AlarmCategoryRepository alarmCategoryRepository;
-    private final AlarmResultRepository alarmResultRepository;
-    private final TagRepository tagRepository;
+    private final int timeGap = 5;
 
     public AlarmResponseDto findAlarmByUsername() {
         User user = authService.getLoginUser();
@@ -84,15 +79,19 @@ public class AlarmService {
         // 설정한 알람 요일
         String alarmWeek = alarmRequestDto.getDaysOfWeek();
 
+        int currentDayBinary = Integer.parseInt(binary, 2);
+        int nextDayBinary = Integer.parseInt(nextBinary, 2);
+        int alarmDayBinary = Integer.parseInt(alarmWeek, 2);
+
 
         // 알람이 현재 요일만 설정 되어 있고, 이후 시간이며, 5시간 이전에 설정되어 있을 때.
 
-        if (binary.equals(alarmWeek) && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0 && ChronoUnit.HOURS.between(nowTime, alarmTime) < 5) {
+        if ((currentDayBinary & alarmDayBinary) > 0 && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0 && ChronoUnit.HOURS.between(nowTime, alarmTime) < timeGap) {
             throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
         }
 
         // 알람이 내일 요일만 설정 되어 있고, 5시간 이전에 설정되어 있을 때.
-        if (nextBinary.equals(alarmWeek) && ChronoUnit.HOURS.between(nowTime, alarmTime) + 24 <= 5) {
+        if ((nextDayBinary & alarmDayBinary) > 0 && ChronoUnit.HOURS.between(nowTime, alarmTime) + 24 <= timeGap) {
             throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
         }
 
