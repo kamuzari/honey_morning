@@ -1,19 +1,19 @@
-// import QuizOption from '@/component/QuizOption'
 import {useState, useEffect, useRef} from 'react';
-import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query'
+import styled from 'styled-components';
+import { instance } from '@/api/axios'
 
-// ??? question과 같은 변수명 뭔지, 정답은 어떤 방식으로 넘겨주는지
 interface QuizData {
-  "id": number,
-  "briefId": number,
-  "question": string,
-  "answer": number,
-  "option1": string,
-  "option2": string,
-  "option3": string,
-  "option4": string,
-  "selection": number,
+  id: number,
+  briefId: number,
+  question: string,
+  answer: number,
+  option1: string,
+  option2: string,
+  option3: string,
+  option4: string,
+  selection: number,
 }
 
 interface ProgressBarProps {
@@ -31,7 +31,30 @@ interface SelectBoxProps {
   isSelected: boolean;
 }
 
+// get 요청
+const fetchQuizData = async(briefId: number): Promise<QuizData[]> => {
+  try {
+    const response = await instance.get(`/api/quizzes/${briefId}`);
+    return response.data;
+  } catch(error: any) {
+    console.log("fetchQuizData Error", error);
+    throw error;
+  }
+}
+
+// patch 요청
+const saveQuizResult = async(quizResult: {correctCount: number; totalQuestions: number}) => {
+  try{
+    const response = await instance.patch(`/api/quizzes`, quizResult)
+    return response.data;
+  } catch(error: any) {
+    console.log("saveQuizResult Error", error)
+  }
+}
+
+
 const QuizSolution: React.FC = () => {
+
   const navigate = useNavigate();
 
   //timer
@@ -50,56 +73,68 @@ const QuizSolution: React.FC = () => {
   // 정답 모달
   const  [showModal, setShowModal] = useState(false);
 
-// 임시 퀴즈 데이터 -> 백 또는 서버 연동 예정
-useEffect(() => {
-  const fetchQuizData = async() => {
-    const data: QuizData[] = [
-      {
-        id: 1,
-        briefId: 1,
-        question: "우리팀의 이름은?",
-        option1: "이세돌",
-        option2: "징버거",
-        option3: "플레이브",
-        option4: "싸피니까",
-        answer: 3,
-        selection: 0
-      },
-      {
-        id: 2,
-        briefId: 1,
-        question: "우리팀 팀장의 이름은?",
-        option1: "송창용",
-        option2: "한도형",
-        option3: "김병연",
-        option4: "김윤홍",
-        answer: 0,
-        selection: 0
-      }
-    ];
-    setQuizData(data);
-  }
-  fetchQuizData();
-}, []);
+  // const [briefId, setBriefId] = useState<number | null>(null);
 
-// 현재 퀴즈 위치
-useEffect(() => {
-  if(quizData.length > 0){
+  const briefId = 1;
+
+  // get
+const { mutate: fetchQuizDataMutate } = useMutation({
+  mutationFn: (id: number) => fetchQuizData(id),
+  onSuccess: (data: QuizData[]) => {
+    console.log("퀴즈 데이터를 불러오는데 성공")
+    setQuizData(data);
+    setIsQuizActive(true);
     speakQuestion();
+  },
+  onError: (error) => {
+    console.error("퀴즈 데이터를 불러오는데 실패", error)
+  }
+})
+
+//patch
+const { mutate: saveQuizResultMutate } = useMutation({
+  mutationFn: saveQuizResult,
+  onSuccess: (response) => {
+    console.log("퀴즈 결과 저장 보냄", response);
+    navigate('/quizresult', { state: {correctCount: correctCountRef.current}})
+  },
+  onError: (error) => {
+    console.log("퀴즈 결과 저장 실패", error)
+  }
+})
+
+// 퀴즈 페이지 로드 시 데이터 가져오기
+useEffect(()=> {
+  // if(briefId !== null) {
+    fetchQuizDataMutate(briefId);
+  // }
+}, [briefId])
+
+
+useEffect(() => {
+  if (quizData.length > 0 && currentQuizIndex > 0) {
+    speakQuestion();
+    setTimeLeft(10);
     setIsQuizActive(true);
   }
-}, [currentQuizIndex])
+}, [currentQuizIndex]);;
 
 useEffect(() => {
-  if (quizData.length > 0 && currentQuizIndex === 0) {
-    setIsQuizActive(true); 
+  let timer: NodeJS.Timeout;
+  if (timeLeft > 0 && isQuizActive) {
+    timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+  } else if (timeLeft === 0 && isQuizActive) {
+    handleTimeUp();
   }
-}, [quizData]);
+  return () => clearTimeout(timer);
+}, [timeLeft, isQuizActive]);
 
 
 const speakQuestion = () => {
-  const speech = new SpeechSynthesisUtterance(quizData[currentQuizIndex].question);
-  window.speechSynthesis.speak(speech);
+  if (quizData[currentQuizIndex]) {
+    const speech = new SpeechSynthesisUtterance(quizData[currentQuizIndex].question);
+    window.speechSynthesis.speak(speech);
+  }
 };
 
 // SpeechSynthesisUtterance.lang: 언어 설정
@@ -110,19 +145,20 @@ const speakQuestion = () => {
 // SpeechSynthesisUtterance.volume: 볼륨 설정
 
 
+
 // 타이머 설정
 const handleTimeUp = () => {
   setIsQuizActive(false);
 
   const isAnswerCorrect = selectedAnswer === quizData[currentQuizIndex].answer;
   setIsCorrect(isAnswerCorrect);
-
+  
   if (isAnswerCorrect) {
     correctCountRef.current += 1;
   }
-
+  
   console.log(correctCountRef);
-
+  
   setShowModal(true);
   setTimeout(() => {
     setShowModal(false);
@@ -132,32 +168,29 @@ const handleTimeUp = () => {
       setSelectedAnswer(null);
       setIsQuizActive(true);
     } else {
-      navigate('/quizresult', { state: { correctCount: correctCountRef.current } });
+      saveQuizResultMutate({
+        correctCount: correctCountRef.current,
+        totalQuestions: quizData.length,
+      })
+      // navigate('/quizresult', { state: { correctCount: correctCountRef.current } });
     }
   }, 5000);  //모달 시간 조절
 };
 
-useEffect(() => {
-  let timer: NodeJS.Timeout;
-  if (timeLeft > 0 && isQuizActive) {
-    timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-  } else if (timeLeft === 0 && isQuizActive) {
-    handleTimeUp();
-  }
-  return () => clearTimeout(timer);
-}, [timeLeft, isQuizActive, currentQuizIndex]);
-
 // 정답 처리
 const handleAnswer = (index: number ) => {
   setSelectedAnswer(index);
+  //handleTimeUp(); 선택 시 즉시 다음 문제로 (일정한 시간이라면 이 줄 삭제)
 }
 
-const currentOptions = [
-  quizData[currentQuizIndex]?.option1,
-  quizData[currentQuizIndex]?.option2,
-  quizData[currentQuizIndex]?.option3,
-  quizData[currentQuizIndex]?.option4,
-];
+const currentOptions = quizData[currentQuizIndex] 
+    ? [
+        quizData[currentQuizIndex].option1,
+        quizData[currentQuizIndex].option2,
+        quizData[currentQuizIndex].option3,
+        quizData[currentQuizIndex].option4,
+      ]
+    : [];
 
 const progress = (currentQuizIndex / quizData.length) * 100 + 50;
 
@@ -169,7 +202,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
         {quizData.map((_, index) => (
         <ProgressStep
           key={index}
-          completed={currentQuizIndex > index || (currentQuizIndex === index && showModal)}
+          completed={currentQuizIndex > index}
           active={currentQuizIndex >= index}
           position={`${((index + 1) / quizData.length) * 100}%`}
         >
@@ -183,13 +216,13 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
       <SelectArea>
         {currentOptions.map((option, index) => (
           <SelectionBox 
-          key={index} 
-          onClick={() => !showModal && handleAnswer(index)}
-          $isSelected={selectedAnswer === index}
-          $isDisabled={showModal}
-        >
-          {option}
-        </SelectionBox>
+            key={index} 
+            onClick={() => !showModal && handleAnswer(index)}
+            $isSelected={selectedAnswer === index}
+            $isDisabled={showModal}
+          >
+            {option}
+          </SelectionBox>
         ))}
       </SelectArea>
       {showModal && (
@@ -197,7 +230,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
           <ModalContent>
             {isCorrect ? '정답입니다!' : '오답입니다.'}
             <br />
-            정답: {currentOptions[quizData[currentQuizIndex].answer]}
+            정답: {currentOptions[quizData[currentQuizIndex]?.answer]}
           </ModalContent>
         </Modal>
       )}

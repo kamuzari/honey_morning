@@ -8,11 +8,8 @@ from utils import get_file_patterns, get_merged_document
 
 app = FastAPI(root_path="/ai/briefing")
 
-class Tag(BaseModel):
-    value: Literal['100', '101', '102', '103', '104', '105']
-
 class JSON_Briefing(BaseModel):
-    tags: List[Tag]
+    tags: List[Literal['100','101','102','103','104','105']]
 
 class Briefing(BaseModel):
     shortBriefing : str
@@ -37,7 +34,7 @@ def read_briefing(json: JSON_Briefing):
         raw_input_ids = tokenizer.encode(merged_document)
         input_ids = [tokenizer.bos_token_id] + raw_input_ids + [tokenizer.eos_token_id]
         input_ids = torch.tensor([input_ids])
-        short_summary_text_ids = model.generate(
+        long_summary_text_ids = model.generate(
             input_ids = input_ids,
             bos_token_id = model.config.bos_token_id,
             eos_token_id = model.config.eos_token_id,
@@ -45,7 +42,7 @@ def read_briefing(json: JSON_Briefing):
             max_length = 1024, # 요약문의 최대 길이 설정
             min_length = 1, # 요약문의 최소 길이 설정
             num_beams = 8) # 문장 생성 시 다음 단어를 탐색하는 영역의 개수
-        long_summary_text_ids = model.generate(
+        short_summary_text_ids = model.generate(
             input_ids = input_ids,
             bos_token_id = model.config.bos_token_id,
             eos_token_id = model.config.eos_token_id,

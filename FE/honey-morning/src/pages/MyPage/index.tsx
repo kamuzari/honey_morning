@@ -16,7 +16,7 @@ import NavBar from '@/component/NavBar/NavBar';
 import {NavBarProps} from '@/component/NavBar/NavBar';
 import {NavIconProps} from '@/component/NavBar/NavIcon';
 import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
-import {getBriefs} from "@/api/briefingApi";
+import {getBriefs} from '@/api/briefingApi';
 
 export const categoryList = [
   '정치',
@@ -29,8 +29,8 @@ export const categoryList = [
   '스포츠',
 ];
 
-interface Data{
-  date: string,
+interface Data {
+  date: string;
   content: string;
 }
 
@@ -42,7 +42,7 @@ interface Data{
 //   correctAnswer: number
 // }
 
-interface Response{
+interface Response {
   dates: Data[];
   totalPage: number;
 }
@@ -69,7 +69,6 @@ const MyPage: React.FC = () => {
     queryFn: fetchUserInfo,
   });
 
-
   const itemsPerPage = 5;
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -91,28 +90,12 @@ const MyPage: React.FC = () => {
 
   const currentItems = briefingData;
 
-
-
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const {selectedCategory, selectedCustomCategory, addCustomCategory} =
-  useInterestStore();
+    useInterestStore();
   const selectedList = selectedCategory;
   const NavIcons = SoleMainNavBarProps;
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const fetchAlarmCategories = async () => {
-  //     try {
-  //       const data = await findAlarmCategory();
-  //       console.log('알람 카테고리 데이터:', data);
-  //       // 데이터를 상태로 저장하거나 처리하는 로직 추가
-  //     } catch (error) {
-  //       console.error('알람 카테고리 데이터를 가져오는 중 오류 발생:', error);
-  //     }
-  //   };
-
-  //   fetchAlarmCategories();
-  // }, []);
 
   // 로딩 상태 처리
   if (!briefingData.length) {
