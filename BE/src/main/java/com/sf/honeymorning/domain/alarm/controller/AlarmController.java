@@ -2,8 +2,8 @@ package com.sf.honeymorning.domain.alarm.controller;
 
 import com.sf.honeymorning.domain.alarm.dto.AlarmRequestDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
+import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
 import com.sf.honeymorning.domain.alarm.service.AlarmService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +14,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Tag(name = "알람")
@@ -21,12 +24,12 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @AllArgsConstructor
 public class AlarmController {
-	private final AlarmService alarmService;
+    private final AlarmService alarmService;
 
-	@GetMapping("/test")
-	public ResponseEntity<?> test(HttpServletRequest req, HttpServletResponse res) {
-		return ResponseEntity.ok("success");
-	}
+    @GetMapping("/test")
+    public ResponseEntity<?> test(HttpServletRequest req, HttpServletResponse res) {
+        return ResponseEntity.ok("success");
+    }
 
     @Operation(
             summary = "설정 일부 수정"
@@ -60,20 +63,20 @@ public class AlarmController {
         return new ResponseEntity<>(alarmResponseDto, HttpStatus.OK);
     }
 
-	@Operation(
-		summary = "사용자 알람 시작"
-	)
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "알람 시작 성공",
-			content = @Content(schema = @Schema(implementation = AlarmStartDto.class))
-		)
-	})
-	@PostMapping("/start")
-	public ResponseEntity<AlarmStartDto> start() {
-		AlarmStartDto alarmStartDto = alarmService.getThings();
-		return ResponseEntity.ok(alarmStartDto);
-	}
+    @Operation(
+            summary = "사용자 알람 시작"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "알람 시작 성공",
+                    content = @Content(schema = @Schema(implementation = AlarmStartDto.class))
+            )
+    })
+    @PostMapping("/start")
+    public ResponseEntity<AlarmStartDto> start() {
+        AlarmStartDto alarmStartDto = alarmService.getThings();
+        return ResponseEntity.ok(alarmStartDto);
+    }
 
 }
