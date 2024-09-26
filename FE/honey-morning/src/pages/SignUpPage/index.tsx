@@ -78,15 +78,16 @@ const SignUpProcess: React.FC = () => {
       const response = await instance.get(
         `/api/users/check/email?email=${email}`,
       );
+      console.log(response);
 
       if (response.data === true) {
         setEmailMessage('이미 사용 중인 이메일입니다.');
-        setEmailMessageType('success');
-        setIsEmailChecked(true);
-      } else {
-        setEmailMessage('사용 가능한 이메일입니다.');
         setEmailMessageType('error');
         setIsEmailChecked(false);
+      } else {
+        setEmailMessage('사용 가능한 이메일입니다.');
+        setEmailMessageType('success');
+        setIsEmailChecked(true);
       }
     } catch (error) {
       setEmailMessage('이메일 확인에 실패했습니다.');

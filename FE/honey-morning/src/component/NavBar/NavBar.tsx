@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import NavIcon from './NavIcon';
 import {NavIconProps} from './NavIcon';
+
 export interface NavBarProps {
   props: NavIconProps[];
 }
@@ -24,6 +25,7 @@ const NavBar: React.FC<NavBarProps> = ({props}) => {
             $textColor={prop.$textColor}
             text={prop.text}
             to={prop.to}
+            onClick={prop.onClick}
           />
         );
       })}

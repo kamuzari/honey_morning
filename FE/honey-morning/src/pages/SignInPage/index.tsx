@@ -64,7 +64,6 @@ const LoginProcess: React.FC = () => {
 
     const res = await instance.get('/api/auth/userInfo', {
       headers: {
-        // Authorization: `Bearer ${token}`,
         access: token,
       },
     });
@@ -79,24 +78,6 @@ const LoginProcess: React.FC = () => {
       throw new Error('유저 정보가 비어 있습니다.');
     }
   };
-
-  // const {mutate: signMutate} = useMutation({
-  //   mutationFn: loginUser,
-  //   onSuccess: data => {
-  //     queryClient.setQueryData(['userInfo'], data);
-  //     console.log('data:', data);
-  //     alert('로그인 성공');
-  //     navigate('/');
-  //   },
-  //   onError: (error: any) => {
-  //     if (error.message) {
-  //       alert(`로그인 실패: ${error.message}`);
-  //     } else {
-  //       alert('로그인 실패');
-  //     }
-  //     reset({email: '', password: ''});
-  //   },
-  // });
 
   // mutation 사용
   const {mutate: signMutate} = useMutation({

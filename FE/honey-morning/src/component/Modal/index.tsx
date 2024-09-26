@@ -8,10 +8,36 @@ interface ModalProps {
   btnText?: string;
 }
 
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  isClose,
+  title,
+  message,
+  btnText = '확인',
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <ToLocate>
+      <Container>
+        <div className="TitleArea">{title}</div>
+        <div className="MessageArea">{message}</div>
+        <div className="ButtonArea">
+          <ModalButton onClick={isClose}>{btnText}</ModalButton>
+        </div>
+      </Container>
+    </ToLocate>
+  );
+};
+
+export default Modal;
+
 const ToLocate = styled.div`
+  position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
 `;
 
 const Container = styled.div`
@@ -26,6 +52,7 @@ const Container = styled.div`
   background-color: white;
   border-radius: 30px;
   box-shadow: 10px 5px 5px gray;
+  z-index: 20;
 
   .TitleArea {
     margin-bottom: 50px;
@@ -51,30 +78,7 @@ const ModalButton = styled.button`
   background-color: var(--yellow-color);
   border: none;
   font-size: 50px;
-
   border-radius: 20px;
   padding: 20px 50px;
+  cursor: pointer;
 `;
-
-const Modal: React.FC<ModalProps> = ({
-  isOpen,
-  isClose,
-  title,
-  message,
-  btnText = '확인',
-}) => {
-  if (!isOpen) return null;
-  return (
-    <ToLocate>
-      <Container>
-        <div className="TitleArea">{title}</div>
-        <div className="MessageArea">{message}</div>
-        <div className="ButtonArea">
-          <ModalButton onClick={isClose}>{btnText}</ModalButton>
-        </div>
-      </Container>
-    </ToLocate>
-  );
-};
-
-export default Modal;
