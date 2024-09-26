@@ -60,7 +60,7 @@ def load_and_merge_section_data(section_number, hours_back=hours_back):
         valid_hour = (start_time + timedelta(hours=hour)).strftime('%H')
         valid_hours.append(valid_hour)
 
-    file_patterns = [f"./data/{section_number}/*_{hour}.pkl" for hour in valid_hours]
+    file_patterns = [f"/var/data/{section_number}/*_{hour}.pkl" for hour in valid_hours]
 
     merged_content = []
     for file_pattern in file_patterns:
