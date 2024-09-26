@@ -1,5 +1,6 @@
 package com.sf.honeymorning.exception;
 
+import com.sf.honeymorning.exception.alarm.AlarmFatalException;
 import com.sf.honeymorning.exception.user.AlarmCategoryNotFoundException;
 import com.sf.honeymorning.exception.user.DuplicateException;
 import com.sf.honeymorning.exception.user.UserNotFoundException;
@@ -72,6 +73,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AlarmCategoryNotFoundException.class)
     public ResponseEntity<String> handleAlarmCategoryNotFoundException(final AlarmCategoryNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AlarmFatalException.class)
+    public ResponseEntity<String> handleAlarmFatalException(final AlarmFatalException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     // 그 외 모든 오류
