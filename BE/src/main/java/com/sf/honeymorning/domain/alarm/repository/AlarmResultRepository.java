@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface AlarmResultRepository extends JpaRepository<AlarmResult, Long> {
     List<AlarmResult> findByUser(User user);
+
+    List<AlarmResult> findByUserOrderByCreatedAt(User user);
 }
