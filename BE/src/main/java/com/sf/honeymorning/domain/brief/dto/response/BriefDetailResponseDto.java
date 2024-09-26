@@ -14,20 +14,18 @@ import lombok.Data;
 
 @Builder
 @AllArgsConstructor
+@Schema(name = "브리핑 상세 목록 응답", description = "브리핑 상세 조회에서 필요한 응답 모델이에요 📦")
 @Data
 public class BriefDetailResponseDto {
-	@Schema(description = "브리핑 ID", example = "1")
+	@Schema( example = "숫자 - 브리핑 ID")
 	private Long briefId;
 
-	@Schema(name = "[TAP] 요약")
 	private SummaryResponseDto summaryDto;
 
-	@Schema(name = "[TAP] 브리핑")
 	private BriefResponseDto briefDto;
 
-	@Schema(name = "[TAP] 퀴즈 목록 (최대 2문제)")
 	private List<QuizResponseDto> quizDto;
 
-	@Schema(name = "title 앞에 쓰일 생성일자")
+	@Schema(example = "title 앞에 쓰일 생성일자")
 	private LocalDateTime createdAt;
 }

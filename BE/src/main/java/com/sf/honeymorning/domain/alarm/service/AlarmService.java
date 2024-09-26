@@ -7,6 +7,7 @@ import com.sf.honeymorning.domain.alarm.dto.AlarmRequestDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmResultDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
+import com.sf.honeymorning.domain.alarm.dto.QuizDto;
 import com.sf.honeymorning.domain.alarm.entity.Alarm;
 import com.sf.honeymorning.domain.alarm.entity.AlarmCategory;
 import com.sf.honeymorning.domain.alarm.entity.AlarmResult;
@@ -18,14 +19,13 @@ import com.sf.honeymorning.domain.brief.entity.Brief;
 import com.sf.honeymorning.domain.brief.repository.BriefRepository;
 import com.sf.honeymorning.domain.quiz.entity.Quiz;
 import com.sf.honeymorning.domain.quiz.repository.QuizRepository;
-import com.sf.honeymorning.domain.brief.repository.BriefRepository;
-import com.sf.honeymorning.domain.quiz.repository.QuizRepository;
 import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.tag.repository.TagRepository;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
 import com.sf.honeymorning.exception.user.AlarmCategoryNotFoundException;
 import com.sf.honeymorning.exception.user.UserNotFoundException;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -120,10 +120,10 @@ public class AlarmService {
 		// 설정한 알람 요일
 		String alarmWeek = alarmRequestDto.getDaysOfWeek();
 
-
 		// 알람이 현재 요일만 설정 되어 있고, 이후 시간이며, 5시간 이전에 설정되어 있을 때.
 
-		if (binary.equals(alarmWeek) && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0 && ChronoUnit.HOURS.between(nowTime, alarmTime) < 5) {
+		if (binary.equals(alarmWeek) && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0
+			&& ChronoUnit.HOURS.between(nowTime, alarmTime) < 5) {
 			throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
 		}
 
@@ -159,7 +159,6 @@ public class AlarmService {
 		if (alarmCategoryList.size() == 0) {
 			throw new AlarmCategoryNotFoundException("해당 알람이 카테고리를 가지고 있지 않습니다.");
 		}
-
 
 		List<AlarmCategoryDto> alarmCategoryDtoList = new ArrayList<>();
 
@@ -414,10 +413,30 @@ public class AlarmService {
 	}
 
 	public AlarmStartDto getThings() {
+		ArrayList<QuizDto> list = new ArrayList<>();
+		list.add(new QuizDto(
+			1L,
+			"한국토지자원관리공단의 목적은 무엇인가요?",
+			1,
+			"지역경제",
+			"국제무역",
+			"외환관리",
+			"관세제도"
+		));
+		list.add(new QuizDto(
+			2L,
+			"한국토지자원관리공단은 어떤 방법으로 경제활성화를 도모하고 있나요?",
+			1,
+			"지분참여",
+			"장기대출",
+			"세금감면",
+			"임대사업"
+		));
 		return new AlarmStartDto(
-			"htts://www.songUrl38f8ff.com",
-			new ArrayList<>(),
-			""
+			"https://cdn1.suno.ai/a3aa4a9c-5f27-445b-af00-2babbd3bc924.mp3",
+			list,
+			"한국토지자원관리공단은 한국토지공사의 지분참여를 통해 지역경제활성화를 이룰 수 있는 방안을 모색하기 위해 노력중이다. "
+				+ "\n 한국토지자원관리공단은 한국토지공사의 지분참여를 통해 지역경제활성화를 이룰 수 있는 방안을 모색하기 위해 노력중이다.  "
 		);
 	}
 
