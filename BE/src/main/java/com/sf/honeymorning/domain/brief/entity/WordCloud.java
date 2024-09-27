@@ -1,14 +1,7 @@
 package com.sf.honeymorning.domain.brief.entity;
 
 import com.sf.honeymorning.domain.common.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +24,6 @@ public class WordCloud extends BaseEntity {
     private String keyword;
 
     @Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
-    private Integer frequency = 0;
+    private int frequency = 0;
 
 }

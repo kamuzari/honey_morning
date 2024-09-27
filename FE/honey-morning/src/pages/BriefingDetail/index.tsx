@@ -33,7 +33,7 @@ const BriefingDetail = () => {
     }, [brief_id]);
 
     if (loading) {
-        return <div>Loading...</div>;  // 로딩 상태일 때 보여줄 UI
+        return <div>Loading...</div>;
     }
     return (
         <Container>
