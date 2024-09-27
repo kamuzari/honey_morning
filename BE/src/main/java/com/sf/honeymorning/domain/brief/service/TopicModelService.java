@@ -10,6 +10,7 @@ import com.sf.honeymorning.domain.brief.repository.BriefRepository;
 import com.sf.honeymorning.domain.brief.repository.TopicModelRepository;
 import com.sf.honeymorning.domain.brief.repository.TopicModelWordRepository;
 import com.sf.honeymorning.domain.brief.repository.WordRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +19,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TopicModelService {
     private final TopicModelRepository topicModelRepository;
     private final BriefRepository briefRepository;
     private final WordRepository wordRepository;
     private final TopicModelWordRepository topicModelWordRepository;
 
-    // 파이썬에서 topicModeling 정보를 가져오는 메서드
+    // 파이썬에서 topicModeling 정보를 가져오는 메서드 (not yet)
 
     // 프론트엔드에서 요청을 했을 때 가지고 있는 topicModeling 정보를 전달하는 메서드
     public List<TopicModelWordDto> getTopicModel(Long briefId) {
@@ -50,8 +52,8 @@ public class TopicModelService {
                 wordDtoList.add(wordDto);
             }
             TopicModelWordDto topicModelWordDto = TopicModelWordDto.builder()
-                    .section(tm.getSection())
-                    .wordList(wordDtoList)
+                    .topic_id(tm.getSection())
+                    .topic_words(wordDtoList)
                     .build();
 
             topicModelWordDtoList.add(topicModelWordDto);
@@ -62,20 +64,24 @@ public class TopicModelService {
 
 
     public void saveTopicModel(List<TopicModelWordDto> topicModelWordDtoList, Long brief_id) {
-        Brief Brief = briefRepository.findById(brief_id)
+
+        Brief brief = briefRepository.findById(brief_id)
                 .orElseThrow(() -> new RuntimeException("Brief not found"));
 
+
         for (TopicModelWordDto tmw : topicModelWordDtoList) {
-            Long section = tmw.getSection();
-            List<WordDto> wordDtoList = tmw.getWordList();
+            Long section = tmw.getTopic_id();
+            List<WordDto> wordDtoList = tmw.getTopic_words();
 
             TopicModel topicModel = TopicModel.builder()
-                    .brief(Brief)
+                    .brief(brief)
                     .section(section)
                     .build();
 
             // 토픽_모델_단어 Entity 저장을 위한 토픽_모델 Entity
             TopicModel savedTopicModel = topicModelRepository.save(topicModel);
+
+            List<TopicModelWord> wordList = new ArrayList<>();
 
             // 단어 저장
             for (WordDto wordDto : wordDtoList) {
@@ -85,9 +91,11 @@ public class TopicModelService {
                     TopicModelWord topicModelWord = TopicModelWord.builder()
                             .topicModel(savedTopicModel)
                             .word(word)
+                            .weight(wordDto.getWeight())
                             .build();
 
                     topicModelWordRepository.save(topicModelWord);
+//                    wordList.add(topicModelWord);
                 } else {
                     // 단어가 존재하지 않다면, 해당 단어를 저장한 이후 Entity를 가져와서 저장.
                     Word word = Word.builder()
@@ -99,9 +107,11 @@ public class TopicModelService {
                     TopicModelWord topicModelWord = TopicModelWord.builder()
                             .topicModel(savedTopicModel)
                             .word(savedWord)
+                            .weight(wordDto.getWeight())
                             .build();
 
                     topicModelWordRepository.save(topicModelWord);
+//                    wordList.add(topicModelWord);
                 }
             } // 단어 저장 반복문
 

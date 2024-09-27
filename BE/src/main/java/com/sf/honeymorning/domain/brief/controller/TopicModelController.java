@@ -57,8 +57,9 @@ public class TopicModelController {
     })
     @PostMapping("/{brief_id}")
     public ResponseEntity<?> read(@RequestBody List<TopicModelWordDto> topicModelWordDtoList,
-                                  @PathVariable Long brief_id) {
-        topicModelService.saveTopicModel(topicModelWordDtoList, brief_id);
+                                  @PathVariable("brief_id") Long briefId) {
+        topicModelService.saveTopicModel(topicModelWordDtoList, briefId);
         return ResponseEntity.ok(null);
     }
+
 }

@@ -24,7 +24,7 @@ public class TopicModelWord extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Word word;
 
-    @Column(nullable = false, columnDefinition = "DECIMAL(10, 2) DEFAULT 0.0")
+    @Column(nullable = false, columnDefinition = "DECIMAL(20, 18) DEFAULT 0.0")
     private Double weight = 0.0;
 
 }

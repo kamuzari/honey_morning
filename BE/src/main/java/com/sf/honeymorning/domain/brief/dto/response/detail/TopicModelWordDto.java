@@ -10,6 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class TopicModelWordDto {
-    private Long section;
-    private List<WordDto> wordList;
+    private Long topic_id;
+    private List<WordDto> topic_words;
 }
