@@ -6,6 +6,8 @@ import pickle
 import glob
 from datetime import datetime, timedelta
 from gensim.models.coherencemodel import CoherenceModel
+from tqdm import tqdm
+import logging
 
 # 이전 몇 개 까지의 파일을 읽을 것인지 작성
 hours_back = 8
@@ -81,7 +83,7 @@ def process_documents(section_numbers, stopwords_file_path=stopwords_file_path, 
 
     processed_documents = []
     
-    for section_number in section_numbers:
+    for section_number in tqdm(section_numbers, desc='태그 병합 중'):
         merged_content_list = load_and_merge_section_data(section_number, hours_back)
         for content in merged_content_list:
             processed_text = preprocess_text(content, stopwords)
@@ -93,10 +95,26 @@ def process_documents(section_numbers, stopwords_file_path=stopwords_file_path, 
 def optimalize_lda_model(corpus, dictionary, processed_documents, start=2, end=6, step=1):
     coherence_values = []
     lda_model_list = []
-    for num_topics in range(start, end+1, step):
-        lda_model = LdaModel(corpus=corpus, id2word=dictionary, num_topics=num_topics)
-        lda_model_list.append(lda_model)
-        coherence_model = CoherenceModel(model=lda_model, texts=processed_documents, dictionary=dictionary, coherence='c_v')
-        coherence_values.append(coherence_model.get_coherence())
-    optimal_model = lda_model_list[coherence_values.index(max(coherence_values))]
-    return optimal_model
+
+    try:
+        if not corpus:
+            raise ValueError("코퍼스가 비어 있습니다. LDA 모델을 생성할 수 없습니다.")
+
+        for num_topics in tqdm(range(start, end+1, step), desc='토픽 개수 최적화 중...'):
+            lda_model = LdaModel(corpus=corpus, id2word=dictionary, num_topics=num_topics)
+            lda_model_list.append(lda_model)
+            coherence_model = CoherenceModel(model=lda_model, texts=processed_documents, dictionary=dictionary, coherence='c_v')
+            coherence_values.append(coherence_model.get_coherence())
+
+        print('LDA 모델 최적화-토픽 개수 추출 완료')
+        optimal_model = lda_model_list[coherence_values.index(max(coherence_values))]
+        return optimal_model
+
+    except ValueError as ve:
+        logger.error(f"LDA 모델 생성 중 오류 발생: {ve}")
+        # 추가로 처리할 방법이 있다면 여기에 작성 (예: 기본 모델 반환, 사용자에게 오류 메시지 전달 등)
+        return None  # 또는 적절한 오류 처리 방법을 반환
+
+    except Exception as e:
+        logger.error(f"예기치 못한 오류 발생: {e}")
+        return None  # 또는 적절한 오류 처리 방법을 반환
