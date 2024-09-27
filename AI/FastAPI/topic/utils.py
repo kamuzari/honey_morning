@@ -7,7 +7,6 @@ import glob
 from datetime import datetime, timedelta
 from gensim.models.coherencemodel import CoherenceModel
 from tqdm import tqdm
-import logging
 
 # 이전 몇 개 까지의 파일을 읽을 것인지 작성
 hours_back = 8
@@ -111,10 +110,9 @@ def optimalize_lda_model(corpus, dictionary, processed_documents, start=2, end=6
         return optimal_model
 
     except ValueError as ve:
-        logger.error(f"LDA 모델 생성 중 오류 발생: {ve}")
-        # 추가로 처리할 방법이 있다면 여기에 작성 (예: 기본 모델 반환, 사용자에게 오류 메시지 전달 등)
-        return None  # 또는 적절한 오류 처리 방법을 반환
+        print(ve)
+        return None  
 
     except Exception as e:
-        logger.error(f"예기치 못한 오류 발생: {e}")
-        return None  # 또는 적절한 오류 처리 방법을 반환
+        print(e)
+        return None
