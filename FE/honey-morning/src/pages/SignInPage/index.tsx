@@ -238,7 +238,7 @@ const Container = styled.div<{isPortrait: boolean}>`
     flex-direction: column;
     width: ${({ isPortrait }) => (isPortrait ? '50vw' : '35vw')};
 
-    padding: 3vh;
+    padding: 3vh 5vw 1vh;
     margin: 0 auto;
     border-radius: 20px;
     background-color: white;
@@ -284,13 +284,14 @@ const SubmitButton =
   color: white;
   border: none;
   border-radius: 20px;
-  font-size: ${({isPortrait}) => (isPortrait ? '2vw' : '1.3vw')};
+  font-size: ${({isPortrait}) => (isPortrait ? '3vw' : '1.3vw')};
 
   display: flex;
   justify-content: center;
   padding: 1vw 1vh;
   margin: 1vw auto;
   width: 100%;
+  height: ${({isPortrait}) => (isPortrait ? '7vw' : '1.3vw')};
 
   cursor: pointer;
 `;

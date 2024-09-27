@@ -2,46 +2,6 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 100vh;
-  background-color: var(--yellow-color);
-  position: relative;
-  overflow: hidden;
-`;
-
-const CurrentTime = styled.div`
-  margin-top: 5rem;
-  font-size: 10rem;
-  color: black;
-  font-weight: bold;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 3rem;
-`;
-
-const Button = styled.button`
-  padding: 1rem 2rem;
-  font-size: 1.5rem;
-  background-color: var(--blue-color); /* 버튼 배경색 */
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: var(--dark-blue-color); /* 버튼 호버 시 색상 */
-  }
-`;
-
 const AlarmPage = () => {
   const navigate = useNavigate();
   const [isAlarmOn, setIsAlarmOn] = useState(false);
@@ -90,12 +50,14 @@ const AlarmPage = () => {
   // 브리핑 스킵 및 메인 페이지 이동
   const handleSkipBriefing = () => {
     setIsAlarmOn(false); // 알람 해제
-    navigate('/main'); // 메인 페이지로 이동
+    navigate('/'); // 메인 페이지로 이동
   };
 
   return (
     <Container>
-      <Button onClick={handleRemindLater}>5분 뒤에 다시 알림</Button>
+      <RemindButton onClick={handleRemindLater}>
+        5분 뒤에 다시 알림
+      </RemindButton>
       <CurrentTime>{currentTimer}</CurrentTime>
       {isAlarmOn ? (
         <div>
@@ -107,8 +69,12 @@ const AlarmPage = () => {
             />
           </audio>
           <ButtonContainer>
-            <Button onClick={handleStartBriefing}>브리핑 시작</Button>
-            <Button onClick={handleSkipBriefing}>브리핑 스킵</Button>
+            <StartBriefButton onClick={handleStartBriefing}>
+              알람 해제+브리핑 시작
+            </StartBriefButton>
+            <SkipBriefButton onClick={handleSkipBriefing}>
+              브리핑 스킵
+            </SkipBriefButton>
           </ButtonContainer>
         </div>
       ) : (
@@ -119,3 +85,51 @@ const AlarmPage = () => {
 };
 
 export default AlarmPage;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--yellow-color);
+  position: relative;
+  overflow: hidden;
+`;
+
+const CurrentTime = styled.div`
+  margin-top: 5rem;
+  font-size: 10rem;
+  color: black;
+  font-weight: bold;
+`;
+
+const RemindButton = styled.button``;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 3rem;
+`;
+
+const StartBriefButton = styled.button`
+  background-color: var(--darkblue-color);
+  padding: 1em;
+  border-radius: 30px;
+
+  color: white;
+  font-size: 3em;
+`;
+
+const SkipBriefButton = styled.button`
+  text-decoration: underline;
+  color: black;
+  font-size: 2em;
+
+  border: none;
+  background-color: var(--yellow-color);
+
+  margin: 1em auto 2em;
+`;
