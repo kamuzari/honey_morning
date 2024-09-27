@@ -17,26 +17,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${cors.allowedOrigins.frontend}")
     private String allowedOriginsFrontend;
 
-    @Value("${cors.allowedOrigins.ai.briefing}")
-    private String allowedOriginsBriefing;
-
-    @Value("${cors.allowedOrigins.ai.quiz}")
-    private String allowedOriginsQuiz;
-
-    @Value("${cors.allowedOrigins.ai.music}")
-    private String allowedOriginsMusic;
-
-    @Value("${cors.allowedOrigins.ai.topic}")
-    private String allowedOriginsTopic;
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(allowedOriginsFrontend,
-                        allowedOriginsBriefing,
-                        allowedOriginsQuiz,
-                        allowedOriginsMusic,
-                        allowedOriginsTopic)
+                .allowedOrigins(allowedOriginsFrontend)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .exposedHeaders("Set-Cookie")

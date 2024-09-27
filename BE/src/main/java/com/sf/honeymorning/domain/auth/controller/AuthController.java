@@ -38,7 +38,7 @@ public class AuthController {
         // 회원 데이터 생성
         authService.saveUser(user);
 
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("회원가입을 성공하였습니다.");
     }
 
 
@@ -55,7 +55,7 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<String> getAccessToken(HttpServletRequest request,
                                                  HttpServletResponse response) {
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok("refresh 토큰을 성공적으로 발급하였습니다.");
     }
 
     @Operation(
@@ -69,9 +69,8 @@ public class AuthController {
             )
     })
     @GetMapping("/userInfo")
-    public ResponseEntity<?> getUserInfo(HttpServletRequest request,
-                                         HttpServletResponse response) {
-        UserDetailDto userDetailDto = authService.getUserInfo(request);
+    public ResponseEntity<?> getUserInfo() {
+        UserDetailDto userDetailDto = authService.getUserInfo();
         return ResponseEntity.ok(userDetailDto);
     }
 }

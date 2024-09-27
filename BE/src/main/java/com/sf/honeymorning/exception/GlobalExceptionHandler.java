@@ -1,5 +1,6 @@
 package com.sf.honeymorning.exception;
 
+import com.sf.honeymorning.exception.alarm.AlarmFatalException;
 import com.sf.honeymorning.exception.user.AlarmCategoryNotFoundException;
 import com.sf.honeymorning.exception.user.DuplicateException;
 import com.sf.honeymorning.exception.user.UserNotFoundException;
@@ -47,7 +48,7 @@ public class GlobalExceptionHandler {
     // 유저가 존재하지 않는 오류
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     // 중복값 오류
@@ -72,6 +73,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AlarmCategoryNotFoundException.class)
     public ResponseEntity<String> handleAlarmCategoryNotFoundException(final AlarmCategoryNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AlarmFatalException.class)
+    public ResponseEntity<String> handleAlarmFatalException(final AlarmFatalException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     // 그 외 모든 오류

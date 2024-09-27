@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query'
 import styled from 'styled-components';
 import { instance } from '@/api/axios'
+import STT from '@/component/STT';
 
-interface QuizData {
+export interface QuizData {
   id: number,
   briefId: number,
   question: string,
@@ -196,6 +197,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
 
   return (
     <Container>
+      { quizData[currentQuizIndex] &&<STT currentOptions={currentOptions} answer={currentOptions[quizData[currentQuizIndex].answer]} setAnswer={setSelectedAnswer}></STT>}
       <ProgressBarArea>
         <ProgressBarBackground />
         <ProgressBarFill progress={progress} isActive={isQuizActive} />
