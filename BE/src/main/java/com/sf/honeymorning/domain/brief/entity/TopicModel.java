@@ -15,7 +15,7 @@ public class TopicModel extends BaseEntity {
     @Column(name = "topic_model_id")
     private Long id;
 
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "brief_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Brief brief;
 

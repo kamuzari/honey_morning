@@ -1293,3 +1293,213 @@ INSERT INTO honeymorning.quiz (answer, selection, brief_id, created_at, updated_
                                question)
 VALUES (4, 1, 11, '2024-09-25 13:40:11.000000', '2024-09-25 13:40:11.000000', '화성 이주', '달 기지 건설', '자원 개발', '해양 탐사',
         '미래 우주 개발의 주요 목표 중 하나가 아닌 것은 무엇인가요?');
+
+
+-- Section 0
+INSERT INTO honeymorning.topic_model (brief_id, section, created_at, updated_at)
+VALUES (1, 0, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Assuming topic_model id for section 0 is 1
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('고용', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 1
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (1, 1, 0.021611033007502556, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('하청', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 2
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (1, 2, 0.0214912798255682, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('근로자', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 3
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (1, 3, 0.016508346423506737, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('시제', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 4
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (1, 4, 0.01513649057596922, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('선고', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 5
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (1, 5, 0.014303713105618954, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('조선업', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 6
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (1, 6, 0.013910394161939621, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Continue for the rest of section 0
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('상생', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (1, 7, 0.013903365470468998, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('구조', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (1, 8, 0.01281394250690937, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('공시', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (1, 9, 0.012677776627242565, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Section 1
+INSERT INTO honeymorning.topic_model (brief_id, section, created_at, updated_at)
+VALUES (1, 1, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Assuming topic_model id for section 1 is 2
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('경찰', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 10
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (2, 10, 0.02569182589650154, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('전화', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 11
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (2, 11, 0.018914541229605675, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('의원', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 12
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (2, 12, 0.018290456384420395, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Continue for the rest of section 1
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('대통령', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (2, 13, 0.016742851585149765, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('사고', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (2, 14, 0.015104971826076508, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Section 2
+INSERT INTO honeymorning.topic_model (brief_id, section, created_at, updated_at)
+VALUES (1, 2, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Assuming topic_model id for section 2 is 3
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('통합', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 15
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (3, 15, 0.013489742763340473, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('과학', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 16
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (3, 16, 0.012598520144820213, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Continue for the rest of section 2
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('수능', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (3, 17, 0.011659025214612484, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('탐구', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (3, 18, 0.011036351323127747, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Section 3
+INSERT INTO honeymorning.topic_model (brief_id, section, created_at, updated_at)
+VALUES (1, 3, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Assuming topic_model id for section 3 is 4
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('후보', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 19
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (4, 19, 0.07162900269031525, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('일화', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 20
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (4, 20, 0.02792862243950367, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Continue for the rest of section 3
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('추진', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (4, 21, 0.0175042562186718, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('서울시', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (4, 22, 0.014176635071635246, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Section 4
+INSERT INTO honeymorning.topic_model (brief_id, section, created_at, updated_at)
+VALUES (1, 4, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Assuming topic_model id for section 4 is 5
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('고엽제', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 23
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (5, 23, 0.0359853133559227, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('피해자', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 24
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (5, 24, 0.010825916193425655, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Continue for the rest of section 4
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('유전', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (5, 25, 0.010781006887555122, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('후유증', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (5, 26, 0.010767299681901932, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Section 5
+INSERT INTO honeymorning.topic_model (brief_id, section, created_at, updated_at)
+VALUES (1, 5, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Assuming topic_model id for section 5 is 6
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('병원', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 27
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (6, 27, 0.013687974773347378, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('수술', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 28
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (6, 28, 0.01220863126218319, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+-- Continue for the rest of section 5
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('기소', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (6, 29, 0.011826995760202408, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('심위', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (6, 30, 0.011749758385121822, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+
+INSERT INTO honeymorning.word (word, created_at, updated_at)
+VALUES ('연합뉴스', '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
+-- Assuming word id is 31
+INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, created_at, updated_at)
+VALUES (6, 31, 0.003923531621694565, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
