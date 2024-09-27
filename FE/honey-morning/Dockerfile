@@ -11,7 +11,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # node_modules 및 package-lock.json 삭제 후 의존성 설치
-RUN rm -rf node_modules package-lock.json && npm install --platform=linux
+RUN rm -rf node_modules package-lock.json && npm install --platform=linux --legacy-peer-deps
 
 COPY . .
 
