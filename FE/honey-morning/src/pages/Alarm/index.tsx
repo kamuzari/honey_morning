@@ -1,12 +1,48 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
+import {useQuery, useQueryClient} from '@tanstack/react-query';
+import {instance} from '@/api/axios';
+
+interface AlarmStartData {
+  songUrl: string;
+  quizzes: Array<{
+    id: number,
+    briefId: number,
+    question: string,
+    answer: number,
+    option1: string,
+    option2: string,
+    option3: string,
+    option4: string,
+    selection: number,
+  }>;
+  content: string;
+}
 
 const AlarmPage = () => {
   const navigate = useNavigate();
   const [isAlarmOn, setIsAlarmOn] = useState(false);
   const [time, setTime] = useState(new Date());
   const [currentTimer, setCurrentTimer] = useState('00:00:00');
+
+  const queryClient = useQueryClient(); // 여기다 쓰는게 맞나?
+
+  // 알람 가져오기
+  const fetchAlarmData = async (): Promise<AlarmStartData> => {
+    const {data} = await instance.post(`api/alarms/start`);
+    return data;
+  };
+
+  //prettier-ignore
+  const {
+    data: alarmData,
+    isLoading,
+    error,
+  } = useQuery<AlarmStartData>({
+    queryKey: ['alarmData'],
+    queryFn: fetchAlarmData,
+  });
 
   const currentTime = () => {
     const currentDate = new Date();
@@ -53,6 +89,9 @@ const AlarmPage = () => {
     navigate('/'); // 메인 페이지로 이동
   };
 
+  if (isLoading) return <h2>로딩 중</h2>;
+  if (error) return <h2>에러</h2>;
+
   return (
     <Container>
       <RemindButton onClick={handleRemindLater}>
@@ -63,8 +102,12 @@ const AlarmPage = () => {
         <div>
           <h2>알람이 울리고 있습니다!</h2>
           <audio autoPlay>
-            <source
+            {/* <source
               src="https://cdn1.suno.ai/dc1d94fa-975b-4eab-a391-dc55eb4cdcc5.mp3"
+              type="audio/mpeg"
+            /> */}
+            <source
+              src={alarmData?.songUrl}
               type="audio/mpeg"
             />
           </audio>
