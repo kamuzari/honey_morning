@@ -19,6 +19,6 @@ public class TopicModel extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Brief brief;
 
-    @Column(nullable = false)
-    private Long section;
+    @Column(name = "topic_id", nullable = false)
+    private Long topicId;
 }
