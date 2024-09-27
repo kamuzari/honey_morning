@@ -19,20 +19,17 @@ import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
 import com.sf.honeymorning.exception.alarm.AlarmFatalException;
-import com.sf.honeymorning.exception.user.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,6 +104,22 @@ public class AlarmService {
             }
         }
 
+        /**
+         *
+         * Integer로 바꾼다.
+         * 가장 최근에 해당하는 곳을
+         * 현재 날짜는 예를들면 0100000 이렇게 나올 거고.
+         * 알람 날짜는 예를들면 1010100 이렇게 나올텐데.
+         * 각각을 charAt으로 해서 배열화를 한다.
+         * 그럼 모듈러를 이용해서 하나씩 이동하며 가까운 1을 찾는다.
+         * 반복문을 돌리면서 반복되는 횟수를 저장한다.
+         * 해당 횟수만큼 현재 년월일에 24hour를 더해준다.
+         * 그렇게 년월일을 가져오면 가장 먼저 시작될 날짜를 계산할 수 있게 된다.
+         *
+         * 잠자기 버튼을 눌렀을 때의 로직은 아래 로직을 변형해서 그대로 갖다 쓰면 된다.
+         *
+         */
+
         // 설정한 알람 시각
         LocalTime alarmTime = alarmRequestDto.getAlarmTime();
         // 설정한 알람 요일
@@ -114,19 +127,17 @@ public class AlarmService {
 
         // 알람이 요일만 설정 되어 있고, 이후 시간이며, 5시간 이전에 설정되어 있을 때.
 
-        if (binary.equals(alarmWeek) && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0
-                && ChronoUnit.HOURS.between(nowTime, alarmTime) < timeGap) {
-            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
-        }
+//        if (binary.equals(alarmWeek) && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0
+//                && ChronoUnit.HOURS.between(nowTime, alarmTime) < timeGap) {
+//            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
+//        }
 
         // 알람이 내일 요일만 설정 되어 있고, 5시간 이전에 설정되어 있을 때.
-        if (nextBinary.equals(alarmWeek) && ChronoUnit.HOURS.between(nowTime, alarmTime) + 24 < timeGap) {
-            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
-        }
+//        if (nextBinary.equals(alarmWeek) && ChronoUnit.HOURS.between(nowTime, alarmTime) + 24 < timeGap) {
+//            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
+//        }
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("해당 알람의 유저가 없습니다"));
+        User user = authService.getLoginUser();
         Alarm alarm = alarmRepository.findByUser(user);
 
         alarm.setAlarmTime(alarmRequestDto.getAlarmTime());
