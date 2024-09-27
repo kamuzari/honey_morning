@@ -8,13 +8,18 @@ const CATEGORY = ['정치', '경제', '사회', '생활/문화', 'IT/과학', '�
 
 const customCategory = ['유럽에 사는 고양이'];
 
-interface WordCloudResponseDto {
-    word: string;
-    frequency: number;
+interface Topic {
+    topic_id: number;
+    WordResponseDto: Word[]
+}
+
+interface Word {
+    word: String,
+    weight: number
 }
 
 interface SummaryDto {
-    wordCloudResponses: WordCloudResponseDto[];
+    topic: Topic[];
     categories: string[];
 }
 
