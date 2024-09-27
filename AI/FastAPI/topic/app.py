@@ -29,7 +29,6 @@ class JSON_Topic_Out(BaseModel):
 @app.post("/", response_model=JSON_Topic_Out)
 def generate_topic(json: JSON_Topic):
 
-    
     mapping_tag = {
         '정치': '100',
         '경제': '101',
@@ -43,7 +42,7 @@ def generate_topic(json: JSON_Topic):
 
     processed_documents = process_documents(tag_numbers)
 
-    print(len(processed_documents))
+    print(f'전체 문서의 개수: {len(processed_documents)}개')
     
     dictionary = corpora.Dictionary(processed_documents)
 
@@ -53,6 +52,8 @@ def generate_topic(json: JSON_Topic):
 
     # 토픽의 수
     num_topics = optimal_lda_model.num_topics
+    
+    print(f'최적화된 토픽의 개수: {num_topics}개')
 
     topics_list = []
 
@@ -63,6 +64,7 @@ def generate_topic(json: JSON_Topic):
         topic = Topic(topic_id=topic_num, topic_words=terms)
         topics_list.append(topic)
 
+    print("토픽의 단어와 비중 추출 완료")
     
     return JSON_Topic_Out(data=topics_list)
 
