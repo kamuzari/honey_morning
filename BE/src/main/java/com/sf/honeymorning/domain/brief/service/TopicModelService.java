@@ -52,7 +52,7 @@ public class TopicModelService {
                 wordDtoList.add(wordDto);
             }
             TopicModelWordDto topicModelWordDto = TopicModelWordDto.builder()
-                    .topic_id(tm.getSection())
+                    .topic_id(tm.getTopicId())
                     .topic_words(wordDtoList)
                     .build();
 
@@ -75,7 +75,7 @@ public class TopicModelService {
 
             TopicModel topicModel = TopicModel.builder()
                     .brief(brief)
-                    .section(section)
+                    .topicId(section)
                     .build();
 
             // 토픽_모델_단어 Entity 저장을 위한 토픽_모델 Entity
