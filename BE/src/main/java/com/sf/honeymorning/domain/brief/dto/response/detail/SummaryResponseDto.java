@@ -11,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class SummaryResponseDto {
-	private List<WordCloudResponseDto> wordCloudResponses;
+	private List<TopicModelWordDto> topicModelResponses;
 
 	@Schema(example = "카테고리리스트 - ['경제', '정치', '고냥이']")
 	private List<String> categories;
