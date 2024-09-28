@@ -365,10 +365,13 @@ public class AlarmService {
 
         /**
          *
-         * 알람 까지의 남은 시간이 5시간 미만이라면 false를 날린다.
-         * 그것이 아니라면 true를 날린다.
+         * 알람 까지의 남은 시간이 5시간 미만이라면 예외를 던진다.
+         * 그것이 아니라면 200 신호를 반환한다.
          *
          */
+
+        User user = authService.getLoginUser();
+        Alarm alarm = alarmRepository.findByUser(user);
 
         // 현재 시간
         LocalDateTime nowDateTime = LocalDateTime.now();
@@ -394,17 +397,20 @@ public class AlarmService {
             }
         }
 
-        // 알람이 요일만 설정 되어 있고, 이후 시간이며, 5시간 이전에 설정되어 있을 때.
+        int alarmWeek = Integer.parseInt(alarm.getDaysOfWeek());
+        LocalTime alarmTime = alarm.getAlarmTime();
 
-//        if (binary.equals(alarmWeek) && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0
-//                && ChronoUnit.HOURS.between(nowTime, alarmTime) < timeGap) {
-//            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
-//        }
+        // 알람이 요일만 설정 되어 있고, 이후 시간이며, 5시간 이전에 설정되어 있을 때.
+        // equal이 아닌 &연산을 통해서 비교할 것.
+        if ((Integer.parseInt(binary) & alarmWeek) > 0 && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0
+                && ChronoUnit.HOURS.between(nowTime, alarmTime) < timeGap) {
+            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 수면 시작이 거부되었습니다.");
+        }
 //
         // 알람이 내일 요일만 설정 되어 있고, 5시간 이전에 설정되어 있을 때.
-//        if (nextBinary.equals(alarmWeek) && ChronoUnit.HOURS.between(nowTime, alarmTime) + 24 < timeGap) {
-//            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
-//        }
+        if ((Integer.parseInt(nextBinary) & alarmWeek) > 0 && ChronoUnit.HOURS.between(nowTime, alarmTime) + 24 < timeGap) {
+            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 수면 시작이 거부되었습니다.");
+        }
 
     }
 

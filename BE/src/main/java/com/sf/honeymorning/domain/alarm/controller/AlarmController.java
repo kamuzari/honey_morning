@@ -100,7 +100,7 @@ public class AlarmController {
                     content = @Content(schema = @Schema(implementation = AlarmStartDto.class))
             )
     })
-    @PostMapping("/sleep")
+    @GetMapping("/sleep")
     public ResponseEntity<?> sleep() {
         alarmService.getSleep();
         return ResponseEntity.ok(null);
