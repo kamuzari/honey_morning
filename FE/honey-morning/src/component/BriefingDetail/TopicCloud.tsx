@@ -1,47 +1,27 @@
-import {Content, SmallTitle} from '@/pages/MyPage';
 import styled from 'styled-components';
-import HashTag from '../MyPage/HashTag';
-// import WordCloud from './WordCloud';
-import TopicCloud from './TopicCloud';
-import {useState} from 'react';
+import WordCloud from 'react-wordcloud';
+import Slider from 'react-slick';
+import {Topic} from './Summary';
 
-const CATEGORY = [
-  '정치',
-  '경제',
-  '사회',
-  '생활/문화',
-  'IT/과학',
-  '세계',
-  '연예',
-  '스포츠',
-];
+// interface TopicResponseDto {
+//   data: Topic[];
+// }
 
-const customCategory = ['유럽에 사는 고양이'];
+// interface Topic {
+//   topic_id: number;
+//   topic_words: TopicWord[];
+// }
 
-export interface Topic {
-  topic_id: number;
-  WordResponseDto: Word[];
-}
+// interface TopicWord{
+//   word: string
+//   weight: number
+// }
 
-interface Word {
-  word: String;
-  weight: number;
-}
-
-interface SummaryDto {
-  topic: Topic[];
-  categories: string[];
-}
-
-const Summary = ({summaryDto}: {summaryDto: any}) => {
-  const [isHelpOpen, setIsHelpOpen] = useState(false);
-  const categories = summaryDto.categories || [];
-  const wordCloudResponses = summaryDto.wordCloudResponses || [];
-
-  const dummyData = [
+const dummyData = {
+  data: [
     {
       topic_id: 0,
-      WordResponseDto: [
+      topic_words: [
         {
           word: '대통령',
           weight: 0.008147770538926125,
@@ -166,7 +146,7 @@ const Summary = ({summaryDto}: {summaryDto: any}) => {
     },
     {
       topic_id: 1,
-      WordResponseDto: [
+      topic_words: [
         {
           word: '대통령',
           weight: 0.0065469942055642605,
@@ -289,135 +269,56 @@ const Summary = ({summaryDto}: {summaryDto: any}) => {
         },
       ],
     },
-  ];
+  ],
+};
 
-  const basicCategory = categories.filter((category: string) =>
-    CATEGORY.includes(category),
-  );
-  const customCategory = categories.filter(
-    (category: string) => !CATEGORY.includes(category),
-  );
+interface TopicCloudProps {
+  topics: Topic[];
+}
+
+const TopicCloud: React.FC<TopicCloudProps> = ({topics}) => {
+  console.log(dummyData.data.length);
+  console.log('topics: ');
+  console.log(topics);
+
+  function repeatTopicCloud() {
+    var topicCloud = [];
+    for (var i = 0; i < dummyData.data.length; i++) {
+      const words = dummyData.data[i].topic_words.map(({word, weight}) => ({
+        text: word,
+        value: weight,
+      }));
+      topicCloud.push(
+        <WordCloud
+          words={words}
+          options={{rotations: 2, rotationAngles: [-90, 0]}}
+          size={[600, 600]}
+        />,
+      );
+    }
+    return topicCloud;
+  }
+
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
 
   return (
     <Container>
-      <Content>
-        <div className="smallTitleContainer">
-          <SmallTitle>카테고리</SmallTitle>
-        </div>
-
-        <div className="hashTagContainer">
-          {basicCategory.map((item: string) => {
-            return (
-              <HashTag
-                key={item}
-                text={item}
-                type="NEWS"
-              ></HashTag>
-            );
-          })}
-        </div>
-
-        <div className="hashTagContainer">
-          {customCategory.map((item: string) => {
-            return (
-              <HashTag
-                key={item}
-                text={item}
-                type="CUSTOM"
-              ></HashTag>
-            );
-          })}
-        </div>
-      </Content>
-      <Content>
-        <div className="smallTitleContainer">
-          <SmallTitle>워드 클라우드</SmallTitle>
-          <HelpSpan
-            className="material-icons"
-            onClick={() => {
-              setIsHelpOpen(!isHelpOpen);
-            }}
-          >
-            help
-          </HelpSpan>
-        </div>
-        {isHelpOpen ? (
-          <HelpContainer>
-            <div className="notification">
-              <span>AI / 빅데이터 기술로 생성한 워드 클라우드 기술입니다.</span>
-            </div>
-            <div className="notification">
-              <span>워드 클라우드란?</span>
-              <span>토픽의 중요도에 따라 눈에 잘 보이게 그려드려요!</span>
-            </div>
-          </HelpContainer>
-        ) : (
-          []
-        )}
-        <WordCloudContaienr>
-          <div className="wordCloudContainer">
-            {/* <TopicCloud topics={summaryDto.topic} /> */}
-            <TopicCloud topics={dummyData} />
-          </div>
-        </WordCloudContaienr>
-      </Content>
+      <Slider {...settings}>{repeatTopicCloud()}</Slider>
     </Container>
   );
 };
-export const Container = styled.div`
+
+const Container = styled.div`
   display: flex;
   width: 100%;
-  flex-direction: column;
-  align-items: center;
+  height: 50rem;
+  border: 1px solid lime;
 `;
 
-export const HelpSpan = styled.span`
-  display: flex;
-
-  margin-left: 1.2rem;
-  font-size: 4rem;
-`;
-
-const WordCloudContaienr = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-export const HelpContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0 0 0 4rem;
-
-  .notification {
-    display: inline-flex;
-    flex-direction: column;
-    background-color: var(--lightblue-color);
-    border-radius: 40px;
-    box-sizing: border-box;
-    padding: 1rem;
-    margin-bottom: 2rem;
-
-    span {
-      font-size: 2.3rem;
-      color: var(--darkblue-color);
-      padding: 0.7rem 0 0.7rem 0;
-    }
-
-    span:nth-child(1) {
-      font-weight: 900;
-    }
-  }
-
-  .notification:nth-child(1) {
-    width: 90%;
-    text-align: center;
-  }
-
-  .notification:nth-child(2) {
-    width: 80%;
-    font-weight: 500;
-  }
-`;
-
-export default Summary;
+export default TopicCloud;
