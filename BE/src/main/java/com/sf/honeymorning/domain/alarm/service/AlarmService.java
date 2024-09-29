@@ -2,10 +2,7 @@ package com.sf.honeymorning.domain.alarm.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sf.honeymorning.domain.alarm.dto.AlarmRequestDto;
-import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
-import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
-import com.sf.honeymorning.domain.alarm.dto.QuizDto;
+import com.sf.honeymorning.domain.alarm.dto.*;
 import com.sf.honeymorning.domain.alarm.entity.Alarm;
 import com.sf.honeymorning.domain.alarm.entity.AlarmCategory;
 import com.sf.honeymorning.domain.alarm.repository.AlarmCategoryRepository;
@@ -19,16 +16,15 @@ import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
 import com.sf.honeymorning.exception.alarm.AlarmFatalException;
-import com.sf.honeymorning.exception.user.UserNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -78,18 +74,38 @@ public class AlarmService {
 
     }
 
-    public void updateAlarm(AlarmRequestDto alarmRequestDto) {
+    public AlarmDateDto updateAlarm(AlarmRequestDto alarmRequestDto) {
 
-        /**
-         *설정한 시간 및 요일이 현재 시간에서 5시간 이상 차이가 나지 않으면 업데이트 거부
-         */
+        User user = authService.getLoginUser();
+        Alarm alarm = alarmRepository.findByUser(user);
+
+        alarm.setAlarmTime(alarmRequestDto.getAlarmTime());
+        alarm.setDaysOfWeek(alarmRequestDto.getDaysOfWeek());
+        alarm.setRepeatFrequency(alarmRequestDto.getRepeatFrequency());
+        alarm.setRepeatInterval(alarmRequestDto.getRepeatInterval());
+        alarm.setIsActive(alarmRequestDto.getIsActive());
 
         // 현재 시간
         LocalDateTime nowDateTime = LocalDateTime.now();
         LocalTime nowTime = LocalTime.now();
         int currentDayOfWeek = nowDateTime.getDayOfWeek().getValue() - 1; // 현재 요일 (0 ~ 6)
+
+
+        // 오늘 날짜에 해당하는 요일부터 차례로 list에 들어간다.
+        List<Integer> alarmDayOfWeekList = new ArrayList<>();
+
+        // 설정한 알람 시각
+        LocalTime alarmTime = alarmRequestDto.getAlarmTime();
+        // 설정한 알람 요일
+        String alarmWeek = alarmRequestDto.getDaysOfWeek();
+
+        for(int i = 0; i < alarmWeek.length(); i++){
+            if(alarmWeek.substring((i + currentDayOfWeek) % 7, (i + currentDayOfWeek) % 7 + 1).equals("1")){
+                alarmDayOfWeekList.add((i + currentDayOfWeek));
+            }
+        }
+
         String binary = "";
-        String nextBinary = "";
 
         for (int i = 0; i < 7; i++) {
             if (i == currentDayOfWeek) {
@@ -99,41 +115,57 @@ public class AlarmService {
             }
         }
 
-        for (int i = 0; i < 7; i++) {
-            if (i == (currentDayOfWeek + 1) % 7) {
-                nextBinary += "1";
-            } else {
-                nextBinary += "0";
+        // 알람 설정 요일 중, 당일의 요일 또한 설정이 되어있으며,
+        if(alarmWeek.substring(currentDayOfWeek, currentDayOfWeek + 1).equals("1")){
+            // 알람 설정 시간이 현재보다 이후라면,
+            if(ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0){
+                Duration duration = Duration.between(nowTime, alarmTime);
+
+                AlarmDateDto alarmDateDto = AlarmDateDto.builder()
+                        .alarmDate(nowDateTime.plus(duration))
+                        .day(0L)
+                        .hour(duration.toHours())
+                        .minuet(duration.toMinutes())
+                        .dayOfWeek(binary)
+                        .build();
+
+                return alarmDateDto;
+
             }
         }
 
-        // 설정한 알람 시각
-        LocalTime alarmTime = alarmRequestDto.getAlarmTime();
-        // 설정한 알람 요일
-        String alarmWeek = alarmRequestDto.getDaysOfWeek();
+        for(int i = 0; i < alarmDayOfWeekList.size(); i++){
+            if(i == 0 && currentDayOfWeek == alarmDayOfWeekList.get(i)){
+                continue;
+            }
 
-        // 알람이 요일만 설정 되어 있고, 이후 시간이며, 5시간 이전에 설정되어 있을 때.
+            int dow = alarmDayOfWeekList.get(i % alarmDayOfWeekList.size());
 
-        if (binary.equals(alarmWeek) && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0
-                && ChronoUnit.HOURS.between(nowTime, alarmTime) < timeGap) {
-            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
+            Duration duration = Duration.between(nowTime, alarmTime);
+
+            LocalDateTime alarmDateTime = nowDateTime.plusDays(dow - currentDayOfWeek).plus(duration);
+
+            Duration duration1 = Duration.between(nowDateTime, alarmDateTime);
+
+            long totalMinutes = duration1.toMinutes();
+            long days = totalMinutes / (24 * 60);
+            long hours = (totalMinutes % (24 * 60)) / 60;
+            long minutes = totalMinutes % 60;
+
+
+            AlarmDateDto alarmDateDto = AlarmDateDto.builder()
+                    .alarmDate(nowDateTime.plusDays(dow - currentDayOfWeek).plus(duration))
+                    .day(days)
+                    .hour(hours)
+                    .minuet(minutes)
+                    .dayOfWeek(binary)
+                    .build();
+
+            return alarmDateDto;
         }
 
-        // 알람이 내일 요일만 설정 되어 있고, 5시간 이전에 설정되어 있을 때.
-        if (nextBinary.equals(alarmWeek) && ChronoUnit.HOURS.between(nowTime, alarmTime) + 24 < timeGap) {
-            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 설정이 거부되었습니다.");
-        }
+        throw new IllegalArgumentException("알람 시간 설정에 실패하였습니다.");
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("해당 알람의 유저가 없습니다"));
-        Alarm alarm = alarmRepository.findByUser(user);
-
-        alarm.setAlarmTime(alarmRequestDto.getAlarmTime());
-        alarm.setDaysOfWeek(alarmRequestDto.getDaysOfWeek());
-        alarm.setRepeatFrequency(alarmRequestDto.getRepeatFrequency());
-        alarm.setRepeatInterval(alarmRequestDto.getRepeatInterval());
-        alarm.setIsActive(alarmRequestDto.getIsActive());
     }
 
     @Transactional
@@ -327,6 +359,59 @@ public class AlarmService {
                 "한국토지자원관리공단은 한국토지공사의 지분참여를 통해 지역경제활성화를 이룰 수 있는 방안을 모색하기 위해 노력중이다. "
                         + "\n 한국토지자원관리공단은 한국토지공사의 지분참여를 통해 지역경제활성화를 이룰 수 있는 방안을 모색하기 위해 노력중이다.  "
         );
+    }
+
+    public void getSleep(){
+
+        /**
+         *
+         * 알람 까지의 남은 시간이 5시간 미만이라면 예외를 던진다.
+         * 그것이 아니라면 200 신호를 반환한다.
+         *
+         */
+
+        User user = authService.getLoginUser();
+        Alarm alarm = alarmRepository.findByUser(user);
+
+        // 현재 시간
+        LocalDateTime nowDateTime = LocalDateTime.now();
+        LocalTime nowTime = LocalTime.now();
+        int currentDayOfWeek = nowDateTime.getDayOfWeek().getValue() - 1; // 현재 요일 (0 ~ 6)
+
+        String binary = "";
+        String nextBinary = "";
+
+        for (int i = 0; i < 7; i++) {
+            if (i == currentDayOfWeek) {
+                binary += "1";
+            } else {
+                binary += "0";
+            }
+        }
+
+        for (int i = 0; i < 7; i++) {
+            if (i == (currentDayOfWeek + 1) % 7) {
+                nextBinary += "1";
+            } else {
+                nextBinary += "0";
+            }
+        }
+
+        int alarmWeek = Integer.parseInt(alarm.getDaysOfWeek());
+        LocalTime alarmTime = alarm.getAlarmTime();
+
+        // 알람이 요일만 설정 되어 있고, 이후 시간이며, 5시간 이전에 설정되어 있을 때.
+        // equal이 아닌 &연산을 통해서 비교할 것.
+        if ((Integer.parseInt(binary) & alarmWeek) > 0 && ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0
+                && ChronoUnit.HOURS.between(nowTime, alarmTime) < timeGap) {
+            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 수면 시작이 거부되었습니다.");
+        }
+//
+        // 알람이 내일 요일만 설정 되어 있고, 5시간 이전에 설정되어 있을 때.
+        if ((Integer.parseInt(nextBinary) & alarmWeek) > 0 && ChronoUnit.HOURS.between(nowTime, alarmTime) + 24 < timeGap) {
+            throw new IllegalArgumentException("알람 시간이 현재 시간으로부터 5시간 이내여서 수면 시작이 거부되었습니다.");
+        }
+
     }
 
 }

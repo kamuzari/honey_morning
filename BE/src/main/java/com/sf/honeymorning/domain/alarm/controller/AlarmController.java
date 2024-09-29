@@ -1,5 +1,6 @@
 package com.sf.honeymorning.domain.alarm.controller;
 
+import com.sf.honeymorning.domain.alarm.dto.AlarmDateDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmRequestDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
@@ -67,13 +68,16 @@ public class AlarmController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "수정 성공"
+                    description = "수정 성공",
+                    content = @Content(schema = @Schema(implementation = AlarmDateDto.class))
             )
     })
     @PatchMapping
-    public ResponseEntity<String> update(@RequestBody AlarmRequestDto alarmRequestDto) {
-        alarmService.updateAlarm(alarmRequestDto);
-        return new ResponseEntity<>("알람이 성공적으로 갱신되었습니다.", HttpStatus.OK);
+    public ResponseEntity<AlarmDateDto> update(@RequestBody AlarmRequestDto alarmRequestDto) {
+        AlarmDateDto alarmDateDto = alarmService.updateAlarm(alarmRequestDto);
+
+        // 알람 설정을 수정할 경우, 가장 최근에 알람이 울리는 날짜 및 시간을 반환해줘야 한다.
+        return new ResponseEntity<>(alarmDateDto, HttpStatus.OK);
     }
 
     @Operation(
@@ -107,6 +111,22 @@ public class AlarmController {
     public ResponseEntity<AlarmStartDto> start() {
         AlarmStartDto alarmStartDto = alarmService.getThings();
         return ResponseEntity.ok(alarmStartDto);
+    }
+
+    @Operation(
+            summary = "수면 시작"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "알람 시작 성공",
+                    content = @Content(schema = @Schema(implementation = AlarmStartDto.class))
+            )
+    })
+    @GetMapping("/sleep")
+    public ResponseEntity<?> sleep() {
+        alarmService.getSleep();
+        return ResponseEntity.ok(null);
     }
 
 }
