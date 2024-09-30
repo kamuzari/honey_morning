@@ -21,13 +21,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TtsUtil {
 
-    @Value("file.directory.path.content")
+    @Value("${file.directory.path.content}")
     private String contentPath;
 
-    @Value("file.directory.path.summary")
+    @Value("${file.directory.path.summary}")
     private String summaryPath;
 
-    @Value("file.directory.path.quiz")
+    @Value("${file.directory.path.quiz}")
     private String quizPath;
 
 
