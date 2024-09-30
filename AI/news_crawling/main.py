@@ -12,7 +12,7 @@ def save_articles_pickle(section_num, articles):
 
     # 현재 시간을 기반으로 파일명 생성
     now = datetime.now()
-    file_name = now.strftime("%Y-%m-%d_%H.pkl")
+    file_name = now.strftime("_%H.pkl")
     file_path = os.path.join(base_dir, file_name)
 
     # Pickle 형식으로 저장
