@@ -4,7 +4,6 @@ import com.sf.honeymorning.domain.alarm.entity.Alarm;
 import com.sf.honeymorning.domain.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.domain.auth.repository.RefreshTokenRepository;
 import com.sf.honeymorning.domain.auth.util.JWTUtil;
-import com.sf.honeymorning.domain.tag.repository.TagRepository;
 import com.sf.honeymorning.domain.user.constant.LoginMessage;
 import com.sf.honeymorning.domain.user.dto.CustomUserDetails;
 import com.sf.honeymorning.domain.user.dto.response.UserDetailDto;
@@ -34,7 +33,6 @@ public class AuthService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AlarmRepository alarmRepository;
-    private final TagRepository tagRepository;
 
     public UserDetailDto getUserInfo() {
         User loginUser = getLoginUser();
@@ -47,6 +45,7 @@ public class AuthService {
                 .role(loginUser.getRole())
                 .email(loginUser.getEmail())
                 .username(loginUser.getUsername())
+                .createdAt(loginUser.getCreatedAt())
                 .build();
     }
 
