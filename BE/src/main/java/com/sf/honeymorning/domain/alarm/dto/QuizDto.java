@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-@Schema(example = "퀴즈")
 public class QuizDto {
 	@Schema(example = " 숫자 - 퀴즈 id")
 	private Long id;
@@ -22,6 +21,8 @@ public class QuizDto {
 	private String option2;
 	@Schema(example = "선택지 3")
 	private String option3;
-	@Schema(name = "선택지 4")
+	@Schema(example = "선택지 4")
 	private String option4;
+	@Schema(example = "퀴즈 음성 경로")
+	private String quizUrl;
 }
