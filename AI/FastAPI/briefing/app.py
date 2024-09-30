@@ -9,7 +9,7 @@ from utils import get_file_patterns, get_merged_document
 app = FastAPI(root_path="/ai/briefing")
 
 class JSON_Briefing(BaseModel):
-    tags: List[Literal['100','101','102','103','104','105']]
+    tags: List[Literal['정치', '경제', '사회', '생활/문화', '세계', 'IT/과학']]
 
 class Briefing(BaseModel):
     shortBriefing : str
@@ -18,6 +18,14 @@ class Briefing(BaseModel):
 class JSON_Briefing_Out(BaseModel):
     data: Briefing
 
+mapping_tag = {
+    '정치': '100',
+    '경제': '101',
+    '사회': '102',
+    '생활/문화': '103',
+    '세계': '104',
+    'IT/과학': '105'
+}
 
 @app.post("/", response_model=JSON_Briefing_Out)
 def read_briefing(json: JSON_Briefing):
@@ -25,10 +33,11 @@ def read_briefing(json: JSON_Briefing):
     shortBriefing = ""
     longBriefing = ""
 
-    tokenizer = PreTrainedTokenizerFast.from_pretrained('gogamza/kobart-summarization')
-    model = BartForConditionalGeneration.from_pretrained('gogamza/kobart-summarization')
+    tokenizer = PreTrainedTokenizerFast.from_pretrained('digit82/kobart-summarization')
+    model = BartForConditionalGeneration.from_pretrained('digit82/kobart-summarization')
 
-    for tag in json.tags:    
+    for tag in json.tags:
+        tag = mapping_tag.get(tag)  
         file_names = get_file_patterns(tag)
         merged_document = get_merged_document(tag, file_names)
         raw_input_ids = tokenizer.encode(merged_document)
@@ -42,6 +51,7 @@ def read_briefing(json: JSON_Briefing):
             max_length = 1024, # 요약문의 최대 길이 설정
             min_length = 1, # 요약문의 최소 길이 설정
             num_beams = 8) # 문장 생성 시 다음 단어를 탐색하는 영역의 개수
+        shortBriefing += tokenizer.decode(short_summary_text_ids[0], skip_special_tokens=True)
         short_summary_text_ids = model.generate(
             input_ids = input_ids,
             bos_token_id = model.config.bos_token_id,
@@ -50,7 +60,6 @@ def read_briefing(json: JSON_Briefing):
             max_length = 256, # 요약문의 최대 길이 설정
             min_length = 1, # 요약문의 최소 길이 설정
             num_beams = 8) # 문장 생성 시 다음 단어를 탐색하는 영역의 개수
-        shortBriefing += tokenizer.decode(short_summary_text_ids[0], skip_special_tokens=True)
         longBriefing += tokenizer.decode(long_summary_text_ids[0], skip_special_tokens=True)
     
     resp = {"shortBriefing": shortBriefing,
