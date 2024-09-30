@@ -21,13 +21,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TtsUtil {
 
-    @Value("file.directory.path.content")
+    @Value("${file.directory.path.content}")
     private String contentPath;
 
-    @Value("file.directory.path.summary")
+    @Value("${file.directory.path.summary}")
     private String summaryPath;
 
-    @Value("file.directory.path.quiz")
+    @Value("${file.directory.path.quiz}")
     private String quizPath;
 
 
@@ -91,6 +91,7 @@ public class TtsUtil {
         try {
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, audioData);
+            log.info("디렉토리 저장이 완료되었습니다: " + filePath);
             return fileName;
         } catch (IOException e) {
             log.error("디렉토리 관련 파일 저장을 실패했습니다: " + e.getMessage(), e);

@@ -17,7 +17,6 @@ import com.sf.honeymorning.domain.brief.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.detail.SummaryResponseDto;
 import com.sf.honeymorning.domain.brief.entity.Brief;
 import com.sf.honeymorning.domain.brief.entity.BriefCategory;
-import com.sf.honeymorning.domain.brief.entity.WordCloud;
 import com.sf.honeymorning.domain.brief.repository.BriefCategoryRepository;
 import com.sf.honeymorning.domain.brief.repository.BriefRepository;
 import com.sf.honeymorning.domain.brief.repository.WordCloudRepository;
@@ -25,6 +24,7 @@ import com.sf.honeymorning.domain.quiz.entity.Quiz;
 import com.sf.honeymorning.domain.quiz.repository.QuizRepository;
 import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.user.entity.User;
+import com.sf.honeymorning.exception.user.UserNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -57,17 +57,13 @@ public class BriefService {
 
 	public BriefDetailResponseDto getBrief(Long briefId) {
 		User user = authService.getLoginUser();
-		Brief brief = briefRepository.findByUserAndId(user, briefId)
-			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
+		Brief brief = briefRepository.findByUserAndId(user, briefId).orElseThrow(() -> new EntityNotFoundException("not exist user"));
 		boolean canAccess = brief.getUser().getId().equals(user.getId());
-		if (!canAccess) {
-			throw new RuntimeException("not allowed service");
-		}
-		List<WordCloud> wordClouds = wordCloudRepository.findByBrief(brief);
+		if (!canAccess)
+			throw new IllegalArgumentException("invalid brief");
 		List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(brief);
-		List<Quiz> quizzes = quizRepository.findByBrief(brief)
-			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
-		return new BriefDetailResponseDto(briefId, new SummaryResponseDto(topicModelService.getTopicModel(briefId), briefCategories.stream().map(briefCategory -> briefCategory.getTag().getWord()).toList()), new BriefResponseDto(brief.getSummary(), brief.getContent()), quizzes.stream().map(quiz -> new QuizResponseDto(quiz.getQuestion(), quiz.getOption1(),quiz.getOption2(), quiz.getOption3(), quiz.getOption4(), quiz.getSelection(), quiz.getAnswer())).toList(), brief.getCreatedAt());
+		List<Quiz> quizzes = quizRepository.findByBrief(brief).orElseThrow(() -> new EntityNotFoundException("not exist user"));
+		return new BriefDetailResponseDto(briefId, new SummaryResponseDto(topicModelService.getTopicModel(briefId), briefCategories.stream().map(briefCategory -> briefCategory.getTag().getWord()).toList()), new BriefResponseDto(brief.getSummary(), brief.getContent(),brief.getContentFilePath()), quizzes.stream().map(quiz -> new QuizResponseDto(quiz.getQuestion(), quiz.getOption1(), quiz.getOption2(), quiz.getOption3(), quiz.getOption4(), quiz.getSelection(), quiz.getAnswer())).toList(), brief.getCreatedAt());
 	}
 
 }

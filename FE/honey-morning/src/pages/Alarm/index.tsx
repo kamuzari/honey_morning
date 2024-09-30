@@ -1,48 +1,85 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useNavigate} from 'react-router-dom';
-import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {instance} from '@/api/axios';
 
-interface AlarmStartData {
-  songUrl: string;
-  quizzes: Array<{
-    id: number,
-    briefId: number,
-    question: string,
-    answer: number,
-    option1: string,
-    option2: string,
-    option3: string,
-    option4: string,
-    selection: number,
-  }>;
-  content: string;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-color: var(--yellow-color);
+  position: relative;
+  overflow: hidden;
+`;
+
+const CurrentTime = styled.div`
+  margin-top: 5rem;
+  font-size: 10rem;
+  color: black;
+  font-weight: bold;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 3rem;
+`;
+
+const Button = styled.button`
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  background-color: var(--blue-color); /* 버튼 배경색 */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--dark-blue-color); /* 버튼 호버 시 색상 */
+  }
+`;
+interface AlarmData{
+  morningCallUrl: string,
+  quizzes : Quiz[],
+  briefingContent: string,
+  briefingContentUrl: string
 }
 
+interface Quiz{
+  id: number,
+  question: string,
+  answer : number,
+  option1 : string,
+  option2 : string,
+  option3 : string,
+  option4 : string,
+  quizUrl : string,
+}
 const AlarmPage = () => {
   const navigate = useNavigate();
   const [isAlarmOn, setIsAlarmOn] = useState(false);
   const [time, setTime] = useState(new Date());
   const [currentTimer, setCurrentTimer] = useState('00:00:00');
 
-  const queryClient = useQueryClient(); // 여기다 쓰는게 맞나?
 
-  // 알람 가져오기
-  const fetchAlarmData = async (): Promise<AlarmStartData> => {
-    const {data} = await instance.post(`api/alarms/start`);
-    return data;
-  };
+  // // 알람 가져오기
+  // const fetchAlarmData = async (): Promise<AlarmStartData> => {
+  //   const {data} = await instance.post(`api/alarms/start`);
+  //   return data;
+  // };
 
-  //prettier-ignore
-  const {
-    data: alarmData,
-    isLoading,
-    error,
-  } = useQuery<AlarmStartData>({
-    queryKey: ['alarmData'],
-    queryFn: fetchAlarmData,
-  });
+  // //prettier-ignore
+  // const {
+  //   data: alarmData,
+  //   isLoading,
+  //   error,
+  // } = useQuery<AlarmStartData>({
+  //   queryKey: ['alarmData'],
+  //   queryFn: fetchAlarmData,
+  // });
 
   const currentTime = () => {
     const currentDate = new Date();
@@ -89,8 +126,6 @@ const AlarmPage = () => {
     navigate('/'); // 메인 페이지로 이동
   };
 
-  if (isLoading) return <h2>로딩 중</h2>;
-  if (error) return <h2>에러</h2>;
 
   return (
     <Container>
@@ -129,33 +164,11 @@ const AlarmPage = () => {
 
 export default AlarmPage;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 100vh;
-  background-color: var(--yellow-color);
-  position: relative;
-  overflow: hidden;
-`;
 
-const CurrentTime = styled.div`
-  margin-top: 5rem;
-  font-size: 10rem;
-  color: black;
-  font-weight: bold;
-`;
 
 const RemindButton = styled.button``;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 3rem;
-`;
+
 
 const StartBriefButton = styled.button`
   background-color: var(--darkblue-color);
