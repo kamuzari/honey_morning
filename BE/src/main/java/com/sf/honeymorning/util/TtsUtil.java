@@ -20,7 +20,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TtsUtil {
 
-    // TODO: 각 서비스마다 String을 받아서 file_path를 저장하기
+    // TODO: 각 서비스마다 String을 받아서 file_path를 저장하기 사용법 공유하기
+    // TODO: application.properties 변수 나누기
 
     private final OkHttpClient client = new OkHttpClient();
 
@@ -40,9 +41,15 @@ public class TtsUtil {
     private final double similarityBoost = 0.5;
     private final double style = 0.5;
 
-    // Text -> Speech
-    // fileType: summary, content, quiz
-    public String textToSpeech(String text, Long briefId, String fileType) throws IOException {
+    /**
+     * TTS API를 활용하여 주어진 텍스트를 음성 파일로 변환하고 저장합니다. 음성 파일 경로를 받은 뒤, 파일 경로를 각 DB에 저장해야 합니다.
+     *
+     * @param text     음성으로 변화할 텍스트입니다.
+     * @param fileType TTS로 만들 타입입니다. 파일 경로가 달라집니다. (ex. "summary", "content", "quiz").
+     * @return 음성 파일 경로를 반환합니다.
+     * @throws IOException 파일 저장 시 발생한 에러를 반환합니다.
+     */
+    public String textToSpeech(String text, String fileType) throws IOException {
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("text", text);
         jsonBody.put("model_id", modelId);
@@ -65,22 +72,27 @@ public class TtsUtil {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response);
+                throw new IOException("예상치 못한 코드입니다: " + response);
             }
 
-            return saveTts(response.body().bytes(), briefId, getFileDirectoryPath(fileType));
+            return saveTts(response.body().bytes(), getFileDirectoryPath(fileType));
         }
     }
 
     // TTS 파일 저장
-    private String saveTts(byte[] audioData, Long briefId, String fileDirectoryPath)
+    private String saveTts(byte[] audioData, String fileDirectoryPath)
             throws IOException {
-        String fileName = briefId + "_" + UUID.randomUUID().toString() + ".mp3";
+        String fileName = UUID.randomUUID().toString() + ".mp3";
         Path filePath = Paths.get(fileDirectoryPath, fileName);
-        Files.createDirectories(filePath.getParent());
-        Files.write(filePath, audioData);
 
-        return fileName; // 반환 내용
+        try {
+            Files.createDirectories(filePath.getParent());
+            Files.write(filePath, audioData);
+            return fileName;
+        } catch (IOException e) {
+            log.error("디렉토리 관련 파일 저장을 실패했습니다: " + e.getMessage(), e);
+            throw new IOException("디렉토리 관련 파일 저장을 실패했습니다", e);
+        }
     }
 
     // 파일 타입에 따른 디렉토리 경로 반환
