@@ -13,6 +13,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -20,15 +21,17 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TtsUtil {
 
-    // TODO: 각 서비스마다 String을 받아서 file_path를 저장하기 사용법 공유하기
-    // TODO: application.properties 변수 나누기
+    @Value("file.directory.path.content")
+    private String contentPath;
+
+    @Value("file.directory.path.summary")
+    private String summaryPath;
+
+    @Value("file.directory.path.quiz")
+    private String quizPath;
+
 
     private final OkHttpClient client = new OkHttpClient();
-
-    // 경로
-    private static final String FILE_DIRECTORY_PATH_SUMMARY = "C:\\SSAFY\\HoneyMorning\\project_data\\summary";
-    private static final String FILE_DIRECTORY_PATH_CONTENT = "C:\\SSAFY\\HoneyMorning\\project_data\\content";
-    private static final String FILE_DIRECTORY_PATH_QUIZ = "C:\\SSAFY\\HoneyMorning\\project_data\\quiz";
 
     // 세팅
     private static final String API_KEY = "sk_bb66d759209977f666fb4d27eef34e0dca2e003415380b4f";
@@ -98,12 +101,12 @@ public class TtsUtil {
     // 파일 타입에 따른 디렉토리 경로 반환
     private String getFileDirectoryPath(String fileType) {
         switch (fileType.toLowerCase()) {
-            case "summary":
-                return FILE_DIRECTORY_PATH_SUMMARY;
             case "content":
-                return FILE_DIRECTORY_PATH_CONTENT;
+                return contentPath;
+            case "summary":
+                return summaryPath;
             case "quiz":
-                return FILE_DIRECTORY_PATH_QUIZ;
+                return quizPath;
             default:
                 throw new IllegalArgumentException("Invalid file type: " + fileType);
         }
