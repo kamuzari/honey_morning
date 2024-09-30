@@ -41,7 +41,23 @@ const Button = styled.button`
     background-color: var(--dark-blue-color); /* 버튼 호버 시 색상 */
   }
 `;
+interface AlarmData{
+  morningCallUrl: string,
+  quizzes : Quiz[],
+  briefingContent: string,
+  briefingContentUrl: string
+}
 
+interface Quiz{
+  id: number,
+  question: string,
+  answer : number,
+  option1 : string,
+  option2 : string,
+  option3 : string,
+  option4 : string,
+  quizUrl : string,
+}
 const AlarmPage = () => {
   const navigate = useNavigate();
   const [isAlarmOn, setIsAlarmOn] = useState(false);

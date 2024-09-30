@@ -5,9 +5,9 @@ import {useState} from 'react';
 import GlobalBtn from '../GlobalBtn';
 const Briefing = ({briefDto}: {briefDto: any}) => {
 
-
   const shortData = briefDto.summary
   const LongData =briefDto.content
+  const voiceFileUrl =briefDto.contentFilePath
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   return (
     <Container>
