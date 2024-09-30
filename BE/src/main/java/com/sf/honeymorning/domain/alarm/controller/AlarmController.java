@@ -51,7 +51,7 @@ public class AlarmController {
                         + "기후 변화로 인한 이상 기후가 전 세계적으로 확산되면서, 각국의 대응이 주목받고 있습니다."
                         + "기술 분야에서는 인공지능과 클라우드 혁신이 기업 경쟁력 강화의 핵심으로 떠오르고 있습니다."
                         + "이상으로 오늘의 뉴스를 마치겠습니다. 시청해 주셔서 감사합니다.",
-                1L, "summary");
+                "summary");
 
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
