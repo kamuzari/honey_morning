@@ -52,22 +52,12 @@ const dataSample: Data = {
   content: '이것은 아무 내용이 들어있는 아무 샘플이지요.',
 };
 
-//유저 정보
-const fetchUserInfo = async () => {
-  const {data} = await instance.get(`/api/auth/userInfo`);
-  return data;
-};
-
 const MyPage: React.FC = () => {
-  // useQuery를 사용하여 userInfo 가져오기
-  const {
-    data: userInfo,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['userInfo'],
-    queryFn: fetchUserInfo,
-  });
+  // 유저 정보 가져오기
+  const queryClient = useQueryClient();
+  //prettier-ignore
+  const userInfo = queryClient.getQueryData<{id: number, role: string, email: string, username: string}>(['userInfo']);
+  const username = userInfo ? userInfo.username : null;
 
   const itemsPerPage = 5;
   const [totalPages, setTotalPages] = useState(1);
