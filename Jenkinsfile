@@ -94,6 +94,7 @@ pipeline {
                     -p 8081:8081 \
                     --network hm-network \
                     -v $APP_PROPS:/app/config/application.properties \
+                    -v /home/ubuntu/project_data:/app/project_data \
                     backend:latest
                 '''
             }

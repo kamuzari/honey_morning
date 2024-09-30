@@ -23,6 +23,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 @Configuration
@@ -65,8 +66,8 @@ public class SecurityConfig {
                                 CorsConfiguration configuration = new CorsConfiguration();
 
                                 // 허용할 포트
-                                configuration.setAllowedOrigins(
-                                        Collections.singletonList(allowedOrigins));
+                                configuration.setAllowedOrigins(Collections.singletonList(allowedOrigins));
+                                configuration.addAllowedOriginPattern("http://localhost:5173");
                                 // 허용할 메서드
                                 configuration.setAllowedMethods(Collections.singletonList("*"));
                                 // 요청이 오는 곳의 credential을 true로 변경

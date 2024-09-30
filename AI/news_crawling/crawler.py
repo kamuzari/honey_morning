@@ -5,7 +5,7 @@ import json
 from utils import get_article_time_from_text
 import time
 
-def crawl_news_articles(section_num, target_time, max_pages=10):
+def crawl_news_articles(section_num, max_pages=10):
     base_url = 'https://news.naver.com/section/template/SECTION_ARTICLE_LIST'
     
     articles = []
@@ -46,11 +46,14 @@ def crawl_news_articles(section_num, target_time, max_pages=10):
                 # "n분전", "n시간전" 텍스트를 추출하여 발행 시간 계산
                 time_text = block.find('b').get_text()
                 
-                article_time = get_article_time_from_text(time_text)
 
-                if article_time and article_time < target_time:
-                    print("목표 시간에 도달했습니다. 크롤링을 종료합니다.")
+                # 기사 중복 수집을 피하기 위한 로직
+                if '분전' not in time_text:
+                    # 'n시간전' 혹은 'n일전'인 경우 크롤링을 중지
+                    print("1시간 이전의 기사들입니다. 크롤링을 종료합니다.")
                     return articles
+
+                article_time = get_article_time_from_text(time_text)
 
                 articles.append((title, link, article_time))
                 print(f"기사 제목: {title}, 링크: {link}, 발행 시간: {article_time}")
