@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import HashTag from '../MyPage/HashTag';
 // import WordCloud from './WordCloud';
 import TopicCloud from './TopicCloud';
-import Slider from 'react-slick';
 import {useState} from 'react';
 
 const CATEGORY = [
@@ -39,14 +38,6 @@ const Summary = ({summaryDto}: {summaryDto: SummaryDto}) => {
   const categories = summaryDto.categories || [];
 
   console.log(summaryDto);
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
 
   const basicCategory = categories.filter((category: string) =>
     CATEGORY.includes(category),
@@ -113,14 +104,6 @@ const Summary = ({summaryDto}: {summaryDto: SummaryDto}) => {
         )}
         <WordCloudContainer>
           <TopicCloud topics={summaryDto.topicModelResponses} />
-
-          {/* <Slider {...settings}>
-            {summaryDto.topicModelResponses.map((topic: Topic) => (
-              <div key={topic.topic_id}>
-                <TopicCloud topics={[topic]} />
-              </div>
-            ))}
-          </Slider> */}
         </WordCloudContainer>
       </Content>
     </Container>
@@ -143,7 +126,7 @@ export const HelpSpan = styled.span`
 const WordCloudContainer = styled.div`
   width: 100%;
   height: 100%;
-  display: flex;
+  // display: flex;
   justify-content: center;
   backgroud-color: black;
 `;
