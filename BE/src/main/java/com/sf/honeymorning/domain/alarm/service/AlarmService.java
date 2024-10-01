@@ -1,34 +1,8 @@
 package com.sf.honeymorning.domain.alarm.service;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sf.honeymorning.domain.alarm.dto.AlarmDateDto;
-import com.sf.honeymorning.domain.alarm.dto.AlarmRequestDto;
-import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
-import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
-import com.sf.honeymorning.domain.alarm.dto.QuizDto;
+import com.sf.honeymorning.domain.alarm.dto.*;
 import com.sf.honeymorning.domain.alarm.entity.Alarm;
 import com.sf.honeymorning.domain.alarm.entity.AlarmCategory;
 import com.sf.honeymorning.domain.alarm.repository.AlarmCategoryRepository;
@@ -42,9 +16,25 @@ import com.sf.honeymorning.domain.tag.entity.Tag;
 import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.domain.user.repository.UserRepository;
 import com.sf.honeymorning.exception.alarm.AlarmFatalException;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -187,7 +177,7 @@ public class AlarmService {
 		LocalTime start = LocalTime.now().plusMinutes(40).withSecond(0);
 		LocalTime end = LocalTime.now().plusMinutes(40).withSecond(59);
 
-		List<Alarm> alarms = alarmRepository.findByAlarmTimeBetweenAndIsActive(start, end, true);
+		List<Alarm> alarms = alarmRepository.findByAlarmTimeBetweenAndIsActive(start, end, 1);
 		log.warn("alarms: {}, start --- > {} , end --- > {}", alarms, start, end);
 
 		for (int j = 0; j < alarms.size(); j++) {
