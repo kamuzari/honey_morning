@@ -12,6 +12,5 @@ import java.util.Optional;
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     Optional<Alarm> findByUser(User user);
 
-
-    List<Alarm> findByAlarmTime(@Param("alarmTime") LocalTime alarmTime);
+    List<Alarm> findByAlarmTimeBetweenAndIsActive(LocalTime start, LocalTime end, Boolean isActive);
 }
