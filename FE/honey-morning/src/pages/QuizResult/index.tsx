@@ -2,11 +2,22 @@ import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 import {instance} from '@/api/axios';
 import React, { useState, useEffect } from 'react';
+import {saveAlarmResult} from '@/api/alarmApi/index'
+
+
+// Typescript
+interface AlarmResultData {
+  count: number,
+  isAttending: number
+}
 
 const ShowQuizResult: React.FC = () => {
+
+
+
   const location = useLocation();
 
-  const {correctCount} = location.state || {correctCount: 0};
+  const {correctCount} = location.state || {correctCount: 0};  
   // 상태 변수 선언
   const [alarmCategoryInfo, setAlarmCategoryInfo] = useState(null);
   const [alarmResultInfo, setAlarmResultInfo] = useState(null);
@@ -53,10 +64,6 @@ const ShowQuizResult: React.FC = () => {
     fetchResult(); // 데이터 fetch 호출
   }, []);
 
-  console.log(alarmCategoryInfo)
-  console.log(alarmResultInfo)
-  console.log(streakInfo)
-
   const fetchStreakData = async () => {
     const {data} = await instance.get(`/api/alarms/result/streak`);
     return data;
@@ -74,7 +81,7 @@ const ShowQuizResult: React.FC = () => {
     <TopContainer>
       <CharacterArea>캐릭터</CharacterArea>
       <div className="MessageArea">
-        {alarmResultInfo && alarmResultInfo[alarmResultInfo.length - 1].count > 0 ? 'Misson Completed!' : (
+        {correctCount > 0 ? 'Misson Completed!' : (
   <>
     {'Streak Broken!'}<br />
     {'Keep Trying!'}
@@ -101,7 +108,7 @@ const ShowQuizResult: React.FC = () => {
           <div className="Answer">정답 수</div>
           <div className="AnswerCount">
             <p className="material-icons">check</p>
-            <p>{alarmResultInfo && alarmResultInfo[alarmResultInfo.length - 1].count} / 2 </p>
+            <p>{correctCount} / 2 </p>
           </div>
         </CorrectAnswersArea>
         <StreakArea>
