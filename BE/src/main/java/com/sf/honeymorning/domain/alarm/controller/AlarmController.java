@@ -128,5 +128,4 @@ public class AlarmController {
         alarmService.getSleep();
         return ResponseEntity.ok(null);
     }
-
 }
