@@ -52,6 +52,23 @@ const dataSample: Data = {
   content: '이것은 아무 내용이 들어있는 아무 샘플이지요.',
 };
 
+// 각 도형의 색을 계산하는 함수
+const getShapeColor = (isAttending: number, count: number): string => {
+  if (isAttending === 0) {
+    return 'gray'; // 참석하지 않은 경우 회색
+  }
+  if (isAttending === 1 && count === 0) {
+    return 'linear-gradient(to top, yellow 33%, white 33%)'; // 1/3만큼 노랑
+  }
+  if (isAttending === 1 && count === 1) {
+    return 'linear-gradient(to top, yellow 66%, white 66%)'; // 2/3만큼 노랑
+  }
+  if (isAttending === 1 && count === 2) {
+    return 'yellow'; // 전부 노랑
+  }
+  return 'white'; // 기본 색상
+};
+
 //유저 정보
 const fetchUserInfo = async () => {
   const {data} = await instance.get(`/api/auth/userInfo`);
@@ -76,6 +93,7 @@ const MyPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [briefingData, setBriefingData] = useState([]);
   const [daysSinceSignup, setDaysSinceSignup] = useState(0); // 가입일로부터 며칠인지 상태로 관리
+  const [streakData, setStreakData] = useState<any>(null);
   const signupDate = new Date('2024-09-01'); // 예시 가입 날짜
   const today = new Date();
 
@@ -141,32 +159,12 @@ const calculateDaysInMonths = (startDate: Date, endDate: Date): number[][] => {
   return months;
 };
 
-  // 새로운 streak 데이터를 위한 useEffect
-  const [streakData, setStreakData] = useState<any>(null);
 
   console.log(streakData);
   console.log(userInfo);
   if(userInfo){
     console.log(userInfo.createdAt);
   }
-
-  // useEffect(() => {
-  //   // 예시 데이터 (실제로는 서버에서 가져오는 값)
-  //   const exampleStreakData = [
-  //     { count: 1, isAttending: 1, createdAt: '2024-09-20T15:34:43' },
-  //     { count: 1, isAttending: 1, createdAt: '2024-09-21T15:34:43' },
-  //     { count: 1, isAttending: 1, createdAt: '2024-09-22T15:34:43' },
-  //     { count: 2, isAttending: 1, createdAt: '2024-09-23T15:34:43' },
-  //     { count: 0, isAttending: 0, createdAt: '2024-09-23T06:15:00' },
-  //     { count: 1, isAttending: 1, createdAt: '2024-09-24T15:34:43' },
-  //   ];
-
-  //   // 날짜별로 streakData를 매핑
-  //   const monthDays = calculateDaysInMonths(signupDate, today);
-  //   const streakByDate = processStreakData(exampleStreakData);
-  //   setStreakData(streakByDate);
-  //   setDaysInMonths(monthDays);
-  // }, [signupDate, today]);
 
 
   useEffect(() => {
