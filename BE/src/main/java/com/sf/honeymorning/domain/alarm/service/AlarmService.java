@@ -182,9 +182,13 @@ public class AlarmService {
 	@Transactional
 	@Scheduled(fixedRate = 60000)
 	public void readyBriefing() {
-		int[] categories = new int[] {100, 101, 102, 103, 104, 105, 106, 107};
-		String[] categoryNames = new String[] {"정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"};
-		List<Alarm> alarms = alarmRepository.findByAlarmTime(LocalTime.now().minusMinutes(10));
+		log.warn("=============================== ready Briefing ===============================");
+
+		LocalTime alarmTime = LocalTime.now().minusMinutes(10);
+
+		List<Alarm> alarms = alarmRepository.findByAlarmTime(alarmTime);
+		log.warn("alarms: {}, request time : {}", alarms, alarmTime);
+
 		for (int j = 0; j < alarms.size(); j++) {
 			Alarm alarm = alarms.get(j);
 			User user = alarm.getUser();
@@ -199,7 +203,7 @@ public class AlarmService {
 
 				tags.add(alarmCategory.getTag().getWord());
 			}
-
+			log.warn("tags params : {}", tags);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setAccept(List.of(MediaType.APPLICATION_JSON));
