@@ -340,7 +340,7 @@ const AlarmSetting: React.FunctionComponent = () => {
           </div>
         </SettingContainer>
         <ButtonContainer>
-          <GlobalBtn
+          <GlobalBtn  // 여기를 수정해야 합니다.
             text="저 장"
             $padding={10}
             onClick={()=> {

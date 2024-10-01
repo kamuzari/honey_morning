@@ -1,37 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import styled from 'styled-components';
-import {useQuery, useQueryClient} from '@tanstack/react-query';
-import {instance} from '@/api/axios';
+import {useQueryClient} from '@tanstack/react-query';
 import Logout from '@/component/Logout';
 
-const fetchUserInfo = async () => {
-  const {data} = await instance.get(`/api/auth/userInfo`);
-  return data;
-};
-
 const Header = () => {
-  const {
-    data: userInfo,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['userInfo'],
-    queryFn: fetchUserInfo,
-    retry: 1,
-  });
+  const queryClient = useQueryClient();
+  //prettier-ignore
+  const userInfo = queryClient.getQueryData<{id: number, role: string, email: string, username: string}>(['userInfo']);
 
-  console.log(userInfo);
+  const username = userInfo ? userInfo.username : null;
 
-  if (isLoading) {
-    return <HeaderContainer>Loading...</HeaderContainer>;
-  }
+  console.log('Header에서 가져온 유저 정보:', userInfo);
 
-  if (isError) {
+  if (!userInfo) {
     return (
       <HeaderContainer>
-        {' '}
-        <Link to="/signin">로그인</Link>해 주세요.
+        <p>
+          <Link to="/signin">로그인</Link>해 주세요.
+        </p>
       </HeaderContainer>
     );
   }
@@ -39,7 +26,7 @@ const Header = () => {
   return (
     <HeaderContainer>
       {userInfo ? (
-        <p>{userInfo.username}님, 반갑습니다!@</p>
+        <p>{userInfo.username}님, 반갑습니다!</p>
       ) : (
         <p>
           <Link to="/signin">로그인</Link>해 주세요.

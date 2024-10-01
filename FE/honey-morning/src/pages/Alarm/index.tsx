@@ -64,6 +64,23 @@ const AlarmPage = () => {
   const [time, setTime] = useState(new Date());
   const [currentTimer, setCurrentTimer] = useState('00:00:00');
 
+
+  // // 알람 가져오기
+  // const fetchAlarmData = async (): Promise<AlarmStartData> => {
+  //   const {data} = await instance.post(`api/alarms/start`);
+  //   return data;
+  // };
+
+  // //prettier-ignore
+  // const {
+  //   data: alarmData,
+  //   isLoading,
+  //   error,
+  // } = useQuery<AlarmStartData>({
+  //   queryKey: ['alarmData'],
+  //   queryFn: fetchAlarmData,
+  // });
+
   const currentTime = () => {
     const currentDate = new Date();
     const hours = String(currentDate.getHours()).padStart(2, '0');
@@ -106,25 +123,36 @@ const AlarmPage = () => {
   // 브리핑 스킵 및 메인 페이지 이동
   const handleSkipBriefing = () => {
     setIsAlarmOn(false); // 알람 해제
-    navigate('/main'); // 메인 페이지로 이동
+    navigate('/'); // 메인 페이지로 이동
   };
+
 
   return (
     <Container>
-      <Button onClick={handleRemindLater}>5분 뒤에 다시 알림</Button>
+      <RemindButton onClick={handleRemindLater}>
+        5분 뒤에 다시 알림
+      </RemindButton>
       <CurrentTime>{currentTimer}</CurrentTime>
       {isAlarmOn ? (
         <div>
           <h2>알람이 울리고 있습니다!</h2>
           <audio autoPlay>
-            <source
+            {/* <source
               src="https://cdn1.suno.ai/dc1d94fa-975b-4eab-a391-dc55eb4cdcc5.mp3"
+              type="audio/mpeg"
+            /> */}
+            <source
+              src={alarmData?.songUrl}
               type="audio/mpeg"
             />
           </audio>
           <ButtonContainer>
-            <Button onClick={handleStartBriefing}>브리핑 시작</Button>
-            <Button onClick={handleSkipBriefing}>브리핑 스킵</Button>
+            <StartBriefButton onClick={handleStartBriefing}>
+              알람 해제+브리핑 시작
+            </StartBriefButton>
+            <SkipBriefButton onClick={handleSkipBriefing}>
+              브리핑 스킵
+            </SkipBriefButton>
           </ButtonContainer>
         </div>
       ) : (
@@ -135,3 +163,29 @@ const AlarmPage = () => {
 };
 
 export default AlarmPage;
+
+
+
+const RemindButton = styled.button``;
+
+
+
+const StartBriefButton = styled.button`
+  background-color: var(--darkblue-color);
+  padding: 1em;
+  border-radius: 30px;
+
+  color: white;
+  font-size: 3em;
+`;
+
+const SkipBriefButton = styled.button`
+  text-decoration: underline;
+  color: black;
+  font-size: 2em;
+
+  border: none;
+  background-color: var(--yellow-color);
+
+  margin: 1em auto 2em;
+`;
