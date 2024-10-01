@@ -11,6 +11,5 @@ import java.util.List;
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
     Alarm findByUser(User user);
 
-
-    List<Alarm> findByAlarmTime(@Param("alarmTime") LocalTime alarmTime);
+    List<Alarm> findByAlarmTimeBetweenAndIsActive(LocalTime start, LocalTime end, Boolean isActive);
 }

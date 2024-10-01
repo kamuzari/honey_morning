@@ -184,10 +184,11 @@ public class AlarmService {
 	public void readyBriefing() {
 		log.warn("=============================== ready Briefing ===============================");
 
-		LocalTime alarmTime = LocalTime.now().plusMinutes(40);
+		LocalTime start = LocalTime.now().plusMinutes(40).withSecond(0);
+		LocalTime end = LocalTime.now().plusMinutes(40).withSecond(59);
 
-		List<Alarm> alarms = alarmRepository.findByAlarmTime(alarmTime);
-		log.warn("alarms: {}, request time : {}", alarms, alarmTime);
+		List<Alarm> alarms = alarmRepository.findByAlarmTimeBetweenAndIsActive(start, end, true);
+		log.warn("alarms: {}, start --- > {} , end --- > {}", alarms, start, end);
 
 		for (int j = 0; j < alarms.size(); j++) {
 			Alarm alarm = alarms.get(j);
