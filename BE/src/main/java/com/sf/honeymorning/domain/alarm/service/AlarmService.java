@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -48,6 +50,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class AlarmService {
+	private static final Logger log = LoggerFactory.getLogger(AlarmService.class);
 	@Value("${ai.url.briefing}")
 	private String briefingAi;
 	@Value("${ai.url.quiz}")
@@ -178,37 +181,41 @@ public class AlarmService {
 
 	@Transactional
 	@Scheduled(fixedRate = 60000)
-	public void readyBrief() {
-		HashMap<String, Integer> categoryMap = new HashMap<>();
+	public void readyBriefing() {
 		int[] categories = new int[] {100, 101, 102, 103, 104, 105, 106, 107};
 		String[] categoryNames = new String[] {"정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"};
-		for (int i = 0; i < categories.length; i++) {
-			categoryMap.put(categoryNames[i], categories[i]);
-		}
 		List<Alarm> alarms = alarmRepository.findByAlarmTime(LocalTime.now().minusMinutes(10));
 		for (int j = 0; j < alarms.size(); j++) {
 			Alarm alarm = alarms.get(j);
 			User user = alarm.getUser();
 			List<AlarmCategory> alarmCategoryList = alarmCategoryRepository.findByAlarm(alarm);
-			List<Integer> tagIds = new ArrayList<>();
+			List<String> tags = new ArrayList<>();
 			for (int i = 0; i < alarmCategoryList.size(); i++) {
 				AlarmCategory alarmCategory = alarmCategoryList.get(i);
-				if (categoryMap.containsKey(alarmCategory.getTag().getWord())) {
-					Integer tagId = categoryMap.get(alarmCategory.getTag().getWord());
-					tagIds.add(tagId);
+				Tag tag = alarmCategory.getTag();
+				if (tag.getIsCustom() == 1) {
+					continue;
 				}
+
+				tags.add(alarmCategory.getTag().getWord());
 			}
+
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 			Map<String, Object> body = new HashMap<>();
-			body.put("tags", tagIds);
+			body.put("tags", tags);
 			HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
 			try {
-				ResponseEntity<String> briefResponse = restTemplate.exchange(
-					briefingAi, HttpMethod.POST, requestEntity,
+				ResponseEntity<String> briefResponse = restTemplate.exchange(briefingAi, HttpMethod.POST, requestEntity,
 					String.class);
-				if (briefResponse.getStatusCode().is2xxSuccessful()) {
+				ResponseEntity<String> topicModelResponse = restTemplate.exchange(topicModelAi, HttpMethod.POST,
+					requestEntity, String.class);
+				if (briefResponse.getStatusCode().is2xxSuccessful() && topicModelResponse.getStatusCode()
+					.is2xxSuccessful()) {
+					log.info(
+						"@@@@@@@@@@@@@@@@@@@@briefResponse , topicModelResponse success@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 					String data = briefResponse.getBody();
 					ObjectMapper objectMapper = new ObjectMapper();
 					JsonNode jsonNode = objectMapper.readTree(data);
@@ -223,33 +230,13 @@ public class AlarmService {
 							.content(longBriefing)
 							.build()
 					);
-					headers = new HttpHeaders();
-					headers.setContentType(MediaType.APPLICATION_JSON);
-					headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-					body = new HashMap<>();
-					ArrayList<String> tagList = new ArrayList<>();
-					List<AlarmCategory> alarmCategories = alarmCategoryRepository.findByAlarm(alarm);
-					for (int i = 0; i < alarmCategories.size(); i++) {
-						AlarmCategory alarmCategory = alarmCategories.get(i);
-						Tag tag = alarmCategory.getTag();
-						if (tag.getIsCustom() == 1)
-							continue;
-						tagList.add(tag.getWord());
-					}
-					body.put("tags", tagList);
-					requestEntity = new HttpEntity<>(body, headers);
-					ResponseEntity<String> topicModelResponse = restTemplate.exchange(topicModelAi, HttpMethod.POST,
-						requestEntity, String.class);
-					if (topicModelResponse.getStatusCode().is2xxSuccessful()) {
-						data = briefResponse.getBody();
-						objectMapper = new ObjectMapper();
-						jsonNode = objectMapper.readTree(data);
-						String url = jsonNode.get("url").asText();
-						alarm.setMusicFilePath(url);
-						alarmRepository.save(alarm);
-					} else {
-						System.out.println("POST 요청 실패: " + briefResponse.getStatusCode());
-					}
+
+					data = briefResponse.getBody();
+					objectMapper = new ObjectMapper();
+					jsonNode = objectMapper.readTree(data);
+					String url = jsonNode.get("url").asText();
+					alarm.setMusicFilePath(url);
+					alarmRepository.save(alarm);
 
 					headers = new HttpHeaders();
 					headers.setContentType(MediaType.APPLICATION_JSON);
@@ -257,13 +244,14 @@ public class AlarmService {
 					body = new HashMap<>();
 					body.put("briefing", save.getSummary());
 					requestEntity = new HttpEntity<>(body, headers);
-					ResponseEntity<String> songResponse = restTemplate.exchange(
-						musicAi, HttpMethod.POST, requestEntity, String.class);
+					ResponseEntity<String> songResponse = restTemplate.exchange(musicAi, HttpMethod.POST, requestEntity,
+						String.class);
+
 					if (songResponse.getStatusCode().is2xxSuccessful()) {
 						data = songResponse.getBody();
 						objectMapper = new ObjectMapper();
 						jsonNode = objectMapper.readTree(data);
-						String url = jsonNode.get("url").asText();
+						url = jsonNode.get("url").asText();
 						System.out.println("url: " + url);
 
 					} else {
@@ -311,6 +299,7 @@ public class AlarmService {
 					}
 				} else {
 					System.out.println("POST 요청 실패: " + briefResponse.getStatusCode());
+					System.out.println("POST 요청 실패: " + topicModelResponse.getStatusCode());
 				}
 			} catch (Exception e) {
 				System.out.println("에러 발생: " + e.getMessage());
