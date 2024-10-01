@@ -5,25 +5,21 @@ import React, { useState, useEffect } from 'react';
 import {saveAlarmResult} from '@/api/alarmApi/index'
 
 
-// Typescript
-interface AlarmResultData {
-  count: number,
-  isAttending: number
-}
-
 const ShowQuizResult: React.FC = () => {
 
-
-
+  
   const location = useLocation();
-
   const {correctCount} = location.state || {correctCount: 0};  
+  
+  const response = saveAlarmResult({count: correctCount, isAttending: 1});
+
+  console.log(response);
+
   // 상태 변수 선언
   const [alarmCategoryInfo, setAlarmCategoryInfo] = useState(null);
-  const [alarmResultInfo, setAlarmResultInfo] = useState(null);
   const [streakInfo, setStreakInfo] = useState(null);
 
-
+  
   
   useEffect(() => {
     const fetchStreak = async () => {
@@ -51,18 +47,7 @@ const ShowQuizResult: React.FC = () => {
       fetchCategory(); // 데이터 fetch 호출
     }, []);
 
-  useEffect(() => {
-    const fetchResult = async () => {
-      try {
-        const data = await fetchResultData();
-        setAlarmResultInfo(data);
-      } catch (error) {
-        console.error(`[Error] data: ${error}`);
-      }
-    };
-
-    fetchResult(); // 데이터 fetch 호출
-  }, []);
+    console.log(alarmCategoryInfo);
 
   const fetchStreakData = async () => {
     const {data} = await instance.get(`/api/alarms/result/streak`);
@@ -72,10 +57,7 @@ const ShowQuizResult: React.FC = () => {
     const {data} = await instance.get(`/api/alarms/category`);
     return data;
   };
-  const fetchResultData = async () => {
-    const {data} = await instance.get(`/api/alarms/result`);
-    return data;
-  };
+
 
   return (
     <TopContainer>
