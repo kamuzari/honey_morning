@@ -1,7 +1,6 @@
 import {Content, SmallTitle} from '@/pages/MyPage';
 import styled from 'styled-components';
 import HashTag from '../MyPage/HashTag';
-// import WordCloud from './WordCloud';
 import TopicCloud from './TopicCloud';
 import {useState} from 'react';
 
@@ -36,8 +35,6 @@ interface SummaryDto {
 const Summary = ({summaryDto}: {summaryDto: SummaryDto}) => {
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const categories = summaryDto.categories || [];
-
-  console.log(summaryDto);
 
   const basicCategory = categories.filter((category: string) =>
     CATEGORY.includes(category),
@@ -79,7 +76,7 @@ const Summary = ({summaryDto}: {summaryDto: SummaryDto}) => {
       </Content>
       <Content>
         <div className="smallTitleContainer">
-          <SmallTitle>워드 클라우드</SmallTitle>
+          <SmallTitle>토픽 클라우드</SmallTitle>
           <HelpSpan
             className="material-icons"
             onClick={() => {
@@ -96,7 +93,9 @@ const Summary = ({summaryDto}: {summaryDto: SummaryDto}) => {
             </div>
             <div className="notification">
               <span>워드 클라우드란?</span>
-              <span>토픽의 중요도에 따라 눈에 잘 보이게 그려드려요!</span>
+              <span>
+                각 토픽별 키워드 비중에 따라 눈에 잘 보이게 그려드려요!
+              </span>
             </div>
           </HelpContainer>
         ) : (
@@ -118,7 +117,6 @@ export const Container = styled.div`
 
 export const HelpSpan = styled.span`
   display: flex;
-
   margin-left: 1.2rem;
   font-size: 4rem;
 `;
@@ -141,7 +139,7 @@ export const HelpContainer = styled.div`
     display: inline-flex;
     flex-direction: column;
     background-color: var(--lightblue-color);
-    border-radius: 40px;
+    border-radius: 20px;
     box-sizing: border-box;
     padding: 1rem;
     margin-bottom: 2rem;
@@ -163,7 +161,7 @@ export const HelpContainer = styled.div`
   }
 
   .notification:nth-child(2) {
-    width: 80%;
+    width: 90%;
     font-weight: 500;
   }
 `;
