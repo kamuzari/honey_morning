@@ -7,9 +7,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
-    Alarm findByUser(User user);
+    Optional<Alarm> findByUser(User user);
 
     List<Alarm> findByAlarmTimeBetweenAndIsActive(LocalTime start, LocalTime end, Boolean isActive);
 }
