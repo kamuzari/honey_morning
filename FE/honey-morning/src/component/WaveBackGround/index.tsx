@@ -22,7 +22,7 @@ const moveLeft = keyframes`
 
 // Styled components for the waves
 const WaveOne = styled.div`
-  opacity: 0.4;
+  opacity: 0.95;
   position: absolute;
   top: -330px;
   width: 3000px;
@@ -36,7 +36,7 @@ const WaveOne = styled.div`
 
 const WaveTwo = styled(WaveOne)`
   background: #3773b7;
-  opacity: 0.4;
+  opacity: 0.5;
   animation: ${drift} 16000ms infinite linear;
   z-index: 0;
 `;
