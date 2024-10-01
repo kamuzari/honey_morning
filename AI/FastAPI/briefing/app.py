@@ -29,7 +29,7 @@ load_dotenv(verbose=True)
 app = FastAPI(root_path="/ai/briefing")
 client = AsyncOpenAI(api_key = os.getenv("API_KEY"))
 
-model = "gpt-3.5-turbo";
+model = "gpt-4o-mini";
 
 prompt = """
 -- 너에게 전날 밤에 있었던 뉴스들을 요약해서 들려주는 리포터 역할을 부여할게.
@@ -37,9 +37,10 @@ prompt = """
 -- 그 요약문들을 모두 종합해서 자연스럽게 한국어 뉴스 브리핑을 만들어줘.
 -- 친절한 말투로 부탁해.
 -- 브리핑은 짧은 브리핑과 긴 브리핑 두가지로 만들어줘.
--- 짧은 브리핑과 긴 브리핑 모두 문장의 끝을 구어체로 제대로 맺어줘. "~습니다." 형식을 말하는거야.
--- 짧은 브리핑은 500 token, 긴 브리핑은 1000 token 정도로 만들어줘.
+-- 짧은 브리핑과 긴 브리핑 모두 문장의 끝을 구어체로 제대로 맺어줘. "~습니다." 혹은 "~요" 형식을 말하는거야.
+-- 짧은 브리핑은 500 token, 긴 브리핑은 짧은 브리핑 길이의 4배 정도로 만들어줘.
 -- 단어나 내용이 반복되지 않도록 해줘.
+-- 문단을 나누지 말고, 그냥 한 문단으로 쭉 이어줘.
 -- make sure there is no trailing comma
 
 {
@@ -126,5 +127,5 @@ async def read_briefing(json: JSON_Briefing):
         response = from_json(chat_completion.choices[0].message.content, allow_partial = True)
     except ValidationError as e:
         print(e)
-    
-    return {"data" : {"shortBriefing" : response.get("shortBriefing"), "longBriefing" : response.get("longBriefing")}}
+    startMsg = f"{datetime.now().year}년 {datetime.now().month}월 {datetime.now().day}일 꿀모닝 브리핑을 시작합니다."
+    return {"data" : {"shortBriefing" : startMsg + response.get("shortBriefing"), "longBriefing" : startMsg + response.get("longBriefing")}}
