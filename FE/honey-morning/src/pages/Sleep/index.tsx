@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQuery, useMutation } from '@tanstack/react-query'
 import  { instance } from '@/api/axios'
 import styled, { keyframes } from 'styled-components';
 
@@ -7,16 +8,64 @@ import WaveBackGround from '@/component/WaveBackGround';
 import Modal2 from '@/component/Modal2';
 import Modal3 from '@/component/Modal3';
 
+interface Quiz {
+  id: number;
+  question: string;
+  answer: number;
+  option1: string;
+  option2: string;
+  option3: string;
+  option4: string;
+  quizUrl: string;
+}
+
+interface AlarmStartResponse {
+  morningCallUrl: string;
+  quizzes: Quiz[];
+  briefingContent: string;
+  briefingContentUrl: string;
+}
+
+
+// 알람 정보 조회
+const fetchAlarmData = async () => {
+  const token = sessionStorage.getItem('access');
+  const response = await instance.get(`/api/alarms`, {
+    headers: {
+      access: token,
+    },
+  });
+  return response.data;
+};
+
+// 10분전에 정보를 가져오기 위한 용도
+const startAlarmCall = async () => {
+  const token = sessionStorage.getItem('access');
+  const response = await instance.post(`/api/alarms/start`, {}, {
+    headers: {
+      access: token,
+    },
+  });
+  return response.data;
+};
+
 
 // SleepWakeLock 컴포넌트 정의
 const SleepWakeLock = () => {
   const navigate = useNavigate();
+  const { data: alarmData} = useQuery({
+    queryKey: ['alarmData'],
+    queryFn: fetchAlarmData,
+  });
+
+  // 10분전
+  const { mutate: fetchStartAlarm, data: startAlarmData } = useMutation(startAlarmCall);
   
   const [wakeLock, setWakeLock] = useState<WakeLockSentinel | null>(null);
   const [isScreenDimmed, setIsScreenDimmed] = useState(false);
   const [timer, setTimer] = useState("00:00:00");
-  const [alarmTime, setAlarmTime] = useState("13:29");
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [helpModalOpen, setHelpModalOpen] =  useState(false);
@@ -25,57 +74,92 @@ const SleepWakeLock = () => {
   const startTimeRef = useRef<number>(Date.now());
   const timerId = useRef<NodeJS.Timeout | null>(null);
   const timerIntervalId = useRef<NodeJS.Timeout | null>(null);
-  
-  const Overlay = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.95); // 화면을 어둡게 처리
-    z-index: 1000; // 다른 콘텐츠 위에 표시
-  `;
-
-  // useEffect(() => {
-  //   const fetchSleepData = async () => {
-  //     try {
-  //       const response = await instance.get(`/api/alarms/sleep`);
-  //       setIsLoading(false);
-  //     } catch(error) {
-  //       if(error.response.status === 400){
-  //         setTooShortModalOpen(true);
-  //       } else {
-
-  //       }
-  //     }
-  //   }
-  // })
 
   useEffect(() => {
-    startTimer();
-    handleRequestWakeLock();
-    resetTimer();
+    if (alarmData) {
+      startTimer();
+      handleRequestWakeLock();
+    }
+  }, [alarmData]);
+  
+  useEffect(() => {
+    const fetchSleepData = async () => {
+      try {
+        const token = sessionStorage.getItem('access');
+        console.log('Fetching sleep data...');
+        const response = await instance.get(`/api/alarms/sleep`, {
+          headers: {
+            access: token,
+          }
+        });
+        console.log('API response:', response.data);
+        setIsLoading(false);
+      } catch(error) {
+        console.error('API 호출 중 오류 발생:', error);
+        if (error.response) {
+          console.log('응답 데이터:', error.response.data);
+          console.log('응답 상태 코드:', error.response.status);
+          console.log('응답 헤더:', error.response.headers);
+          if (error.response.status === 400) {
+            setTooShortModalOpen(true);
+          }
+        } else if (error.request) {
+          console.log('요청이 전송되었지만 응답이 수신되지 않음:', error.request);
+        } else {
+          console.log('오류 설정 중 문제 발생:', error.message);
+        }
+        setError('데이터를 불러오는 중 오류가 발생했습니다.');
+        setIsLoading(false)
+      }
+    }
+    fetchSleepData();
+  }, [])
 
-    window.addEventListener('touchstart', resetTimer);
-    window.addEventListener('mousedown', resetTimer);
+  useEffect(() => {
+    if (!isLoading && !tooShortModalOpen) {
+      console.log('Starting timer and wake lock...');
+      startTimer();
+      handleRequestWakeLock();
+      resetTimer();
 
-    return () => {
-      if (timerIntervalId.current) clearInterval(timerIntervalId.current);
-      if (timerId.current) clearTimeout(timerId.current);
-      if (wakeLock) handleReleaseWakeLock();
-      window.removeEventListener('touchstart', resetTimer);
-      window.removeEventListener('mousedown', resetTimer);
-    };
-  }, []);
+      window.addEventListener('touchstart', resetTimer);
+      window.addEventListener('mousedown', resetTimer);
+
+      return () => {
+        if (timerIntervalId.current) clearInterval(timerIntervalId.current);
+        if (timerId.current) clearTimeout(timerId.current);
+        if (wakeLock) handleReleaseWakeLock();
+        window.removeEventListener('touchstart', resetTimer);
+        window.removeEventListener('mousedown', resetTimer);
+      };
+    }
+  }, [isLoading, tooShortModalOpen]);
 
   
   const startTimer = () => {
     timerIntervalId.current = setInterval(() => {
-      const currentDate = new Date();
-      const hours = String(currentDate.getHours()).padStart(2, "0");
-      const minutes = String(currentDate.getMinutes()).padStart(2, "0");
-      const seconds = String(currentDate.getSeconds()).padStart(2, "0");
+      const currentTime = new Date();
+      const hours = String(currentTime.getHours()).padStart(2, "0");
+      const minutes = String(currentTime.getMinutes()).padStart(2, "0");
+      const seconds = String(currentTime.getSeconds()).padStart(2, "0");
       setTimer(`${hours}:${minutes}:${seconds}`);
+
+       // 요일 확인 (월화수목금토일 순서)
+    const daysOfWeekMap = ['월', '화', '수', '목', '금', '토', '일'];
+    let currentDayIndex = currentTime.getDay() - 1;
+    if (currentDayIndex === -1) {
+      currentDayIndex = 6; // 일요일을 6으로 설정
+    }
+
+    // 알람이 울리는 요일 및 시간 확인
+    const alarmDays = alarmData?.daysOfWeek || "0000000";
+
+       // 현재 요일에 알람이 활성화되어 있는지 확인
+      if (alarmDays[currentDayIndex] === '1' && `${hours}:${minutes}` === alarmData.alarmTime.slice(0, 5)) {
+        clearInterval(timerIntervalId.current); // 타이머 중지
+        navigate('/alarm'); // 알람 페이지로 이동
+      }
+
     }, 1000);
   };
   
@@ -198,6 +282,31 @@ const SleepWakeLock = () => {
   };
   
   const modalContent = getModalContent();
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (tooShortModalOpen) {
+    return (
+      <Modal3
+        isOpen={tooShortModalOpen}
+        isClose={() => {
+          setTooShortModalOpen(false);
+          navigate(-1);
+        }}
+        header="수면 불가"
+        icon="error_outline"
+        btnText="확인"
+      >
+        수면시간이 너무 짧아서 알람이 울릴 수 없습니다.
+      </Modal3>
+    );
+  }
   
   
   
@@ -216,7 +325,7 @@ const SleepWakeLock = () => {
         <AlarmInfo>
           <span className="material-icons">alarm</span>
           {/* span 태그 안에 내가 설정한 알람 시각 조회해서 보여줘야 함 */}
-          <span>{alarmTime}</span>
+          <span>{alarmData.alarmTime.slice(0,5)}</span>
         </AlarmInfo>
   
         <EndButton onClick={() => setModalOpen(true)}>잠자기 종료</EndButton>
@@ -260,6 +369,17 @@ const SleepWakeLock = () => {
 };
 
 export default SleepWakeLock;
+
+const Overlay = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95); // 화면을 어둡게 처리
+    z-index: 1000; // 다른 콘텐츠 위에 표시
+  `;
+
 
 const Container = styled.div`
   display: flex;
