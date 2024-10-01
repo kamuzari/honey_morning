@@ -177,7 +177,7 @@ public class AlarmService {
 		LocalTime start = LocalTime.now().plusMinutes(40).withSecond(0);
 		LocalTime end = LocalTime.now().plusMinutes(40).withSecond(59);
 
-		List<Alarm> alarms = alarmRepository.findByAlarmTimeBetweenAndIsActive(start, end, 1);
+		List<Alarm> alarms = alarmRepository.findAlarmsWithinTimeRange(start, end, 1);
 		log.warn("alarms: {}, start --- > {} , end --- > {}", alarms, start, end);
 
 		for (int j = 0; j < alarms.size(); j++) {
@@ -369,7 +369,8 @@ public class AlarmService {
 		 */
 
 		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+		Alarm alarm = alarmRepository.findByUser(user)
+				.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));;
 
 		// 현재 시간
 		LocalDateTime nowDateTime = LocalDateTime.now();
