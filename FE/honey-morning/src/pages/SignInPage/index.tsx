@@ -86,7 +86,6 @@ const LoginProcess: React.FC = () => {
       console.log('유저 정보 응답: ', res);
       return res.data;
     } else {
-      console.error('유저 정보가 비어 있습니다.');
       throw new Error('유저 정보가 비어 있습니다.');
     }
   };
@@ -98,8 +97,9 @@ const LoginProcess: React.FC = () => {
       try {
         if (accessToken) {
           const userInfo = await fetchUserInfo();
+          console.log('유저 정보를 queryClient에 저장하기 전에:', userInfo);
           queryClient.setQueryData(['userInfo'], userInfo);
-          console.log('유저 정보:', userInfo);
+          console.log('유저 정보가 queryClient에 저장되었습니다:', userInfo);
           alert('로그인 성공');
           navigate('/');
         } else {
@@ -238,7 +238,7 @@ const Container = styled.div<{isPortrait: boolean}>`
     flex-direction: column;
     width: ${({ isPortrait }) => (isPortrait ? '50vw' : '35vw')};
 
-    padding: 3vh;
+    padding: 3vh 5vw 1vh;
     margin: 0 auto;
     border-radius: 20px;
     background-color: white;
@@ -284,13 +284,14 @@ const SubmitButton =
   color: white;
   border: none;
   border-radius: 20px;
-  font-size: ${({isPortrait}) => (isPortrait ? '2vw' : '1.3vw')};
+  font-size: ${({isPortrait}) => (isPortrait ? '3vw' : '1.3vw')};
 
   display: flex;
   justify-content: center;
   padding: 1vw 1vh;
   margin: 1vw auto;
   width: 100%;
+  height: ${({isPortrait}) => (isPortrait ? '7vw' : '1.3vw')};
 
   cursor: pointer;
 `;

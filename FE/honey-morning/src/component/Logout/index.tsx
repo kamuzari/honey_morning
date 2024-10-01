@@ -15,9 +15,14 @@ const LogoutProcess: React.FC = () => {
           withCredentials: true,
         },
       );
+      console.log('서버 응답:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Logout error:', error);
+      if (error.response) {
+        console.error('Logout error response:', error.response.data);
+      } else {
+        console.error('Logout error:', error.message);
+      }
       throw error;
     }
   };
