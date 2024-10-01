@@ -13,6 +13,9 @@ import BriefingPage from '@/pages/Briefing';
 import BriefingDetail from '@/pages/BriefingDetail';
 import SleepPage from '@/pages/Sleep';
 import Main from '@/pages/Main';
+
+import TestPage from '@/pages/Tester';
+
 const routerInfo: RouteObject[] = [
   {path: '/', element: <Main />},
   {
@@ -54,6 +57,10 @@ const routerInfo: RouteObject[] = [
   {
     path: '/quizresult',
     element: <QuizResult />,
+  },
+  {
+    path: '/tester',
+    element: <TestPage />,
   },
 ];
 

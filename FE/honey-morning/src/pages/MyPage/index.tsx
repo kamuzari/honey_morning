@@ -52,39 +52,12 @@ const dataSample: Data = {
   content: '이것은 아무 내용이 들어있는 아무 샘플이지요.',
 };
 
-// 각 도형의 색을 계산하는 함수
-const getShapeColor = (isAttending: number, count: number): string => {
-  if (isAttending === 0) {
-    return 'gray'; // 참석하지 않은 경우 회색
-  }
-  if (isAttending === 1 && count === 0) {
-    return 'linear-gradient(to top, yellow 33%, white 33%)'; // 1/3만큼 노랑
-  }
-  if (isAttending === 1 && count === 1) {
-    return 'linear-gradient(to top, yellow 66%, white 66%)'; // 2/3만큼 노랑
-  }
-  if (isAttending === 1 && count === 2) {
-    return 'yellow'; // 전부 노랑
-  }
-  return 'white'; // 기본 색상
-};
-
-//유저 정보
-const fetchUserInfo = async () => {
-  const {data} = await instance.get(`/api/auth/userInfo`);
-  return data;
-};
-
 const MyPage: React.FC = () => {
-  // useQuery를 사용하여 userInfo 가져오기
-  const {
-    data: userInfo,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['userInfo'],
-    queryFn: fetchUserInfo,
-  });
+  // 유저 정보 가져오기
+  const queryClient = useQueryClient();
+  //prettier-ignore
+  const userInfo = queryClient.getQueryData<{id: number, role: string, email: string, username: string, createdAt: string}>(['userInfo']);
+  const username = userInfo ? userInfo.username : null;
 
   const [daysInMonths, setDaysInMonths] = useState<number[][]>([]); // 각 달의 일수를 저장하는 배열
   const [currentMonthIndex, setCurrentMonthIndex] = useState(0); // 현재 보여줄 달 인덱스

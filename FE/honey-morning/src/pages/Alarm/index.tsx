@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
 const Container = styled.div`
   width: 1080px;
   height: 100vh;
-  background: linear-gradient(45deg, #FDC727 0%, #FFE082 100%);
+  background: linear-gradient(45deg, #fdc727 0%, #ffe082 100%);
   margin: 0 auto;
   position: relative;
   overflow: hidden;
@@ -29,8 +29,8 @@ const GlassCard = styled.div`
 const Button = styled.button`
   padding: 20px 30px;
   font-size: 30px;
-  background: #25387C;
-  color: #FFFFFF;
+  background: #25387c;
+  color: #ffffff;
   border: none;
   border-radius: 20px;
   cursor: pointer;
@@ -39,7 +39,7 @@ const Button = styled.button`
   width: 80%;
 
   &:hover {
-    background: #1A2A5E;
+    background: #1a2a5e;
     box-shadow: 0 8px 16px 0 rgba(37, 56, 124, 0.3);
   }
 `;
@@ -47,7 +47,7 @@ const Button = styled.button`
 const SkipButton = styled.button`
   background: none;
   border: none;
-  color: #25387C;
+  color: #25387c;
   font-size: 24px;
   cursor: pointer;
   text-decoration: underline;
@@ -55,7 +55,7 @@ const SkipButton = styled.button`
   transition: all 0.3s ease;
 
   &:hover {
-    color: #1A2A5E;
+    color: #1a2a5e;
   }
 `;
 
@@ -73,7 +73,7 @@ const TimeDisplay = styled.div`
   border: 2px solid rgba(253, 199, 39, 0.3);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
   padding: 30px;
-  color: #25387C;
+  color: #25387c;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -129,7 +129,7 @@ const ClockHand = styled.div`
 const HourHand = styled(ClockHand)`
   width: 8px;
   height: 100px;
-  background: #C4302B;
+  background: #c4302b;
   border-radius: 4px;
 `;
 
@@ -143,7 +143,7 @@ const MinuteHand = styled(ClockHand)`
 const SecondHand = styled(ClockHand)`
   width: 2px;
   height: 160px;
-  background: #1D3557;
+  background: #1d3557;
 `;
 
 const CenterDot = styled.div`
@@ -153,13 +153,13 @@ const CenterDot = styled.div`
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #25387C;
+  background: #25387c;
   transform: translate(-50%, -50%);
   z-index: 11;
 `;
 
 const AlarmMessage = styled.h2`
-  color: #25387C;
+  color: #25387c;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 30px 0;
   font-size: 36px;
@@ -180,16 +180,18 @@ const GlassmorphismClock = () => {
   }, []);
 
   const secondsStyle = {
-    transform: `translateX(-50%) rotate(${time.getSeconds() * 6}deg)`
+    transform: `translateX(-50%) rotate(${time.getSeconds() * 6}deg)`,
   };
   const minutesStyle = {
-    transform: `translateX(-50%) rotate(${time.getMinutes() * 6}deg)`
+    transform: `translateX(-50%) rotate(${time.getMinutes() * 6}deg)`,
   };
   const hoursStyle = {
-    transform: `translateX(-50%) rotate(${(time.getHours() % 12) * 30 + time.getMinutes() * 0.5}deg)`
+    transform: `translateX(-50%) rotate(${
+      (time.getHours() % 12) * 30 + time.getMinutes() * 0.5
+    }deg)`,
   };
 
-  const formatTimeUnit = (unit) => {
+  const formatTimeUnit = unit => {
     return unit.toString().padStart(2, '0');
   };
 
