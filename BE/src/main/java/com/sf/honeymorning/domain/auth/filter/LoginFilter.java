@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.Collection;
 import java.util.Iterator;
 
+@Slf4j
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -59,6 +61,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
+
         // access 토큰 생성 및 발급
         String access = jwtUtil.createAccessJwt("access", username, role);
         res.addHeader("access", access);
@@ -66,6 +69,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         // refresh 토큰 생성 및 발급
         String refresh = jwtUtil.createRefreshJwt("refresh", username, role);
         res.addCookie(createCookie("refresh", refresh));
+
+        logger.info("refresh : " + refresh.toString());
 
         // Refresh 토큰 저장 (oracle)
 //        addRefreshEntity(username, refresh, 864000000L);
