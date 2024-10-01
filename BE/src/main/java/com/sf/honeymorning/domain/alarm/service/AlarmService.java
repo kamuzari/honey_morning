@@ -184,7 +184,7 @@ public class AlarmService {
 	public void readyBriefing() {
 		log.warn("=============================== ready Briefing ===============================");
 
-		LocalTime alarmTime = LocalTime.now().minusMinutes(10);
+		LocalTime alarmTime = LocalTime.now().plusMinutes(40);
 
 		List<Alarm> alarms = alarmRepository.findByAlarmTime(alarmTime);
 		log.warn("alarms: {}, request time : {}", alarms, alarmTime);
