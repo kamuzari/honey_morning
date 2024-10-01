@@ -174,8 +174,8 @@ public class AlarmService {
 	public void readyBriefing() {
 		log.warn("=============================== ready Briefing ===============================");
 
-		LocalTime start = LocalTime.now().plusMinutes(40).withSecond(0);
-		LocalTime end = LocalTime.now().plusMinutes(40).withSecond(59);
+		LocalTime start = LocalTime.now().plusMinutes(40).withSecond(0).withNano(0);
+		LocalTime end = LocalTime.now().plusMinutes(40).withSecond(59).withNano(0);
 
 		List<Alarm> alarms = alarmRepository.findAlarmsWithinTimeRange(start, end, 1);
 		log.warn("alarms: {}, start --- > {} , end --- > {}", alarms, start, end);
