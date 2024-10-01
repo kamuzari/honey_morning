@@ -72,7 +72,7 @@ public class AlarmService {
 	public AlarmResponseDto findAlarmByUsername() {
 		User user = authService.getLoginUser();
 
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
 			.id(alarm.getId())
@@ -90,7 +90,7 @@ public class AlarmService {
 	public AlarmDateDto updateAlarm(AlarmRequestDto alarmRequestDto) {
 
 		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		alarm.setAlarmTime(alarmRequestDto.getAlarmTime());
 		alarm.setDaysOfWeek(alarmRequestDto.getDaysOfWeek());
@@ -187,7 +187,7 @@ public class AlarmService {
 		LocalTime start = LocalTime.now().plusMinutes(40).withSecond(0);
 		LocalTime end = LocalTime.now().plusMinutes(40).withSecond(59);
 
-		List<Alarm> alarms = alarmRepository.findByAlarmTimeBetweenAndIsActive(start, end, true);
+		List<Alarm> alarms = alarmRepository.findAlarmsWithinTimeRange(start, end, 1);
 		log.warn("alarms: {}, start --- > {} , end --- > {}", alarms, start, end);
 
 		for (int j = 0; j < alarms.size(); j++) {
@@ -321,7 +321,8 @@ public class AlarmService {
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		List<Quiz> quizzes = quizRepository.findByBrief(brief)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)
+				.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));;
 		brief.getSummary();
 		List<QuizDto> quizDtos = new ArrayList<>();
 		for (int i = 0; i < quizzes.size(); i++) {
@@ -378,7 +379,7 @@ public class AlarmService {
 		 */
 
 		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		// 현재 시간
 		LocalDateTime nowDateTime = LocalDateTime.now();
