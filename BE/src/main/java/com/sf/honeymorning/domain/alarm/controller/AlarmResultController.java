@@ -1,6 +1,5 @@
 package com.sf.honeymorning.domain.alarm.controller;
 
-import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
 import com.sf.honeymorning.domain.alarm.dto.AlarmResultDto;
 import com.sf.honeymorning.domain.alarm.service.AlarmResultService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +29,7 @@ public class AlarmResultController {
             @ApiResponse(
                     responseCode = "200",
                     description = "알람 결과 조회 성공",
-                    content = @Content(schema = @Schema(type = "string", example = "success", implementation = AlarmResponseDto.class))
+                    content = @Content(schema = @Schema(type = "string", example = "success", implementation = AlarmResultDto.class))
             )
     })
     @GetMapping

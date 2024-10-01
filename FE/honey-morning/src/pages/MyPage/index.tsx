@@ -52,6 +52,23 @@ const dataSample: Data = {
   content: '이것은 아무 내용이 들어있는 아무 샘플이지요.',
 };
 
+// 각 도형의 색을 계산하는 함수
+const getShapeColor = (isAttending: number, count: number): string => {
+  if (isAttending === 0) {
+    return 'gray'; // 참석하지 않은 경우 회색
+  }
+  if (isAttending === 1 && count === 0) {
+    return 'linear-gradient(to top, yellow 33%, white 33%)'; // 1/3만큼 노랑
+  }
+  if (isAttending === 1 && count === 1) {
+    return 'linear-gradient(to top, yellow 66%, white 66%)'; // 2/3만큼 노랑
+  }
+  if (isAttending === 1 && count === 2) {
+    return 'yellow'; // 전부 노랑
+  }
+  return 'white'; // 기본 색상
+};
+
 //유저 정보
 const fetchUserInfo = async () => {
   const {data} = await instance.get(`/api/auth/userInfo`);
@@ -69,10 +86,16 @@ const MyPage: React.FC = () => {
     queryFn: fetchUserInfo,
   });
 
+  const [daysInMonths, setDaysInMonths] = useState<number[][]>([]); // 각 달의 일수를 저장하는 배열
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(0); // 현재 보여줄 달 인덱스
   const itemsPerPage = 5;
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [briefingData, setBriefingData] = useState([]);
+  const [daysSinceSignup, setDaysSinceSignup] = useState(0); // 가입일로부터 며칠인지 상태로 관리
+  const [streakData, setStreakData] = useState<any>(null);
+  const signupDate = new Date('2024-09-01'); // 예시 가입 날짜
+  const today = new Date();
 
   useEffect(() => {
     const fetchBriefs = async () => {
@@ -87,6 +110,98 @@ const MyPage: React.FC = () => {
 
     fetchBriefs();
   }, [currentPage]);
+
+  useEffect(() => {
+    const userSignupDate = new Date('2024-09-20'); // 예시 가입 날짜, 실제로는 userInfo.createdAt 사용
+    const today = new Date();
+
+    // 가입한 달부터 현재 달까지 각 달의 일수를 계산
+    const monthDaysArray = calculateDaysInMonths(userSignupDate, today);
+    setDaysInMonths(monthDaysArray);
+  }, []);
+
+    // 이전 달로 이동
+    const handlePreviousMonth = () => {
+      setCurrentMonthIndex((prevIndex) =>
+        prevIndex === 0 ? daysInMonths.length - 1 : prevIndex - 1
+      );
+    };
+  
+    // 다음 달로 이동
+    const handleNextMonth = () => {
+      setCurrentMonthIndex((prevIndex) =>
+        prevIndex === daysInMonths.length - 1 ? 0 : prevIndex + 1
+      );
+    };
+  
+// New function to fetch data from /api/alarms/result
+const fetchStreakData = async () => {
+  const {data} = await instance.get(`/api/alarms/result`);
+  return data;
+};
+
+// Helper 함수: 가입한 달부터 현재 달까지 각 달의 일수를 계산
+const calculateDaysInMonths = (startDate: Date, endDate: Date): number[][] => {
+  const months = [];
+  let currentDate = new Date(startDate);
+
+  while (currentDate <= endDate) {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate(); // 해당 달의 일수 계산
+    const daysArray = Array(daysInMonth).fill(0); // 해당 달의 일수만큼 0으로 채운 배열 생성
+    months.push(daysArray);
+
+    // 다음 달로 이동
+    currentDate.setMonth(currentDate.getMonth() + 1);
+  }
+
+  return months;
+};
+
+
+  console.log(streakData);
+  console.log(userInfo);
+  if(userInfo){
+    console.log(userInfo.createdAt);
+  }
+
+
+  useEffect(() => {
+    const getStreakData = async () => {
+      try {
+        const data = await fetchStreakData(); // 새로운 API 요청
+        setStreakData(data);
+      } catch (error) {
+        console.error(`[Error] streak data: ${error}`);
+      }
+    };
+    if (userInfo) {
+      const days = calculateDaysSinceSignup(userInfo.createdAt);
+      setDaysSinceSignup(days);
+    }
+    getStreakData();
+  }, [userInfo]); // 이 useEffect는 컴포넌트가 처음 렌더될 때만 실행됨
+
+    // 가입일과 오늘 날짜로 며칠 차이인지 계산하는 함수
+    const calculateDaysSinceSignup = (createdAt: string) => {
+      const signupDate = new Date(createdAt);
+      const today = new Date();
+      
+      // 두 날짜 간의 차이 계산 (밀리초 차이를 일 단위로 변환)
+      const differenceInTime = today.getTime() - signupDate.getTime();
+      const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
+  
+      return differenceInDays;
+    };
+    
+
+    // 각 일자에 대응하는 도형 배열을 생성
+    const shapesArray = Array.from({ length: daysSinceSignup }, (_, index) => (
+      <Shape key={index} />
+    ));
+
+    
 
   const currentItems = briefingData;
 
@@ -178,7 +293,25 @@ const MyPage: React.FC = () => {
           <div className="titleContainer">
             <Title>스트릭</Title>
           </div>
-          <div className="streakContainer">스트릭은 아직 디자인 중입니다.</div>
+          <div className="streakContainer">
+            <CarouselContainer>
+              <Button onClick={handlePreviousMonth}>{"<"}</Button>
+              <MonthContainer>
+                {/* 육각형이 교차 배치되도록 각 달의 일수를 표시 */}
+                {daysInMonths[currentMonthIndex].map((dayIndex, rowIndex) => (
+                  <Row key={rowIndex} isOffset={rowIndex % 2 !== 0}>
+                    {/* 행에 맞게 남은 일수를 그리기 */}
+                    {daysInMonths[currentMonthIndex]
+                      .slice(rowIndex * 6, (rowIndex + 1) * 6) // 한 행에 6개의 육각형씩 그리기
+                      .map((_, hexIndex) => (
+                        <Shape key={hexIndex} />
+                      ))}
+                  </Row>
+                ))}
+              </MonthContainer>
+              <Button onClick={handleNextMonth}>{">"}</Button>
+            </CarouselContainer>
+          </div>
         </Content>
 
         <Content>
@@ -357,5 +490,45 @@ const BtnContainer = styled.div`
   width: 20rem;
   justify-content: center;
 `;
+
+// 도형을 렌더링할 스타일드 컴포넌트 예시
+const Shape = styled.div`
+  width: 52px;
+  height: 60px;
+  background-color: var(--yellow-color);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  margin-right: 1px;
+`;
+
+// 행마다 오프셋을 적용하고 겹치게 배치
+const Row = styled.div<{ isOffset: boolean }>`
+  display: flex;
+  justify-content: center;
+  margin-left: ${({ isOffset }) => (isOffset ? '17.5%' : '0')}; /* 짝수 행에 오프셋을 줌 */
+  margin-top: -4.5%; /* 위아래 행이 겹치도록 음수 margin 적용 */
+`;
+
+// Carousel 버튼
+const Button = styled.button`
+  background-color: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+`;
+
+const MonthContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 300px; /* 너비 설정 */
+`;
+
+const CarouselContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 
 export default MyPage;

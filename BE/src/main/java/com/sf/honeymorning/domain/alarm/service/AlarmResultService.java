@@ -31,6 +31,7 @@ public class AlarmResultService {
             AlarmResultDto alarmResultDto = AlarmResultDto.builder()
                     .count(alarmResult.getCount())
                     .isAttending(alarmResult.getIsAttended())
+                    .createdAt(alarmResult.getCreatedAt())
                     .build();
             alarmResultDtoList.add(alarmResultDto);
         }
