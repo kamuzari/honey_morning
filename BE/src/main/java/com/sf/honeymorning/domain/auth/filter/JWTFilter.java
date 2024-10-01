@@ -40,7 +40,7 @@ public class JWTFilter extends OncePerRequestFilter {
         // 토큰이 없다면 다음 필터로 넘김
         if (accessToken == null) {
             filterChain.doFilter(request, response);
-
+            log.info("access 토큰이 존재하지 않습니다. access token: {}", accessToken);
             return;
         }
         // 토큰 만료 여부 확인, 만료시 다음 필터로 넘기지 않음
@@ -48,6 +48,7 @@ public class JWTFilter extends OncePerRequestFilter {
             jwtUtil.isExpired(accessToken);
         } catch (ExpiredJwtException e) {
             //response body
+            log.info("access 토큰이 만료되었습니다. accessToken: {}", accessToken);
             PrintWriter writer = response.getWriter();
             writer.print("access token expired");
 
@@ -60,6 +61,8 @@ public class JWTFilter extends OncePerRequestFilter {
         String category = jwtUtil.getCategory(accessToken);
 
         if (!category.equals("access")) {
+
+            log.info("access 토큰이 정확하지 않습니다. access token: {}", accessToken);
 
             //response body
             PrintWriter writer = response.getWriter();

@@ -72,7 +72,7 @@ public class AlarmService {
 	public AlarmResponseDto findAlarmByUsername() {
 		User user = authService.getLoginUser();
 
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
 			.id(alarm.getId())
@@ -90,7 +90,7 @@ public class AlarmService {
 	public AlarmDateDto updateAlarm(AlarmRequestDto alarmRequestDto) {
 
 		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		alarm.setAlarmTime(alarmRequestDto.getAlarmTime());
 		alarm.setDaysOfWeek(alarmRequestDto.getDaysOfWeek());
@@ -182,9 +182,14 @@ public class AlarmService {
 	@Transactional
 	@Scheduled(fixedRate = 60000)
 	public void readyBriefing() {
-		int[] categories = new int[] {100, 101, 102, 103, 104, 105, 106, 107};
-		String[] categoryNames = new String[] {"정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"};
-		List<Alarm> alarms = alarmRepository.findByAlarmTime(LocalTime.now().minusMinutes(10));
+		log.warn("=============================== ready Briefing ===============================");
+
+		LocalTime start = LocalTime.now().plusMinutes(40).withSecond(0);
+		LocalTime end = LocalTime.now().plusMinutes(40).withSecond(59);
+
+		List<Alarm> alarms = alarmRepository.findByAlarmTimeBetweenAndIsActive(start, end, true);
+		log.warn("alarms: {}, start --- > {} , end --- > {}", alarms, start, end);
+
 		for (int j = 0; j < alarms.size(); j++) {
 			Alarm alarm = alarms.get(j);
 			User user = alarm.getUser();
@@ -199,7 +204,7 @@ public class AlarmService {
 
 				tags.add(alarmCategory.getTag().getWord());
 			}
-
+			log.warn("tags params : {}", tags);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -316,7 +321,8 @@ public class AlarmService {
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		List<Quiz> quizzes = quizRepository.findByBrief(brief)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)
+				.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));;
 		brief.getSummary();
 		List<QuizDto> quizDtos = new ArrayList<>();
 		for (int i = 0; i < quizzes.size(); i++) {
@@ -373,7 +379,7 @@ public class AlarmService {
 		 */
 
 		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		// 현재 시간
 		LocalDateTime nowDateTime = LocalDateTime.now();
