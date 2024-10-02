@@ -1,31 +1,5 @@
 package com.sf.honeymorning.domain.alarm.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sf.honeymorning.domain.alarm.dto.*;
-import com.sf.honeymorning.domain.alarm.entity.Alarm;
-import com.sf.honeymorning.domain.alarm.entity.AlarmCategory;
-import com.sf.honeymorning.domain.alarm.repository.AlarmCategoryRepository;
-import com.sf.honeymorning.domain.alarm.repository.AlarmRepository;
-import com.sf.honeymorning.domain.auth.service.AuthService;
-import com.sf.honeymorning.domain.brief.entity.Brief;
-import com.sf.honeymorning.domain.brief.repository.BriefRepository;
-import com.sf.honeymorning.domain.quiz.entity.Quiz;
-import com.sf.honeymorning.domain.quiz.repository.QuizRepository;
-import com.sf.honeymorning.domain.tag.entity.Tag;
-import com.sf.honeymorning.domain.user.entity.User;
-import com.sf.honeymorning.domain.user.repository.UserRepository;
-import com.sf.honeymorning.exception.alarm.AlarmFatalException;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,6 +9,52 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sf.honeymorning.domain.alarm.dto.AlarmDateDto;
+import com.sf.honeymorning.domain.alarm.dto.AlarmRequestDto;
+import com.sf.honeymorning.domain.alarm.dto.AlarmResponseDto;
+import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
+import com.sf.honeymorning.domain.alarm.dto.QuizDto;
+import com.sf.honeymorning.domain.alarm.entity.Alarm;
+import com.sf.honeymorning.domain.alarm.entity.AlarmCategory;
+import com.sf.honeymorning.domain.alarm.repository.AlarmCategoryRepository;
+import com.sf.honeymorning.domain.alarm.repository.AlarmRepository;
+import com.sf.honeymorning.domain.auth.service.AuthService;
+import com.sf.honeymorning.domain.brief.dto.response.TopicAiResponseDto;
+import com.sf.honeymorning.domain.brief.dto.response.TopicResponse;
+import com.sf.honeymorning.domain.brief.dto.response.TopicWord;
+import com.sf.honeymorning.domain.brief.entity.Brief;
+import com.sf.honeymorning.domain.brief.entity.TopicModel;
+import com.sf.honeymorning.domain.brief.entity.TopicModelWord;
+import com.sf.honeymorning.domain.brief.entity.Word;
+import com.sf.honeymorning.domain.brief.repository.BriefRepository;
+import com.sf.honeymorning.domain.brief.repository.TopicModelRepository;
+import com.sf.honeymorning.domain.brief.repository.TopicModelWordRepository;
+import com.sf.honeymorning.domain.brief.repository.WordRepository;
+import com.sf.honeymorning.domain.quiz.entity.Quiz;
+import com.sf.honeymorning.domain.quiz.repository.QuizRepository;
+import com.sf.honeymorning.domain.tag.entity.Tag;
+import com.sf.honeymorning.domain.user.entity.User;
+import com.sf.honeymorning.domain.user.repository.UserRepository;
+import com.sf.honeymorning.exception.alarm.AlarmFatalException;
+import com.sf.honeymorning.util.TtsUtil;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +70,9 @@ public class AlarmService {
 	@Value("${ai.url.topic-model}")
 	private String topicModelAi;
 
+	private final TopicModelRepository topicModelRepository;
+	private final TopicModelWordRepository topicModelWordRepository;
+	private final WordRepository wordRepository;
 	private final AlarmRepository alarmRepository;
 	private final UserRepository userRepository;
 	private final AuthService authService;
@@ -62,7 +85,7 @@ public class AlarmService {
 	public AlarmResponseDto findAlarmByUsername() {
 		User user = authService.getLoginUser();
 
-		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+		Alarm alarm = alarmRepository.findByUser(user).orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
 			.id(alarm.getId())
@@ -80,7 +103,7 @@ public class AlarmService {
 	public AlarmDateDto updateAlarm(AlarmRequestDto alarmRequestDto) {
 
 		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+		Alarm alarm = alarmRepository.findByUser(user).orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		alarm.setAlarmTime(alarmRequestDto.getAlarmTime());
 		alarm.setDaysOfWeek(alarmRequestDto.getDaysOfWeek());
@@ -218,20 +241,43 @@ public class AlarmService {
 					String longBriefing = jsonNode.get("data").get("longBriefing").asText();
 					System.out.println("Short Briefing: " + shortBriefing);
 					System.out.println("Long Briefing: " + longBriefing);
+					TtsUtil ttsUtil = new TtsUtil();
+					String summaryPath = ttsUtil.textToSpeech(shortBriefing, "summary");
+					String contentPath = ttsUtil.textToSpeech(longBriefing, "content");
 					Brief save = briefRepository.save(
 						Brief.builder()
 							.user(user)
 							.summary(shortBriefing)
 							.content(longBriefing)
+							.summaryFilePath(summaryPath)
+							.contentFilePath(contentPath)
 							.build()
 					);
 
-					data = briefResponse.getBody();
+					data = topicModelResponse.getBody();
 					objectMapper = new ObjectMapper();
-					jsonNode = objectMapper.readTree(data);
-					String url = jsonNode.get("url").asText();
-					alarm.setMusicFilePath(url);
-					alarmRepository.save(alarm);
+					TopicResponse topicResponse = objectMapper.readValue(data, TopicResponse.class);
+					for (TopicAiResponseDto responseDto : topicResponse.getData()) {
+						TopicModel topicModel = topicModelRepository.save(TopicModel.builder()
+							.topicId((long)responseDto.getTopic_id())
+							.brief(save)
+							.build());
+						for (TopicWord topicWord : responseDto.getTopic_words()) {
+							Word word = wordRepository.save(
+								Word.builder()
+									.word(topicWord.getWord())
+									.build()
+							);
+
+							topicModelWordRepository.save(
+								TopicModelWord.builder()
+									.word(word)
+									.weight(topicWord.getWeight())
+									.topicModel(topicModel)
+									.build()
+							);
+						}
+					}
 
 					headers = new HttpHeaders();
 					headers.setContentType(MediaType.APPLICATION_JSON);
@@ -246,7 +292,7 @@ public class AlarmService {
 						data = songResponse.getBody();
 						objectMapper = new ObjectMapper();
 						jsonNode = objectMapper.readTree(data);
-						url = jsonNode.get("url").asText();
+						String url = jsonNode.get("url").asText();
 						System.out.println("url: " + url);
 
 					} else {
@@ -266,12 +312,12 @@ public class AlarmService {
 						objectMapper = new ObjectMapper();
 						JsonNode rootNode = objectMapper.readTree(body1);
 						JsonNode dataArray = rootNode.get("data");
-						for (JsonNode quiz : dataArray) {
-							String problem = quiz.get("problem").asText();
+						for (JsonNode jNode : dataArray) {
+							String problem = jNode.get("problem").asText();
 							System.out.println("문제: " + problem);
-							Quiz savings = new Quiz();
-							savings.setQuestion(problem);
-							JsonNode choices = quiz.get("choices");
+							Quiz quiz = new Quiz();
+							quiz.setQuestion(problem);
+							JsonNode choices = jNode.get("choices");
 							List<String> items = new ArrayList<>();
 							for (JsonNode choice : choices) {
 								int id = choice.get("id").asInt();
@@ -279,15 +325,18 @@ public class AlarmService {
 								System.out.println("선택지 " + id + ": " + item);
 								items.add(item);
 							}
-							savings.setOption1(items.get(0));
-							savings.setOption2(items.get(1));
-							savings.setOption3(items.get(2));
-							savings.setOption4(items.get(3));
-							int answer = quiz.get("answer").asInt();
-							savings.setAnswer(answer);
+							quiz.setOption1(items.get(0));
+							quiz.setOption2(items.get(1));
+							quiz.setOption3(items.get(2));
+							quiz.setOption4(items.get(3));
+							int answer = jNode.get("answer").asInt();
+							quiz.setAnswer(answer);
 							System.out.println("정답: " + answer);
 							System.out.println("---------------------------");
-							quizRepository.save(savings);
+							ttsUtil = new TtsUtil();
+							String quizPath = ttsUtil.textToSpeech(quiz.getQuestion(), "quiz");
+							quiz.setSummaryFilePath(quizPath);
+							Quiz saveQuiz = quizRepository.save(quiz);
 						}
 					} else {
 						System.out.println("POST 요청 실패: " + briefResponse.getStatusCode());
@@ -312,8 +361,7 @@ public class AlarmService {
 		List<Quiz> quizzes = quizRepository.findByBrief(brief)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		Alarm alarm = alarmRepository.findByUser(user)
-				.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));;
-		brief.getSummary();
+			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		List<QuizDto> quizDtos = new ArrayList<>();
 		for (int i = 0; i < quizzes.size(); i++) {
 			Quiz quiz = quizzes.get(i);
@@ -328,34 +376,11 @@ public class AlarmService {
 				quiz.getSummaryFilePath()
 			));
 		}
-		alarm.getMusicFilePath();
-		ArrayList<QuizDto> list = new ArrayList<>();
-		list.add(new QuizDto(
-			1L,
-			"한국토지자원관리공단의 목적은 무엇인가요?",
-			1,
-			"지역경제",
-			"국제무역",
-			"외환관리",
-			"관세제도",
-			"http://localhost:1012"
-		));
-		list.add(new QuizDto(
-			2L,
-			"한국토지자원관리공단은 어떤 방법으로 경제활성화를 도모하고 있나요?",
-			1,
-			"지분참여",
-			"장기대출",
-			"세금감면",
-			"임대사업",
-			"http://localhost:1012"
-		));
 		return new AlarmStartDto(
-			"https://cdn1.suno.ai/a3aa4a9c-5f27-445b-af00-2babbd3bc924.mp3",
-			list,
-			"한국토지자원관리공단은 한국토지공사의 지분참여를 통해 지역경제활성화를 이룰 수 있는 방안을 모색하기 위해 노력중이다. "
-				+ "\n 한국토지자원관리공단은 한국토지공사의 지분참여를 통해 지역경제활성화를 이룰 수 있는 방안을 모색하기 위해 노력중이다.  "
-			, brief.getSummaryFilePath()
+			alarm.getMusicFilePath(),
+			quizDtos,
+			brief.getSummary(),
+			brief.getSummaryFilePath()
 		);
 	}
 
@@ -370,7 +395,8 @@ public class AlarmService {
 
 		User user = authService.getLoginUser();
 		Alarm alarm = alarmRepository.findByUser(user)
-				.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));;
+			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+		;
 
 		// 현재 시간
 		LocalDateTime nowDateTime = LocalDateTime.now();

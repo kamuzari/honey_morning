@@ -24,11 +24,10 @@ const week = ['월', '화', '수', '목', '금', '토', '일'];
 const timeIntervalList = [1, 5, 10, 15, 20, 25, 30];
 const repeatCntList = [1, 2, 3, 5, 10];
 
-// "00"부터 "23"까지의 시간 배열 생성
-const hours = Array.from({length: 24}, (_, i) => String(i).padStart(2, '0'));
 
-// "00"부터 "59"까지의 분 배열 생성
+const hours = Array.from({length: 24}, (_, i) => String(i).padStart(2, '0'));
 const minutes = Array.from({length: 60}, (_, i) => String(i).padStart(2, '0'));
+const seconds = Array.from({length: 60}, (_, i) => String(i).padStart(2, '0'));
 
 // 알람 데이터 가져오기(조회)
 const fetchAlarmData = async (): Promise<AlarmData|null> => {
@@ -103,6 +102,7 @@ const AlarmSetting: React.FunctionComponent = () => {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [hour, setHour] = useState('00');
   const [minute, setMinute] = useState('00');
+  const [second, setSecond] = useState('00');
   const [alarmState, setAlarmState] = useState<AlarmData>({
     id: 0,
     alarmTime: '',
@@ -138,9 +138,10 @@ const AlarmSetting: React.FunctionComponent = () => {
   useEffect(() => {
     if (alarmData) {
       setAlarmState(alarmData);
-      const [alarmHour, alarmMinute] = alarmData.alarmTime.split(':');
+      const [alarmHour, alarmMinute, alarmSecond] = alarmData.alarmTime.split(':');
       setHour(alarmHour);
       setMinute(alarmMinute);
+      setSecond(alarmSecond);
     }
   }, [alarmData]);
 
@@ -327,7 +328,7 @@ const AlarmSetting: React.FunctionComponent = () => {
             onClick={()=> {
               const updatedAlarmState = {
                 ...alarmState,
-                alarmTime: `${hour}:${minute}`
+                alarmTime: `${hour}:${minute}:00`
               };
               console.log("Updating alarm with:", updatedAlarmState);
               updateAlarm(updatedAlarmState);

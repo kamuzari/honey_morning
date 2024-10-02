@@ -17,6 +17,8 @@ import {NavBarProps} from '@/component/NavBar/NavBar';
 import {NavIconProps} from '@/component/NavBar/NavIcon';
 import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
 import {getBriefs} from '@/api/briefingApi';
+import Streak from '@/component/Streak/Streak';
+import {StreakProps} from '@/component/Streak/Streak';
 
 export const categoryList = [
   '정치',
@@ -47,29 +49,45 @@ interface Response {
   totalPage: number;
 }
 
-const dataSample: Data = {
-  date: '8/30',
-  content: '이것은 아무 내용이 들어있는 아무 샘플이지요.',
+//유저 정보
+const fetchUserInfo = async () => {
+  const {data} = await instance.get(`/api/auth/userInfo`);
+  return data;
 };
 
 const MyPage: React.FC = () => {
-  // 유저 정보 가져오기
-  const queryClient = useQueryClient();
-  //prettier-ignore
-  const userInfo = queryClient.getQueryData<{id: number, role: string, email: string, username: string, createdAt: string}>(['userInfo']);
-  const username = userInfo ? userInfo.username : null;
-
-  const [daysInMonths, setDaysInMonths] = useState<number[][]>([]); // 각 달의 일수를 저장하는 배열
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(0); // 현재 보여줄 달 인덱스
+  // const [daysInMonths, setDaysInMonths] = useState<number[][]>([]); // 각 달의 일수를 저장하는 배열
+  // const [currentMonthIndex, setCurrentMonthIndex] = useState(0); // 현재 보여줄 달 인덱스
   const itemsPerPage = 5;
+  // useQuery를 사용하여 userInfo 가져오기
+  // const queryClient = useQueryClient();
+  const {data: userInfo} = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: fetchUserInfo,
+  });
+
+  // const username = userInfo ? userInfo.username : null;
+  //prettier-ignore
+  // const userInfo = queryClient.getQueryData<{id: number, role: string, email: string, username: string, createdAt: string}>(['userInfo']);
+  // const [userInfo, setUserInfo] = useState(
+  //   queryClient.getQueryData <
+  //     {
+  //       id: number,
+  //       role: string,
+  //       email: string,
+  //       username: string,
+  //       createdAt: string,
+  //     } >
+  //     ['userInfo'],
+  // );
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [briefingData, setBriefingData] = useState([]);
-  const [daysSinceSignup, setDaysSinceSignup] = useState(0); // 가입일로부터 며칠인지 상태로 관리
-  const [streakData, setStreakData] = useState<any>(null);
-  const signupDate = new Date('2024-09-01'); // 예시 가입 날짜
-  const today = new Date();
-
+  // const [daysSinceSignup, setDaysSinceSignup] = useState(0); // 가입일로부터 며칠인지 상태로 관리
+  const [streakData, setStreakData] = useState(null);
+  const [finalStreak, setFinalStreak] = useState(null);
+  const [rows, setRows] = useState(0);
+  console.log(userInfo);
   useEffect(() => {
     const fetchBriefs = async () => {
       try {
@@ -84,97 +102,81 @@ const MyPage: React.FC = () => {
     fetchBriefs();
   }, [currentPage]);
 
-  useEffect(() => {
-    const userSignupDate = new Date('2024-09-20'); // 예시 가입 날짜, 실제로는 userInfo.createdAt 사용
-    const today = new Date();
+  // New function to fetch data from /api/alarms/result
+  const fetchStreakData = async () => {
+    const {data} = await instance.get(`/api/alarms/result`);
 
-    // 가입한 달부터 현재 달까지 각 달의 일수를 계산
-    const monthDaysArray = calculateDaysInMonths(userSignupDate, today);
-    setDaysInMonths(monthDaysArray);
-  }, []);
-
-    // 이전 달로 이동
-    const handlePreviousMonth = () => {
-      setCurrentMonthIndex((prevIndex) =>
-        prevIndex === 0 ? daysInMonths.length - 1 : prevIndex - 1
-      );
-    };
-  
-    // 다음 달로 이동
-    const handleNextMonth = () => {
-      setCurrentMonthIndex((prevIndex) =>
-        prevIndex === daysInMonths.length - 1 ? 0 : prevIndex + 1
-      );
-    };
-  
-// New function to fetch data from /api/alarms/result
-const fetchStreakData = async () => {
-  const {data} = await instance.get(`/api/alarms/result`);
-  return data;
-};
-
-// Helper 함수: 가입한 달부터 현재 달까지 각 달의 일수를 계산
-const calculateDaysInMonths = (startDate: Date, endDate: Date): number[][] => {
-  const months = [];
-  let currentDate = new Date(startDate);
-
-  while (currentDate <= endDate) {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate(); // 해당 달의 일수 계산
-    const daysArray = Array(daysInMonth).fill(0); // 해당 달의 일수만큼 0으로 채운 배열 생성
-    months.push(daysArray);
-
-    // 다음 달로 이동
-    currentDate.setMonth(currentDate.getMonth() + 1);
-  }
-
-  return months;
-};
-
-
-  console.log(streakData);
-  console.log(userInfo);
-  if(userInfo){
-    console.log(userInfo.createdAt);
-  }
-
+    return data;
+  };
 
   useEffect(() => {
-    const getStreakData = async () => {
-      try {
-        const data = await fetchStreakData(); // 새로운 API 요청
-        setStreakData(data);
-      } catch (error) {
-        console.error(`[Error] streak data: ${error}`);
-      }
-    };
     if (userInfo) {
-      const days = calculateDaysSinceSignup(userInfo.createdAt);
-      setDaysSinceSignup(days);
+      const getStreakData = async () => {
+        try {
+          const data = await fetchStreakData(); // 새로운 API 요청
+          console.log(data);
+          setStreakData(data);
+
+          const finalData = getFinalStreakData(data, userInfo.createdAt);
+          setFinalStreak(finalData);
+        } catch (error) {
+          console.error(`[Error] streak data: ${error}`);
+        }
+      };
+
+      const days = calculateDaysBetween(
+        userInfo.createdAt,
+        '2024-10-11T09:18:35.010323',
+      );
+      setRows(days % 6 == 0 ? days / 6 : Math.floor(days / 6) + 1);
+      getStreakData();
     }
-    getStreakData();
   }, [userInfo]); // 이 useEffect는 컴포넌트가 처음 렌더될 때만 실행됨
 
-    // 가입일과 오늘 날짜로 며칠 차이인지 계산하는 함수
-    const calculateDaysSinceSignup = (createdAt: string) => {
-      const signupDate = new Date(createdAt);
-      const today = new Date();
-      
-      // 두 날짜 간의 차이 계산 (밀리초 차이를 일 단위로 변환)
-      const differenceInTime = today.getTime() - signupDate.getTime();
-      const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
-  
-      return differenceInDays;
+  const getFinalStreakData = (streakData: StreakProps[], startDate: string) => {
+    const broken = {
+      count: 0,
+      isAttending: 0,
+      createdAt: 'string',
     };
-    
+    var answer = [];
+    for (
+      var i = 0;
+      i <
+      calculateDaysBetween(userInfo.createdAt, '2024-10-09T09:18:35.010323');
+      i++
+    ) {
+      answer.push(broken);
+    }
+    streakData.forEach(item => {
+      const daysBetween = calculateDaysBetween(startDate, item.createdAt);
+      console.log('daysBetween' + daysBetween);
+      answer[daysBetween] = {
+        count: item.count,
+        isAttending: item.isAttending,
+        createdAt: item.createdAt,
+      };
+    });
 
-    // 각 일자에 대응하는 도형 배열을 생성
-    const shapesArray = Array.from({ length: daysSinceSignup }, (_, index) => (
-      <Shape key={index} />
-    ));
+    return answer;
+  };
+  // 가입일과 오늘 날짜로 며칠 차이인지 계산하는 함수
+  const calculateDaysBetween = (from: string, to: string) => {
+    const signupDate = new Date(from);
+    console.log(from + '부터' + to + '까지의 날짜 차이를 계산합니다.');
+    var today = null;
+    if (to == 'today') {
+      today = new Date();
+    } else {
+      today = new Date(to);
+    }
 
-    
+    // 두 날짜 간의 차이 계산 (밀리초 차이를 일 단위로 변환)
+    const differenceInTime = today.getTime() - signupDate.getTime();
+    const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
+    console.log('계산한 날짜차이는 ' + differenceInDays + '입니다.');
+    return differenceInDays;
+  };
 
   const currentItems = briefingData;
 
@@ -195,7 +197,7 @@ const calculateDaysInMonths = (startDate: Date, endDate: Date): number[][] => {
       <WhiteContainer>
         <Content>
           <div className="titleContainer">
-            <Title>{userInfo.username}님 관심사</Title>
+            <Title>{userInfo && userInfo.username}님 관심사</Title>
             <BtnContainer>
               {isSelectOpen ? (
                 <GlobalBtn
@@ -215,7 +217,6 @@ const calculateDaysInMonths = (startDate: Date, endDate: Date): number[][] => {
                   $textColor="var(--white-color)"
                   $padding={3}
                   onClick={() => {
-                    console.log('작동');
                     setIsSelectOpen(true);
                   }}
                 />
@@ -226,8 +227,9 @@ const calculateDaysInMonths = (startDate: Date, endDate: Date): number[][] => {
             <HashTagSelect />
           ) : (
             <div className="hashTagContainer">
-              {categoryList.map(item => (
+              {categoryList.map((item, index) => (
                 <HashTag
+                  key={index}
                   text={item}
                   type="NEWS"
                   selected={selectedList.includes(item) ? true : false}
@@ -267,23 +269,24 @@ const calculateDaysInMonths = (startDate: Date, endDate: Date): number[][] => {
             <Title>스트릭</Title>
           </div>
           <div className="streakContainer">
-            <CarouselContainer>
-              <Button onClick={handlePreviousMonth}>{"<"}</Button>
-              <MonthContainer>
-                {/* 육각형이 교차 배치되도록 각 달의 일수를 표시 */}
-                {daysInMonths[currentMonthIndex].map((dayIndex, rowIndex) => (
-                  <Row key={rowIndex} isOffset={rowIndex % 2 !== 0}>
-                    {/* 행에 맞게 남은 일수를 그리기 */}
-                    {daysInMonths[currentMonthIndex]
-                      .slice(rowIndex * 6, (rowIndex + 1) * 6) // 한 행에 6개의 육각형씩 그리기
-                      .map((_, hexIndex) => (
-                        <Shape key={hexIndex} />
+            {streakData &&
+              Array.from(Array(rows).keys()).map(rowNum => {
+                return (
+                  <Row $left={rowNum % 2 == 0}>
+                    {finalStreak
+                      .slice(rowNum * 6, (rowNum + 1) * 6)
+                      .map((item, index) => (
+                        <Streak
+                          key={index}
+                          count={item.count}
+                          isAttending={item.isAttending}
+                          createdAt={item.createdAt}
+                          size={7}
+                        />
                       ))}
                   </Row>
-                ))}
-              </MonthContainer>
-              <Button onClick={handleNextMonth}>{">"}</Button>
-            </CarouselContainer>
+                );
+              })}
           </div>
         </Content>
 
@@ -378,10 +381,15 @@ export const Content = styled.div`
 
   .streakContainer {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 40rem;
-    border: 1px solid lime;
+    width: 85%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    padding-left: 4rem;
   }
 `;
 export const Title = styled.div`
@@ -464,44 +472,16 @@ const BtnContainer = styled.div`
   justify-content: center;
 `;
 
-// 도형을 렌더링할 스타일드 컴포넌트 예시
-const Shape = styled.div`
-  width: 52px;
-  height: 60px;
-  background-color: var(--yellow-color);
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  margin-right: 1px;
-`;
-
-// 행마다 오프셋을 적용하고 겹치게 배치
-const Row = styled.div<{ isOffset: boolean }>`
+const Row =
+  styled.div <
+  {$left: boolean} >
+  `
   display: flex;
-  justify-content: center;
-  margin-left: ${({ isOffset }) => (isOffset ? '17.5%' : '0')}; /* 짝수 행에 오프셋을 줌 */
-  margin-top: -4.5%; /* 위아래 행이 겹치도록 음수 margin 적용 */
-`;
+  width: 100%;
+  box-sizign: border-box;
+  padding-left: ${props => (props.$left ? '0' : '7rem')};
+  margin-top: -1.6rem;
 
-// Carousel 버튼
-const Button = styled.button`
-  background-color: transparent;
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
 `;
-
-const MonthContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  width: 300px; /* 너비 설정 */
-`;
-
-const CarouselContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 
 export default MyPage;
