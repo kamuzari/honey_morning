@@ -10,10 +10,12 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 
+@Slf4j
 public class CustomLogoutFilter extends GenericFilterBean {
 
     private final JWTUtil jwtUtil;
@@ -58,7 +60,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         //refresh null check
         if (refresh == null) {
-
+            log.info("refresh token이 없습니다. refresh: {}", refresh);
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
@@ -68,6 +70,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
             jwtUtil.isExpired(refresh);
         } catch (ExpiredJwtException e) {
 
+            log.info("refresh token이 만료되었습니다. refresh: {}", refresh);
             //response status code
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
@@ -76,7 +79,7 @@ public class CustomLogoutFilter extends GenericFilterBean {
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시)
         String category = jwtUtil.getCategory(refresh);
         if (!category.equals("refresh")) {
-
+            log.info("refresh token이 올바르지 않습니다. refresh: {}", refresh);
             //response status code
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;

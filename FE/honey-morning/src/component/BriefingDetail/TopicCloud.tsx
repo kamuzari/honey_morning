@@ -169,13 +169,12 @@ const WordCloudContainer = styled.div`
 `;
 
 const StyledButton = styled.button`
-  background-color: var(--darkblue-color);
-  color: white;
+  background-color: white;
+  color: var(--darkblue-color);
   border: none;
-  padding: 0.5rem 1rem;
   border-radius: 30%;
   font-size: 2.5rem;
-  // weight: 500,
+  weight: 500,
   cursor: pointer;
 `;
 const BarContainer = styled.div`

@@ -34,8 +34,17 @@ import com.sf.honeymorning.domain.alarm.entity.AlarmCategory;
 import com.sf.honeymorning.domain.alarm.repository.AlarmCategoryRepository;
 import com.sf.honeymorning.domain.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.domain.auth.service.AuthService;
+import com.sf.honeymorning.domain.brief.dto.response.TopicAiResponseDto;
+import com.sf.honeymorning.domain.brief.dto.response.TopicResponse;
+import com.sf.honeymorning.domain.brief.dto.response.TopicWord;
 import com.sf.honeymorning.domain.brief.entity.Brief;
+import com.sf.honeymorning.domain.brief.entity.TopicModel;
+import com.sf.honeymorning.domain.brief.entity.TopicModelWord;
+import com.sf.honeymorning.domain.brief.entity.Word;
 import com.sf.honeymorning.domain.brief.repository.BriefRepository;
+import com.sf.honeymorning.domain.brief.repository.TopicModelRepository;
+import com.sf.honeymorning.domain.brief.repository.TopicModelWordRepository;
+import com.sf.honeymorning.domain.brief.repository.WordRepository;
 import com.sf.honeymorning.domain.quiz.entity.Quiz;
 import com.sf.honeymorning.domain.quiz.repository.QuizRepository;
 import com.sf.honeymorning.domain.tag.entity.Tag;
@@ -60,6 +69,9 @@ public class AlarmService {
 	@Value("${ai.url.topic-model}")
 	private String topicModelAi;
 
+	private final TopicModelRepository topicModelRepository;
+	private final TopicModelWordRepository topicModelWordRepository;
+	private final WordRepository wordRepository;
 	private final AlarmRepository alarmRepository;
 	private final UserRepository userRepository;
 	private final AuthService authService;
@@ -72,7 +84,7 @@ public class AlarmService {
 	public AlarmResponseDto findAlarmByUsername() {
 		User user = authService.getLoginUser();
 
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
 			.id(alarm.getId())
@@ -90,7 +102,7 @@ public class AlarmService {
 	public AlarmDateDto updateAlarm(AlarmRequestDto alarmRequestDto) {
 
 		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		alarm.setAlarmTime(alarmRequestDto.getAlarmTime());
 		alarm.setDaysOfWeek(alarmRequestDto.getDaysOfWeek());
@@ -182,9 +194,14 @@ public class AlarmService {
 	@Transactional
 	@Scheduled(fixedRate = 60000)
 	public void readyBriefing() {
-		int[] categories = new int[] {100, 101, 102, 103, 104, 105, 106, 107};
-		String[] categoryNames = new String[] {"정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"};
-		List<Alarm> alarms = alarmRepository.findByAlarmTime(LocalTime.now().minusMinutes(10));
+		log.warn("=============================== ready Briefing ===============================");
+
+		LocalTime start = LocalTime.now().plusMinutes(40).withSecond(0).withNano(0);
+		LocalTime end = LocalTime.now().plusMinutes(40).withSecond(59).withNano(0);
+
+		List<Alarm> alarms = alarmRepository.findAlarmsWithinTimeRange(start, end, 1);
+		log.warn("alarms: {}, start --- > {} , end --- > {}", alarms, start, end);
+
 		for (int j = 0; j < alarms.size(); j++) {
 			Alarm alarm = alarms.get(j);
 			User user = alarm.getUser();
@@ -199,7 +216,7 @@ public class AlarmService {
 
 				tags.add(alarmCategory.getTag().getWord());
 			}
-
+			log.warn("tags params : {}", tags);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -231,12 +248,30 @@ public class AlarmService {
 							.build()
 					);
 
-					data = briefResponse.getBody();
+					data = topicModelResponse.getBody();
 					objectMapper = new ObjectMapper();
-					jsonNode = objectMapper.readTree(data);
-					String url = jsonNode.get("url").asText();
-					alarm.setMusicFilePath(url);
-					alarmRepository.save(alarm);
+					TopicResponse topicResponse = objectMapper.readValue(data, TopicResponse.class);
+					for (TopicAiResponseDto responseDto : topicResponse.getData()) {
+						TopicModel topicModel = topicModelRepository.save(TopicModel.builder()
+							.topicId((long)responseDto.getTopic_id())
+							.brief(save)
+							.build());
+						for (TopicWord topicWord : responseDto.getTopic_words()) {
+							Word word = wordRepository.save(
+								Word.builder()
+									.word(topicWord.getWord())
+									.build()
+							);
+
+							topicModelWordRepository.save(
+								TopicModelWord.builder()
+									.word(word)
+									.weight(topicWord.getWeight())
+									.topicModel(topicModel)
+									.build()
+							);
+						}
+					}
 
 					headers = new HttpHeaders();
 					headers.setContentType(MediaType.APPLICATION_JSON);
@@ -251,7 +286,7 @@ public class AlarmService {
 						data = songResponse.getBody();
 						objectMapper = new ObjectMapper();
 						jsonNode = objectMapper.readTree(data);
-						url = jsonNode.get("url").asText();
+						String url = jsonNode.get("url").asText();
 						System.out.println("url: " + url);
 
 					} else {
@@ -316,7 +351,9 @@ public class AlarmService {
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		List<Quiz> quizzes = quizRepository.findByBrief(brief)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)
+			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+		;
 		brief.getSummary();
 		List<QuizDto> quizDtos = new ArrayList<>();
 		for (int i = 0; i < quizzes.size(); i++) {
@@ -373,7 +410,8 @@ public class AlarmService {
 		 */
 
 		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUser(user);
+		Alarm alarm = alarmRepository.findByUser(user)
+				.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));;
 
 		// 현재 시간
 		LocalDateTime nowDateTime = LocalDateTime.now();
