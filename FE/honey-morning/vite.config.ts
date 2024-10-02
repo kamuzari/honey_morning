@@ -29,12 +29,12 @@ export default defineConfig({
             type: 'image/x-icon',
           },
           {
-            src: '/logo192.png',
+            src: '/images/tempAppIcon192x192.png',
             type: 'image/png',
             sizes: '192x192',
           },
           {
-            src: '/logo512.png',
+            src: '/images/tempAppIcon512x512.png',
             type: 'image/png',
             sizes: '512x512',
           },
@@ -42,6 +42,7 @@ export default defineConfig({
       },
     }),
   ],
+  publicDir: 'public', // public 폴더를 명시적으로 설정
   resolve: {
     alias: [
       {find: '@', replacement: path.resolve(__dirname, 'src')},
