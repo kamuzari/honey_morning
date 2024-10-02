@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -10,68 +9,211 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   position: relative;
-  background-color: var(--darkblue-color);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   overflow: hidden;
 `;
 
 const BriefTitle = styled.div`
   margin: 5rem;
   font-weight: bold;
-  font-size:5rem;
+  font-size: 5rem;
   color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  z-index: 10;
 `;
 
 const CanvasContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10rem;
+  margin-top: 2rem;
+  z-index: 10;
+  position: relative;
 `;
 
 const Canvas = styled.canvas`
-  width: 800px;
-  height: 1000px;
-`;
-
-const BeeImage = styled.img`
-  width: 25rem;
-  height: 25rem;
-  object-fit: cover;
-  margin: 5px 0;
-  border-radius: 16px;
-  z-index: 10;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  position: absolute;
 `;
 
 const Button = styled.button`
   padding: 1rem 2rem;
   font-size: 1.5rem;
-  background-color: #2a4b9c;
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-  border: none;
-  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
   cursor: pointer;
-  margin-top: 1rem;
+  margin-top: 2rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  z-index: 10;
 
   &:hover {
-    background-color: #1f3b7a;
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;
 
-const BriefingPage = () => {
-  const navigate = useNavigate(); 
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+`;
 
-  const canvasRefLeft = useRef<HTMLCanvasElement | null>(null);
-  const canvasRefRight = useRef<HTMLCanvasElement | null>(null);
+const BriefingPage: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const flippedCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [animationId, setAnimationId] = useState<number | null>(null);
 
-
   const currentDate = new Date();
-  // 오늘 날짜
   const currentMonth = String(currentDate.getMonth() + 1);
   const currentDay = String(currentDate.getDate());
-  
+
+  useEffect(() => {
+    initializeCanvas(canvasRef.current);
+    initializeCanvas(flippedCanvasRef.current, true);
+
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
+  }, []);
+
+  const initializeCanvas = (canvas: HTMLCanvasElement | null, isFlipped: boolean = false) => {
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+    const centerX = WIDTH / 2;
+    const centerY = HEIGHT / 2;
+    const baseRadius = Math.min(WIDTH, HEIGHT) / 2 - 50;
+
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, baseRadius, 0, 2 * Math.PI);
+    
+    const mainGradient = ctx.createRadialGradient(
+      centerX,
+      centerY,
+      0,
+      centerX,
+      centerY,
+      baseRadius
+    );
+    mainGradient.addColorStop(0, '#FDC727');  
+    mainGradient.addColorStop(1, '#FDB827');  
+    
+    ctx.fillStyle = mainGradient;
+    ctx.fill();
+
+    // Add a subtle glow effect
+    const glowGradient = ctx.createRadialGradient(
+      centerX,
+      centerY,
+      baseRadius - 10,
+      centerX,
+      centerY,
+      baseRadius + 10
+    );
+    glowGradient.addColorStop(0, 'rgba(253, 199, 39, 0.5)');
+    glowGradient.addColorStop(1, 'rgba(253, 199, 39, 0)');
+    
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, baseRadius, 0, 2 * Math.PI);
+    ctx.fillStyle = glowGradient;
+    ctx.fill();
+  };
+
+  const drawVisualization = (
+    canvas: HTMLCanvasElement,
+    analyser: AnalyserNode,
+    dataArray: Uint8Array,
+    bufferLength: number,
+    isFlipped: boolean = false
+  ) => {
+    const canvasCtx = canvas.getContext('2d');
+    if (!canvasCtx) return;
+
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+    const centerX = WIDTH / 2;
+    const centerY = HEIGHT / 2;
+    const baseRadius = Math.min(WIDTH, HEIGHT) / 2 - 50;
+    const maxWaveHeight = 50;
+
+    function draw() {
+      const id = requestAnimationFrame(draw);
+      setAnimationId(id);
+
+      analyser.getByteFrequencyData(dataArray);
+
+      canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+
+      // Draw base circle
+      canvasCtx.beginPath();
+      canvasCtx.arc(centerX, centerY, baseRadius, 0, 2 * Math.PI);
+      const baseGradient = canvasCtx.createRadialGradient(
+        centerX,
+        centerY,
+        0,
+        centerX,
+        centerY,
+        baseRadius
+      );
+      baseGradient.addColorStop(0, '#FDC727');
+      baseGradient.addColorStop(1, '#FDB827');
+      canvasCtx.fillStyle = baseGradient;
+      canvasCtx.fill();
+
+      canvasCtx.beginPath();
+      for (let i = 0; i < bufferLength; i++) {
+        const angle = (i / bufferLength) * 2 * Math.PI;
+        let amplitude = dataArray[i] / 255.0;
+        amplitude = Math.pow(amplitude, 2);
+        const waveHeight = amplitude * maxWaveHeight;
+        const r = baseRadius + waveHeight;
+        const x = centerX + Math.cos(angle) * r;
+        const y = centerY + (isFlipped ? -Math.sin(angle) : Math.sin(angle)) * r;
+
+        if (i === 0) {
+          canvasCtx.moveTo(x, y);
+        } else {
+          canvasCtx.lineTo(x, y);
+        }
+      }
+
+      canvasCtx.closePath();
+
+      const waveGradient = canvasCtx.createRadialGradient(
+        centerX,
+        centerY,
+        baseRadius,
+        centerX,
+        centerY,
+        baseRadius + maxWaveHeight
+      );
+      waveGradient.addColorStop(0, '#FDC727');
+      waveGradient.addColorStop(1, '#FDB827');
+      canvasCtx.fillStyle = waveGradient;
+      canvasCtx.fill();
+    }
+
+    draw();
+  };
 
   const handlePlayAudio = () => {
     if (isPlaying) return;
@@ -79,20 +221,13 @@ const BriefingPage = () => {
     const audio = new Audio('sample_briefing.mp3');
     audioRef.current = audio;
 
-    // 오디오가 끝났을 때 페이지 이동 처리
-    audio.addEventListener('ended', () => {
-      setTimeout(() => {
-        navigate('/quizzie');
-      }, 3000); // 3초 대기 후 페이지 전환
-    });
+    const canvas = canvasRef.current;
+    const flippedCanvas = flippedCanvasRef.current;
 
-    const canvasLeft = canvasRefLeft.current;
-    const canvasRight = canvasRefRight.current;
-
-    if (canvasLeft && canvasRight && audio) {
+    if (canvas && flippedCanvas && audio) {
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       const analyser = audioContext.createAnalyser();
-      analyser.fftSize = 256; 
+      analyser.fftSize = 256;
 
       const source = audioContext.createMediaElementSource(audio);
       source.connect(analyser);
@@ -101,58 +236,9 @@ const BriefingPage = () => {
       const bufferLength = analyser.frequencyBinCount;
       const dataArray = new Uint8Array(bufferLength);
 
-      const canvasCtxLeft = canvasLeft.getContext('2d');
-      const canvasCtxRight = canvasRight.getContext('2d');
-      if (!canvasCtxLeft || !canvasCtxRight) return;
+      drawVisualization(canvas, analyser, dataArray, bufferLength);
+      drawVisualization(flippedCanvas, analyser, dataArray, bufferLength, true);
 
-      const WIDTH = canvasLeft.width;
-      const HEIGHT = canvasLeft.height;
-
-      function draw() {
-        const id = requestAnimationFrame(draw);
-        setAnimationId(id);
-
-        analyser.getByteFrequencyData(dataArray);
-
-        // 좌측 캔버스 그리기
-        canvasCtxLeft!.clearRect(0, 0, WIDTH, HEIGHT);
-        const gradientLeft = canvasCtxLeft!.createLinearGradient(0, 0, 0, HEIGHT);
-        gradientLeft.addColorStop(0, '#FFE29D');
-        gradientLeft.addColorStop(1, '#F29B05');
-        canvasCtxLeft!.fillStyle = gradientLeft;
-
-        const barWidth = WIDTH / bufferLength;
-        let x = 0;
-
-        for (let i = 0; i < bufferLength; i++) {
-          const barHeight = dataArray[i] / 1.5;
-          canvasCtxLeft!.fillRect(x, (HEIGHT / 2) - barHeight / 2, barWidth, barHeight);
-          x += barWidth;
-        }
-
-        // 우측 캔버스 그리기 (좌우 반전)
-        canvasCtxRight!.clearRect(0, 0, WIDTH, HEIGHT);
-        canvasCtxRight!.save();
-        canvasCtxRight!.scale(-1, 1);
-        canvasCtxRight!.translate(-WIDTH, 0);
-
-        const gradientRight = canvasCtxRight!.createLinearGradient(0, 0, 0, HEIGHT);
-        gradientRight.addColorStop(0, '#FFE29D');
-        gradientRight.addColorStop(1, '#F29B05');
-        canvasCtxRight!.fillStyle = gradientRight;
-
-        x = 0;
-
-        for (let i = 0; i < bufferLength; i++) {
-          const barHeight = dataArray[i] / 1.5;
-          canvasCtxRight!.fillRect(x, (HEIGHT / 2) - barHeight / 2, barWidth, barHeight);
-          x += barWidth;
-        }
-
-        canvasCtxRight!.restore();
-      }
-
-      draw();
       audio.play().catch((error) => {
         console.error('Audio play failed:', error);
       });
@@ -172,26 +258,26 @@ const BriefingPage = () => {
     }
 
     setIsPlaying(false);
-  };
 
-  useEffect(() => {
-    handlePlayAudio();
-  }, [])
+    initializeCanvas(canvasRef.current);
+    initializeCanvas(flippedCanvasRef.current, true);
+  };
 
   return (
     <Container>
-    <BriefTitle>{currentMonth}월 {currentDay}일 꿀모닝 브리핑</BriefTitle>
+      <BriefTitle>{currentMonth}월 {currentDay}일 꿀모닝 브리핑</BriefTitle>
       <CanvasContainer>
-        <Canvas ref={canvasRefRight} width="400" height="300" />
-        <Canvas ref={canvasRefLeft} width="400" height="300" />
+        <Canvas ref={canvasRef} width="400" height="400" />
+        <Canvas ref={flippedCanvasRef} width="400" height="400" />
       </CanvasContainer>
-      <BeeImage src="sleepingbee.webp" alt="Sleeping Bee" />
-      <Button onClick={handlePlayAudio} disabled={isPlaying}>
-        브리핑 시작
-      </Button>
-      <Button onClick={handleStopAudio} disabled={!isPlaying}>
-        브리핑 중지
-      </Button>
+      <ButtonContainer>
+        <Button onClick={handlePlayAudio} disabled={isPlaying}>
+          브리핑 시작
+        </Button>
+        <Button onClick={handleStopAudio} disabled={!isPlaying}>
+          브리핑 중지
+        </Button>
+      </ButtonContainer>
     </Container>
   );
 };
