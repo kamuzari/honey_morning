@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -57,6 +58,8 @@ const Button = styled.button`
 `;
 
 const BriefingPage = () => {
+  const navigate = useNavigate(); 
+
   const canvasRefLeft = useRef<HTMLCanvasElement | null>(null);
   const canvasRefRight = useRef<HTMLCanvasElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -75,6 +78,13 @@ const BriefingPage = () => {
 
     const audio = new Audio('sample_briefing.mp3');
     audioRef.current = audio;
+
+    // 오디오가 끝났을 때 페이지 이동 처리
+    audio.addEventListener('ended', () => {
+      setTimeout(() => {
+        navigate('/quizzie');
+      }, 3000); // 3초 대기 후 페이지 전환
+    });
 
     const canvasLeft = canvasRefLeft.current;
     const canvasRight = canvasRefRight.current;
@@ -163,6 +173,10 @@ const BriefingPage = () => {
 
     setIsPlaying(false);
   };
+
+  useEffect(() => {
+    handlePlayAudio();
+  }, [])
 
   return (
     <Container>

@@ -18,9 +18,10 @@ export const SoleMainNavBarProps: NavIconProps[] = [
 const NavBar: React.FC<NavBarProps> = ({props}) => {
   return (
     <Container $num={props.length}>
-      {props.map(prop => {
+      {props.map((prop, index) => {
         return (
           <NavIcon
+            key={index}
             $bgColor={prop.$bgColor}
             $textColor={prop.$textColor}
             text={prop.text}
