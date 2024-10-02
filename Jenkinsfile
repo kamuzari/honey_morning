@@ -85,29 +85,21 @@ pipeline {
             }
         }
 
-        stage('Stop and Remove Existing Containers') {
+        stage('Build Frontend') {
             steps {
-                script {
-                    def containerNames = ['hm-backend', 'hm-frontend']
-                    
-                    containerNames.each { containerName ->
-                        sh "docker stop ${containerName} || true"
-                        sh "docker rm ${containerName} || true"
+                dir('FE/honey-morning') {
+                    script {
+                        def viteBaseUrl = sh(script: "grep VITE_BASE_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
+                        def viteProjectDataUrl = sh(script: "grep VITE_PROJECT_DATA_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
                         
-                        def containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep -q '^${containerName}\$'", returnStatus: true) == 0
+                        echo "Building frontend with VITE_BASE_URL: ${viteBaseUrl} and VITE_PROJECT_DATA_URL: ${viteProjectDataUrl}"
                         
-                        if (containerExists) {
-                            echo "Container ${containerName} still exists. Attempting force removal..."
-                            sh "docker rm -f ${containerName} || true"
-                            
-                            containerExists = sh(script: "docker ps -a --format '{{.Names}}' | grep -q '^${containerName}\$'", returnStatus: true) == 0
-                            
-                            if (containerExists) {
-                                error "Failed to remove ${containerName} container even after force removal"
-                            }
-                        }
-                        
-                        echo "Container ${containerName} successfully removed"
+                        sh """
+                            docker build -t frontend:latest \
+                            --build-arg VITE_BASE_URL=${viteBaseUrl} \
+                            --build-arg VITE_PROJECT_DATA_URL=${viteProjectDataUrl} \
+                            -f Dockerfile .
+                        """
                     }
                 }
             }
