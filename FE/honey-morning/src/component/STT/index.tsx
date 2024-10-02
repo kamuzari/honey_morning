@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import annyang from 'annyang';
+import styled from 'styled-components';
 
 interface SttProps {
   currentOptions: string[];
@@ -9,7 +10,7 @@ interface SttProps {
 
 const stt: React.FC<SttProps> = props => {
   const [currentOptions, setCurrentOptions] = useState(props.currentOptions);
-
+  const [test, setTest] = useState(null);
   // 마이크 요청 함수
   const requestMicrophoneAccess = async () => {
     try {
@@ -51,10 +52,20 @@ const stt: React.FC<SttProps> = props => {
     setCurrentOptions(props.currentOptions);
     annyang.addCallback('result', (phrases: string[]) => {
       optionCheck(phrases[0].trim(), props.currentOptions);
+      setTest(phrases[0].trim());
     });
   }, [props.currentOptions]);
 
-  return <></>;
+  return (
+    <>
+      <Test>{test}</Test>
+    </>
+  );
 };
+
+const Test = styled.div`
+  font-size: 10rem;
+  color: blue;
+`;
 
 export default stt;
