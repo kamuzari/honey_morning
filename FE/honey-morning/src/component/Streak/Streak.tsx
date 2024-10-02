@@ -1,14 +1,21 @@
 import styled from 'styled-components';
 
-interface StreakProps {
+export interface StreakProps {
   count: number;
   isAttending: number;
   createdAt: string;
+  size: number;
 }
 
-const Streak: React.FC<StreakProps> = ({count, isAttending, createdAt}) => {
+const Streak: React.FC<StreakProps> = ({
+  count,
+  isAttending,
+  createdAt,
+  size,
+}) => {
   const calcPercent = count + isAttending;
   var colors = [];
+  colors.length;
   if (calcPercent == 3)
     colors = [
       'var(--yellow-color)',
@@ -20,21 +27,21 @@ const Streak: React.FC<StreakProps> = ({count, isAttending, createdAt}) => {
     ];
   if (calcPercent == 2)
     colors = [
-      'var(--black-color)',
+      'gray',
+      'var(--yellow-color)',
+      'gray',
       'var(--yellow-color)',
       'var(--yellow-color)',
       'var(--yellow-color)',
-      'var(--yellow-color)',
-      'var(--black-color)',
     ];
   if (calcPercent == 1)
     colors = [
-      'var(--black-color)',
+      'gray',
       'var(--yellow-color)',
+      'gray',
       'var(--yellow-color)',
-      'var(--black-color)',
-      'var(--black-color)',
-      'var(--black-color)',
+      'gray',
+      'gray',
     ];
   if (calcPercent == 0)
     colors = [
@@ -45,9 +52,9 @@ const Streak: React.FC<StreakProps> = ({count, isAttending, createdAt}) => {
       'var(--darkblue-color)',
       'var(--darkblue-color)',
     ];
-  console.log(colors);
   return (
-    <Shape>
+    <Shape $size={size}>
+      {/* {createdAt} */}
       <One $color={colors[0]}></One>
       <Two $color={colors[1]}></Two>
       <Three $color={colors[2]}></Three>
@@ -60,16 +67,20 @@ const Streak: React.FC<StreakProps> = ({count, isAttending, createdAt}) => {
 
 export default Streak;
 // 도형을 렌더링할 스타일드 컴포넌트 예시
-const Shape = styled.div`
-  width: 52px;
-  height: 60px;
+const Shape =
+  styled.div <
+  {$size: number} >
+  `
+  width: ${props => props.$size}rem;
+  height: ${props => props.$size * 1.15}rem;
   display: inline-flex;
   flex-wrap: wrap;
   div {
     display: inline-flex;
     border: none;
+    margin-left: -1px;
+    margin-right: -1px;
   }
-  border: red 1px solid;
 `;
 const One =
   styled.div <
@@ -94,8 +105,8 @@ const Three =
   {$color} >
   `
   width: 50%;
-  height: 50%;
-  margin-top: -31%;
+  height: 47%;
+  margin-top: -32%;
   background-color: ${props => props.$color};
   clip-path: polygon(0 0, 0 100%, 100% 50%);
 `;
@@ -104,8 +115,8 @@ const Four =
   {$color} >
   `
   width: 50%;
-  height: 50%;
-  margin-top: -31%;
+  height: 47%;
+  margin-top: -32%;
 
   background-color: ${props => props.$color};
   clip-path: polygon(100% 0, 100% 100%, 0 50%);
@@ -116,7 +127,7 @@ const Five =
   `
   width: 50%;
   height: 50%;
-  margin-top: -31%;
+  margin-top: -32%;
 
   background-color: ${props => props.$color};
   clip-path: polygon(100% 0, 100% 100%, 0 50%);
@@ -127,7 +138,7 @@ const Six =
   `
   width: 50%;
   height: 50%;
-  margin-top: -31%;
+  margin-top: -32%;
   background-color: ${props => props.$color};
   clip-path: polygon(0 0, 0 100%, 100% 50%);
 `;
