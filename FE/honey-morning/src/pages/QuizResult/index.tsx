@@ -10,15 +10,23 @@ const ShowQuizResult: React.FC = () => {
   
   const location = useLocation();
   const {correctCount} = location.state || {correctCount: 0};  
-  
-  const response = saveAlarmResult({count: correctCount, isAttending: 1});
-
-  console.log(response);
 
   // 상태 변수 선언
   const [alarmCategoryInfo, setAlarmCategoryInfo] = useState(null);
   const [streakInfo, setStreakInfo] = useState(null);
+  
+  useEffect(() => {
+    const sendAlarmResult = async () => {
+      try {
+        const response = await saveAlarmResult({ count: correctCount, isAttending: 1 });
+        console.log(response);
+      } catch (error) {
+        console.error(`[Error] saving alarm result: ${error}`);
+      }
+    };
 
+    sendAlarmResult(); // POST 요청을 한 번만 전송
+  }, [correctCount]); // `correctCount`가 변경될 때만 실행
   
   
   useEffect(() => {
