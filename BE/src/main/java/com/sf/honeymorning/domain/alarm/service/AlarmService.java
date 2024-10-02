@@ -60,9 +60,6 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class AlarmService {
 	private static final Logger log = LoggerFactory.getLogger(AlarmService.class);
-	private final TopicModelRepository topicModelRepository;
-	private final TopicModelWordRepository topicModelWordRepository;
-	private final WordRepository wordRepository;
 	@Value("${ai.url.briefing}")
 	private String briefingAi;
 	@Value("${ai.url.quiz}")
@@ -72,6 +69,9 @@ public class AlarmService {
 	@Value("${ai.url.topic-model}")
 	private String topicModelAi;
 
+	private final TopicModelRepository topicModelRepository;
+	private final TopicModelWordRepository topicModelWordRepository;
+	private final WordRepository wordRepository;
 	private final AlarmRepository alarmRepository;
 	private final UserRepository userRepository;
 	private final AuthService authService;
@@ -84,8 +84,7 @@ public class AlarmService {
 	public AlarmResponseDto findAlarmByUsername() {
 		User user = authService.getLoginUser();
 
-		Alarm alarm = alarmRepository.findByUser(user)
-			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		AlarmResponseDto alarmResponseDto = AlarmResponseDto.builder()
 			.id(alarm.getId())
@@ -103,8 +102,7 @@ public class AlarmService {
 	public AlarmDateDto updateAlarm(AlarmRequestDto alarmRequestDto) {
 
 		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUser(user)
-			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+		Alarm alarm = alarmRepository.findByUser(user)	.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		alarm.setAlarmTime(alarmRequestDto.getAlarmTime());
 		alarm.setDaysOfWeek(alarmRequestDto.getDaysOfWeek());
@@ -275,7 +273,6 @@ public class AlarmService {
 						}
 					}
 
-
 					headers = new HttpHeaders();
 					headers.setContentType(MediaType.APPLICATION_JSON);
 					headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -291,7 +288,7 @@ public class AlarmService {
 						jsonNode = objectMapper.readTree(data);
 						String url = jsonNode.get("url").asText();
 						System.out.println("url: " + url);
-						alarm.setMusicFilePath(url);
+
 					} else {
 						System.out.println("POST 요청 실패: " + briefResponse.getStatusCode());
 					}
@@ -414,8 +411,7 @@ public class AlarmService {
 
 		User user = authService.getLoginUser();
 		Alarm alarm = alarmRepository.findByUser(user)
-			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
-		;
+				.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));;
 
 		// 현재 시간
 		LocalDateTime nowDateTime = LocalDateTime.now();
