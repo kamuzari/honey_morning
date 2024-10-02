@@ -48,16 +48,21 @@ pipeline {
         }
 
         stage('Build Frontend') {
-           steps {
-               dir('FE/honey-morning') {
-                   script {
-                       def viteBaseUrl = sh(script: "grep VITE_BASE_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
-                       def viteProjectDataUrl = sh(script: "grep VITE_PROJECT_DATA_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
-                       sh "docker build -t frontend:latest --build-arg VITE_BASE_URL=${viteBaseUrl} --build-arg VITE_PROJECT_DATA_URL=${viteProjectDataUrl} -f Dockerfile ."
-                   }
-               }
-           }
-       }
+            steps {
+                dir('FE/honey-morning') {
+                    script {
+                        def viteBaseUrl = sh(script: "grep VITE_BASE_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
+                        def viteProjectDataUrl = sh(script: "grep VITE_PROJECT_DATA_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
+                        sh """
+                            docker build -t frontend:latest \
+                            --build-arg VITE_BASE_URL=${viteBaseUrl} \
+                            --build-arg VITE_PROJECT_DATA_URL=${viteProjectDataUrl} \
+                            -f Dockerfile .
+                        """
+                    }
+                }
+            }
+        }
 
         stage('Stop and Remove Existing Containers') {
             steps {
