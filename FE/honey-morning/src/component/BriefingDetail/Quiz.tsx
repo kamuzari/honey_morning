@@ -58,7 +58,7 @@ const Quiz = ({quizDto}: {quizDto: QuizResponseDto[]}) => {
                       $answer={quiz.answerNumber}
                     >
                       <div className="check" />
-                      {opt}
+                      <div className="optionText">{opt}</div>
                     </Option>
                   ),
                 )}
@@ -97,7 +97,8 @@ const Problem = styled.div`
   flex-direction: column;
 
   span {
-    font-size: 3.4rem;
+    font-size: 3rem;
+    line-height: 4rem;
     font-weight: bold;
     margin: 0 0 4rem 0;
   }
@@ -105,6 +106,9 @@ const Problem = styled.div`
   .optionContainer {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    // padding-left: 1rem;
   }
 `;
 
@@ -115,7 +119,6 @@ const Option =
             display: flex;
             justify-content: space-around;
             font-weight: bold;
-            font-size: 3rem;
             width: 12rem;
             height: 8rem;
             align-items: center;
@@ -140,6 +143,21 @@ const Option =
                     : 'var(--white-color)'};
                 width: 3rem;
                 height: 3rem;
+            }
+
+            .optionText {
+                font-size: 2.3rem;
+                align-items: center;
+                // background-color: red;
+                display: flex;
+                width: 8rem;
+                height: 8rem;
+                white-space: nowrap;
+                overflow-x: scroll;
+                
+            }
+            .optionText::-webkit-scrollbar {
+                display: none;
             }
         `;
 export default Quiz;
