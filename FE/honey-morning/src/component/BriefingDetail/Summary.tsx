@@ -86,22 +86,24 @@ const Summary = ({summaryDto}: {summaryDto: SummaryDto}) => {
             help
           </HelpSpan>
         </div>
-        {isHelpOpen ? (
-          <HelpContainer>
-            <div className="notification">
-              <span>AI / 빅데이터 기술로 생성한 워드 클라우드 기술입니다.</span>
-            </div>
-            <div className="notification">
-              <span>워드 클라우드란?</span>
-              <span>
-                각 토픽별 키워드 비중에 따라 눈에 잘 보이게 그려드려요!
-              </span>
-            </div>
-          </HelpContainer>
-        ) : (
-          []
-        )}
-        <WordCloudContainer>
+        <WordCloudContainer $isHelpOpen={isHelpOpen}>
+          {isHelpOpen ? (
+            <HelpContainer>
+              <div className="notification">
+                <span>
+                  AI / 빅데이터 기술로 생성한 워드 클라우드 기술입니다.
+                </span>
+              </div>
+              <div className="notification">
+                <span>워드 클라우드란?</span>
+                <span>
+                  각 토픽별 키워드 비중에 따라 눈에 잘 보이게 그려드려요!
+                </span>
+              </div>
+            </HelpContainer>
+          ) : (
+            []
+          )}
           <TopicCloud topics={summaryDto.topicModelResponses} />
         </WordCloudContainer>
       </Content>
@@ -113,6 +115,9 @@ export const Container = styled.div`
   width: 100%;
   flex-direction: column;
   align-items: center;
+  // * {
+  //   border: 1px solid lime;
+  // }
 `;
 
 export const HelpSpan = styled.span`
@@ -121,10 +126,14 @@ export const HelpSpan = styled.span`
   font-size: 4rem;
 `;
 
-const WordCloudContainer = styled.div`
+const WordCloudContainer =
+  styled.div <
+  {$isHelpOpen: boolean} >
+  `
   width: 100%;
-  height: 100%;
-  // display: flex;
+  height: ${props => (props.$isHelpOpen ? '78%' : '100%')};
+  overflow-y: scroll;
+  // display: block;
   justify-content: center;
   backgroud-color: black;
 `;
