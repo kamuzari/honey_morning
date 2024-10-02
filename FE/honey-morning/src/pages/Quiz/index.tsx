@@ -198,7 +198,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
 
   return (
     <Container>
-      { quizData[currentQuizIndex] &&<STT currentOptions={currentOptions} answer={currentOptions[quizData[currentQuizIndex].answer]} setAnswer={setSelectedAnswer}></STT>}
+      { quizData[currentQuizIndex] &&<STT currentOptions={currentOptions} answer={currentOptions[quizData[currentQuizIndex].answerNumber]} setAnswer={setSelectedAnswer}></STT>}
       <ProgressBarArea>
         <ProgressBarBackground />
         <ProgressBarFill progress={progress} isActive={isQuizActive} />

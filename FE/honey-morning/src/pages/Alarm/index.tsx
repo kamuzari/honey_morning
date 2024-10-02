@@ -79,8 +79,9 @@ const AlarmPage = () => {
   // 저장된 alarmStartData 불러오기
   //prettier-ignore
   const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
-  const morningCallUrl = alarmStartData?.morningCallUrl;
-  console.log('moring', morningCallUrl);
+  let morningCallUrl =
+    alarmStartData?.morningCallUrl ??
+    'https://cdn1.suno.ai/dc1d94fa-975b-4eab-a391-dc55eb4cdcc5.mp3';
 
   //prettier-ignore
   const alarmData = queryClient.getQueryData<AlarmData>(['alarmData']);
@@ -134,8 +135,8 @@ const AlarmPage = () => {
             <AlarmMessage>알람이 울리고 있습니다!</AlarmMessage>
             <audio autoPlay>
               <source
-                src="https://cdn1.suno.ai/dc1d94fa-975b-4eab-a391-dc55eb4cdcc5.mp3"
-                // src={morningCallUrl}
+                // src="https://cdn1.suno.ai/dc1d94fa-975b-4eab-a391-dc55eb4cdcc5.mp3"
+                src={morningCallUrl}
                 type="audio/mpeg"
               />
             </audio>
