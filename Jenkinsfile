@@ -53,6 +53,7 @@ pipeline {
                     script {
                         def viteBaseUrl = sh(script: "grep VITE_BASE_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
                         def viteProjectDataUrl = sh(script: "grep VITE_PROJECT_DATA_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
+                        
                         sh """
                             docker build -t frontend:latest \
                             --build-arg VITE_BASE_URL=${viteBaseUrl} \
