@@ -155,10 +155,10 @@ const TopicCloud: React.FC<TopicCloudProps> = ({topics}) => {
 };
 
 const Container = styled.div`
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   justify-content: center;
   align-items: center;
-  padding: 5rem;
+  padding: 5rem 5rem 0 5rem;
 `;
 
 const WordCloudContainer = styled.div`

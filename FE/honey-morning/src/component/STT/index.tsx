@@ -9,6 +9,17 @@ interface SttProps {
 
 const stt: React.FC<SttProps> = props => {
   const [currentOptions, setCurrentOptions] = useState(props.currentOptions);
+
+  // 마이크 요청 함수
+  const requestMicrophoneAccess = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+      console.log('마이크 권한 허용');
+    } catch (error) {
+      console.error('마이크 권한 거절:', error);
+    }
+  };
+
   const optionCheck = (phrase: string, currentOptions: string[]) => {
     for (var option = 0; option < 4; option++) {
       for (var i = 0; i < phrase.length; i++) {
@@ -22,6 +33,9 @@ const stt: React.FC<SttProps> = props => {
   useEffect(() => {
     // annyang이 정의되어 있는지 확인
     if (annyang) {
+      // 마이크 권한 요청
+      requestMicrophoneAccess();
+
       annyang.debug();
       annyang.setLanguage('ko');
       annyang.start();
