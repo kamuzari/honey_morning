@@ -17,14 +17,14 @@ export default defineConfig({
         name: 'Honey Morning',
         short_name: 'HoneyMorning',
         description: 'Honey Morning with SSAFY NiKKA',
-        theme_color: '#ffffff',
+        theme_color: '#000000',
         background_color: '#ffffff',
-        display: 'standalone',
+        display: 'fullscreen',
         scope: '/',
         start_url: '/',
         icons: [
           {
-            src: '/favicon.ico',
+            src: '/tempAppIcon.ico',
             sizes: '64x64 32x32 24x24 16x16',
             type: 'image/x-icon',
           },

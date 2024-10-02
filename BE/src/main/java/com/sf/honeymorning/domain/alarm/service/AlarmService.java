@@ -293,6 +293,7 @@ public class AlarmService {
 						objectMapper = new ObjectMapper();
 						jsonNode = objectMapper.readTree(data);
 						String url = jsonNode.get("url").asText();
+						alarm.setMusicFilePath(url);
 						System.out.println("url: " + url);
 
 					} else {
