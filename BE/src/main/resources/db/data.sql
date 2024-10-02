@@ -1666,3 +1666,10 @@ INSERT INTO honeymorning.topic_model_word (topic_model_id, word_id, weight, crea
 VALUES (2, 60, 0.0025261160917580128, '2024-09-20 15:49:26.000000', '2024-09-20 15:49:26.000000');
 
 
+-- Alarm Category
+INSERT INTO honeymorning.alarm_category (alarm_id, tag_id)
+VALUES (1, 1);
+INSERT INTO honeymorning.alarm_category (alarm_id, tag_id)
+VALUES (1, 2);
+INSERT INTO honeymorning.alarm_category (alarm_id, tag_id)
+VALUES (1, 3);
