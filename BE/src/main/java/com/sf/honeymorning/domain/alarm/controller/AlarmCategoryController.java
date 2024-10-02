@@ -33,7 +33,7 @@ public class AlarmCategoryController {
                     content = @Content(schema = @Schema(type = "string", example = "success", implementation = AlarmCategoryDto.class))
             )
     })
-    @GetMapping("/category")
+    @GetMapping
     public ResponseEntity<?> getAlarmCategory() {
         // 현재 선택된 카테고리(Tag) 리스트를 반환
         List<AlarmCategoryDto> alarmCategoryDtoList = alarmCategoryService.findAlarmCategory();
@@ -49,7 +49,7 @@ public class AlarmCategoryController {
                     content = @Content(schema = @Schema(type = "string", example = "success", implementation = AlarmCategoryDto.class))
             )
     })
-    @PostMapping("/category")
+    @PostMapping
     public ResponseEntity<String> saveAlarmCategory(@RequestBody String word) {
         alarmCategoryService.addAlarmCategory(word);
         return new ResponseEntity<>("알람 카테고리를 성공적으로 추가하였습니다.", HttpStatus.OK);
@@ -64,7 +64,7 @@ public class AlarmCategoryController {
                     content = @Content(schema = @Schema(type = "string", example = "success", implementation = AlarmCategoryDto.class))
             )
     })
-    @DeleteMapping("/category")
+    @DeleteMapping
     public ResponseEntity<?> removeAlarmCategory(@RequestBody String word) {
         alarmCategoryService.deleteAlarmCategory(word);
         return ResponseEntity.ok("alarm category successfully deleted");

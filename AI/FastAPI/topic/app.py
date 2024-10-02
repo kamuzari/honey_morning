@@ -5,7 +5,7 @@ from gensim import corpora
 from gensim.models import LdaModel
 from utils import process_documents, optimalize_lda_model
 
-app = FastAPI(root_path="/ai/topic")
+app = FastAPI(root_path="/ai/topicAiResponseDto")
 
 
 class JSON_Topic(BaseModel):
@@ -61,8 +61,8 @@ def generate_topic(json: JSON_Topic):
     for topic_num in range(num_topics):
         term_weight_pairs = optimal_lda_model.get_topic_terms(topicid=topic_num, topn=30)
         terms = [Term(word=dictionary[term_id], weight=weight) for term_id, weight in term_weight_pairs]
-        topic = Topic(topic_id=topic_num, topic_words=terms)
-        topics_list.append(topic)
+        topicAiResponseDto = Topic(topic_id=topic_num, topic_words=terms)
+        topics_list.append(topicAiResponseDto)
 
     print("토픽의 단어와 비중 추출 완료")
     
