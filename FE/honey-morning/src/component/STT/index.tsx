@@ -10,6 +10,7 @@ interface SttProps {
 
 const stt: React.FC<SttProps> = props => {
   const [currentOptions, setCurrentOptions] = useState(props.currentOptions);
+  const [isMicAvailable, setIsMicAvailable] = useState(false);
   const [test, setTest] = useState(null);
   // 마이크 요청 함수
   const requestMicrophoneAccess = async () => {
@@ -58,6 +59,9 @@ const stt: React.FC<SttProps> = props => {
 
   return (
     <>
+      <Test>
+        {annyang && annyang.isListening() ? '안냥이 듣고 있습니다.' : 'error'}
+      </Test>
       <Test>{test}</Test>
     </>
   );
