@@ -145,8 +145,8 @@ const AlarmSetting: React.FunctionComponent = () => {
 
   const { mutate: updateAlarm } = useMutation({
     mutationFn: updateAlarmData,
-    onSuccess: () => {
-      console.log("알람이 성공적으로 수정되었습니다.");
+    onSuccess: (data) => {
+      console.log("알람이 성공적으로 수정되었습니다.", data);
       setIsResultModalOpen(true);
     },
     onError: () => {
