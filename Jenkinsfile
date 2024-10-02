@@ -54,12 +54,32 @@ pipeline {
                         def viteBaseUrl = sh(script: "grep VITE_BASE_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
                         def viteProjectDataUrl = sh(script: "grep VITE_PROJECT_DATA_URL $FRONTEND_ENV | cut -d '=' -f2", returnStdout: true).trim()
                         
-                        sh """
-                            docker build -t frontend:latest \
-                            --build-arg VITE_BASE_URL=${viteBaseUrl} \
-                            --build-arg VITE_PROJECT_DATA_URL=${viteProjectDataUrl} \
-                            -f Dockerfile .
-                        """
+                        // 환경 변수 값 출력 (디버깅용)
+                        echo "VITE_BASE_URL: ${viteBaseUrl}"
+                        echo "VITE_PROJECT_DATA_URL: ${viteProjectDataUrl}"
+                        
+                        // Dockerfile 존재 확인
+                        sh 'ls -l Dockerfile || echo "Dockerfile not found"'
+                        
+                        // 환경 변수 검증
+                        if (!viteBaseUrl) {
+                            error "VITE_BASE_URL is not set or empty"
+                        }
+                        if (!viteProjectDataUrl) {
+                            error "VITE_PROJECT_DATA_URL is not set or empty"
+                        }
+                        
+                        try {
+                            sh """
+                                docker build -t frontend:latest \
+                                --build-arg VITE_BASE_URL=${viteBaseUrl} \
+                                --build-arg VITE_PROJECT_DATA_URL=${viteProjectDataUrl} \
+                                -f Dockerfile .
+                            """
+                        } catch (Exception e) {
+                            echo "Error during frontend build: ${e.message}"
+                            error "Frontend build failed"
+                        }
                     }
                 }
             }
