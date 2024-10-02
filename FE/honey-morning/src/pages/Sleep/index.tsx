@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import  { instance } from '@/api/axios'
 import styled, { keyframes } from 'styled-components';
 
@@ -39,9 +39,9 @@ const fetchAlarmData = async () => {
 };
 
 // 10분전에 정보를 가져오기 위한 용도
-const startAlarmCall = async () => {
+const fetchAlarmStartDataFn = async (): Promise<AlarmStartResponse> => {
   const token = sessionStorage.getItem('access');
-  const response = await instance.post(`/api/alarms/start`, {}, {
+  const response = await instance.post<AlarmStartResponse>(`/api/alarms/start`,{}, {
     headers: {
       access: token,
     },
@@ -53,13 +53,47 @@ const startAlarmCall = async () => {
 // SleepWakeLock 컴포넌트 정의
 const SleepWakeLock = () => {
   const navigate = useNavigate();
-  const { data: alarmData} = useQuery({
+  const queryClient = useQueryClient();
+
+  // 알람을 조회해서 저장 api/alarms
+  const { data: alarmData, error: alarmError, isSuccess: isAlarmDataSuccess } = useQuery({
     queryKey: ['alarmData'],
     queryFn: fetchAlarmData,
+    enabled: true,
   });
 
+  useEffect(() => {
+    if (isAlarmDataSuccess && alarmData) {
+      console.log('AlarmData here:', alarmData); // 데이터를 확인하기 위한 콘솔 출력
+      // 추가적으로 처리할 로직이 있다면 여기에 작성
+    }
+  
+    if (alarmError) {
+      console.error('AlarmData fetch error:', alarmError); // 에러 처리
+    }
+  }, [isAlarmDataSuccess, alarmData, alarmError]);
+
+  // api/alarms/start 데이터 저장
+  const { data: alarmStartData } = useQuery({
+    queryKey: ['alarmStartData'],
+    queryFn: fetchAlarmStartDataFn,
+    enabled: false,
+  })
+  
+
   // 10분전
-  const { mutate: fetchStartAlarm, data: startAlarmData } = useMutation(startAlarmCall);
+  const { mutate: startAlarmMutation } = useMutation<AlarmStartResponse, Error, void>({
+    mutationFn: fetchAlarmStartDataFn,
+    onSuccess: (data) => {
+      // 요청 성공 시, 데이터를 전역 상태에 저장
+      console.log('AlarmStartData after mutation:', data);
+      queryClient.setQueryData(['alarmStartData'], data);
+    },
+    onError: (error) => {
+      console.error("Error fetching alarm start data:", error);
+    }
+  });
+  
   
   const [wakeLock, setWakeLock] = useState<WakeLockSentinel | null>(null);
   const [isScreenDimmed, setIsScreenDimmed] = useState(false);
@@ -75,45 +109,59 @@ const SleepWakeLock = () => {
   const timerId = useRef<NodeJS.Timeout | null>(null);
   const timerIntervalId = useRef<NodeJS.Timeout | null>(null);
 
+  // useEffect(() => {
+  //   if (alarmData) {
+  //     startTimer();
+  //     handleRequestWakeLock();
+  //   }
+  // }, [alarmData]);
   useEffect(() => {
     if (alarmData) {
       startTimer();
       handleRequestWakeLock();
+  
+      // 테스트를 위해 컴포넌트 마운트 시 데이터를 요청하고 AlarmPage로 이동
+      startAlarmMutation();
     }
   }, [alarmData]);
   
+  // useEffect(() => {
+  //   const fetchSleepData = async () => {
+  //     try {
+  //       const token = sessionStorage.getItem('access');
+  //       console.log('Fetching sleep data...');
+  //       const response = await instance.get(`/api/alarms/sleep`, {
+  //         headers: {
+  //           access: token,
+  //         }
+  //       });
+  //       console.log('API response:', response.data);
+  //       setIsLoading(false);
+  //     } catch(error) {
+  //       console.error('API 호출 중 오류 발생:', error);
+  //       if (error.response) {
+  //         console.log('응답 데이터:', error.response.data);
+  //         console.log('응답 상태 코드:', error.response.status);
+  //         console.log('응답 헤더:', error.response.headers);
+  //         if (error.response.status === 400) {
+  //           setTooShortModalOpen(true);
+  //         }
+  //       } else if (error.request) {
+  //         console.log('요청이 전송되었지만 응답이 수신되지 않음:', error.request);
+  //       } else {
+  //         console.log('오류 설정 중 문제 발생:', error.message);
+  //       }
+  //       // setError('데이터를 불러오는 중 오류가 발생했습니다.');
+  //       setIsLoading(false)
+  //     }
+  //   }
+  //   fetchSleepData();
+  // }, [])
+
+  //진입 금지 무력화 -> 실제는 얘를 지우고 바로 위 useEffect를 살리면 됨
   useEffect(() => {
-    const fetchSleepData = async () => {
-      try {
-        const token = sessionStorage.getItem('access');
-        console.log('Fetching sleep data...');
-        const response = await instance.get(`/api/alarms/sleep`, {
-          headers: {
-            access: token,
-          }
-        });
-        console.log('API response:', response.data);
-        setIsLoading(false);
-      } catch(error) {
-        console.error('API 호출 중 오류 발생:', error);
-        if (error.response) {
-          console.log('응답 데이터:', error.response.data);
-          console.log('응답 상태 코드:', error.response.status);
-          console.log('응답 헤더:', error.response.headers);
-          if (error.response.status === 400) {
-            setTooShortModalOpen(true);
-          }
-        } else if (error.request) {
-          console.log('요청이 전송되었지만 응답이 수신되지 않음:', error.request);
-        } else {
-          console.log('오류 설정 중 문제 발생:', error.message);
-        }
-        setError('데이터를 불러오는 중 오류가 발생했습니다.');
-        setIsLoading(false)
-      }
-    }
-    fetchSleepData();
-  }, [])
+    setIsLoading(false);
+  }, []);
 
   useEffect(() => {
     if (!isLoading && !tooShortModalOpen) {
@@ -154,11 +202,23 @@ const SleepWakeLock = () => {
     // 알람이 울리는 요일 및 시간 확인
     const alarmDays = alarmData?.daysOfWeek || "0000000";
 
-       // 현재 요일에 알람이 활성화되어 있는지 확인
-      if (alarmDays[currentDayIndex] === '1' && `${hours}:${minutes}` === alarmData.alarmTime.slice(0, 5)) {
-        clearInterval(timerIntervalId.current); // 타이머 중지
-        navigate('/alarm'); // 알람 페이지로 이동
+    // 현재 요일에 알람이 활성화되어 있는지 확인
+    if (alarmDays[currentDayIndex] === '1' && `${hours}:${minutes}` === alarmData.alarmTime.slice(0, 5)) {
+      clearInterval(timerIntervalId.current); // 타이머 중지
+      navigate('/alarm'); // 알람 페이지로 이동
+    }
+
+    // 알람 시간 10분 전일 때 데이터 요청
+    if (alarmData) {
+      const alarmTime = new Date();
+      const [alarmHour, alarmMinute] = alarmData.alarmTime.split(':');
+      alarmTime.setHours(Number(alarmHour));
+      alarmTime.setMinutes(Number(alarmMinute));
+
+      if (`${hours}:${minutes}` === `${String(alarmTime.getHours()).padStart(2, '0')}:${String(alarmTime.getMinutes()).padStart(2, '0')}`) {
+        startAlarmMutation();
       }
+    }
 
     }, 1000);
   };
@@ -297,13 +357,14 @@ const SleepWakeLock = () => {
         isOpen={tooShortModalOpen}
         isClose={() => {
           setTooShortModalOpen(false);
-          navigate(-1);
+          navigate('/');
         }}
         header="수면 불가"
         icon="error_outline"
         btnText="확인"
       >
-        수면시간이 너무 짧아서 알람이 울릴 수 없습니다.
+        수면시간이 너무 짧아서<br/> 알람이 울릴 수 없습니다. <br/><br/>
+        브리핑 서비스를 이용하시려면 <br/> 5시간 이상 취침하시기 바랍니다.
       </Modal3>
     );
   }
