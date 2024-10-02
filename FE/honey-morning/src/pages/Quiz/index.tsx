@@ -9,7 +9,7 @@ export interface QuizData {
   id: number,
   briefId: number,
   question: string,
-  answer: number,
+  answerNumber: number,
   option1: string,
   option2: string,
   option3: string,
@@ -151,7 +151,7 @@ const speakQuestion = () => {
 const handleTimeUp = () => {
   setIsQuizActive(false);
 
-  const isAnswerCorrect = selectedAnswer === quizData[currentQuizIndex].answer;
+  const isAnswerCorrect = selectedAnswer === quizData[currentQuizIndex].answerNumber;
   setIsCorrect(isAnswerCorrect);
   
   if (isAnswerCorrect) {
@@ -180,6 +180,7 @@ const handleTimeUp = () => {
 
 // 정답 처리
 const handleAnswer = (index: number ) => {
+  console.log("정답 처리 메서드 실행")
   setSelectedAnswer(index);
   //handleTimeUp(); 선택 시 즉시 다음 문제로 (일정한 시간이라면 이 줄 삭제)
 }
@@ -232,7 +233,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
           <ModalContent>
             {isCorrect ? '정답입니다!' : '오답입니다.'}
             <br />
-            정답: {currentOptions[quizData[currentQuizIndex]?.answer]}
+            정답: {currentOptions[quizData[currentQuizIndex]?.answerNumber]}
           </ModalContent>
         </Modal>
       )}
