@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 interface AlarmStartResponse {
   morningCallUrl: string;
-  //quizzes: Quiz[];
   briefingContent: string;
   briefingContentUrl: string;
 }
@@ -27,8 +26,12 @@ const BriefingPage: React.FC = () => {
 
   //prettier-ignore
   const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
+  console.log('alarmStartData:', alarmStartData);
   const briefingContent = alarmStartData?.briefingContent;
   const briefingContentUrl = alarmStartData?.briefingContentUrl;
+
+  console.log('briefingContent:', briefingContent);
+  console.log('briefingContentUrl:', briefingContentUrl);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const flippedCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -179,7 +182,9 @@ const BriefingPage: React.FC = () => {
   const handlePlayAudio = () => {
     if (isPlaying) return;
     
-    const audio = new Audio(briefingContentUrl);
+    console.log("TTS 파일 경로:", `${import.meta.env.VITE_PROJECT_DATA_URL}/project_data/summary/${briefingContentUrl}`);
+    const audio = new Audio(`${import.meta.env.VITE_PROJECT_DATA_URL}/project_data/summary/${briefingContentUrl}`);
+    console.log(`${import.meta.env.VITE_PROJECT_DATA_URL}/project_data/summary/${briefingContentUrl}`)
     audioRef.current = audio;
     
     const canvas = canvasRef.current;
