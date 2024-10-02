@@ -353,7 +353,7 @@ public class AlarmService {
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		Alarm alarm = alarmRepository.findByUser(user)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
-		;
+
 		brief.getSummary();
 		List<QuizDto> quizDtos = new ArrayList<>();
 		for (int i = 0; i < quizzes.size(); i++) {
@@ -369,7 +369,7 @@ public class AlarmService {
 				quiz.getSummaryFilePath()
 			));
 		}
-		alarm.getMusicFilePath();
+		String musicFilePath = alarm.getMusicFilePath();
 		ArrayList<QuizDto> list = new ArrayList<>();
 		list.add(new QuizDto(
 			1L,
@@ -379,7 +379,7 @@ public class AlarmService {
 			"국제무역",
 			"외환관리",
 			"관세제도",
-			"http://localhost:1012"
+			"https://cdn1.suno.ai/a3aa4a9c-5f27-445b-af00-2babbd3bc924.mp3"
 		));
 		list.add(new QuizDto(
 			2L,
@@ -389,14 +389,14 @@ public class AlarmService {
 			"장기대출",
 			"세금감면",
 			"임대사업",
-			"http://localhost:1012"
+			"https://cdn1.suno.ai/a3aa4a9c-5f27-445b-af00-2babbd3bc924.mp3"
 		));
 		return new AlarmStartDto(
 			"https://cdn1.suno.ai/a3aa4a9c-5f27-445b-af00-2babbd3bc924.mp3",
 			list,
 			"한국토지자원관리공단은 한국토지공사의 지분참여를 통해 지역경제활성화를 이룰 수 있는 방안을 모색하기 위해 노력중이다. "
 				+ "\n 한국토지자원관리공단은 한국토지공사의 지분참여를 통해 지역경제활성화를 이룰 수 있는 방안을 모색하기 위해 노력중이다.  "
-			, brief.getSummaryFilePath()
+			, "https://cdn1.suno.ai/a3aa4a9c-5f27-445b-af00-2babbd3bc924.mp3"
 		);
 	}
 
