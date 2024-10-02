@@ -28,20 +28,21 @@ export default defineConfig({
             sizes: '64x64 32x32 24x24 16x16',
             type: 'image/x-icon',
           },
-          // {
-          //   src: '/logo192.png',
-          //   type: 'image/png',
-          //   sizes: '192x192',
-          // },
-          // {
-          //   src: '/logo512.png',
-          //   type: 'image/png',
-          //   sizes: '512x512',
-          // },
+          {
+            src: '/images/tempAppIcon192x192.png',
+            type: 'image/png',
+            sizes: '192x192',
+          },
+          {
+            src: '/images/tempAppIcon512x512.png',
+            type: 'image/png',
+            sizes: '512x512',
+          },
         ],
       },
     }),
   ],
+  publicDir: 'public', // public 폴더를 명시적으로 설정
   resolve: {
     alias: [
       {find: '@', replacement: path.resolve(__dirname, 'src')},

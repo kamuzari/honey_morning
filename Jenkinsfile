@@ -95,6 +95,7 @@ pipeline {
                     --network hm-network \
                     -v $APP_PROPS:/app/config/application.properties \
                     -v /home/ubuntu/project_data:/app/project_data \
+                    -e TZ=Asia/Seoul \
                     backend:latest
                 '''
             }
@@ -108,6 +109,7 @@ pipeline {
                     -p 5173:5173 \
                     --network hm-network \
                     -e VITE_BASE_URL=$(grep VITE_BASE_URL $FRONTEND_ENV | cut -d '=' -f2) \
+                    -e TZ=Asia/Seoul \
                     frontend:latest
                 '''
             }
