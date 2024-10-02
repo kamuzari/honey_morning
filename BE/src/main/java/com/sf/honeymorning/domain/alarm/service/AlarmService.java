@@ -249,6 +249,8 @@ public class AlarmService {
 							.user(user)
 							.summary(shortBriefing)
 							.content(longBriefing)
+							.summaryFilePath(summaryPath)
+							.contentFilePath(contentPath)
 							.build()
 					);
 
@@ -329,6 +331,7 @@ public class AlarmService {
 							quiz.setOption4(items.get(3));
 							int answer = jNode.get("answer").asInt();
 							quiz.setAnswer(answer);
+							quiz.setBrief(save);
 							System.out.println("정답: " + answer);
 							System.out.println("---------------------------");
 							String quizPath = ttsUtil.textToSpeech(quiz.getQuestion(), "quiz");
