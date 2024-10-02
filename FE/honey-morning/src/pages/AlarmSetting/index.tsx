@@ -378,9 +378,9 @@ const Container = styled.div`
   flex-direction: column;
   z-index: -1;
 
-  // * {
-  //   border: 1px solid lime;
-  // }
+  * {
+    border: 1px solid lime;
+  }
 `;
 const ContentsContainer = styled.div`
   display: flex;
@@ -469,7 +469,7 @@ const ToggleContainer =
 const SettingContainer = styled.div`
   display: flex;
   width: 100%;
-  height: 15rem;
+  
   justify-content: center;
   margin: 8rem 0 8rem 0;
   h1 {
@@ -481,6 +481,16 @@ const SettingContainer = styled.div`
     font-weight: bold;
     margin-bottom: 5rem;
   }
+  h2 {
+    display: flex;
+    height: 35rem;
+    justify-content: center;
+    color: var(--white-color);
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 5rem;
+  }
+
   ul {
     display: flex;
     height: 7rem;
@@ -502,7 +512,7 @@ const SettingContainer = styled.div`
       font-size: 3.5rem;
       font-weight: bold;
       color: var(--lightblue-color);
-      position: relative;
+      // position: relative;
 
       .selected {
         color: white;
@@ -568,7 +578,7 @@ const ButtonContainer = styled.div`
 
 const ModalOverlay = styled.div`
   display: flex;
-  position: absolute;
+  // position: absolute;
   background-color: rgba(0, 0, 0, 0.7);
   width: 100%;
   height: 100%;
