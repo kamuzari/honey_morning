@@ -90,7 +90,7 @@ const CustomHashTagContainer = styled.div`
   width: 90%;
   font-size: 5rem;
   padding: 1rem 0 2rem 0;
-  height: 15rem;
+  height: 10rem;
   justify-content: space-between;
   input {
     display: flex;

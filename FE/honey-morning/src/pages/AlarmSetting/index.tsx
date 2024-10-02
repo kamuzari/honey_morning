@@ -7,6 +7,7 @@ import GlobalBtn from '@/component/GlobalBtn';
 import NavBar from '@/component/NavBar/NavBar';
 import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
 
+
 // Typescript
 interface AlarmData {
   id: number,
@@ -23,11 +24,10 @@ const week = ['월', '화', '수', '목', '금', '토', '일'];
 const timeIntervalList = [1, 5, 10, 15, 20, 25, 30];
 const repeatCntList = [1, 2, 3, 5, 10];
 
-// "00"부터 "23"까지의 시간 배열 생성
-const hours = Array.from({length: 24}, (_, i) => String(i).padStart(2, '0'));
 
-// "00"부터 "59"까지의 분 배열 생성
+const hours = Array.from({length: 24}, (_, i) => String(i).padStart(2, '0'));
 const minutes = Array.from({length: 60}, (_, i) => String(i).padStart(2, '0'));
+const seconds = Array.from({length: 60}, (_, i) => String(i).padStart(2, '0'));
 
 // 알람 데이터 가져오기(조회)
 const fetchAlarmData = async (): Promise<AlarmData|null> => {
@@ -55,7 +55,7 @@ const fetchAlarmData = async (): Promise<AlarmData|null> => {
     throw error;
   }
 };
-
+// 알람 데이터를 저장할 state 추가
 const updateAlarmData = async (updatedAlarm: AlarmData) => {
   try {
     const token = sessionStorage.getItem('access');
@@ -64,6 +64,8 @@ const updateAlarmData = async (updatedAlarm: AlarmData) => {
         access: token,
       },
     });
+    console.log(response);
+    // setAlarmData(response.data); // 상태 저장
     return response.data;
   } catch (error) {
     console.error("알람 업데이트 중 오류 발생:", error);
@@ -72,39 +74,6 @@ const updateAlarmData = async (updatedAlarm: AlarmData) => {
 };
 
 
-function getAdjustedTime(inputHour: number, inputMinute: number) {
-  // 현재 시간 가져오기
-  const currentTime = new Date();
-
-  // 입력된 시와 분을 기반으로 오늘 날짜에 해당하는 Date 객체 생성
-  let inputTime = new Date(
-    currentTime.getFullYear(),
-    currentTime.getMonth(),
-    currentTime.getDate(),
-    inputHour,
-    inputMinute,
-  );
-
-  // 입력된 시간이 현재 시간보다 과거인 경우 (즉, 입력된 시간이 이미 지난 시간인 경우)
-  if (inputTime < currentTime) {
-    // 입력된 시간에 하루를 더해서 다음 날로 이동
-    inputTime.setDate(inputTime.getDate() + 1);
-  }
-  
-  // 입력된 시간과 현재 시간의 차이를 계산 (밀리초 단위)
-  const timeDifference = inputTime.getTime() - currentTime.getTime();
-  
-  // 5시간을 밀리초로 계산 (5 * 60 * 60 * 1000 밀리초)
-  const fiveHoursInMs = 5 * 60 * 60 * 1000;
-  
-  // 입력된 시간과 현재 시간의 차이가 5시간 이하인 경우
-  if (timeDifference <= fiveHoursInMs) {
-    // 입력된 시간에 다시 하루를 더함
-    inputTime.setDate(inputTime.getDate() + 1);
-  }
-
-  return inputTime;
-}
 
 const AlarmSetting: React.FunctionComponent = () => {
 
@@ -133,6 +102,7 @@ const AlarmSetting: React.FunctionComponent = () => {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false);
   const [hour, setHour] = useState('00');
   const [minute, setMinute] = useState('00');
+  const [second, setSecond] = useState('00');
   const [alarmState, setAlarmState] = useState<AlarmData>({
     id: 0,
     alarmTime: '',
@@ -142,11 +112,22 @@ const AlarmSetting: React.FunctionComponent = () => {
     musicFilePath: '',
     isActive: 0,
   });
+  const [nextMonth, setNextMonth] = useState('00');
+  const [nextDay, setNextDay] = useState('00');
+  const [nextHour, setNextHour] = useState('00');
+  const [nextMinute, setNextMinute] = useState('00');
 
   const { mutate: updateAlarm } = useMutation({
     mutationFn: updateAlarmData,
-    onSuccess: () => {
-      console.log("알람이 성공적으로 수정되었습니다.");
+    onSuccess: (data) => {
+      console.log("알람이 성공적으로 수정되었습니다.", data);
+      // setAlarmData(data);
+      const date = new Date(data.alarmDate);
+      setNextMonth(String(date.getMonth() + 1).padStart(2, '0'));  // 월은 0부터 시작하므로 +1
+      setNextDay(String(date.getDate()).padStart(2, '0'));
+      setNextHour(String(date.getHours()).padStart(2, '0'));
+      setNextMinute(String(date.getMinutes()).padStart(2, '0'));
+      
       setIsResultModalOpen(true);
     },
     onError: () => {
@@ -157,9 +138,10 @@ const AlarmSetting: React.FunctionComponent = () => {
   useEffect(() => {
     if (alarmData) {
       setAlarmState(alarmData);
-      const [alarmHour, alarmMinute] = alarmData.alarmTime.split(':');
+      const [alarmHour, alarmMinute, alarmSecond] = alarmData.alarmTime.split(':');
       setHour(alarmHour);
       setMinute(alarmMinute);
+      setSecond(alarmSecond);
     }
   }, [alarmData]);
 
@@ -346,7 +328,7 @@ const AlarmSetting: React.FunctionComponent = () => {
             onClick={()=> {
               const updatedAlarmState = {
                 ...alarmState,
-                alarmTime: `${hour}:${minute}`
+                alarmTime: `${hour}:${minute}:00`
               };
               console.log("Updating alarm with:", updatedAlarmState);
               updateAlarm(updatedAlarmState);
@@ -359,8 +341,8 @@ const AlarmSetting: React.FunctionComponent = () => {
           <Modal>
             <div className="description">
               <span>
-                {reservedTime.getMonth() + 1}월 {reservedTime.getDate()}일,{' '}
-                {reservedTime.getHours()}시 {reservedTime.getMinutes()}분{' '}
+                {nextMonth}월 {nextDay}일,{' '}
+                {nextHour}시 {nextMinute}분{' '}
               </span>
 
               <span>알람이 설정되었습니다.</span>

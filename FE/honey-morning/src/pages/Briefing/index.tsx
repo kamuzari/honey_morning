@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -62,15 +63,11 @@ const Button = styled.button`
   }
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-`;
+const BriefingPage = () => {
+  const navigate = useNavigate(); 
 
-const BriefingPage: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const flippedCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRefLeft = useRef<HTMLCanvasElement | null>(null);
+  const canvasRefRight = useRef<HTMLCanvasElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [animationId, setAnimationId] = useState<number | null>(null);
@@ -221,8 +218,15 @@ const BriefingPage: React.FC = () => {
     const audio = new Audio('sample_briefing.mp3');
     audioRef.current = audio;
 
-    const canvas = canvasRef.current;
-    const flippedCanvas = flippedCanvasRef.current;
+    // 오디오가 끝났을 때 페이지 이동 처리
+    audio.addEventListener('ended', () => {
+      setTimeout(() => {
+        navigate('/quizzie');
+      }, 3000); // 3초 대기 후 페이지 전환
+    });
+
+    const canvasLeft = canvasRefLeft.current;
+    const canvasRight = canvasRefRight.current;
 
     if (canvas && flippedCanvas && audio) {
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -262,6 +266,10 @@ const BriefingPage: React.FC = () => {
     initializeCanvas(canvasRef.current);
     initializeCanvas(flippedCanvasRef.current, true);
   };
+
+  useEffect(() => {
+    handlePlayAudio();
+  }, [])
 
   return (
     <Container>

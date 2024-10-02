@@ -17,24 +17,24 @@ export default defineConfig({
         name: 'Honey Morning',
         short_name: 'HoneyMorning',
         description: 'Honey Morning with SSAFY NiKKA',
-        theme_color: '#ffffff',
+        theme_color: '#000000',
         background_color: '#ffffff',
-        display: 'standalone',
+        display: 'fullscreen',
         scope: '/',
         start_url: '/',
         icons: [
           {
-            src: '/favicon.ico',
+            src: '/tempAppIcon.ico',
             sizes: '64x64 32x32 24x24 16x16',
             type: 'image/x-icon',
           },
           {
-            src: '/logo192.png',
+            src: '/images/tempAppIcon192x192.png',
             type: 'image/png',
             sizes: '192x192',
           },
           {
-            src: '/logo512.png',
+            src: '/images/tempAppIcon512x512.png',
             type: 'image/png',
             sizes: '512x512',
           },
@@ -42,6 +42,7 @@ export default defineConfig({
       },
     }),
   ],
+  publicDir: 'public', // public 폴더를 명시적으로 설정
   resolve: {
     alias: [
       {find: '@', replacement: path.resolve(__dirname, 'src')},
