@@ -353,6 +353,7 @@ export const Content = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+
   .titleContainer {
     display: flex;
     width: 100%;
@@ -390,6 +391,10 @@ export const Content = styled.div`
     overflow-y: scroll;
     box-sizing: border-box;
     padding-left: 4rem;
+  }
+  .topic {
+    // flex-direction: column;
+    // display: flex;
   }
 `;
 export const Title = styled.div`
