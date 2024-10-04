@@ -345,7 +345,7 @@ public class AlarmService {
                             System.out.println("정답: " + answer);
                             System.out.println("---------------------------");
                             String quizPath = ttsUtil.textToSpeech(quiz.getQuestion(), "quiz");
-                            quiz.setSummaryFilePath(quizPath);
+                            quiz.setQuizFilePath(quizPath);
                             Quiz saveQuiz = quizRepository.save(quiz);
                         }
                     } else {
@@ -383,7 +383,7 @@ public class AlarmService {
                     quiz.getOption2(),
                     quiz.getOption3(),
                     quiz.getOption4(),
-                    quiz.getSummaryFilePath()
+                    quiz.getQuizFilePath()
             ));
         }
         return new AlarmStartDto(
