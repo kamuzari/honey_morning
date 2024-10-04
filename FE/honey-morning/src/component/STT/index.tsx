@@ -2,14 +2,14 @@ import React, {useEffect, useState} from 'react';
 // import annyang from 'annyang';
 
 import styled from 'styled-components';
-const annyang = window.annyang;
-const SpeechKITT = window.SpeechKITT;
-
 interface SttProps {
   currentOptions: string[];
   answer: string;
   setAnswer: any;
 }
+
+const annyang = window.annyang;
+const SpeechKITT = window.SpeechKITT;
 
 const stt: React.FC<SttProps> = props => {
   const [currentOptions, setCurrentOptions] = useState(props.currentOptions);
@@ -36,6 +36,8 @@ const stt: React.FC<SttProps> = props => {
     }
   };
   useEffect(() => {
+    const annyang = window.annyang;
+    const SpeechKITT = window.SpeechKITT;
     // annyang이 정의되어 있는지 확인
     if (annyang) {
       // 마이크 권한 요청
@@ -58,6 +60,8 @@ const stt: React.FC<SttProps> = props => {
 
   useEffect(() => {
     // 음성 인식 결과가 나올 때 실행
+    const annyang = window.annyang;
+    const SpeechKITT = window.SpeechKITT;
     setCurrentOptions(props.currentOptions);
     annyang.addCallback('result', (phrases: string[]) => {
       optionCheck(phrases[0].trim(), props.currentOptions);
