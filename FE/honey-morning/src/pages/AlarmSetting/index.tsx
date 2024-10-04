@@ -378,9 +378,9 @@ const Container = styled.div`
   flex-direction: column;
   z-index: -1;
 
-  * {
-    border: 1px solid lime;
-  }
+  // * {
+  //   border: 1px solid lime;
+  // }
 `;
 const ContentsContainer = styled.div`
   display: flex;
