@@ -142,7 +142,7 @@ public class AlarmService {
                 Duration duration = Duration.between(nowTime, alarmTime);
 
                 AlarmDateDto alarmDateDto = AlarmDateDto.builder()
-                        .alarmDate(nowDateTime.plus(duration).truncatedTo(ChronoUnit.SECONDS))
+                        .alarmDate(nowDateTime.plus(duration).truncatedTo(ChronoUnit.MINUTES))
                         .day(0L)
                         .hour(duration.toHours())
                         .minuet(duration.toMinutes())
@@ -174,7 +174,7 @@ public class AlarmService {
             long minutes = totalMinutes % 60;
 
             AlarmDateDto alarmDateDto = AlarmDateDto.builder()
-                    .alarmDate(nowDateTime.plusDays(dow - currentDayOfWeek).plus(duration).truncatedTo(ChronoUnit.SECONDS))
+                    .alarmDate(nowDateTime.plusDays(dow - currentDayOfWeek).plus(duration).truncatedTo(ChronoUnit.MINUTES))
                     .day(days)
                     .hour(hours)
                     .minuet(minutes)
