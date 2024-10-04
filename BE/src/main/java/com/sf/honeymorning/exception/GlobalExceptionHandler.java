@@ -71,7 +71,8 @@ public class GlobalExceptionHandler {
 
     // 알람 카테고리가 존재하지 않을 때 오류
     @ExceptionHandler(AlarmCategoryNotFoundException.class)
-    public ResponseEntity<String> handleAlarmCategoryNotFoundException(final AlarmCategoryNotFoundException e) {
+    public ResponseEntity<String> handleAlarmCategoryNotFoundException(
+            final AlarmCategoryNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
@@ -81,8 +82,8 @@ public class GlobalExceptionHandler {
     }
 
     // 그 외 모든 오류
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGeneralException(Exception ex) {
-        return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<String> handleGeneralException(Exception ex) {
+//        return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 }
