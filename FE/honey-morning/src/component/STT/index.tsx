@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import annyang from 'annyang';
+// import annyang from 'annyang';
 
 import styled from 'styled-components';
 interface SttProps {
@@ -8,8 +8,8 @@ interface SttProps {
   setAnswer: any;
 }
 
-// const annyang = window.annyang;
-// const SpeechKITT = window.SpeechKITT;
+const annyang = window.annyang;
+const SpeechKITT = window.SpeechKITT;
 
 const stt: React.FC<SttProps> = props => {
   const [currentOptions, setCurrentOptions] = useState(props.currentOptions);
