@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-// import annyang from 'annyang';
+import annyang from 'annyang';
 
 import styled from 'styled-components';
 interface SttProps {
