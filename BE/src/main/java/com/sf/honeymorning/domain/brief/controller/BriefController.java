@@ -10,8 +10,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,9 +69,19 @@ public class BriefController {
         return ResponseEntity.ok(briefs);
     }
 
-//    @GetMapping("/test")
-//    public ResponseEntity<String> test(@RequestBody String text) {
-//        String brief = briefService.storeBriefFromAi(text);
-//        return ResponseEntity.ok(brief);
-//    }
+    @GetMapping("/audio/{brief_id}")
+    public ResponseEntity<Resource> getBriefAudio(@PathVariable(name = "brief_id") Long briefId) {
+        try {
+            Resource resource = briefService.getBriefAudio(briefId);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("audio/mpeg"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }
