@@ -174,7 +174,7 @@ public class AlarmService {
             long minutes = totalMinutes % 60;
 
             AlarmDateDto alarmDateDto = AlarmDateDto.builder()
-                    .alarmDate(nowDateTime.plusDays(dow - currentDayOfWeek).plus(duration))
+                    .alarmDate(nowDateTime.plusDays(dow - currentDayOfWeek).plus(duration).truncatedTo(ChronoUnit.SECONDS))
                     .day(days)
                     .hour(hours)
                     .minuet(minutes)
