@@ -1,24 +1,26 @@
 import styled from 'styled-components';
 import {useLocation} from 'react-router-dom';
 import {instance} from '@/api/axios';
-import React, { useState, useEffect } from 'react';
-import {saveAlarmResult} from '@/api/alarmApi/index'
-
+import {useNavigate} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {saveAlarmResult} from '@/api/alarmApi/index';
+import GlobalBtn from '@/component/GlobalBtn';
 
 const ShowQuizResult: React.FC = () => {
-
-  
   const location = useLocation();
-  const {correctCount} = location.state || {correctCount: 0};  
+  const {correctCount} = location.state || {correctCount: 0};
 
   // 상태 변수 선언
   const [alarmCategoryInfo, setAlarmCategoryInfo] = useState(null);
   const [streakInfo, setStreakInfo] = useState(null);
-  
+
   useEffect(() => {
     const sendAlarmResult = async () => {
       try {
-        const response = await saveAlarmResult({ count: correctCount, isAttending: 1 });
+        const response = await saveAlarmResult({
+          count: correctCount,
+          isAttending: 1,
+        });
         console.log(response);
       } catch (error) {
         console.error(`[Error] saving alarm result: ${error}`);
@@ -27,8 +29,7 @@ const ShowQuizResult: React.FC = () => {
 
     sendAlarmResult(); // POST 요청을 한 번만 전송
   }, [correctCount]); // `correctCount`가 변경될 때만 실행
-  
-  
+
   useEffect(() => {
     const fetchStreak = async () => {
       try {
@@ -42,20 +43,20 @@ const ShowQuizResult: React.FC = () => {
     fetchStreak(); // 데이터 fetch 호출
   }, []);
 
-    useEffect(() => {
-      const fetchCategory = async () => {
-        try {
-          const data = await fetchCategoryData();
-          setAlarmCategoryInfo(data);
-        } catch (error) {
-          console.error(`[Error] data: ${error}`);
-        }
-      };
-  
-      fetchCategory(); // 데이터 fetch 호출
-    }, []);
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const data = await fetchCategoryData();
+        setAlarmCategoryInfo(data);
+      } catch (error) {
+        console.error(`[Error] data: ${error}`);
+      }
+    };
 
-    console.log(alarmCategoryInfo);
+    fetchCategory(); // 데이터 fetch 호출
+  }, []);
+
+  console.log(alarmCategoryInfo);
 
   const fetchStreakData = async () => {
     const {data} = await instance.get(`/api/alarms/result/streak`);
@@ -66,17 +67,28 @@ const ShowQuizResult: React.FC = () => {
     return data;
   };
 
+  const navigate = useNavigate();
 
   return (
     <TopContainer>
-      <CharacterArea>캐릭터</CharacterArea>
+      <CharacterArea>
+        <img
+          src={
+            correctCount > 0 ? 'images/happyBee.png' : 'images/cryingBee.png'
+          }
+          alt="Bee Character"
+        />
+      </CharacterArea>
       <div className="MessageArea">
-        {correctCount > 0 ? 'Misson Completed!' : (
-  <>
-    {'Streak Broken!'}<br />
-    {'Keep Trying!'}
-  </>
-)}
+        {correctCount > 0 ? (
+          'Misson Completed!'
+        ) : (
+          <>
+            {'Streak Broken!'}
+            <br />
+            {'Keep Trying!'}
+          </>
+        )}
       </div>
       <StatsArea>
         <CategoryArea>
@@ -109,7 +121,14 @@ const ShowQuizResult: React.FC = () => {
           </div>
         </StreakArea>
       </StatsArea>
-      <ToStreakButton>스트릭 확인하기</ToStreakButton>
+      <MypageButton
+        onClick={() => {
+          navigate('/mypage');
+        }}
+      >
+        마이페이지로 이동하기
+      </MypageButton>
+      {/* <ToStreakButton>마이페이지로 이동하기</ToStreakButton> */}
     </TopContainer>
   );
 };
@@ -139,7 +158,7 @@ const CharacterArea = styled.div`
   align-items: center;
   margin: 200px auto 100px;
 
-  border: black solid 1px;
+  // border: black solid 1px;
   height: 800px;
   width: 500px;
   font-size: 100px;
@@ -182,10 +201,10 @@ const CategoryArea = styled.div`
     border-radius: 20px;
     width: 250px;
     height: 250px;
-    font-size: 30px
+    font-size: 30px;
   }
 
-    .CategoryName div {
+  .CategoryName div {
     display: flex;
     align-items: center;
     justify-content: between;
@@ -264,7 +283,7 @@ const StreakArea = styled.div`
   }
 `;
 
-const ToStreakButton = styled.button`
+const MypageButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -275,6 +294,7 @@ const ToStreakButton = styled.button`
   border-radius: 30px;
   color: white;
   font-size: 60px;
+  font-weight: 700;
 `;
 
 export default ShowQuizResult;
