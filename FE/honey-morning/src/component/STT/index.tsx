@@ -36,8 +36,6 @@ const stt: React.FC<SttProps> = props => {
     }
   };
   useEffect(() => {
-    const annyang = window.annyang;
-    const SpeechKITT = window.SpeechKITT;
     // annyang이 정의되어 있는지 확인
     if (annyang) {
       // 마이크 권한 요청
@@ -51,8 +49,8 @@ const stt: React.FC<SttProps> = props => {
         '//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat.css',
       );
       SpeechKITT.vroom();
-      //ddil-ddil.tistory.com/60 [머리가 나쁘면 적어놔야한다:티스토리]
-      출처: https: return () => {
+
+      return () => {
         annyang.abort(); // 컴포넌트가 언마운트될 때 음성 인식 중단
       };
     }
@@ -60,13 +58,13 @@ const stt: React.FC<SttProps> = props => {
 
   useEffect(() => {
     // 음성 인식 결과가 나올 때 실행
-    const annyang = window.annyang;
-    const SpeechKITT = window.SpeechKITT;
     setCurrentOptions(props.currentOptions);
-    annyang.addCallback('result', (phrases: string[]) => {
-      optionCheck(phrases[0].trim(), props.currentOptions);
-      setTest(phrases[0].trim());
-    });
+    if (annyang) {
+      annyang.addCallback('result', (phrases: string[]) => {
+        optionCheck(phrases[0].trim(), props.currentOptions);
+        setTest(phrases[0].trim());
+      });
+    }
   }, [props.currentOptions]);
 
   return (
