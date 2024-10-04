@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import annyang from 'annyang';
+// import annyang from 'annyang';
+
 import styled from 'styled-components';
+const annyang = window.annyang;
+const SpeechKITT = window.SpeechKITT;
 
 interface SttProps {
   currentOptions: string[];
@@ -41,8 +44,13 @@ const stt: React.FC<SttProps> = props => {
       annyang.debug();
       annyang.setLanguage('ko');
       annyang.start();
-
-      return () => {
+      SpeechKITT.annyang();
+      SpeechKITT.setStylesheet(
+        '//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat.css',
+      );
+      SpeechKITT.vroom();
+      //ddil-ddil.tistory.com/60 [머리가 나쁘면 적어놔야한다:티스토리]
+      출처: https: return () => {
         annyang.abort(); // 컴포넌트가 언마운트될 때 음성 인식 중단
       };
     }
