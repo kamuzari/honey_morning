@@ -69,17 +69,42 @@ public class BriefController {
         return ResponseEntity.ok(briefs);
     }
 
-    @Operation(summary = "브리핑 오디오 조회")
+    @Operation(summary = "브리핑 요약본 오디오 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "오디오 파일 조회 성공",
                     content = @Content(mediaType = "audio/mpeg", schema = @Schema(type = "string", format = "binary"))),
             @ApiResponse(responseCode = "404", description = "브리핑을 찾을 수 없음", content = @Content),
             @ApiResponse(responseCode = "500", description = "서버 내부 오류", content = @Content)
     })
-    @GetMapping("/audio/{brief_id}")
-    public ResponseEntity<Resource> getBriefAudio(@PathVariable(name = "brief_id") Long briefId) {
+    @GetMapping("/audio/summary/{brief_id}")
+    public ResponseEntity<Resource> getBriefSummaryAudio(
+            @PathVariable(name = "brief_id") Long briefId) {
         try {
-            Resource resource = briefService.getBriefAudio(briefId);
+            Resource resource = briefService.getBriefSummaryAudio(briefId);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("audio/mpeg"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @Operation(summary = "브리핑 전체 오디오 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "오디오 파일 조회 성공",
+                    content = @Content(mediaType = "audio/mpeg", schema = @Schema(type = "string", format = "binary"))),
+            @ApiResponse(responseCode = "404", description = "브리핑을 찾을 수 없음", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 내부 오류", content = @Content)
+    })
+    @GetMapping("/audio/content/{brief_id}")
+    public ResponseEntity<Resource> getBriefContentAudio(
+            @PathVariable(name = "brief_id") Long briefId) {
+        try {
+            Resource resource = briefService.getBrieContentAudio(briefId);
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType("audio/mpeg"))
                     .header(HttpHeaders.CONTENT_DISPOSITION,
