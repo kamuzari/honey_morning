@@ -39,7 +39,7 @@ const stt: React.FC<SttProps> = props => {
     // annyang이 정의되어 있는지 확인
     if (annyang) {
       // 마이크 권한 요청
-      // requestMicrophoneAccess();
+      requestMicrophoneAccess();
 
       annyang.debug();
       annyang.setLanguage('ko');
