@@ -13,8 +13,6 @@ const SpeechKITT = window.SpeechKITT;
 
 const stt: React.FC<SttProps> = props => {
   const [currentOptions, setCurrentOptions] = useState(props.currentOptions);
-  const [isMicAvailable, setIsMicAvailable] = useState(false);
-  const [test, setTest] = useState(null);
   // 마이크 요청 함수
   const requestMicrophoneAccess = async () => {
     try {
@@ -62,24 +60,30 @@ const stt: React.FC<SttProps> = props => {
     if (annyang) {
       annyang.addCallback('result', (phrases: string[]) => {
         optionCheck(phrases[0].trim(), props.currentOptions);
-        setTest(phrases[0].trim());
       });
     }
   }, [props.currentOptions]);
 
   return (
-    <>
-      <Test>
-        {annyang && annyang.isListening() ? '안냥이 듣고 있습니다.' : 'error'}
-      </Test>
-      <Test>{test}</Test>
-    </>
+    <Container $isListening={annyang && annyang.isListening()}>
+      {annyang && annyang.isListening() ? (
+        <span className="material-icons">mic</span>
+      ) : (
+        <span className="material-icons">mic_off</span>
+      )}
+    </Container>
   );
 };
 
-const Test = styled.div`
-  font-size: 10rem;
-  color: blue;
+const Container =
+  styled.div <
+  {$isListening: boolean} >
+  `
+ color: ${props =>
+   props.$isListening ? 'var(--yellow-color)' : 'var(--darkblue-color)'};
+   span {
+   font-size: 5rem;
+  }
 `;
 
 export default stt;

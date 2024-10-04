@@ -198,7 +198,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
 
   return (
     <Container>
-      { quizData[currentQuizIndex] &&<STT currentOptions={currentOptions} answer={currentOptions[quizData[currentQuizIndex].answerNumber]} setAnswer={setSelectedAnswer}></STT>}
+      
       <ProgressBarArea>
         <ProgressBarBackground />
         <ProgressBarFill progress={progress} isActive={isQuizActive} />
@@ -214,8 +214,14 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
       ))}
       </ProgressBarArea>
       <CharacterArea>캐릭터존</CharacterArea>
-      <NoticeArea>정답을 선택하거나 말하세요.</NoticeArea>
-      <div>남은 시간: {timeLeft} 초</div>
+      <NoticeArea>정답을 선택하거나 말하세요. 
+      </NoticeArea>
+        <div>남은 시간: {timeLeft} 초</div>
+      <Notices>
+        { quizData[currentQuizIndex] &&
+        <STT currentOptions={currentOptions} answer={currentOptions[quizData[currentQuizIndex].answerNumber]} setAnswer={setSelectedAnswer}></STT>}
+      </Notices>
+      
       <SelectArea>
         {currentOptions.map((option, index) => (
           <SelectionBox 
@@ -313,6 +319,13 @@ const NoticeArea = styled.div`
 
   font-size: 50px;
 `;
+
+const Notices = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+`
 
 const SelectArea = styled.div`
   display: grid;
