@@ -9,7 +9,14 @@ import com.sf.honeymorning.domain.quiz.entity.Quiz;
 import com.sf.honeymorning.domain.quiz.repository.QuizRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +25,12 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Transactional
+@Slf4j
 public class QuizService {
+
+    @Value("${file.directory.path.quiz}")
+    private String quizPath;
 
     QuizRepository quizRepository;
     AuthService authService;
@@ -56,7 +68,6 @@ public class QuizService {
     }
 
     // 퀴즈가 끝난 이후, 선택한 보기를 등록할 메서드
-    @Transactional
     public ResponseEntity<?> updateQuiz(QuizRequestDto quizRequestDto) {
 
         Long quizId = quizRequestDto.getId();
@@ -70,5 +81,24 @@ public class QuizService {
 
         return ResponseEntity.ok("퀴즈를 성공적으로 갱신하였습니다.");
     }
+
+    public Resource getQuizAudio(Long quizId) throws IOException {
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Quiz not found with id: " + quizId));
+
+        Path filePath = Paths.get(quizPath, quiz.getQuizFilePath());
+        log.info("파일을 찾습니다: " + filePath);
+        Resource resource = new UrlResource(filePath.toUri());
+
+        if (resource.exists() || resource.isReadable()) {
+            log.info("파일을 찾았습니다: " + resource.getFilename());
+            return resource;
+        } else {
+            throw new IOException("Could not read the file: " + quiz.getQuizFilePath());
+        }
+    }
+    }
+
 
 }

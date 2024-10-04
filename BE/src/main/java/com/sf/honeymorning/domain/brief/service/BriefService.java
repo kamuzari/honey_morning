@@ -99,8 +99,8 @@ public class BriefService {
                 .orElseThrow(
                         () -> new EntityNotFoundException("Brief not found with id: " + briefId));
 
-//        Path filePath = Paths.get(summaryPath, brief.getSummaryFilePath());
-        Path filePath = Paths.get(summaryPath, "test.mp3");
+        Path filePath = Paths.get(summaryPath, brief.getSummaryFilePath());
+//        Path filePath = Paths.get(summaryPath, "test.mp3");
         log.info("파일을 찾습니다: " + filePath);
         Resource resource = new UrlResource(filePath.toUri());
 

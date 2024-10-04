@@ -54,6 +54,6 @@ public class Quiz extends BaseEntity {
     private Integer selection;
 
     @Column(length = 1000, nullable = true)
-    private String summaryFilePath;
+    private String quizFilePath;
 
 }
