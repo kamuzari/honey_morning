@@ -2,6 +2,9 @@ const CACHE_NAME = 'honey-morning-cache-v1';
 const contentToCache = [
   '/',
   '/index.html',
+  '/annyang.min.js',
+  '/speechkit.min.js',
+  '/index.html',
   '/images/tempAppIcon192x192.png',
   '/images/tempAppIcon512x512.png',
 ];
