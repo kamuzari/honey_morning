@@ -9,8 +9,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
+import java.io.IOException;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +58,22 @@ public class QuizController {
     @PatchMapping
     public ResponseEntity<?> updateQuizResults(@RequestBody QuizRequestDto quizRequestDto) {
         return quizService.updateQuiz(quizRequestDto);
+    }
+
+    @GetMapping("/audio/{quiz_id}")
+    public ResponseEntity<Resource> getQuizAudio(@PathVariable(name = "quiz_id") Long quizId) {
+        try {
+            Resource resource = quizService.getQuizAudio(quizId);
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType("audio/mpeg"))
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
 }
