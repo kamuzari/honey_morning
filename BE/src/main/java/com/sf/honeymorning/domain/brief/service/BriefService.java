@@ -46,6 +46,9 @@ public class BriefService {
     @Value("${file.directory.path.summary}")
     private String summaryPath;
 
+    @Value("${file.directory.path.content}")
+    private String contentPath;
+
     private final AuthService authService;
     private final BriefRepository briefRepository;
     private final BriefCategoryRepository briefCategoryRepository;
@@ -94,13 +97,29 @@ public class BriefService {
                         quiz.getSelection(), quiz.getAnswer())).toList(), brief.getCreatedAt());
     }
 
-    public Resource getBriefAudio(Long briefId) throws IOException {
+    public Resource getBriefSummaryAudio(Long briefId) throws IOException {
         Brief brief = briefRepository.findById(briefId)
                 .orElseThrow(
                         () -> new EntityNotFoundException("Brief not found with id: " + briefId));
 
         Path filePath = Paths.get(summaryPath, brief.getSummaryFilePath());
-//        Path filePath = Paths.get(summaryPath, "test.mp3");
+        log.info("파일을 찾습니다: " + filePath);
+        Resource resource = new UrlResource(filePath.toUri());
+
+        if (resource.exists() || resource.isReadable()) {
+            log.info("파일을 찾았습니다: " + resource.getFilename());
+            return resource;
+        } else {
+            throw new IOException("Could not read the file: " + brief.getSummaryFilePath());
+        }
+    }
+
+    public Resource getBrieContentAudio(Long briefId) throws IOException {
+        Brief brief = briefRepository.findById(briefId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Brief not found with id: " + briefId));
+
+        Path filePath = Paths.get(contentPath, brief.getContentFilePath());
         log.info("파일을 찾습니다: " + filePath);
         Resource resource = new UrlResource(filePath.toUri());
 
