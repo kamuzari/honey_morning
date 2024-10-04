@@ -69,6 +69,13 @@ public class BriefController {
         return ResponseEntity.ok(briefs);
     }
 
+    @Operation(summary = "브리핑 오디오 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "오디오 파일 조회 성공",
+                    content = @Content(mediaType = "audio/mpeg", schema = @Schema(type = "string", format = "binary"))),
+            @ApiResponse(responseCode = "404", description = "브리핑을 찾을 수 없음", content = @Content),
+            @ApiResponse(responseCode = "500", description = "서버 내부 오류", content = @Content)
+    })
     @GetMapping("/audio/{brief_id}")
     public ResponseEntity<Resource> getBriefAudio(@PathVariable(name = "brief_id") Long briefId) {
         try {
