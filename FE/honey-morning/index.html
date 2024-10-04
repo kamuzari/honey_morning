@@ -9,12 +9,15 @@
     <title>Honey Morning</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.6.0/annyang.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/SpeechKITT/1.0.0/speechkitt.min.js"></script>
-    <script src="/speechkit.min.js"></script>
-    <script src="/annyang.min.js"></script>
+    <script src="./public/speechkit.min.js"></script>
+    <script src="./public/annyang.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/eruda"></script>
     <script>eruda.init();</script>
-    <script>      annyang.debug();
-      annyang.setLanguage('ko');annyang.start();</script>
+    <script>
+      annyang.debug();
+      annyang.setLanguage('ko');
+      annyang.start();
+    </script>
   </head>
   <body>
     <script type="module" src="/src/main.tsx"></script>
