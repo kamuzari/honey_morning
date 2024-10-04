@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import annyang from 'annyang';
+// import annyang from 'annyang';
 
 import styled from 'styled-components';
 interface SttProps {
@@ -8,13 +8,11 @@ interface SttProps {
   setAnswer: any;
 }
 
-// const annyang = window.annyang;
-// const SpeechKITT = window.SpeechKITT;
+const annyang = window.annyang;
+const SpeechKITT = window.SpeechKITT;
 
 const stt: React.FC<SttProps> = props => {
   const [currentOptions, setCurrentOptions] = useState(props.currentOptions);
-  const [isMicAvailable, setIsMicAvailable] = useState(false);
-  const [test, setTest] = useState(null);
   // 마이크 요청 함수
   const requestMicrophoneAccess = async () => {
     try {
@@ -39,16 +37,16 @@ const stt: React.FC<SttProps> = props => {
     // annyang이 정의되어 있는지 확인
     if (annyang) {
       // 마이크 권한 요청
-      requestMicrophoneAccess();
+      // requestMicrophoneAccess();
 
       annyang.debug();
       annyang.setLanguage('ko');
       annyang.start();
-      // SpeechKITT.annyang();
-      // SpeechKITT.setStylesheet(
-      //   '//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat.css',
-      // );
-      // SpeechKITT.vroom();
+      SpeechKITT.annyang();
+      SpeechKITT.setStylesheet(
+        '//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat.css',
+      );
+      SpeechKITT.vroom();
 
       return () => {
         annyang.abort(); // 컴포넌트가 언마운트될 때 음성 인식 중단
@@ -62,24 +60,30 @@ const stt: React.FC<SttProps> = props => {
     if (annyang) {
       annyang.addCallback('result', (phrases: string[]) => {
         optionCheck(phrases[0].trim(), props.currentOptions);
-        setTest(phrases[0].trim());
       });
     }
   }, [props.currentOptions]);
 
   return (
-    <>
-      <Test>
-        {annyang && annyang.isListening() ? '안냥이 듣고 있습니다.' : 'error'}
-      </Test>
-      <Test>{test}</Test>
-    </>
+    <Container $isListening={annyang && annyang.isListening()}>
+      {annyang && annyang.isListening() ? (
+        <span className="material-icons">mic</span>
+      ) : (
+        <span className="material-icons">mic_off</span>
+      )}
+    </Container>
   );
 };
 
-const Test = styled.div`
-  font-size: 10rem;
-  color: blue;
+const Container =
+  styled.div <
+  {$isListening: boolean} >
+  `
+ color: ${props =>
+   props.$isListening ? 'var(--yellow-color)' : 'var(--darkblue-color)'};
+   span {
+   font-size: 5rem;
+  }
 `;
 
 export default stt;
