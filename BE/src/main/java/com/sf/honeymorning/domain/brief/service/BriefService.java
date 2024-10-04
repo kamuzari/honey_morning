@@ -1,5 +1,6 @@
 package com.sf.honeymorning.domain.brief.service;
 
+import jakarta.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -41,6 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class BriefService {
 
     @Value("${file.directory.path.summary}")
