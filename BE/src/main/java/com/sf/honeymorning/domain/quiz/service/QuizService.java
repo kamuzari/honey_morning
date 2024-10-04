@@ -33,9 +33,9 @@ public class QuizService {
     @Value("${file.directory.path.quiz}")
     private String quizPath;
 
-    QuizRepository quizRepository;
-    AuthService authService;
-    BriefRepository briefRepository;
+    private final QuizRepository quizRepository;
+    private final AuthService authService;
+    private final BriefRepository briefRepository;
 
     // 하나의 브리핑에 묶인 두 개의 퀴즈 반환
     public List<QuizResponseDto> getQuiz(Long briefId) {
