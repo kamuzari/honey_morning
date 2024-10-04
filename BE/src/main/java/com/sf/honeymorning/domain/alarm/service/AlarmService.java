@@ -115,6 +115,8 @@ public class AlarmService {
 
         // 설정한 알람 시각
         LocalTime alarmTime = alarmRequestDto.getAlarmTime();
+        int alarmHour = alarmTime.getHour();
+        int alarmMinute = alarmTime.getMinute();
         // 설정한 알람 요일
         String alarmWeek = alarmRequestDto.getDaysOfWeek();
 
@@ -142,7 +144,7 @@ public class AlarmService {
                 Duration duration = Duration.between(nowTime, alarmTime);
 
                 AlarmDateDto alarmDateDto = AlarmDateDto.builder()
-                        .alarmDate(nowDateTime.plus(duration).truncatedTo(ChronoUnit.MINUTES))
+                        .alarmDate(nowDateTime.plus(duration).withHour(alarmHour).withMinute(alarmMinute).truncatedTo(ChronoUnit.MINUTES))
                         .day(0L)
                         .hour(duration.toHours())
                         .minuet(duration.toMinutes())
@@ -174,7 +176,7 @@ public class AlarmService {
             long minutes = totalMinutes % 60;
 
             AlarmDateDto alarmDateDto = AlarmDateDto.builder()
-                    .alarmDate(nowDateTime.plusDays(dow - currentDayOfWeek).plus(duration).truncatedTo(ChronoUnit.MINUTES))
+                    .alarmDate(nowDateTime.plusDays(dow - currentDayOfWeek).plus(duration).withHour(alarmHour).withMinute(alarmMinute).truncatedTo(ChronoUnit.MINUTES))
                     .day(days)
                     .hour(hours)
                     .minuet(minutes)
