@@ -9,7 +9,7 @@ interface SttProps {
 }
 
 const annyang = window.annyang;
-const SpeechKITT = window.SpeechKITT;
+// const SpeechKITT = window.SpeechKITT;
 
 const stt: React.FC<SttProps> = props => {
   const [currentOptions, setCurrentOptions] = useState(props.currentOptions);
@@ -39,14 +39,14 @@ const stt: React.FC<SttProps> = props => {
       // 마이크 권한 요청
       // requestMicrophoneAccess();
 
-      annyang.debug();
+      // annyang.debug();
       annyang.setLanguage('ko');
       annyang.start();
-      SpeechKITT.annyang();
-      SpeechKITT.setStylesheet(
-        '//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat.css',
-      );
-      SpeechKITT.vroom();
+      // SpeechKITT.annyang();
+      // SpeechKITT.setStylesheet(
+      // '//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat.css',
+      // );
+      // SpeechKITT.vroom();
 
       return () => {
         annyang.abort(); // 컴포넌트가 언마운트될 때 음성 인식 중단
