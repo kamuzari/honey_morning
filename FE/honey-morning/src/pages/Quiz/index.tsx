@@ -1,9 +1,28 @@
-import {useState, useEffect, useRef} from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import styled from 'styled-components';
 import { instance } from '@/api/axios'
 import STT from '@/component/STT';
+
+interface Quiz {
+  id: number;
+  question: string;
+  answer: number;
+  option1: string;
+  option2: string;
+  option3: string;
+  option4: string;
+  quizUrl: string;
+}
+
+interface AlarmStartResponse {
+  morningCallUrl: string;
+  quizzes: Quiz[];
+  briefingContent: string;
+  briefingContentUrl: string;
+  briefingId: number;
+}
 
 export interface QuizData {
   id: number,
@@ -43,6 +62,22 @@ const fetchQuizData = async(briefId: number): Promise<QuizData[]> => {
   }
 }
 
+const fetchAudio = async (quizId: number) => {
+  try {
+    const response = await instance.get(`/api/quizzes/audio/${quizId}`, {
+      responseType: 'blob',
+    });
+    const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
+    const audioUrl = URL.createObjectURL(audioBlob);
+    console.log('오디오를 성공적으로 받아왔습니다:', audioUrl);
+    return { audioUrl, response };
+  } catch (error) {
+    console.error('오디오를 받아오는데 실패했습니다:', error);
+    throw error;
+  }
+};
+
+
 // patch 요청
 const saveQuizResult = async(quizResult: {correctCount: number; totalQuestions: number}) => {
   try{
@@ -57,6 +92,10 @@ const saveQuizResult = async(quizResult: {correctCount: number; totalQuestions: 
 const QuizSolution: React.FC = () => {
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  //prettier-ignore
+  const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
 
   //timer
   const [timeLeft, setTimeLeft] = useState(10);
@@ -76,16 +115,18 @@ const QuizSolution: React.FC = () => {
 
   // const [briefId, setBriefId] = useState<number | null>(null);
 
-  const briefId = 1;
+  const briefId = alarmStartData?.briefingId;
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  console.log('퀴즈 페이지의 alarmStartData:', alarmStartData);
+
 
   // get
 const { mutate: fetchQuizDataMutate } = useMutation({
   mutationFn: (id: number) => fetchQuizData(id),
   onSuccess: (data: QuizData[]) => {
-    console.log("퀴즈 데이터를 불러오는데 성공")
+    console.log("퀴즈 데이터를 불러오는데 성공", data)
     setQuizData(data);
     setIsQuizActive(true);
-    speakQuestion();
   },
   onError: (error) => {
     console.error("퀴즈 데이터를 불러오는데 실패", error)
@@ -113,12 +154,27 @@ useEffect(()=> {
 
 
 useEffect(() => {
-  if (quizData.length > 0 && currentQuizIndex > 0) {
-    speakQuestion();
-    setTimeLeft(10);
-    setIsQuizActive(true);
+  if (quizData.length > 0 && currentQuizIndex >= 0) {
+    const currentQuiz = alarmStartData.quizzes[currentQuizIndex];
+    console.log("currentQuiz",currentQuiz);
+    if (currentQuiz && currentQuiz.id !== undefined) {
+      console.log('현재 퀴즈 ID:', currentQuiz.id);
+      fetchAudio(currentQuiz.id).then(({ audioUrl }) => {
+        console.log('오디오 URL:', audioUrl);
+        if (audioRef.current) {
+          audioRef.current.src = audioUrl;
+          audioRef.current.play();
+        }
+      }).catch((error) => {
+        console.error("오디오를 가져오는데 실패했습니다:", error);
+      });
+      setTimeLeft(10);
+      setIsQuizActive(true);
+    } else {
+      console.error('현재 퀴즈 또는 퀴즈 ID가 정의되지 않았습니다:', currentQuiz);
+    }
   }
-}, [currentQuizIndex]);;
+}, [currentQuizIndex, quizData]);
 
 useEffect(() => {
   let timer: NodeJS.Timeout;
@@ -130,20 +186,6 @@ useEffect(() => {
   return () => clearTimeout(timer);
 }, [timeLeft, isQuizActive]);
 
-
-const speakQuestion = () => {
-  if (quizData[currentQuizIndex]) {
-    const speech = new SpeechSynthesisUtterance(quizData[currentQuizIndex].question);
-    window.speechSynthesis.speak(speech);
-  }
-};
-
-// SpeechSynthesisUtterance.lang: 언어 설정
-// SpeechSynthesisUtterance.pitch: 음높이 설정
-// SpeechSynthesisUtterance.rate: 말하는 속도 설정
-// SpeechSynthesisUtterance.text: 이용할 텍스트 설정
-// SpeechSynthesisUtterance.voice: 보이스 설정
-// SpeechSynthesisUtterance.volume: 볼륨 설정
 
 
 
@@ -173,7 +215,7 @@ const handleTimeUp = () => {
         correctCount: correctCountRef.current,
         totalQuestions: quizData.length,
       })
-      // navigate('/quizresult', { state: { correctCount: correctCountRef.current } });
+      
     }
   }, 5000);  //모달 시간 조절
 };
@@ -198,7 +240,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
 
   return (
     <Container>
-      
+      <audio ref={audioRef} controls hidden />
       <ProgressBarArea>
         <ProgressBarBackground />
         <ProgressBarFill progress={progress} isActive={isQuizActive} />

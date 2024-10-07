@@ -21,7 +21,7 @@ interface AlarmData {
 }
 
 const fetchAudio = async (briefingId: number) => {
-  const response = await instance.get(`/api/briefs/audio/${briefingId}`, {
+  const response = await instance.get(`/api/briefs/audio/summary/${briefingId}`, {
     responseType: 'blob',
   });
   const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
@@ -36,14 +36,14 @@ const BriefingPage: React.FC = () => {
 
   //prettier-ignore
   const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
-  console.log('alarmStartData:', alarmStartData);
+  // console.log('alarmStartData:', alarmStartData);
   const briefingContent = alarmStartData?.briefingContent;
   const briefingContentUrl = alarmStartData?.briefingContentUrl;
   const briefingId = alarmStartData?.briefingId;
 
-  console.log('briefingContent: ', briefingContent);
-  console.log('briefingContentUrl: ', briefingContentUrl);
-  console.log('briefingId: ', briefingId);
+  // console.log('briefingContent: ', briefingContent);
+  // console.log('briefingContentUrl: ', briefingContentUrl);
+  // console.log('briefingId: ', briefingId);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const flippedCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -60,11 +60,11 @@ const BriefingPage: React.FC = () => {
     initializeCanvas(flippedCanvasRef.current, true);
     
     return () => {
-      if (animationId) {
+      if (animationId !== null ) {
         cancelAnimationFrame(animationId);
       }
     };
-  }, []);
+  }, []); //처음 렌더링 시에만 실행
   
   const initializeCanvas = (canvas: HTMLCanvasElement | null, isFlipped: boolean = false) => {
     if (!canvas) return;
@@ -194,7 +194,7 @@ const BriefingPage: React.FC = () => {
   const { mutate: fetchAndPlayAudio } = useMutation({
     mutationFn: () => fetchAudio(briefingId!),
     onSuccess: ({ audioUrl, response }) => {
-      console.log('Axios response:', response);
+      // console.log('Axios response:', response);
       const audio = new Audio(audioUrl);
       audioRef.current = audio;
       const canvas = canvasRef.current;
@@ -244,7 +244,7 @@ const BriefingPage: React.FC = () => {
       audioRef.current.currentTime = 0;
     }
     
-    if (animationId) {
+    if (animationId !== null) {
       cancelAnimationFrame(animationId);
     }
     
