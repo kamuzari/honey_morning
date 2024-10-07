@@ -41,10 +41,10 @@ const Container =
   display: flex;
   width: 100%;
   height: 8rem;
-  padding: 2rem 0 0 0;
+  padding: 1.7rem 0 0 0;
   justify-content: ${props => (props.$num > 1 ? 'space-between' : 'center')};
   align-items: center;
-  background-color: red;
+  // background-color: red;
 `;
 
 export default NavBar;
