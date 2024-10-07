@@ -7,20 +7,20 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                git branch: 'develop',
-                    url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git',
-                    credentialsId: 'wngud1225'
-            }
-        }
-
         stage('Prepare Git Info') {
             steps {
                 script {
                     env.GIT_AUTHOR_NAME = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
                     env.GIT_AUTHOR_EMAIL = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
                 }
+            }
+        }
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'develop',
+                    url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git',
+                    credentialsId: 'wngud1225'
             }
         }
 
