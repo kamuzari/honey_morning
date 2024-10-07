@@ -417,7 +417,7 @@ export const SmallTitle = styled.div`
 const PaginationContainer = styled.ul`
   display: flex;
   box-sizing: border-box;
-  margin: 3rem 0 0 0;
+  margin: 4rem 0 0 0;
   flex-direction: column;
   align-items: center;
 `;
@@ -446,7 +446,7 @@ const PaginationHead = styled.div`
 const PaginationItem = styled.li`
   display: flex;
   font-size: 2.8rem;
-  height: 5.2rem;
+  height: 7rem;
   width: 100%;
   align-items: center;
   justify-content: space-around;
@@ -460,7 +460,7 @@ const PaginationItem = styled.li`
   }
   .content {
     display: block;
-    width: 40rem;
+    width: 35rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
