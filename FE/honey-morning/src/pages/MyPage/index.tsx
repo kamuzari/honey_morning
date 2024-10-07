@@ -406,7 +406,7 @@ export const Content = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 40rem;
+    height: 33rem;
     width: 85%;
     overflow-x: hidden;
     overflow-y: scroll;
@@ -468,7 +468,7 @@ const PaginationHead = styled.div`
 const PaginationItem = styled.li`
   display: flex;
   font-size: 2.8rem;
-  height: 5.2rem;
+  height: 6rem;
   width: 100%;
   align-items: center;
   justify-content: space-around;

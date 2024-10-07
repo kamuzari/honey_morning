@@ -141,7 +141,7 @@ const AlarmPage = () => {
               />
             </audio>
             <Button onClick={handleStartBriefing}>브리핑 시작</Button>
-            <SkipButton onClick={handleSkipBriefing}>브리핑 스킵</SkipButton>
+            <SkipButton onClick={handleSkipBriefing}>오늘은 건너뛰기</SkipButton>
           </>
         ) : (
           <>
@@ -168,23 +168,22 @@ const Container = styled.div`
 `;
 
 const GlassCard = styled.div`
-  background: rgba(253, 199, 39, 0.15);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(253, 199, 39, 0.3);
-  box-shadow: 0 16px 64px 0 rgba(31, 38, 135, 0.2);
+  border: 2px solid rgba(0, 0, 0); // 임시
+  // background: rgba(242, 227, 182, 0.4);
+  background: rgba(253, 199, 39, 0.2);
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  padding: 50px;
   box-sizing: border-box;
 `;
 
 const Button = styled.button`
   padding: 20px 30px;
-  font-size: 30px;
+  font-size: 60px;
   background: #25387c;
   color: #ffffff;
   border: none;
@@ -192,7 +191,8 @@ const Button = styled.button`
   cursor: pointer;
   transition: all 0.3s ease;
   margin: 30px 0;
-  width: 80%;
+  width: 70%;
+  padding: 25px 20px;
 
   &:hover {
     background: #1a2a5e;
@@ -203,8 +203,8 @@ const Button = styled.button`
 const SkipButton = styled.button`
   background: none;
   border: none;
-  color: #25387c;
-  font-size: 24px;
+  color: black;
+  font-size: 45px;
   cursor: pointer;
   text-decoration: underline;
   margin-top: 20px;
@@ -223,13 +223,15 @@ const ClockContainer = styled.div`
 `;
 
 const TimeDisplay = styled.div`
-  background: rgba(253, 199, 39, 0.15);
+  // background: rgba(253, 199, 39, 0.5);
+  // background: rgba(253, 255, 255, 0.95);
+  background: #25387c;
   backdrop-filter: blur(10px);
   border-radius: 30px;
   border: 2px solid rgba(253, 199, 39, 0.3);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-  padding: 30px;
-  color: #25387c;
+  padding: 25px 10px;
+  color: rgb(255, 255, 255);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -245,17 +247,18 @@ const TimeUnit = styled.div`
 `;
 
 const TimeBox = styled.div`
-  background: rgba(253, 199, 39, 0.3);
+  // background: rgba(250, 199, 39);
+  // background: rgba(253, 255, 255, 0.95);
   border-radius: 20px;
-  padding: 20px;
-  margin: 0 10px;
-  font-size: 48px;
+  padding: 25px;
+  margin: 0 12px;
+  font-size: 70px;
   font-weight: bold;
   min-width: 100px;
 `;
 
 const AmPm = styled.div`
-  font-size: 36px;
+  font-size: 60px;
   font-weight: bold;
   margin-left: 20px;
   display: flex;
@@ -263,11 +266,12 @@ const AmPm = styled.div`
 `;
 
 const ClockFace = styled.div`
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height:500px;
   border-radius: 50%;
   position: relative;
-  background: rgba(253, 199, 39, 0.2);
+  // background: rgba(253, 199, 39, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   border: 2px solid rgba(253, 199, 39, 0.3);
   box-shadow: 0 16px 64px 0 rgba(31, 38, 135, 0.2);
@@ -283,22 +287,22 @@ const ClockHand = styled.div`
 `;
 
 const HourHand = styled(ClockHand)`
-  width: 8px;
-  height: 100px;
+  width: 12px;
+  height: 140px;
   background: #c4302b;
   border-radius: 4px;
 `;
 
 const MinuteHand = styled(ClockHand)`
-  width: 6px;
-  height: 140px;
+  width: 10px;
+  height: 180px;
   background: #5471ff;
   border-radius: 3px;
 `;
 
 const SecondHand = styled(ClockHand)`
-  width: 2px;
-  height: 160px;
+  width: 6px;
+  height: 200px;
   background: #1d3557;
 `;
 
@@ -318,6 +322,6 @@ const AlarmMessage = styled.h2`
   color: #25387c;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 30px 0;
-  font-size: 36px;
+  font-size: 45px;
   text-align: center;
 `;

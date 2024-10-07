@@ -30,12 +30,15 @@ public class TtsUtil {
     @Value("${file.directory.path.quiz}")
     private String quizPath;
 
+    @Value("${api.key.elevenlabs}")
+    private String elevenlabsKey;
+
 
     private final OkHttpClient client = new OkHttpClient();
 
     // 세팅
-    private static final String API_KEY = "sk_bb66d759209977f666fb4d27eef34e0dca2e003415380b4f";
-    private static final String ELEVENLABS_BASE_URL = "https://api.elevenlabs.io/v1";
+    private final String API_KEY = elevenlabsKey;
+    private final String ELEVENLABS_BASE_URL = "https://api.elevenlabs.io/v1";
 
     // 커스텀
     private final String voiceId = "XrExE9yKIg1WjnnlVkGX";
@@ -75,7 +78,7 @@ public class TtsUtil {
 
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                throw new IOException("예상치 못한 코드입니다: " + response);
+                throw new IOException("TTS API 요청의 예상치 못한 코드입니다: " + response);
             }
 
             return saveTts(response.body().bytes(), getFileDirectoryPath(fileType));
