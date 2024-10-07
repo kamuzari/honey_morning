@@ -1,12 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { useNavigate  } from 'react-router-dom';
+import { instance } from '@/api/axios'
 import styled from 'styled-components';
 
 interface AlarmStartResponse {
   morningCallUrl: string;
   briefingContent: string;
   briefingContentUrl: string;
+  briefingId: number;
 }
 
 interface AlarmData {
@@ -17,6 +19,14 @@ interface AlarmData {
   repeatInterval: number;
   isActive: number;
 }
+
+const fetchAudio = async (briefingId: number) => {
+  const response = await instance.get(`/api/briefs/audio/${briefingId}`, {
+    responseType: 'blob',
+  });
+  const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
+  return { audioUrl: URL.createObjectURL(audioBlob), response };  // 오디오 Blob을 URL로 반환
+};
 
 
 const BriefingPage: React.FC = () => {
@@ -29,9 +39,11 @@ const BriefingPage: React.FC = () => {
   console.log('alarmStartData:', alarmStartData);
   const briefingContent = alarmStartData?.briefingContent;
   const briefingContentUrl = alarmStartData?.briefingContentUrl;
+  const briefingId = alarmStartData?.briefingId;
 
-  console.log('briefingContent:', briefingContent);
-  console.log('briefingContentUrl:', briefingContentUrl);
+  console.log('briefingContent: ', briefingContent);
+  console.log('briefingContentUrl: ', briefingContentUrl);
+  console.log('briefingId: ', briefingId);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const flippedCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -178,39 +190,52 @@ const BriefingPage: React.FC = () => {
     
     draw();
   };
-  
-  const handlePlayAudio = () => {
-    if (isPlaying) return;
-    
-    console.log("TTS 파일 경로:", `${import.meta.env.VITE_PROJECT_DATA_URL}/project_data/summary/${briefingContentUrl}`);
-    const audio = new Audio(`${import.meta.env.VITE_PROJECT_DATA_URL}/project_data/summary/${briefingContentUrl}`);
-    console.log(`${import.meta.env.VITE_PROJECT_DATA_URL}/project_data/summary/${briefingContentUrl}`)
-    audioRef.current = audio;
-    
-    const canvas = canvasRef.current;
-    const flippedCanvas = flippedCanvasRef.current;
-    
-    if (canvas && flippedCanvas && audio) {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const analyser = audioContext.createAnalyser();
-      analyser.fftSize = 256;
-      
-      const source = audioContext.createMediaElementSource(audio);
-      source.connect(analyser);
-      analyser.connect(audioContext.destination);
-      
-      const bufferLength = analyser.frequencyBinCount;
-      const dataArray = new Uint8Array(bufferLength);
-      
-      drawVisualization(canvas, analyser, dataArray, bufferLength);
-      drawVisualization(flippedCanvas, analyser, dataArray, bufferLength, true);
-      
-      audio.play().catch((error) => {
-        console.error('Audio play failed:', error);
-      });
 
-      setIsPlaying(true);
-    }
+  const { mutate: fetchAndPlayAudio } = useMutation({
+    mutationFn: () => fetchAudio(briefingId!),
+    onSuccess: ({ audioUrl, response }) => {
+      console.log('Axios response:', response);
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+      const canvas = canvasRef.current;
+      const flippedCanvas = flippedCanvasRef.current;
+  
+      if (canvas && flippedCanvas && audio) {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+  
+        const source = audioContext.createMediaElementSource(audio);
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+  
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+  
+        // 시각화 함수 호출
+        drawVisualization(canvas, analyser, dataArray, bufferLength);
+        drawVisualization(flippedCanvas, analyser, dataArray, bufferLength, true);
+  
+        // 페이지 자동 전환
+        audio.addEventListener('ended', () => {
+          setTimeout(() => {
+            navigate('/quizzie');
+          }, 3000);
+        })
+
+        audio.play().catch((error) => console.error('Audio play failed:', error));
+        setIsPlaying(true);
+      }
+    },
+    onError: (error: any) => {
+      console.error('Failed to fetch or play audio:', error);
+    },
+  });
+  
+
+  const handlePlayAudio = () => {
+    if (isPlaying ) return;
+    fetchAndPlayAudio();  // mutate 호출로 오디오 파일 가져오기 및 재생
   };
   
   const handleStopAudio = () => {

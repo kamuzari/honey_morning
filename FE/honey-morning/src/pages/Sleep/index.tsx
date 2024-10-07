@@ -24,6 +24,7 @@ interface AlarmStartResponse {
   quizzes: Quiz[];
   briefingContent: string;
   briefingContentUrl: string;
+  briefingId: number;
 }
 
 
@@ -386,7 +387,7 @@ const SleepWakeLock = () => {
         <AlarmInfo>
           <span className="material-icons">alarm</span>
           {/* span 태그 안에 내가 설정한 알람 시각 조회해서 보여줘야 함 */}
-          <span>{alarmData.alarmTime.slice(0,5)}</span>
+          <span>{alarmData && alarmData.alarmTime.slice(0,5)}</span>
         </AlarmInfo>
   
         <EndButton onClick={() => setModalOpen(true)}>잠자기 종료</EndButton>
