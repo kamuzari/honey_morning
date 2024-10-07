@@ -33,11 +33,9 @@ public class TtsUtil {
     @Value("${api.key.elevenlabs}")
     private String elevenlabsKey;
 
-
     private final OkHttpClient client = new OkHttpClient();
 
     // 세팅
-    private final String API_KEY = elevenlabsKey;
     private final String ELEVENLABS_BASE_URL = "https://api.elevenlabs.io/v1";
 
     // 커스텀
@@ -69,7 +67,7 @@ public class TtsUtil {
 
         Request request = new Request.Builder()
                 .url(ELEVENLABS_BASE_URL + "/text-to-speech/" + voiceId)
-                .addHeader("xi-api-key", API_KEY)
+                .addHeader("xi-api-key", elevenlabsKey)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("optimize_streaming_latency", "0")
                 .addHeader("output_format", "mp3_22050_32")
