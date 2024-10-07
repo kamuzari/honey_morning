@@ -14,6 +14,10 @@ const ShowQuizResult: React.FC = () => {
   const [alarmCategoryInfo, setAlarmCategoryInfo] = useState(null);
   const [streakInfo, setStreakInfo] = useState(null);
 
+  const currentDate = new Date();
+  const currentMonth = String(currentDate.getMonth() + 1);
+  const currentDay = String(currentDate.getDate());
+
   useEffect(() => {
     const sendAlarmResult = async () => {
       try {
@@ -70,97 +74,128 @@ const ShowQuizResult: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <TopContainer>
-      <CharacterArea>
-        <img
-          src={
-            correctCount > 0 ? 'images/happyBee.png' : 'images/cryingBee.png'
-          }
-          alt="Bee Character"
-        />
-      </CharacterArea>
-      <div className="MessageArea">
-        {correctCount > 0 ? (
-          'Misson Completed!'
-        ) : (
-          <>
-            {'Streak Broken!'}
-            <br />
-            {'Keep Trying!'}
-          </>
-        )}
-      </div>
-      <StatsArea>
-        <CategoryArea>
-          <div className="Category">카테고리</div>
-          <div className="CategoryName">
-            {alarmCategoryInfo ? (
-              alarmCategoryInfo.map((category, index) => (
-                <div key={index}>
-                  <p className="material-icons">category</p>
-                  <p>{category.word}</p>
-                </div>
-              ))
-            ) : (
-              <p>카테고리 정보 없음</p>
-            )}
-          </div>
-        </CategoryArea>
-        <CorrectAnswersArea>
-          <div className="Answer">정답 수</div>
-          <div className="AnswerCount">
-            <p className="material-icons">check</p>
-            <p>{correctCount} / 2 </p>
-          </div>
-        </CorrectAnswersArea>
-        <StreakArea>
-          <div className="Streak">스트릭</div>
-          <div className="StreakDays">
-            <p className="material-icons">event</p>
-            <p>{streakInfo}</p>
-          </div>
-        </StreakArea>
-      </StatsArea>
-      <MypageButton
-        onClick={() => {
-          navigate('/mypage');
-        }}
-      >
-        마이페이지로 이동하기
-      </MypageButton>
-      {/* <ToStreakButton>마이페이지로 이동하기</ToStreakButton> */}
-    </TopContainer>
+    <Container>
+      <WhiteContainer>
+        <ResultTitle>
+          {currentMonth}월 {currentDay}일 꿀모닝 퀴즈 결과
+        </ResultTitle>
+        <CharacterArea>
+          <img
+            src={
+              correctCount > 0 ? 'images/happyBee.png' : 'images/cryingBee.png'
+            }
+            alt="Bee Character"
+          />
+        </CharacterArea>
+        <div className="MessageArea">
+          {correctCount > 0 ? (
+            '오늘의 꿀모닝 퀴즈 완료!'
+          ) : (
+            <>
+              <p>{'정답을 맞추지 못했어요!'}</p>
+              <p>{'연속 출석에 실패하셨어요'}</p>
+            </>
+          )}
+        </div>
+        <StatsArea>
+          <CategoryArea>
+            <div className="Category">카테고리</div>
+            <div className="CategoryName">
+              {alarmCategoryInfo ? (
+                alarmCategoryInfo.map((category, index) => (
+                  <div key={index}>
+                    <p className="material-icons">category</p>
+                    <p>{category.word}</p>
+                  </div>
+                ))
+              ) : (
+                <p>카테고리 정보 없음</p>
+              )}
+            </div>
+          </CategoryArea>
+          <CorrectAnswersArea>
+            <div className="Answer">정답 수</div>
+            <div className="AnswerCount">
+              <p className="material-icons">check</p>
+              <p>{correctCount} / 2 </p>
+            </div>
+          </CorrectAnswersArea>
+          <StreakArea>
+            <div className="Streak">스트릭</div>
+            <div className="StreakDays">
+              <p className="material-icons">event</p>
+              <p>{streakInfo}</p>
+            </div>
+          </StreakArea>
+        </StatsArea>
+        <MypageButton
+          onClick={() => {
+            navigate('/mypage');
+          }}
+        >
+          마이페이지로 이동하기
+        </MypageButton>
+      </WhiteContainer>
+    </Container>
   );
 };
 
-const TopContainer = styled.div`
+export const Container = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   width: 100%;
-
+  height: 100vh;
+  background-color: var(--darkblue-color);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 2rem 3rem;
+  box-sizing: border-box;
+  * {
+    // border: 1px solid lime;
+  }
   .MessageArea {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin: 150px;
+    margin: 100px;
     font-size: 70px;
     font-weight: 500;
     text-align: center;
     color: var(--darkblue-color);
-
     line-height: 120%;
   }
+  p {
+    margin: 10px;
+    font-weight: 600;
+  }
+`;
+
+export const WhiteContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 3rem;
+`;
+
+const ResultTitle = styled.div`
+  align-items: center;
+  padding: 7rem 0 3rem 0;
+  font-size: 5rem;
+  text-align: center;
+  font-weight: 900;
 `;
 
 const CharacterArea = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 200px auto 100px;
+  margin: 150px auto 50px;
 
   // border: black solid 1px;
-  height: 800px;
-  width: 500px;
+  height: 600px;
+  width: 400px;
   font-size: 100px;
 `;
 
@@ -186,7 +221,8 @@ const CategoryArea = styled.div`
     color: white;
     display: flex;
     justify-content: center;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
+    font-weight: 700;
   }
 
   .CategoryName {
@@ -231,7 +267,8 @@ const CorrectAnswersArea = styled.div`
     color: white;
     display: flex;
     justify-content: center;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
+    font-weight: 700;
   }
   .AnswerCount {
     display: flex;
@@ -263,7 +300,8 @@ const StreakArea = styled.div`
     color: white;
     display: flex;
     justify-content: center;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
+    font-weight: 700;
   }
   .StreakDays {
     display: flex;
@@ -287,8 +325,8 @@ const MypageButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 150px auto;
-  width: 950px;
+  margin: 200px auto;
+  width: 900px;
   height: 150px;
   background-color: var(--darkblue-color);
   border-radius: 30px;

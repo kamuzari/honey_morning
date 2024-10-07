@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @AllArgsConstructor
@@ -68,5 +69,21 @@ public class AlarmCategoryController {
     public ResponseEntity<?> removeAlarmCategory(@RequestBody String word) {
         alarmCategoryService.deleteAlarmCategory(word);
         return ResponseEntity.ok("alarm category successfully deleted");
+    }
+
+    @Operation(
+            summary = "카테고리 문자를 통한 알람 카테고리 수정")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "수정 성공",
+                    content = @Content(schema = @Schema(type = "string", example = "success", implementation = AlarmCategoryDto.class))
+            )
+    })
+    @PatchMapping
+    public ResponseEntity<?> patchAlarmCategory(@RequestBody Map<String, List<String>> request) {
+        List<String> tagWords = request.get("categoryWords");
+        alarmCategoryService.patchAlarmCategory(tagWords);
+        return ResponseEntity.ok("alarm category successfully updated");
     }
 }
