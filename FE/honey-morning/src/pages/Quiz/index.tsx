@@ -255,10 +255,10 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
         </ProgressStep>
       ))}
       </ProgressBarArea>
-      <CharacterArea>캐릭터존</CharacterArea>
+      <CharacterArea><img src="./images/happyBee.png"/></CharacterArea>
       <NoticeArea>정답을 선택하거나 말하세요. 
       </NoticeArea>
-        <div>남은 시간: {timeLeft} 초</div>
+        <TimeLeftText timeLeft={timeLeft}>남은 시간: {timeLeft} 초</TimeLeftText>
       <Notices>
         { quizData[currentQuizIndex] &&
         <STT currentOptions={currentOptions} answer={currentOptions[quizData[currentQuizIndex].answerNumber]} setAnswer={setSelectedAnswer}></STT>}
@@ -279,9 +279,8 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
       {showModal && (
         <Modal $isCorrect={isCorrect}>
           <ModalContent>
-            {isCorrect ? '정답입니다!' : '오답입니다.'}
-            <br />
-            정답: {currentOptions[quizData[currentQuizIndex]?.answerNumber]}
+            <p>{isCorrect ? '정답입니다!' : '오답입니다.'}</p>
+            <p>정답: {currentOptions[quizData[currentQuizIndex]?.answerNumber]}</p>
           </ModalContent>
         </Modal>
       )}
@@ -299,9 +298,10 @@ const Container = styled.div`
 
 const ProgressBarArea = styled.div`
   width: 80%;
-  height: 15px;
-  margin: 30px auto;
+  height: 60px;
+  margin: 50px auto;
   position: relative;
+  padding: 0; /* Remove padding so that the progress bar fits properly */
 `;
 
 const ProgressBarBackground = styled.div`
@@ -309,12 +309,14 @@ const ProgressBarBackground = styled.div`
   height: 100%;
   background-color: var(--disabled-color);
   border-radius: 10px;
+  position: relative; /* Keep it relative to align with fill */
+  overflow: hidden; /* Ensure that the fill doesn't overflow */
 `;
 
 //prettier-ignore
 const ProgressBarFill = styled.div<ProgressBarProps>`
   width: ${props => props.progress}%;
-  height: 100%;
+  height: 100%; /* Match the background's height */
   background-color: var(--darkblue-color);
   border-radius: 10px;
   position: absolute;
@@ -326,12 +328,12 @@ const ProgressBarFill = styled.div<ProgressBarProps>`
 //prettier-ignore
 const ProgressStep = styled.div<ProgressStepProps>`
   position: absolute;
-  top: -10px;
+  top: -20px;
   left: ${props => props.position};
   transform: translateX(-50%);
   width: 35px;
   height: 35px;
-  background-color: ${props => (props.completed ? 'var(--green-color)' : props.active ? 'var(--lightblue-color)' : 'var(--disabled-color)')};
+  background-color: ${props => (props.completed ? 'var(--green-color)' : props.active ? '#000000' : 'var(--disabled-color)')};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -346,28 +348,23 @@ const CharacterArea = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 50px;
-
-  height: 800px;
-  width: 800px;
-
-  border: solid 1px black;
+  margin: 30px 0 30px 0;
+  height: 650px;
 `;
 
 const NoticeArea = styled.div`
   display: flex;
   justify-content: center;
-  margin: 50px;
-
-  font-size: 50px;
+  margin: 100px;
+  font-size: 60px;
+  font-weight: 700;
 `;
 
 const Notices = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-`
+`;
 
 const SelectArea = styled.div`
   display: grid;
@@ -388,6 +385,7 @@ const SelectionBox = styled.div<{$isSelected: boolean, $isDisabled:boolean}>`
   align-items: center;
   font-size: 50px;
   cursor: pointer;
+  font-weight: 800;
 
   width: 350px;
   height: 350px;
@@ -399,17 +397,32 @@ const SelectionBox = styled.div<{$isSelected: boolean, $isDisabled:boolean}>`
 const Modal = styled.div<{$isCorrect: boolean}>`
   background-color: ${props => props.$isCorrect ? 'var(--green-color)' : 'var(--red-color)'};
   color: ${props => props.$isCorrect ? 'var(--darkgreen-color)' : 'white'};
-
   height: 150px;
   width: 100%;
   bottom: 0;
   padding: 30px;
   // opacity: 80%;
-
   position: fixed;
-`
+`;
 
 const ModalContent= styled.div`
-  font-size: 35px;
+  text-align: center;
+  font-size: 50px;
   padding: 20px;
-`
+  font-weight: 500;
+  p {
+    padding: 5px;
+  }
+`;
+
+const TimeLeftText = styled.div<{ timeLeft: number }>`
+  font-size: 50px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 0 5rem 0;
+  color: ${({ timeLeft }) => 
+    timeLeft > 5 
+    ? 'black' 
+    : `rgb(${255 - timeLeft * 20}, 0, 0)`};
+  transition: color 0.3s ease;
+`;
