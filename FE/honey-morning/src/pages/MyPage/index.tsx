@@ -1,6 +1,11 @@
 import {useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useQuery, useQueryClient} from '@tanstack/react-query';
+import {
+  useQuery,
+  useQueryClient,
+  useMutation,
+  QueryClient,
+} from '@tanstack/react-query';
 import styled from 'styled-components';
 import {instance} from '@/api/axios';
 import {findAlarmCategory} from '@/api/alarmApi';
@@ -27,8 +32,6 @@ export const categoryList = [
   '생활/문화',
   '세계',
   '기술/IT',
-  '연예',
-  '스포츠',
 ];
 
 interface Data {
@@ -55,39 +58,31 @@ const fetchUserInfo = async () => {
   return data;
 };
 
+//태그 정보
+const fetchTagInfo = async () => {
+  const {data} = await instance.get(`/api/alarms/category`);
+  return data;
+};
+
 const MyPage: React.FC = () => {
-  // const [daysInMonths, setDaysInMonths] = useState<number[][]>([]); // 각 달의 일수를 저장하는 배열
-  // const [currentMonthIndex, setCurrentMonthIndex] = useState(0); // 현재 보여줄 달 인덱스
-  const itemsPerPage = 5;
   // useQuery를 사용하여 userInfo 가져오기
-  // const queryClient = useQueryClient();
   const {data: userInfo} = useQuery({
     queryKey: ['userInfo'],
     queryFn: fetchUserInfo,
   });
 
-  // const username = userInfo ? userInfo.username : null;
-  //prettier-ignore
-  // const userInfo = queryClient.getQueryData<{id: number, role: string, email: string, username: string, createdAt: string}>(['userInfo']);
-  // const [userInfo, setUserInfo] = useState(
-  //   queryClient.getQueryData <
-  //     {
-  //       id: number,
-  //       role: string,
-  //       email: string,
-  //       username: string,
-  //       createdAt: string,
-  //     } >
-  //     ['userInfo'],
-  // );
+  const {data: tagInfo} = useQuery({
+    queryKey: ['tagInfo'],
+    queryFn: fetchTagInfo,
+  });
+
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [briefingData, setBriefingData] = useState([]);
-  // const [daysSinceSignup, setDaysSinceSignup] = useState(0); // 가입일로부터 며칠인지 상태로 관리
   const [streakData, setStreakData] = useState(null);
   const [finalStreak, setFinalStreak] = useState(null);
   const [rows, setRows] = useState(0);
-  console.log(userInfo);
+  if (tagInfo) console.log(tagInfo);
   useEffect(() => {
     const fetchBriefs = async () => {
       try {
@@ -150,7 +145,6 @@ const MyPage: React.FC = () => {
     }
     streakData.forEach(item => {
       const daysBetween = calculateDaysBetween(startDate, item.createdAt);
-      console.log('daysBetween' + daysBetween);
       answer[daysBetween] = {
         count: item.count,
         isAttending: item.isAttending,
@@ -163,7 +157,6 @@ const MyPage: React.FC = () => {
   // 가입일과 오늘 날짜로 며칠 차이인지 계산하는 함수
   const calculateDaysBetween = (from: string, to: string) => {
     const signupDate = new Date(from);
-    console.log(from + '부터' + to + '까지의 날짜 차이를 계산합니다.');
     var today = null;
     if (to == 'today') {
       today = new Date();
@@ -174,7 +167,6 @@ const MyPage: React.FC = () => {
     // 두 날짜 간의 차이 계산 (밀리초 차이를 일 단위로 변환)
     const differenceInTime = today.getTime() - signupDate.getTime();
     const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
-    console.log('계산한 날짜차이는 ' + differenceInDays + '입니다.');
     return differenceInDays;
   };
 
@@ -183,10 +175,36 @@ const MyPage: React.FC = () => {
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const {selectedCategory, selectedCustomCategory, addCustomCategory} =
     useInterestStore();
+  const [selectedCategoryList, setSelectedCategoryList] = useState([]);
   const selectedList = selectedCategory;
   const NavIcons = SoleMainNavBarProps;
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (tagInfo) {
+      console.log('실행!');
+      var selectedCategoryList = [];
+      tagInfo.map(item => {
+        selectedCategoryList.push(item.word);
+      });
+      setSelectedCategoryList(selectedCategoryList);
+    }
+  }, [tagInfo]);
+
+  const queryClient = useQueryClient();
+  const patchFn = () => {
+    const data = {categoryWords: selectedCategory};
+    setSelectedCategoryList(selectedCategory);
+    return instance.patch('/api/alarms/category', data);
+  };
+  const mutation = useMutation({
+    mutationFn: patchFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: ['tagInfo']});
+    },
+  });
+
+  console.log(selectedCategoryList);
   // 로딩 상태 처리
   if (!briefingData.length) {
     return <div>Loading...</div>;
@@ -207,6 +225,7 @@ const MyPage: React.FC = () => {
                   $padding={3}
                   onClick={() => {
                     setIsSelectOpen(false);
+                    mutation.mutate();
                     addCustomCategory();
                   }}
                 />
@@ -232,7 +251,7 @@ const MyPage: React.FC = () => {
                   key={index}
                   text={item}
                   type="NEWS"
-                  selected={selectedList.includes(item) ? true : false}
+                  selected={selectedCategoryList.includes(item) ? true : false}
                 />
               ))}
             </div>
@@ -272,7 +291,10 @@ const MyPage: React.FC = () => {
             {streakData &&
               Array.from(Array(rows).keys()).map(rowNum => {
                 return (
-                  <Row $left={rowNum % 2 == 0}>
+                  <Row
+                    $left={rowNum % 2 == 0}
+                    key={rowNum}
+                  >
                     {finalStreak
                       .slice(rowNum * 6, (rowNum + 1) * 6)
                       .map((item, index) => (
@@ -296,7 +318,6 @@ const MyPage: React.FC = () => {
           </div>
           <PaginationContainer>
             <PaginationHead>
-              <li>날짜</li>
               <li>핵심 브리핑</li>
             </PaginationHead>
             {currentItems.map((item, index) => (
@@ -306,7 +327,7 @@ const MyPage: React.FC = () => {
                   navigate(`/briefingdetail/${item.briefId}`);
                 }}
               >
-                <span className="date">{item.createdAt.split('T')[0]}</span>
+                {/* <span className="date">{item.createdAt.split('T')[0]}</span> */}
                 <span className="content">{item.summary}</span>
               </PaginationItem>
             ))}
@@ -420,6 +441,7 @@ const PaginationContainer = styled.ul`
   margin: 3rem 0 0 0;
   flex-direction: column;
   align-items: center;
+  height: 30rem;
 `;
 
 const PaginationHead = styled.div`
@@ -460,7 +482,7 @@ const PaginationItem = styled.li`
   }
   .content {
     display: block;
-    width: 35rem;
+    width: 55rem;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
