@@ -18,13 +18,9 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                checkout([$class: 'GitSCM', 
-                    branches: [[name: '*/develop']], 
-                    userRemoteConfigs: [[
-                        url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git',
-                        credentialsId: 'wngud1225'
-                    ]]
-                ])
+                git branch: 'develop',
+                    url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git',
+                    credentialsId: 'wngud1225'
             }
         }
 

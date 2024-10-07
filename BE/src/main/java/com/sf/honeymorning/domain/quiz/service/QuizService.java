@@ -88,6 +88,9 @@ public class QuizService {
                 .orElseThrow(
                         () -> new EntityNotFoundException("Quiz not found with id: " + quizId));
 
+        log.debug("quizPath: {}", quizPath);
+        log.debug("quiz file path: {}", quiz.getQuizFilePath());
+
         Path filePath = Paths.get(quizPath, quiz.getQuizFilePath());
         log.info("파일을 찾습니다: " + filePath);
         Resource resource = new UrlResource(filePath.toUri());

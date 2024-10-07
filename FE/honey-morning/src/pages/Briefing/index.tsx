@@ -1,8 +1,9 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { useNavigate  } from 'react-router-dom';
-import { instance } from '@/api/axios'
+import { instance } from '@/api/axios';
 import styled from 'styled-components';
+import Modal4 from '../../component/Modal4';
 
 interface AlarmStartResponse {
   morningCallUrl: string;
@@ -50,6 +51,7 @@ const BriefingPage: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [animationId, setAnimationId] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const currentDate = new Date();
   const currentMonth = String(currentDate.getMonth() + 1);
@@ -239,21 +241,38 @@ const BriefingPage: React.FC = () => {
   };
   
   const handleStopAudio = () => {
+    setIsModalOpen(true); // 모달 열기
+
+  };
+  
+
+  const confirmStopAudio = () => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
+<<<<<<< HEAD
     
     if (animationId !== null) {
+=======
+
+    if (animationId) {
+>>>>>>> 00e6df1ff7541a131f7834930f07fc678dc2a156
       cancelAnimationFrame(animationId);
     }
-    
+
     setIsPlaying(false);
-    
     initializeCanvas(canvasRef.current);
     initializeCanvas(flippedCanvasRef.current, true);
+    setIsModalOpen(false); // 모달 닫기
+    navigate('/');  // 메인 페이지로 이동
   };
-  
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+
   return (
     <Container>
       <BriefTitle>{currentMonth}월 {currentDay}일 꿀모닝 브리핑</BriefTitle>
@@ -269,6 +288,31 @@ const BriefingPage: React.FC = () => {
           브리핑 중지
         </Button>
       </ButtonContainer>
+
+
+      <ButtonContainer>
+        <Button
+          onClick={() => {
+            navigate('/quizzie');
+          }}
+        >
+          퀴즈 페이지로 이동하기
+        </Button>
+      </ButtonContainer>
+
+      <Modal4
+        isOpen={isModalOpen}
+        isClose={closeModal}
+        header="브리핑 중지"
+        icon="warning"
+        onConfirm={confirmStopAudio}
+      >
+        <p>브리핑을 중지하시겠습니까?</p>
+        <p>지금 중지하시면, 퀴즈를 풀 수 없고,</p>
+        <p>메인 페이지로 돌아갑니다.</p>
+        
+      </Modal4>
+
     </Container>
   );
 };
@@ -288,7 +332,7 @@ const Container = styled.div`
 `;
 
 const BriefTitle = styled.div`
-  margin: 5rem;
+  margin: 10rem;
   font-weight: bold;
   font-size: 5rem;
   color: white;
@@ -313,12 +357,13 @@ const Canvas = styled.canvas`
 `;
 
 const Button = styled.button`
-  padding: 1rem 2rem;
-  font-size: 1.5rem;
+  padding: 1.5rem 2rem;
+  font-size: 3.5rem;
+  font-weight: 800;
   background: rgba(255, 255, 255, 0.2);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50px;
+  border-radius: 40px;
   cursor: pointer;
   margin-top: 2rem;
   backdrop-filter: blur(10px);
@@ -338,6 +383,6 @@ const Button = styled.button`
 
 const ButtonContainer = styled.div`
   display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 4rem;
+  margin-bottom: 8rem;
 `;

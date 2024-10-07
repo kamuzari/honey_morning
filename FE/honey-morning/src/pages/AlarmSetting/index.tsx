@@ -6,8 +6,7 @@ import {instance} from '@/api/axios';
 import GlobalBtn from '@/component/GlobalBtn';
 import NavBar from '@/component/NavBar/NavBar';
 import {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
-
-
+import Modal3 from '@/component/Modal3';
 // Typescript
 interface AlarmData {
   id: number,
@@ -171,6 +170,13 @@ const AlarmSetting: React.FunctionComponent = () => {
 
   
   
+
+  const closeModal = () => {
+    setIsResultModalOpen(false);
+  };
+
+
+
 
   return (
     <Container
@@ -336,7 +342,40 @@ const AlarmSetting: React.FunctionComponent = () => {
           ></GlobalBtn>
         </ButtonContainer>
       </ContentsContainer>
-      {isResultModalOpen && (
+
+
+      <Modal3
+  isOpen={isResultModalOpen}
+  isClose={closeModal}
+  header="알람 설정 완료"
+  icon="info"
+  children={
+    <>
+      <div className="description" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '4%', marginBottom: '10%' }}>
+        <span style={{ color: 'black', fontSize: '54px' }}>
+          {nextMonth}월 {nextDay}일, {nextHour}시 {nextMinute}분{' '}
+        </span>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '12.5%' }}>
+        <span style={{ color: 'black', fontSize: '43px' }}>알람이 설정되었습니다.</span>
+      </div>
+    </>
+  }
+  actions={
+    <GlobalBtn
+      text="확인"
+      onClick={() => {
+        navigate('/');
+      }}
+      $bgColor="var(--darkblue-color)"
+      $textColor="var(--white-color)"
+      $padding={5}
+    />
+  }
+/>
+
+
+      {/* {isResultModalOpen && (
         <ModalOverlay>
           <Modal>
             <div className="description">
@@ -360,7 +399,7 @@ const AlarmSetting: React.FunctionComponent = () => {
             </div>
           </Modal>
         </ModalOverlay>
-      )}
+      )} */}
       <NavBar props={SoleMainNavBarProps}></NavBar>
     </Container>
   );
