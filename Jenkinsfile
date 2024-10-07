@@ -7,6 +7,14 @@ pipeline {
     }
 
     stages {
+        stage('Initialize Workspace') {
+            steps {
+                cleanWs()
+                sh 'mkdir -p BE/src/main/resources'
+                sh 'mkdir -p FE/honey-morning'
+            }
+        }
+
         stage('Prepare Git Info') {
             steps {
                 script {
@@ -18,7 +26,6 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                cleanWs()
                 checkout([$class: 'GitSCM', 
                     branches: [[name: 'develop']], 
                     userRemoteConfigs: [[
@@ -31,7 +38,6 @@ pipeline {
 
         stage('Prepare Application Properties') {
             steps {
-                sh 'mkdir -p BE/src/main/resources'
                 sh 'cp $APP_PROPS BE/src/main/resources/application.properties'
             }
         }
