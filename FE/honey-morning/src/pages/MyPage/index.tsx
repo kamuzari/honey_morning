@@ -385,7 +385,7 @@ export const Content = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 30rem;
+    height: 33rem;
     width: 85%;
     overflow-x: hidden;
     overflow-y: scroll;
