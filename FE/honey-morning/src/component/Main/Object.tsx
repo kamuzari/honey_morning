@@ -11,7 +11,7 @@ const Globe = () => {
   const [signinVisible, setSigninVisible] = useState(true);
   const [signupVisible, setSignupVisible] = useState(true);
 
-  const colorMap = useLoader(TextureLoader, './images/world.jpg');
+  const colorMap = useLoader(TextureLoader, './images/test2.png');
 
   useEffect(() => {
     if (globeRef.current) {
