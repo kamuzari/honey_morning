@@ -7,11 +7,11 @@ pipeline {
     }
 
     stages {
-        stage('Initialize Workspace') {
+        stage('Checkout Code') {
             steps {
-                cleanWs()
-                sh 'mkdir -p BE/src/main/resources'
-                sh 'mkdir -p FE/honey-morning'
+                git branch: 'develop',
+                    url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git',
+                    credentialsId: 'wngud1225'
             }
         }
 
@@ -24,20 +24,9 @@ pipeline {
             }
         }
 
-        stage('Checkout Code') {
-            steps {
-                checkout([$class: 'GitSCM', 
-                    branches: [[name: 'develop']], 
-                    userRemoteConfigs: [[
-                        url: 'https://lab.ssafy.com/s11-ai-speech-sub1/S11P21A704.git',
-                        credentialsId: 'wngud1225'
-                    ]]
-                ])
-            }
-        }
-
         stage('Prepare Application Properties') {
             steps {
+                sh 'mkdir -p BE/src/main/resources'
                 sh 'cp $APP_PROPS BE/src/main/resources/application.properties'
             }
         }
