@@ -12,13 +12,17 @@ import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.exception.alarm.AlarmFatalException;
 import com.sf.honeymorning.exception.user.AlarmCategoryNotFoundException;
 import com.sf.honeymorning.exception.user.DuplicateException;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AlarmCategoryService {
 
     private final AuthService authService;
@@ -34,7 +38,8 @@ public class AlarmCategoryService {
 
         // 알람 조회
         Alarm alarm = alarmRepository.findByUser(user)
-                .orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));;
+                .orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+
 
         // 알람 카테고리 조회
         List<AlarmCategory> alarmCategoryList = alarmCategoryRepository.findByAlarm(alarm);
@@ -61,7 +66,8 @@ public class AlarmCategoryService {
     // 알람 카테고리 추가
     public void addAlarmCategory(String word) {
 
-        Tag tag = tagRepository.findByWord(word);
+        Tag tag = tagRepository.findByWord(word)
+                .orElseThrow(() -> new EntityNotFoundException("tag가 존재하지 않습니다."));
 
         // 해당 단어에 대한 tag 데이터가 존재하지 않다면 tag 데이터를 추가한다.
         if (tag == null) {
@@ -93,7 +99,8 @@ public class AlarmCategoryService {
         // alarmCategory 추가.
         User user = authService.getLoginUser();
         Alarm alarm = alarmRepository.findByUser(user)
-                .orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));;
+                .orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+
         alarmCategoryRepository.save(new AlarmCategory(alarm, tag));
     }
 
@@ -102,8 +109,59 @@ public class AlarmCategoryService {
         // tag는 공유되는 것이기 때문에 alarmCategory만 삭제한다.
         User user = authService.getLoginUser();
         Alarm alarm = alarmRepository.findByUser(user)
-                .orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));;
-        Tag tag = tagRepository.findByWord(word);
+                .orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+
+        Tag tag = tagRepository.findByWord(word)
+                .orElseThrow(() -> new EntityNotFoundException("태그가 존재하지 않습니다."));
         alarmCategoryRepository.deleteByAlarmAndTag(alarm, tag);
+    }
+
+    // 알람 카테고리 수정
+    public void patchAlarmCategory(List<String> wordList) {
+        User user = authService.getLoginUser();
+        Alarm alarm = alarmRepository.findByUser(user)
+                .orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+        List<AlarmCategory> alarmCategoryList = alarmCategoryRepository.findByAlarm(alarm);
+
+        // String 타입의 태그 리스트를 통해 태그 엔티티 확인 및 생성
+        List<Tag> newTags = new ArrayList<>();
+        for (String word : wordList) {
+            Tag tag = tagRepository.findByWord(word)
+                    .orElseGet(() -> tagRepository.save(
+                            Tag.builder()
+                                    .word(word)
+                                    .isCustom(0) // 커스텀하지 않은 태그로 추가
+                                    .build()
+                    ));
+            newTags.add(tag);
+        }
+
+        // 새롭게 추가해야 할 AlarmCategory와 현재 있는 AlarmCategory 비교
+        Set<Tag> newTagSet = new HashSet<>(newTags);
+        Set<Tag> currentTagSet = alarmCategoryList.stream()
+                .map(AlarmCategory::getTag)
+                .collect(Collectors.toSet());
+
+        // 제거할 AlarmCategory 찾기
+        List<AlarmCategory> categoriesToRemove = alarmCategoryList.stream()
+                .filter(ac -> !newTagSet.contains(ac.getTag()))
+                .collect(Collectors.toList());
+
+        // 추가할 AlarmCategory 찾기
+        List<Tag> tagsToAdd = newTags.stream()
+                .filter(tag -> !currentTagSet.contains(tag))
+                .collect(Collectors.toList());
+
+        // AlarmCategory 제거
+        if (!categoriesToRemove.isEmpty()) {
+            alarmCategoryRepository.deleteAll(categoriesToRemove);
+        }
+
+        // AlarmCategory 추가
+        for (Tag tag : tagsToAdd) {
+            AlarmCategory newCategory = new AlarmCategory(alarm, tag);
+            alarmCategoryRepository.save(newCategory);
+        }
+
     }
 }
