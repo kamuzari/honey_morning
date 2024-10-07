@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,37 +27,10 @@ import java.io.IOException;
 @Tag(name = "알람")
 @RequestMapping("/api/alarms")
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AlarmController {
 
     private final AlarmService alarmService;
-    private final TtsUtil ttsUtil;
-
-    @GetMapping("/test")
-    public ResponseEntity<?> test(HttpServletRequest req, HttpServletResponse res)
-            throws IOException {
-        log.info("TTS 테스트 시작");
-        long startTime = System.currentTimeMillis();
-
-        String result = ttsUtil.textToSpeech(
-                "안녕하세요. 서버 테스트입니다. 오늘 즐거운 날이네요. 날씨는 맑음입니다. 오늘의 브리핑 시작하겠습니다. 윤석열 대통령 소식인데요."
-                        + "서울 지역 초·중·고등학교의 약 13%는 소규모 학교인 것으로 나타났습니다. "
-                        + "27일 국회 교육위원회 소속 더불어민주당 진선미 의원이 서울교육청에서 받은 서울 소규모 학교 현황을 보면 올해 4월 1일 기준으로 169개교가 소규모 학교였습니다. "
-                        + "서울 지역 전체 초·중·고교(휴교 제외) 1천310개교 가운데 12.9%가 소규모라는 의미입니다."
-                        + "국내 경제 상황이 어려운 가운데, 정부는 추가적인 경기 부양책을 검토 중입니다."
-                        + "기후 변화로 인한 이상 기후가 전 세계적으로 확산되면서, 각국의 대응이 주목받고 있습니다."
-                        + "기술 분야에서는 인공지능과 클라우드 혁신이 기업 경쟁력 강화의 핵심으로 떠오르고 있습니다."
-                        + "이상으로 오늘의 뉴스를 마치겠습니다. 시청해 주셔서 감사합니다.",
-                "summary");
-
-        long endTime = System.currentTimeMillis();
-        long duration = endTime - startTime;
-
-        log.info("TTS 변환 결과: {}", result);
-        log.info("TTS 변환 소요 시간: {} 밀리초", duration);
-
-        return ResponseEntity.ok("success");
-    }
 
     @Operation(
             summary = "설정 일부 수정"
