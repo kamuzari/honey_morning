@@ -446,7 +446,7 @@ const PaginationHead = styled.div`
 const PaginationItem = styled.li`
   display: flex;
   font-size: 2.8rem;
-  height: 6.5rem;
+  height: 6rem;
   width: 100%;
   align-items: center;
   justify-content: space-around;
