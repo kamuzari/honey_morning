@@ -44,6 +44,7 @@ const Container =
   padding: 2rem 0 0 0;
   justify-content: ${props => (props.$num > 1 ? 'space-between' : 'center')};
   align-items: center;
+  opacity: 100%;
 `;
 
 export default NavBar;
