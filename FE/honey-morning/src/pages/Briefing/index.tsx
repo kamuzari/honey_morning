@@ -251,13 +251,8 @@ const BriefingPage: React.FC = () => {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
-<<<<<<< HEAD
     
     if (animationId !== null) {
-=======
-
-    if (animationId) {
->>>>>>> 00e6df1ff7541a131f7834930f07fc678dc2a156
       cancelAnimationFrame(animationId);
     }
 
