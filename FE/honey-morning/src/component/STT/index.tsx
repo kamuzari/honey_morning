@@ -41,7 +41,7 @@ const stt: React.FC<SttProps> = props => {
 
       // annyang.debug();
       annyang.setLanguage('ko');
-      annyang.start();
+      annyang.resume();
       // SpeechKITT.annyang();
       // SpeechKITT.setStylesheet(
       // '//cdnjs.cloudflare.com/ajax/libs/SpeechKITT/0.3.0/themes/flat.css',
@@ -49,7 +49,7 @@ const stt: React.FC<SttProps> = props => {
       // SpeechKITT.vroom();
 
       return () => {
-        annyang.abort(); // 컴포넌트가 언마운트될 때 음성 인식 중단
+        annyang.pause(); // 컴포넌트가 언마운트될 때 음성 인식 중단
       };
     }
   }, []);
