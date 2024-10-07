@@ -382,7 +382,7 @@ const SleepWakeLock = () => {
         <span className="material-icons">help</span>
       </HelpIcon>
         <CurrentTime>{timer}</CurrentTime>
-        <BeeImage src="sleepingbee.webp" alt="Sleeping Bee" />
+        <BeeImage src="/images/sleepingBee.png" alt="Sleeping Bee" />
         <Divider />
         <AlarmInfo>
           <span className="material-icons">alarm</span>
