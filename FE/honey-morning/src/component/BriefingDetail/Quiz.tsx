@@ -19,7 +19,7 @@ const Quiz = ({quizDto}: {quizDto: QuizResponseDto[]}) => {
   const getCorrectNum = list => {
     var count = 0;
     list.map((item: QuizResponseDto) => {
-      item.selectedOption == item.answerNumber ? count++ : [];
+      item.selectedOption + 1 == item.answerNumber ? count++ : [];
     });
     return count;
   };
@@ -54,7 +54,7 @@ const Quiz = ({quizDto}: {quizDto: QuizResponseDto[]}) => {
                     <Option
                       key={optIndex}
                       $index={optIndex + 1}
-                      $pick={quiz.selectedOption}
+                      $pick={quiz.selectedOption + 1}
                       $answer={quiz.answerNumber}
                     >
                       <div className="check" />

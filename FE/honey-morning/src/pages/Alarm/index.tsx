@@ -134,13 +134,14 @@ const AlarmPage = () => {
             {/* <AlarmMessage>알람이 울리고 있습니다!</AlarmMessage> */}
             <audio autoPlay>
               <source
-                // src="https://cdn1.suno.ai/dc1d94fa-975b-4eab-a391-dc55eb4cdcc5.mp3"
                 src={morningCallUrl}
                 type="audio/mpeg"
               />
             </audio>
             <Button onClick={handleStartBriefing}>브리핑 시작</Button>
-            <SkipButton onClick={handleSkipBriefing}>오늘은 건너뛰기</SkipButton>
+            <SkipButton onClick={handleSkipBriefing}>
+              오늘은 건너뛰기
+            </SkipButton>
           </>
         ) : (
           <>
@@ -261,7 +262,7 @@ const AmPm = styled.div`
 
 const ClockFace = styled.div`
   width: 500px;
-  height:500px;
+  height: 500px;
   border-radius: 50%;
   position: relative;
   background: rgba(255, 255, 255, 0.95);
