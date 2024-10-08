@@ -76,14 +76,13 @@ const AlarmPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // 저장된 alarmStartData 불러오기
   //prettier-ignore
   const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
   let morningCallUrl =
     alarmStartData?.morningCallUrl ??
     'https://cdn1.suno.ai/dc1d94fa-975b-4eab-a391-dc55eb4cdcc5.mp3';
 
-  //prettier-ignore
+  
   const alarmData = queryClient.getQueryData<AlarmData>(['alarmData']);
   const repeatFrequency = alarmData?.repeatFrequency ?? 1;
   const repeatInterval = alarmData?.repeatInterval || 0;
@@ -93,7 +92,7 @@ const AlarmPage = () => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    const alarmTime = new Date(time.getTime() + 5000); // 5초 후 알람
+    const alarmTime = new Date(time.getTime() + 5000); 
 
     const checkAlarm = setInterval(() => {
       const currentTime = new Date();
@@ -102,28 +101,28 @@ const AlarmPage = () => {
         !isAlarmOn &&
         alarmCount < repeatFrequency
       ) {
-        setIsAlarmOn(true); // 알람 시작
-        setAlarmCount(prevCount => prevCount + 1); // 알람 횟수 증가
+        setIsAlarmOn(true); 
+        setAlarmCount(prevCount => prevCount + 1); 
       }
-    }, 1000); // 매초 알람 여부 확인
+    }, 1000); 
 
-    return () => clearInterval(checkAlarm); // 언마운트 시 타이머 정리
+    return () => clearInterval(checkAlarm); 
   }, [time, isAlarmOn, alarmCount, repeatFrequency]);
 
   const handleRemindLater = () => {
     const newTime = new Date();
-    setTime(new Date(newTime.getTime() + repeatInterval * 60000)); // 5분 뒤로 알람 설정
-    setIsAlarmOn(false); // 알람 해제 후 다시 설정
-    navigate('/sleep'); // 메인 페이지로 이동
+    setTime(new Date(newTime.getTime() + repeatInterval * 60000)); 
+    setIsAlarmOn(false); 
+    navigate('/sleep'); 
   };
 
   const handleStartBriefing = () => {
-    navigate('/briefing'); // 브리핑 페이지로 이동
+    navigate('/briefing'); 
   };
 
   const handleSkipBriefing = () => {
-    setIsAlarmOn(false); // 알람 해제
-    navigate('/'); // 메인 페이지로 이동
+    setIsAlarmOn(false); 
+    navigate('/'); 
   };
 
   return (
@@ -132,7 +131,7 @@ const AlarmPage = () => {
         <GlassmorphismClock />
         {isAlarmOn ? (
           <>
-            <AlarmMessage>알람이 울리고 있습니다!</AlarmMessage>
+            {/* <AlarmMessage>알람이 울리고 있습니다!</AlarmMessage> */}
             <audio autoPlay>
               <source
                 src={morningCallUrl}
@@ -146,7 +145,7 @@ const AlarmPage = () => {
           </>
         ) : (
           <>
-            <AlarmMessage>알람이 울리지 않고 있습니다.</AlarmMessage>
+            {/* <AlarmMessage>알람이 울리지 않고 있습니다.</AlarmMessage> */}
             <Button onClick={handleRemindLater}>
               {repeatInterval}분 후 다시 알림
             </Button>
@@ -169,8 +168,7 @@ const Container = styled.div`
 `;
 
 const GlassCard = styled.div`
-  border: 2px solid rgba(0, 0, 0); // 임시
-  // background: rgba(242, 227, 182, 0.4);
+  // border: 2px solid rgba(0, 0, 0);
   background: rgba(253, 199, 39, 0.2);
   width: 100%;
   height: 100%;
@@ -224,8 +222,6 @@ const ClockContainer = styled.div`
 `;
 
 const TimeDisplay = styled.div`
-  // background: rgba(253, 199, 39, 0.5);
-  // background: rgba(253, 255, 255, 0.95);
   background: #25387c;
   backdrop-filter: blur(10px);
   border-radius: 30px;
@@ -248,8 +244,6 @@ const TimeUnit = styled.div`
 `;
 
 const TimeBox = styled.div`
-  // background: rgba(250, 199, 39);
-  // background: rgba(253, 255, 255, 0.95);
   border-radius: 20px;
   padding: 25px;
   margin: 0 12px;
@@ -271,7 +265,6 @@ const ClockFace = styled.div`
   height: 500px;
   border-radius: 50%;
   position: relative;
-  // background: rgba(253, 199, 39, 0.9);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   border: 2px solid rgba(253, 199, 39, 0.3);

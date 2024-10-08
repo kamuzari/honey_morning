@@ -26,7 +26,7 @@ const fetchAudio = async (briefingId: number) => {
     responseType: 'blob',
   });
   const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
-  return { audioUrl: URL.createObjectURL(audioBlob), response };  // 오디오 Blob을 URL로 반환
+  return { audioUrl: URL.createObjectURL(audioBlob), response }; 
 };
 
 
@@ -98,7 +98,6 @@ const BriefingPage: React.FC = () => {
     ctx.fillStyle = mainGradient;
     ctx.fill();
     
-    // Add a subtle glow effect
     const glowGradient = ctx.createRadialGradient(
       centerX,
       centerY,
@@ -141,7 +140,6 @@ const BriefingPage: React.FC = () => {
       
       canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
       
-      // Draw base circle
       canvasCtx.beginPath();
       canvasCtx.arc(centerX, centerY, baseRadius, 0, 2 * Math.PI);
       const baseGradient = canvasCtx.createRadialGradient(
@@ -214,11 +212,9 @@ const BriefingPage: React.FC = () => {
         const bufferLength = analyser.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
   
-        // 시각화 함수 호출
         drawVisualization(canvas, analyser, dataArray, bufferLength);
         drawVisualization(flippedCanvas, analyser, dataArray, bufferLength, true);
   
-        // 페이지 자동 전환
         audio.addEventListener('ended', () => {
           setTimeout(() => {
             navigate('/quizzie');
@@ -237,15 +233,14 @@ const BriefingPage: React.FC = () => {
 
   const handlePlayAudio = () => {
     if (isPlaying ) return;
-    fetchAndPlayAudio();  // mutate 호출로 오디오 파일 가져오기 및 재생
+    fetchAndPlayAudio(); 
   };
   
   const handleStopAudio = () => {
-    setIsModalOpen(true); // 모달 열기
+    setIsModalOpen(true); 
 
   };
   
-
   const confirmStopAudio = () => {
     if (audioRef.current) {
       audioRef.current.pause();
@@ -259,14 +254,13 @@ const BriefingPage: React.FC = () => {
     setIsPlaying(false);
     initializeCanvas(canvasRef.current);
     initializeCanvas(flippedCanvasRef.current, true);
-    setIsModalOpen(false); // 모달 닫기
-    navigate('/');  // 메인 페이지로 이동
+    setIsModalOpen(false); 
+    navigate('/');  
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
   };
-
 
   return (
     <Container>
@@ -283,7 +277,6 @@ const BriefingPage: React.FC = () => {
           브리핑 중지
         </Button>
       </ButtonContainer>
-
 
       <ButtonContainer>
         <Button
