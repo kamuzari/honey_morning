@@ -79,7 +79,7 @@ const fetchAudio = async (quizId: number) => {
 
 
 // patch 요청
-const saveQuizResult = async(quizResult: {correctCount: number; totalQuestions: number}) => {
+const saveQuizResult = async(quizResult: {id: number; selection: number}) => {
   try{
     const response = await instance.patch(`/api/quizzes`, quizResult)
     return response.data;
@@ -117,7 +117,7 @@ const QuizSolution: React.FC = () => {
 
   const briefId = alarmStartData?.briefingId;
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  console.log('퀴즈 페이지의 alarmStartData:', alarmStartData);
+  // console.log('퀴즈 페이지의 alarmStartData:', alarmStartData);
 
 
   // get
@@ -138,7 +138,6 @@ const { mutate: saveQuizResultMutate } = useMutation({
   mutationFn: saveQuizResult,
   onSuccess: (response) => {
     console.log("퀴즈 결과 저장 보냄", response);
-    navigate('/quizresult', { state: {correctCount: correctCountRef.current}})
   },
   onError: (error) => {
     console.log("퀴즈 결과 저장 실패", error)
@@ -193,7 +192,7 @@ useEffect(() => {
 const handleTimeUp = () => {
   setIsQuizActive(false);
 
-  const isAnswerCorrect = selectedAnswer === quizData[currentQuizIndex].answerNumber;
+  const isAnswerCorrect = selectedAnswer === quizData[currentQuizIndex].answerNumber - 1;
   setIsCorrect(isAnswerCorrect);
   
   if (isAnswerCorrect) {
@@ -205,18 +204,23 @@ const handleTimeUp = () => {
   setShowModal(true);
   setTimeout(() => {
     setShowModal(false);
+
+    console.log(quizData);
+
+    saveQuizResultMutate({
+      id: alarmStartData.quizzes[currentQuizIndex].id,
+      selection: selectedAnswer,
+    })
     if (currentQuizIndex < quizData.length - 1) {
       setCurrentQuizIndex(currentQuizIndex + 1);
       setTimeLeft(10);
       setSelectedAnswer(null);
       setIsQuizActive(true);
-    } else {
-      saveQuizResultMutate({
-        correctCount: correctCountRef.current,
-        totalQuestions: quizData.length,
-      })
-      
     }
+    
+    if (currentQuizIndex >= 1) {navigate('/quizresult', { state: {correctCount: correctCountRef.current}})}
+      
+    
   }, 5000);  //모달 시간 조절
 };
 
@@ -261,7 +265,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
         <TimeLeftText timeLeft={timeLeft}>남은 시간: {timeLeft} 초</TimeLeftText>
       <Notices>
         { quizData[currentQuizIndex] &&
-        <STT currentOptions={currentOptions} answer={currentOptions[quizData[currentQuizIndex].answerNumber]} setAnswer={setSelectedAnswer}></STT>}
+        <STT currentOptions={currentOptions} answer={currentOptions[quizData[currentQuizIndex].answerNumber - 1]} setAnswer={setSelectedAnswer}></STT>}
       </Notices>
       
       <SelectArea>
@@ -280,7 +284,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
         <Modal $isCorrect={isCorrect}>
           <ModalContent>
             <p>{isCorrect ? '정답입니다!' : '오답입니다.'}</p>
-            <p>정답: {currentOptions[quizData[currentQuizIndex]?.answerNumber]}</p>
+            <p>정답: {currentOptions[quizData[currentQuizIndex]?.answerNumber - 1]}</p>
           </ModalContent>
         </Modal>
       )}
