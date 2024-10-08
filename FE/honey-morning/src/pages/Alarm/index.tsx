@@ -82,7 +82,7 @@ const AlarmPage = () => {
     alarmStartData?.morningCallUrl ??
     'https://cdn1.suno.ai/dc1d94fa-975b-4eab-a391-dc55eb4cdcc5.mp3';
 
-  
+  //prettier-ignore
   const alarmData = queryClient.getQueryData<AlarmData>(['alarmData']);
   const repeatFrequency = alarmData?.repeatFrequency ?? 1;
   const repeatInterval = alarmData?.repeatInterval || 0;
@@ -92,7 +92,7 @@ const AlarmPage = () => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    const alarmTime = new Date(time.getTime() + 5000); 
+    const alarmTime = new Date(time.getTime() + 5000);
 
     const checkAlarm = setInterval(() => {
       const currentTime = new Date();
@@ -101,28 +101,28 @@ const AlarmPage = () => {
         !isAlarmOn &&
         alarmCount < repeatFrequency
       ) {
-        setIsAlarmOn(true); 
-        setAlarmCount(prevCount => prevCount + 1); 
+        setIsAlarmOn(true);
+        setAlarmCount(prevCount => prevCount + 1);
       }
-    }, 1000); 
+    }, 1000);
 
-    return () => clearInterval(checkAlarm); 
+    return () => clearInterval(checkAlarm);
   }, [time, isAlarmOn, alarmCount, repeatFrequency]);
 
   const handleRemindLater = () => {
     const newTime = new Date();
-    setTime(new Date(newTime.getTime() + repeatInterval * 60000)); 
-    setIsAlarmOn(false); 
-    navigate('/sleep'); 
+    setTime(new Date(newTime.getTime() + repeatInterval * 60000));
+    setIsAlarmOn(false);
+    navigate('/sleep');
   };
 
   const handleStartBriefing = () => {
-    navigate('/briefing'); 
+    navigate('/briefing');
   };
 
   const handleSkipBriefing = () => {
-    setIsAlarmOn(false); 
-    navigate('/'); 
+    setIsAlarmOn(false);
+    navigate('/');
   };
 
   return (

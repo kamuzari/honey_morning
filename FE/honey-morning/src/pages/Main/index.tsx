@@ -4,7 +4,6 @@ import Modal from '@/component/Modal';
 import {useQuery} from '@tanstack/react-query';
 import {instance} from '@/api/axios';
 import styled from 'styled-components';
-import {Container} from '../MyPage';
 import Header from '@/component/Header';
 import Object from '@/component/Main/Object';
 import NavBar from '@/component/NavBar/NavBar';
@@ -42,7 +41,6 @@ const Main = () => {
 
   const openModal = useCallback(
     (title: string, message: string, btnText: string) => {
-      console.log('Opening modal');
       setModalTitle(title);
       setModalMessage(message);
       setModalBtnText(btnText);
@@ -59,7 +57,6 @@ const Main = () => {
   const handleNavClick = useCallback(
     (path: string) => {
       console.log('Nav clicked, userInfo:', userInfo);
-      console.log('Nav clicked');
       if (!userInfo) {
         openModal('Caution', '로그인을 해주세요.', '확인');
       } else {
@@ -70,7 +67,7 @@ const Main = () => {
     [userInfo, navigate, openModal],
   );
 
-  const bgColor = 'var(--darkblue-color)';
+  const bgColor = 'var(--mediumblue-color)';
   const textColor = 'var(--white-color)';
   const NavIcons: NavIconProps[] = [
     {
@@ -79,6 +76,13 @@ const Main = () => {
       text: 'alarm',
       // to: '/alarmsetting',
       onClick: () => handleNavClick('/alarmsetting'),
+    },
+    {
+      $bgColor: bgColor,
+      $textColor: textColor,
+      text: 'bedtime',
+      // to: '/alarmsetting',
+      onClick: () => handleNavClick('/sleep'),
     },
     {
       $bgColor: bgColor,
@@ -95,7 +99,9 @@ const Main = () => {
 
   return (
     <Container>
-      <Header />
+      <HeaderArea>
+        <Header />
+      </HeaderArea>
       <Object />
       <NavBar props={NavIcons} />
       <Modal
@@ -108,5 +114,27 @@ const Main = () => {
     </Container>
   );
 };
+
+export const Container = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(
+    135deg,
+    var(--darkblue-color),
+    var(--lightblue-color)
+  );
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 2rem 3rem;
+  box-sizing: border-box;
+`;
+
+const HeaderArea = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+`;
 
 export default Main;
