@@ -5,6 +5,8 @@ import os
 import pickle
 import time
 
+max_article = 20
+
 def save_articles_pickle(section_num, articles):
     """기사들을 섹션 번호에 따라 Pickle 파일로 저장"""
     base_dir = f"/var/data/{section_num}"
@@ -43,6 +45,10 @@ def main():
                     'content': content
                 }
                 structured_articles.append(article_dict)
+                if len(structured_articles) >= max_article:
+                    print(f"최대 {max_article}개의 뉴스만 크롤링합니다.")
+                    break
+
         
         # Pickle 파일로 저장
         save_articles_pickle(section_num, structured_articles)
