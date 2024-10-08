@@ -270,31 +270,13 @@ const AlarmSetting: React.FunctionComponent = () => {
               {!isTimeDropDownOpen ? (
                 <button
                   onClick={() => {
-                    console.log('발동');
                     setIsTimeDropDownOpen(true);
                   }}
                 >
                   {alarmState.repeatFrequency}
                 </button>
               ) : (
-                <button></button>
-              )}{' '}
-              분 마다
-              {!isRepeatDropDownOpen ? (
-                <button
-                  onClick={() => {
-                    setIsRepeatDropDownOpen(true);
-                  }}
-                >
-                  {alarmState.repeatInterval}
-                </button>
-              ) : (
-                <button />
-              )}{' '}
-              번
-            </div>
-            {isTimeDropDownOpen && (
-              <ul className="dropDown timeDropDown">
+                <ul className="dropDown timeDropDown">
                 {timeIntervalList.map(item => {
                   return (
                     <li
@@ -308,9 +290,18 @@ const AlarmSetting: React.FunctionComponent = () => {
                   );
                 })}
               </ul>
-            )}
-            {isRepeatDropDownOpen && (
-              <ul className="dropDown repeatDropDown">
+              )}{' '}
+              분 마다
+              {!isRepeatDropDownOpen ? (
+                <button
+                  onClick={() => {
+                    setIsRepeatDropDownOpen(true);
+                  }}
+                >
+                  {alarmState.repeatInterval}
+                </button>
+              ) : (
+                <ul className="dropDown repeatDropDown">
                 {repeatCntList.map(item => {
                   return (
                     <li
@@ -324,7 +315,9 @@ const AlarmSetting: React.FunctionComponent = () => {
                   );
                 })}
               </ul>
-            )}
+              )}{' '}
+              번
+            </div>
           </div>
         </SettingContainer>
         <ButtonContainer>
@@ -373,33 +366,6 @@ const AlarmSetting: React.FunctionComponent = () => {
     />
   }
 />
-
-
-      {/* {isResultModalOpen && (
-        <ModalOverlay>
-          <Modal>
-            <div className="description">
-              <span>
-                {nextMonth}월 {nextDay}일,{' '}
-                {nextHour}시 {nextMinute}분{' '}
-              </span>
-
-              <span>알람이 설정되었습니다.</span>
-            </div>
-            <div className="buttonContainer">
-              <GlobalBtn
-                text="확인"
-                onClick={() => {
-                  navigate('/');
-                }}
-                $bgColor="var(--darkblue-color)"
-                $textColor="var(--white-color)"
-                $padding={5}
-              ></GlobalBtn>
-            </div>
-          </Modal>
-        </ModalOverlay>
-      )} */}
       <NavBar props={SoleMainNavBarProps}></NavBar>
     </Container>
   );
@@ -417,9 +383,9 @@ const Container = styled.div`
   flex-direction: column;
   z-index: -1;
 
-  // * {
-  //   border: 1px solid lime;
-  // }
+  * {
+    border: 1px solid lime;
+  }
 `;
 const ContentsContainer = styled.div`
   display: flex;
@@ -513,12 +479,12 @@ const SettingContainer = styled.div`
   margin: 8rem 0 8rem 0;
   h1 {
     display: flex;
-    height: 35rem;
+    // height: 35rem;
     justify-content: center;
     color: var(--white-color);
     font-size: 5rem;
     font-weight: bold;
-    margin-bottom: 5rem;
+    // margin-bottom: 5rem;
   }
   h2 {
     display: flex;
@@ -563,29 +529,39 @@ const SettingContainer = styled.div`
         align-items: center;
         justify-content: center;
         width: 7rem;
+        padding: 0;
+        margin: 0;
+        height: 4rem;
         font-size: 3.9rem;
         font-weight: bold;
         display: flex;
         border: none;
         background-color: transparent;
         color: var(--lightblue-color);
-        margin: 0 0.1rem 0 0.1rem;
+        // margin: 0 0.1rem 0 0.1rem;
+        // background-color: red;
       }
     }
 
+    .optionContainer > li {
+      // margin: 0 0.5rem 0 0.5rem;
+      font-size: 4rem;
+    }
+
     .dropDown {
-      position: absolute;
+      // position: absolute;
       display: flex;
       flex-direction: column;
       overflow: scroll;
       height: 9rem;
-
-      bottom: 39rem;
+      width: 7rem;
+      align-items: center;
+      // bottom: 39rem;
       li {
         font-family: 'Noto Sans KR';
         display: flex;
         box-sizing: border-box;
-        padding: 0 0.5rem 0 0.5rem;
+        // padding: 0 0.5rem 0 0.5rem;
         font-size: 3.9rem;
         font-weight: bold;
 
@@ -599,10 +575,13 @@ const SettingContainer = styled.div`
       }
     }
     .timeDropDown {
-      left: 36.5rem;
+      width: 7rem;
+      li {
+        margin: 0.4rem 0 0.4rem 0;
+      }
     }
     .repeatDropDown {
-      left: 55rem;
+      width: 7rem;
     }
   }
 `;
