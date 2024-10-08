@@ -8,16 +8,13 @@ const Header = () => {
   const queryClient = useQueryClient();
   //prettier-ignore
   const userInfo = queryClient.getQueryData<{id: number, role: string, email: string, username: string}>(['userInfo']);
-
   const username = userInfo ? userInfo.username : null;
-
-  console.log('Header에서 가져온 유저 정보:', userInfo);
 
   if (!userInfo) {
     return (
       <HeaderContainer>
         <p>
-          <Link to="/signin">로그인</Link>해 주세요.
+          <StyledLink to="/signin">로그인</StyledLink>해 주세요.
         </p>
       </HeaderContainer>
     );
@@ -26,10 +23,10 @@ const Header = () => {
   return (
     <HeaderContainer>
       {userInfo ? (
-        <p>{userInfo.username}님, 반갑습니다!</p>
+        <p>{userInfo.username}님</p>
       ) : (
         <p>
-          <Link to="/signin">로그인</Link>해 주세요.
+          <StyledLink to="/signin">로그인</StyledLink>해 주세요.
         </p>
       )}
       {userInfo && <Logout />}
@@ -41,8 +38,21 @@ export default Header;
 
 const HeaderContainer = styled.header`
   display: flex;
+  font-size: 2rem;
   justify-content: space-between;
-  padding: 1rem;
-  background-color: var(--yellow-color);
+  align-items: center;
+  padding: 1.5rem;
+  gap: 2rem;
+  background-color: var(--darkblue-color);
+  border: none;
+  border-radius: 20px;
   color: white;
+`;
+
+const StyledLink = styled(Link)`
+  color: var(--yellow-color);
+  text-decoration: none;
+  &:visited {
+    color: var(--yellow-color);
+  }
 `;

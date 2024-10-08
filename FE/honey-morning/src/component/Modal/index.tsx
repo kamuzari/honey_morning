@@ -45,21 +45,24 @@ const Container = styled.div`
   flex-direction: column;
 
   width: 600px;
-  height: 1000px;
+  height: 800px;
   padding: 50px;
 
-  border: solid 8px var(--yellow-color);
+  border: solid 8px var(--mediumblue-color);
   background-color: white;
   border-radius: 30px;
-  box-shadow: 10px 5px 5px gray;
+  box-shadow: 10px 5px 5px;
   z-index: 20;
 
   .TitleArea {
+    color: var(--darkblue-color);
     margin-bottom: 50px;
     font-size: 100px;
   }
 
   .MessageArea {
+    color: var(--darkblue-color);
+    margin-top: 50px;
     margin-bottom: 50px;
     font-size: 50px;
   }
@@ -75,7 +78,8 @@ const Container = styled.div`
 
 const ModalButton = styled.button`
   text: white;
-  background-color: var(--yellow-color);
+  color: white;
+  background-color: var(--mediumblue-color);
   border: none;
   font-size: 50px;
   border-radius: 20px;
