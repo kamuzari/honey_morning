@@ -76,12 +76,13 @@ const AlarmPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // 저장된 alarmStartData 불러오기
+  //prettier-ignore
   const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
   let morningCallUrl =
     alarmStartData?.morningCallUrl ??
     'https://cdn1.suno.ai/dc1d94fa-975b-4eab-a391-dc55eb4cdcc5.mp3';
 
+  
   const alarmData = queryClient.getQueryData<AlarmData>(['alarmData']);
   const repeatFrequency = alarmData?.repeatFrequency ?? 1;
   const repeatInterval = alarmData?.repeatInterval || 0;
