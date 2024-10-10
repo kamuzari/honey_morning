@@ -9,7 +9,7 @@ import NavBar, {SoleMainNavBarProps} from '@/component/NavBar/NavBar';
 import {getBrief} from '@/api/briefingApi';
 
 function toLocalDate(localDateTime: string): string {
-  return new Date(localDateTime).toISOString().split('T')[0];
+  return localDateTime.split('T')[0];
 }
 
 const navType = ['요약', '브리핑', '퀴즈'];
