@@ -28,11 +28,11 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+            FilterChain filterChain) throws ServletException, IOException {
 
         // 요청된 URL을 로그로 출력
         String requestUrl = request.getRequestURI();
-        log.info("Requested URL: {}", requestUrl);
+        log.info("요청이 들어왔습니다. Requested URL: {}", requestUrl);
 
         // 헤더에서 access키에 담긴 토큰을 꺼냄
         String accessToken = request.getHeader("access");
