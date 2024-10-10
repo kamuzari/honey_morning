@@ -57,7 +57,7 @@ const fetchQuizData = async(briefId: number): Promise<QuizData[]> => {
     const response = await instance.get(`/api/quizzes/${briefId}`);
     return response.data;
   } catch(error: any) {
-    console.log("fetchQuizData Error", error);
+    // console.log("fetchQuizData Error", error);
     throw error;
   }
 }
@@ -69,10 +69,10 @@ const fetchAudio = async (quizId: number) => {
     });
     const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
     const audioUrl = URL.createObjectURL(audioBlob);
-    console.log('오디오를 성공적으로 받아왔습니다:', audioUrl);
+    // console.log('오디오를 성공적으로 받아왔습니다:', audioUrl);
     return { audioUrl, response };
   } catch (error) {
-    console.error('오디오를 받아오는데 실패했습니다:', error);
+    // console.error('오디오를 받아오는데 실패했습니다:', error);
     throw error;
   }
 };
@@ -84,7 +84,7 @@ const saveQuizResult = async(quizResult: {id: number; selection: number}) => {
     const response = await instance.patch(`/api/quizzes`, quizResult)
     return response.data;
   } catch(error: any) {
-    console.log("saveQuizResult Error", error)
+    // console.log("saveQuizResult Error", error)
   }
 }
 
@@ -95,7 +95,22 @@ const QuizSolution: React.FC = () => {
   const queryClient = useQueryClient();
 
   //prettier-ignore
-  const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
+  //prettier-ignore
+  const [alarmStartData, setAlarmStartData] = useState<AlarmStartResponse | null>(
+    queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']) || null
+  );
+  // console.log('alarmStartData:', alarmStartData);
+  // localStorage에서 alarmStartData 불러오기
+  useEffect(() => {
+    if (!alarmStartData) {
+      const storedData = localStorage.getItem('alarmStartData');
+      if (storedData) {
+        const parsedData = JSON.parse(storedData) as AlarmStartResponse;
+        setAlarmStartData(parsedData); // 상태 업데이트
+        console.log('localStorage에서 가져온 데이터:', parsedData);
+      }
+    }
+  }, [alarmStartData]);
 
   //timer
   const [timeLeft, setTimeLeft] = useState(10);
@@ -119,17 +134,16 @@ const QuizSolution: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   // console.log('퀴즈 페이지의 alarmStartData:', alarmStartData);
 
-
   // get
 const { mutate: fetchQuizDataMutate } = useMutation({
   mutationFn: (id: number) => fetchQuizData(id),
   onSuccess: (data: QuizData[]) => {
-    console.log("퀴즈 데이터를 불러오는데 성공", data)
+    // console.log("퀴즈 데이터를 불러오는데 성공", data)
     setQuizData(data);
     setIsQuizActive(true);
   },
   onError: (error) => {
-    console.error("퀴즈 데이터를 불러오는데 실패", error)
+    // console.error("퀴즈 데이터를 불러오는데 실패", error)
   }
 })
 
@@ -137,10 +151,10 @@ const { mutate: fetchQuizDataMutate } = useMutation({
 const { mutate: saveQuizResultMutate } = useMutation({
   mutationFn: saveQuizResult,
   onSuccess: (response) => {
-    console.log("퀴즈 결과 저장 보냄", response);
+    // console.log("퀴즈 결과 저장 보냄", response);
   },
   onError: (error) => {
-    console.log("퀴즈 결과 저장 실패", error)
+    // console.log("퀴즈 결과 저장 실패", error)
   }
 })
 
@@ -312,7 +326,7 @@ const ProgressBarBackground = styled.div`
   width: 100%;
   height: 100%;
   background-color: var(--disabled-color);
-  border-radius: 10px;
+  border-radius: 30px;
   position: relative; /* Keep it relative to align with fill */
   overflow: hidden; /* Ensure that the fill doesn't overflow */
 `;
@@ -322,7 +336,7 @@ const ProgressBarFill = styled.div<ProgressBarProps>`
   width: ${props => props.progress}%;
   height: 100%; /* Match the background's height */
   background-color: var(--darkblue-color);
-  border-radius: 10px;
+  border-radius: 30px;
   position: absolute;
   top: 0;
   left: 0;
@@ -335,8 +349,8 @@ const ProgressStep = styled.div<ProgressStepProps>`
   top: -20px;
   left: ${props => props.position};
   transform: translateX(-50%);
-  width: 35px;
-  height: 35px;
+  width: 50px;
+  height: 50px;
   background-color: ${props => (props.completed ? 'var(--green-color)' : props.active ? '#000000' : 'var(--disabled-color)')};
   border-radius: 50%;
   display: flex;

@@ -80,7 +80,7 @@ const AlarmPage = () => {
   const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
   let morningCallUrl =
     alarmStartData?.morningCallUrl ??
-    'https://cdn1.suno.ai/dc1d94fa-975b-4eab-a391-dc55eb4cdcc5.mp3';
+    'https://cdn1.suno.ai/8157d781-b8b0-481b-aa8b-622ae663f45a.mp3';
 
   //prettier-ignore
   const alarmData = queryClient.getQueryData<AlarmData>(['alarmData']);
@@ -92,7 +92,7 @@ const AlarmPage = () => {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
-    const alarmTime = new Date(time.getTime() + 5000);
+    const alarmTime = new Date(time.getTime() + 1000);
 
     const checkAlarm = setInterval(() => {
       const currentTime = new Date();
@@ -131,7 +131,6 @@ const AlarmPage = () => {
         <GlassmorphismClock />
         {isAlarmOn ? (
           <>
-            {/* <AlarmMessage>알람이 울리고 있습니다!</AlarmMessage> */}
             <audio autoPlay>
               <source
                 src={morningCallUrl}
@@ -145,7 +144,6 @@ const AlarmPage = () => {
           </>
         ) : (
           <>
-            {/* <AlarmMessage>알람이 울리지 않고 있습니다.</AlarmMessage> */}
             <Button onClick={handleRemindLater}>
               {repeatInterval}분 후 다시 알림
             </Button>

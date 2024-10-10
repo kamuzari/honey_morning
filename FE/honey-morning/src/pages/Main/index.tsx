@@ -74,21 +74,18 @@ const Main = () => {
       $bgColor: bgColor,
       $textColor: textColor,
       text: 'alarm',
-      // to: '/alarmsetting',
       onClick: () => handleNavClick('/alarmsetting'),
     },
     {
       $bgColor: bgColor,
       $textColor: textColor,
       text: 'bedtime',
-      // to: '/alarmsetting',
       onClick: () => handleNavClick('/sleep'),
     },
     {
       $bgColor: bgColor,
       $textColor: textColor,
       text: 'person',
-      // to: '/mypage',
       onClick: () => handleNavClick('/mypage'),
     },
   ];
