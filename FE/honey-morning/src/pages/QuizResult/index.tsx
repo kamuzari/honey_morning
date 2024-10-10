@@ -25,7 +25,7 @@ const ShowQuizResult: React.FC = () => {
           count: correctCount,
           isAttending: 1,
         });
-        console.log(response);
+        // console.log(response);
       } catch (error) {
         console.error(`[Error] saving alarm result: ${error}`);
       }
@@ -60,7 +60,7 @@ const ShowQuizResult: React.FC = () => {
     fetchCategory(); // 데이터 fetch 호출
   }, []);
 
-  console.log(alarmCategoryInfo);
+  // console.log(alarmCategoryInfo);
 
   const fetchStreakData = async () => {
     const {data} = await instance.get(`/api/alarms/result/streak`);

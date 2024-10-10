@@ -56,11 +56,11 @@ const Main = () => {
 
   const handleNavClick = useCallback(
     (path: string) => {
-      console.log('Nav clicked, userInfo:', userInfo);
+      // console.log('Nav clicked, userInfo:', userInfo);
       if (!userInfo) {
         openModal('Caution', '로그인을 해주세요.', '확인');
       } else {
-        console.log('Navigating to:', path);
+        // console.log('Navigating to:', path);
         navigate(path);
       }
     },

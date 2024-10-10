@@ -63,7 +63,7 @@ const updateAlarmData = async (updatedAlarm: AlarmData) => {
         access: token,
       },
     });
-    console.log(response);
+    // console.log(response);
     return response.data;
   } catch (error) {
     console.error("알람 업데이트 중 오류 발생:", error);
@@ -113,7 +113,7 @@ const AlarmSetting: React.FunctionComponent = () => {
   const { mutate: updateAlarm } = useMutation({
     mutationFn: updateAlarmData,
     onSuccess: (data) => {
-      console.log("알람이 성공적으로 수정되었습니다.", data);
+      // console.log("알람이 성공적으로 수정되었습니다.", data);
       // setAlarmData(data);
       const date = new Date(data.alarmDate);
       setNextMonth(String(date.getMonth() + 1).padStart(2, '0'));  // 월은 0부터 시작하므로 +1
@@ -323,7 +323,7 @@ const AlarmSetting: React.FunctionComponent = () => {
                 ...alarmState,
                 alarmTime: `${hour}:${minute}:00`
               };
-              console.log("Updating alarm with:", updatedAlarmState);
+              // console.log("Updating alarm with:", updatedAlarmState);
               updateAlarm(updatedAlarmState);
             }}
           ></GlobalBtn>

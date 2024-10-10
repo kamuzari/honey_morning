@@ -80,7 +80,7 @@ const AlarmPage = () => {
   const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
   let morningCallUrl =
     alarmStartData?.morningCallUrl ??
-    'https://cdn1.suno.ai/8157d781-b8b0-481b-aa8b-622ae663f45a.mp3';
+    'https://suno.com/song/0c1495dc-d5de-48e6-b1a5-ecc2fd7b758c';
 
   //prettier-ignore
   const alarmData = queryClient.getQueryData<AlarmData>(['alarmData']);
