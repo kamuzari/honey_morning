@@ -55,6 +55,9 @@ const fetchAlarmStartDataFn = async (): Promise<AlarmStartResponse> => {
 const SleepWakeLock = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  //prettier-ignore
+  const userInfo = queryClient.getQueryData<{id: number, role: string, email: string, username: string}>(['userInfo']);
+  const username = userInfo ? userInfo.username : null;
 
   // 알람을 조회해서 저장 api/alarms
   const { data: alarmData, error: alarmError, isSuccess: isAlarmDataSuccess } = useQuery({
@@ -65,7 +68,7 @@ const SleepWakeLock = () => {
 
   useEffect(() => {
     if (isAlarmDataSuccess && alarmData) {
-      console.log('AlarmData here:', alarmData); // 데이터를 확인하기 위한 콘솔 출력
+      // console.log('AlarmData here:', alarmData); // 데이터를 확인하기 위한 콘솔 출력
       // 추가적으로 처리할 로직이 있다면 여기에 작성
     }
   
@@ -96,7 +99,7 @@ const SleepWakeLock = () => {
     mutationFn: fetchAlarmStartDataFn,
     onSuccess: (data) => {
       // 요청 성공 시, 데이터를 전역 상태에 저장
-      console.log('AlarmStartData after mutation:', data);
+      // console.log('AlarmStartData after mutation:', data);
       queryClient.setQueryData(['alarmStartData'], data);
       localStorage.setItem('alarmStartData', JSON.stringify(data)); 
     },
@@ -110,10 +113,10 @@ const SleepWakeLock = () => {
     const storedAlarmStartData = localStorage.getItem('alarmStartData');
     if (storedAlarmStartData) {
       const parsedData = JSON.parse(storedAlarmStartData);
-      console.log('localStorage에 저장된 데이터:', parsedData); // localStorage에서 가져온 데이터 확인
+      // console.log('localStorage에 저장된 데이터:', parsedData); // localStorage에서 가져온 데이터 확인
       queryClient.setQueryData(['alarmStartData'], parsedData); // queryClient에 저장
     } else {
-      console.log('localStorage에 alarmStartData가 존재하지 않습니다.');
+      // console.log('localStorage에 alarmStartData가 존재하지 않습니다.');
     }
   }, [queryClient]);
   
@@ -188,7 +191,7 @@ const SleepWakeLock = () => {
 
   useEffect(() => {
     if (!isLoading && !tooShortModalOpen) {
-      console.log('Starting timer and wake lock...');
+      // console.log('Starting timer and wake lock...');
       startTimer();
       handleRequestWakeLock();
       resetTimer();
@@ -278,10 +281,10 @@ const SleepWakeLock = () => {
         setWakeLock(lock);
 
         lock.addEventListener('release', () => {
-          console.log('Wake Lock 해제');
+          // console.log('Wake Lock 해제');
           setIsScreenDimmed(false);
         });
-        console.log('Wake Lock 활성화');
+        // console.log('Wake Lock 활성화');
       } else {
         console.log('해당 브라우저에서 Wake Lock이 지원되지 않습니다.');
       }
@@ -295,7 +298,7 @@ const SleepWakeLock = () => {
       await wakeLock.release();
       setWakeLock(null);
       setIsScreenDimmed(false);
-      console.log('Wake Lock 해제');
+      // console.log('Wake Lock 해제');
     }
   };
   
@@ -305,7 +308,7 @@ const SleepWakeLock = () => {
     if (timerId.current) {
       clearTimeout(timerId.current); // 기존 타이머 취소
     }
-    console.log('타이머 리셋');
+    // console.log('타이머 리셋');
     setIsScreenDimmed(false); // 터치 시 화면 밝게 설정
 
     // 일정 시간 후 화면을 어둡게 처리하는 새로운 타이머 설정(5초)
@@ -324,7 +327,7 @@ const SleepWakeLock = () => {
         header: '수면 경고',
         body: (
           <>
-          체류시간 확인용: {elapsedTime}{"\n\n"}
+          수면 시간: {elapsedTime}초{"\n\n"}
           정말 수면을 종료하시겠습니까?{"\n\n"}
           수면 시간이 <HighlightedText>2시간</HighlightedText> 이하입니다.{"\n\n"}
           지금 수면을 종료하면 브리핑이 생성되지 않고, 기록이 남지 않습니다.{"\n\n\n"}
@@ -346,10 +349,10 @@ const SleepWakeLock = () => {
         body: (
           <>
           정말 수면을 종료하시겠습니까?{"\n\n"}
-          OOO님의 관심사를 기준으로{"\n"}
+          {userInfo.username}님의 관심사를 기준으로{"\n"}
           현재 시간까지의 브리핑을 준비했습니다.{"\n\n"}
           수면을 종료하고, 브리핑을 시작하시겠습니까?{"\n\n"}
-          <AlertText>알람 시각보다 빨리 일어난 경우,{"\n"}브리핑 생성에 약 n분 소요됩니다.</AlertText>
+          <AlertText>알람 시각보다 빨리 일어난 경우,{"\n"}브리핑 생성에 약 10분 소요됩니다.</AlertText>
         </>
         ),
         actions: (

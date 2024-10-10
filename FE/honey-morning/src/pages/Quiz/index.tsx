@@ -107,13 +107,13 @@ const QuizSolution: React.FC = () => {
       if (storedData) {
         const parsedData = JSON.parse(storedData) as AlarmStartResponse;
         setAlarmStartData(parsedData); // 상태 업데이트
-        console.log('localStorage에서 가져온 데이터:', parsedData);
+        // console.log('localStorage에서 가져온 데이터:', parsedData);
       }
     }
   }, [alarmStartData]);
 
   //timer
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(15);
 
   // quiz
   // prettier-ignore
@@ -169,11 +169,11 @@ useEffect(()=> {
 useEffect(() => {
   if (quizData.length > 0 && currentQuizIndex >= 0) {
     const currentQuiz = alarmStartData.quizzes[currentQuizIndex];
-    console.log("currentQuiz",currentQuiz);
+    // console.log("currentQuiz",currentQuiz);
     if (currentQuiz && currentQuiz.id !== undefined) {
-      console.log('현재 퀴즈 ID:', currentQuiz.id);
+      // console.log('현재 퀴즈 ID:', currentQuiz.id);
       fetchAudio(currentQuiz.id).then(({ audioUrl }) => {
-        console.log('오디오 URL:', audioUrl);
+        // console.log('오디오 URL:', audioUrl);
         if (audioRef.current) {
           audioRef.current.src = audioUrl;
           audioRef.current.play();
@@ -181,7 +181,7 @@ useEffect(() => {
       }).catch((error) => {
         console.error("오디오를 가져오는데 실패했습니다:", error);
       });
-      setTimeLeft(10);
+      setTimeLeft(15);
       setIsQuizActive(true);
     } else {
       console.error('현재 퀴즈 또는 퀴즈 ID가 정의되지 않았습니다:', currentQuiz);
@@ -213,13 +213,13 @@ const handleTimeUp = () => {
     correctCountRef.current += 1;
   }
   
-  console.log(correctCountRef);
+  // console.log(correctCountRef);
   
   setShowModal(true);
   setTimeout(() => {
     setShowModal(false);
 
-    console.log(quizData);
+    // console.log(quizData);
 
     saveQuizResultMutate({
       id: alarmStartData.quizzes[currentQuizIndex].id,
@@ -227,7 +227,7 @@ const handleTimeUp = () => {
     })
     if (currentQuizIndex < quizData.length - 1) {
       setCurrentQuizIndex(currentQuizIndex + 1);
-      setTimeLeft(10);
+      setTimeLeft(15);
       setSelectedAnswer(null);
       setIsQuizActive(true);
     }
@@ -235,12 +235,12 @@ const handleTimeUp = () => {
     if (currentQuizIndex >= 1) {navigate('/quizresult', { state: {correctCount: correctCountRef.current}})}
       
     
-  }, 5000);  //모달 시간 조절
+  }, 3000);  //모달 시간 조절
 };
 
 // 정답 처리
 const handleAnswer = (index: number ) => {
-  console.log("정답 처리 메서드 실행")
+  // console.log("정답 처리 메서드 실행")
   setSelectedAnswer(index);
   //handleTimeUp(); 선택 시 즉시 다음 문제로 (일정한 시간이라면 이 줄 삭제)
 }

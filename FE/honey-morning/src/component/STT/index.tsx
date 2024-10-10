@@ -17,9 +17,9 @@ const stt: React.FC<SttProps> = props => {
   const requestMicrophoneAccess = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({audio: true});
-      console.log('마이크 권한 허용');
+      // console.log('마이크 권한 허용');
     } catch (error) {
-      console.error('마이크 권한 거절:', error);
+      // console.error('마이크 권한 거절:', error);
     }
   };
 
@@ -27,7 +27,7 @@ const stt: React.FC<SttProps> = props => {
     for (var option = 0; option < 4; option++) {
       for (var i = 0; i < phrase.length; i++) {
         if (currentOptions[option].substring(i, i + phrase.length) == phrase) {
-          console.log('일치하는 것을 찾았습니다!');
+          // console.log('일치하는 것을 찾았습니다!');
           props.setAnswer(option);
         }
       }

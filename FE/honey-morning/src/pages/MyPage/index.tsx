@@ -182,7 +182,7 @@ const MyPage: React.FC = () => {
 
   useEffect(() => {
     if (tagInfo) {
-      console.log('실행!');
+      // console.log('실행!');
       var selectedCategoryList = [];
       tagInfo.map(item => {
         selectedCategoryList.push(item.word);
