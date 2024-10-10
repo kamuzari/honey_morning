@@ -83,7 +83,6 @@ const LoginProcess: React.FC = () => {
     });
 
     if (res.data && res.data.username) {
-      console.log('유저 정보 응답: ', res);
       return res.data;
     } else {
       throw new Error('유저 정보가 비어 있습니다.');
@@ -97,9 +96,7 @@ const LoginProcess: React.FC = () => {
       try {
         if (accessToken) {
           const userInfo = await fetchUserInfo();
-          console.log('유저 정보를 queryClient에 저장하기 전에:', userInfo);
           queryClient.setQueryData(['userInfo'], userInfo);
-          console.log('유저 정보가 queryClient에 저장되었습니다:', userInfo);
           alert('로그인 성공');
           navigate('/');
         } else {

@@ -36,15 +36,25 @@ const BriefingPage: React.FC = () => {
   const queryClient = useQueryClient();
 
   //prettier-ignore
-  const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
+  const [alarmStartData, setAlarmStartData] = useState<AlarmStartResponse | null>(
+    queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']) || null
+  );
   // console.log('alarmStartData:', alarmStartData);
+  // localStorage에서 alarmStartData 불러오기
+  useEffect(() => {
+    if (!alarmStartData) {
+      const storedData = localStorage.getItem('alarmStartData');
+      if (storedData) {
+        const parsedData = JSON.parse(storedData) as AlarmStartResponse;
+        setAlarmStartData(parsedData); // 상태 업데이트
+        console.log('localStorage에서 가져온 데이터:', parsedData);
+      }
+    }
+  }, [alarmStartData]);
+
   const briefingContent = alarmStartData?.briefingContent;
   const briefingContentUrl = alarmStartData?.briefingContentUrl;
-  const briefingId = alarmStartData?.briefingId;
-
-  // console.log('briefingContent: ', briefingContent);
-  // console.log('briefingContentUrl: ', briefingContentUrl);
-  // console.log('briefingId: ', briefingId);
+  const briefingId = alarmStartData?.briefingId ?? 109;
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const flippedCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -56,7 +66,7 @@ const BriefingPage: React.FC = () => {
   const currentDate = new Date();
   const currentMonth = String(currentDate.getMonth() + 1);
   const currentDay = String(currentDate.getDate());
-  
+
   useEffect(() => {
     initializeCanvas(canvasRef.current);
     initializeCanvas(flippedCanvasRef.current, true);
@@ -192,9 +202,16 @@ const BriefingPage: React.FC = () => {
   };
 
   const { mutate: fetchAndPlayAudio } = useMutation({
-    mutationFn: () => fetchAudio(briefingId!),
-    onSuccess: ({ audioUrl, response }) => {
-      // console.log('Axios response:', response);
+    mutationFn: () => {
+      if (briefingId) {
+        // briefingId가 있으면, 해당 ID로 API 호출
+        return fetchAudio(briefingId);
+      } else {
+        // briefingId가 없으면 기본 URL을 사용해 오디오 설정
+        return Promise.resolve({ audioUrl: defaultBriefingContentUrl });
+      }
+    },
+    onSuccess: ({ audioUrl }) => {
       const audio = new Audio(audioUrl);
       audioRef.current = audio;
       const canvas = canvasRef.current;
@@ -219,8 +236,8 @@ const BriefingPage: React.FC = () => {
           setTimeout(() => {
             navigate('/quizzie');
           }, 3000);
-        })
-
+        });
+  
         audio.play().catch((error) => console.error('Audio play failed:', error));
         setIsPlaying(true);
       }

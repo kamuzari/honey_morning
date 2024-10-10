@@ -94,7 +94,7 @@ const SignUpProcess: React.FC = () => {
       const response = await instance.get(
         `/api/users/check/email?email=${email}`,
       );
-      console.log(response);
+      // console.log(response);
 
       if (response.data === true) {
         setEmailMessage('이미 사용 중인 이메일입니다.');
@@ -133,13 +133,12 @@ const SignUpProcess: React.FC = () => {
         },
       });
 
-      console.log(data);
+      // console.log(data);
 
       if (response.status === 200) {
         openModal('Success', '회원가입에 성공했습니다.', '확인');
       }
     } catch (error) {
-      console.log('회원가입 실패', error);
       alert('회원가입 실패');
     }
   };

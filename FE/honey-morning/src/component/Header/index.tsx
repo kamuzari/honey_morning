@@ -23,7 +23,7 @@ const Header = () => {
   return (
     <HeaderContainer>
       {userInfo ? (
-        <p>{userInfo.username}님</p>
+        <p>{userInfo.username}님, 활기찬 아침을 맞을 준비가 되셨나요?</p>
       ) : (
         <p>
           <StyledLink to="/signin">로그인</StyledLink>해 주세요.

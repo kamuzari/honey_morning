@@ -74,6 +74,15 @@ const SleepWakeLock = () => {
     }
   }, [isAlarmDataSuccess, alarmData, alarmError]);
 
+  // 컴포넌트가 처음 마운트될 때 localStorage에서 데이터를 불러오는 부분
+  useEffect(() => {
+    const storedAlarmStartData = localStorage.getItem('alarmStartData');
+    if (storedAlarmStartData) {
+      const parsedData = JSON.parse(storedAlarmStartData);
+      queryClient.setQueryData(['alarmStartData'], parsedData); // queryClient에 저장
+    }
+  }, [queryClient]);
+
   // api/alarms/start 데이터 저장
   const { data: alarmStartData } = useQuery({
     queryKey: ['alarmStartData'],
@@ -89,11 +98,24 @@ const SleepWakeLock = () => {
       // 요청 성공 시, 데이터를 전역 상태에 저장
       console.log('AlarmStartData after mutation:', data);
       queryClient.setQueryData(['alarmStartData'], data);
+      localStorage.setItem('alarmStartData', JSON.stringify(data)); 
     },
     onError: (error) => {
       console.error("Error fetching alarm start data:", error);
     }
   });
+
+  useEffect(() => {
+    // localStorage에서 데이터를 가져와 확인
+    const storedAlarmStartData = localStorage.getItem('alarmStartData');
+    if (storedAlarmStartData) {
+      const parsedData = JSON.parse(storedAlarmStartData);
+      console.log('localStorage에 저장된 데이터:', parsedData); // localStorage에서 가져온 데이터 확인
+      queryClient.setQueryData(['alarmStartData'], parsedData); // queryClient에 저장
+    } else {
+      console.log('localStorage에 alarmStartData가 존재하지 않습니다.');
+    }
+  }, [queryClient]);
   
   
   const [wakeLock, setWakeLock] = useState<WakeLockSentinel | null>(null);

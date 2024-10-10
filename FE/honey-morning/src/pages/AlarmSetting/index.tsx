@@ -64,7 +64,6 @@ const updateAlarmData = async (updatedAlarm: AlarmData) => {
       },
     });
     console.log(response);
-    // setAlarmData(response.data); // 상태 저장
     return response.data;
   } catch (error) {
     console.error("알람 업데이트 중 오류 발생:", error);
@@ -88,11 +87,6 @@ const AlarmSetting: React.FunctionComponent = () => {
       queryFn: fetchAlarmData,
     })
 
-
-  // const [isAlarmOn, setIsAlarmOn] = useState(true);
-  // const [timeInterval, setTimeInterval] = useState(init.time);
-  // const [repeatCnt, setRepeatCnt] = useState(init.repeat);
-  // const [selectedWeak, setSelectedWeak] = useState(init.selectedWeek);
   const [reservedTime, setReservedTime] = useState(new Date());
   const [isTimeDropDownOpen, setIsTimeDropDownOpen] = useState(false);
   const [isRepeatDropDownOpen, setIsRepeatDropDownOpen] = useState(false);
