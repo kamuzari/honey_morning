@@ -287,6 +287,7 @@ const MyPage: React.FC = () => {
           <div className="titleContainer">
             <Title>스트릭</Title>
           </div>
+
           <div className="streakContainer">
             {streakData &&
               Array.from(Array(rows).keys()).map(rowNum => {
@@ -406,12 +407,13 @@ export const Content = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 33rem;
+    height: 36rem;
     width: 85%;
     overflow-x: hidden;
     overflow-y: scroll;
     box-sizing: border-box;
-    padding-left: 4rem;
+    padding: 20rem 0 5rem 4rem;
+    margin-bottom: 3rem;
   }
   .topic {
     // flex-direction: column;
@@ -424,7 +426,7 @@ export const Title = styled.div`
   border-radius: 0 10rem 10rem 0;
   background-color: var(--yellow-color);
   font-weight: bold;
-  font-size: 4rem;
+  font-size: 3rem;
   padding: 0 5rem 0 5rem;
   align-items: center;
 `;

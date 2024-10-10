@@ -26,4 +26,4 @@ RUN mkdir -p /app/config
 EXPOSE 8081
 
 # 외부 설정 파일을 우선적으로 사용하도록 ENTRYPOINT 수정
-ENTRYPOINT ["java", "-jar", "/app/app.jar", "--spring.config.location=file:/app/config/application.properties,classpath:/application.properties"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

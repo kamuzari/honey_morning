@@ -94,7 +94,7 @@ services:
 
   hm-ai-music:
     build:
-      context: ./AI/FastAPI/music
+      context: ./SunoAPI
       dockerfile: Dockerfile
     container_name: hm-ai-music
     ports:
