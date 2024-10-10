@@ -208,7 +208,7 @@ const BriefingPage: React.FC = () => {
         return fetchAudio(briefingId);
       } else {
         // briefingId가 없으면 기본 URL을 사용해 오디오 설정
-        return Promise.resolve({ audioUrl: defaultBriefingContentUrl });
+        // return Promise.resolve({ audioUrl: defaultBriefingContentUrl });
       }
     },
     onSuccess: ({ audioUrl }) => {
