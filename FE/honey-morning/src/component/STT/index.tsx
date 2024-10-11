@@ -26,7 +26,11 @@ const stt: React.FC<SttProps> = props => {
   const optionCheck = (phrase: string, currentOptions: string[]) => {
     for (var option = 0; option < 4; option++) {
       for (var i = 0; i < phrase.length; i++) {
-        if (currentOptions[option].substring(i, i + phrase.length) == phrase) {
+        if (
+          currentOptions[option]
+            .substring(i, i + phrase.length)
+            .replace(' ', '') == phrase.replace(' ', '')
+        ) {
           // console.log('일치하는 것을 찾았습니다!');
           props.setAnswer(option);
         }

@@ -90,11 +90,13 @@ const saveQuizResult = async(quizResult: {id: number; selection: number}) => {
 
 
 const QuizSolution: React.FC = () => {
-
+  
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  
+  const briefId = 81;
 
-  //prettier-ignore
+
   //prettier-ignore
   const [alarmStartData, setAlarmStartData] = useState<AlarmStartResponse | null>(
     queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']) || null
@@ -117,7 +119,31 @@ const QuizSolution: React.FC = () => {
 
   // quiz
   // prettier-ignore
-  const [quizData, setQuizData] = useState<QuizData[]>([]);
+  // const [quizData, setQuizData] = useState<QuizData[]>([]);
+  const quizData = [
+    {
+      id: 9,
+      briefId: 81,
+      question: '최근 미슐랭 가이드에서 주목받고 있는 레스토랑은 무엇인가요?',
+      answerNumber: 1,
+      option1: '모수서울',
+      option2: '그릴하우스',
+      option3: '미슐랭레스토랑',
+      option4: '파르마식당',
+      quizUrl: '89c30570-b599-4331-bd6b-3f82f9f50d6c.mp3'
+    },
+    {
+      id: 10,
+      briefId: 81,
+      question: '2040세대에서 증가하고 있는 건강 문제는 무엇인가요?',
+      answerNumber: 1,
+      option1: '무릎퇴행성관절염',
+      option2: '심장병',
+      option3: '당뇨병',
+      option4: '비만',
+      quizUrl: 'ef7e8ca4-378b-4fbf-90ab-bdb15abaa238.mp3'
+    },
+  ]
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   //prettier-ignore
   const [selectedAnswer, setSelectedAnswer] = useState<number|null>(null);
@@ -130,7 +156,6 @@ const QuizSolution: React.FC = () => {
 
   // const [briefId, setBriefId] = useState<number | null>(null);
 
-  const briefId = alarmStartData?.briefingId;
   const audioRef = useRef<HTMLAudioElement | null>(null);
   // console.log('퀴즈 페이지의 alarmStartData:', alarmStartData);
 
@@ -139,7 +164,7 @@ const { mutate: fetchQuizDataMutate } = useMutation({
   mutationFn: (id: number) => fetchQuizData(id),
   onSuccess: (data: QuizData[]) => {
     // console.log("퀴즈 데이터를 불러오는데 성공", data)
-    setQuizData(data);
+    // setQuizData(data);
     setIsQuizActive(true);
   },
   onError: (error) => {
@@ -168,7 +193,7 @@ useEffect(()=> {
 
 useEffect(() => {
   if (quizData.length > 0 && currentQuizIndex >= 0) {
-    const currentQuiz = alarmStartData.quizzes[currentQuizIndex];
+    const currentQuiz = quizData[currentQuizIndex];
     // console.log("currentQuiz",currentQuiz);
     if (currentQuiz && currentQuiz.id !== undefined) {
       // console.log('현재 퀴즈 ID:', currentQuiz.id);
@@ -187,7 +212,7 @@ useEffect(() => {
       console.error('현재 퀴즈 또는 퀴즈 ID가 정의되지 않았습니다:', currentQuiz);
     }
   }
-}, [currentQuizIndex, quizData]);
+}, [currentQuizIndex]);
 
 useEffect(() => {
   let timer: NodeJS.Timeout;
@@ -307,6 +332,7 @@ const progress = (currentQuizIndex / quizData.length) * 100 + 50;
 };
 
 export default QuizSolution;
+
 
 const Container = styled.div`
   display: flex;

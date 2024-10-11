@@ -77,10 +77,13 @@ const AlarmPage = () => {
   const queryClient = useQueryClient();
 
   //prettier-ignore
-  const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
+  // const alarmStartData = queryClient.getQueryData<AlarmStartResponse>(['alarmStartData']);
+  // let morningCallUrl =
+  //   alarmStartData?.morningCallUrl ??
+  //   'https://suno.com/song/0c1495dc-d5de-48e6-b1a5-ecc2fd7b758c';
   let morningCallUrl =
-    alarmStartData?.morningCallUrl ??
-    'https://suno.com/song/0c1495dc-d5de-48e6-b1a5-ecc2fd7b758c';
+    // 'https://suno.com/song/0c1495dc-d5de-48e6-b1a5-ecc2fd7b758c.mp3';
+    'https://cdn1.suno.ai/0c1495dc-d5de-48e6-b1a5-ecc2fd7b758c.mp3';
 
   //prettier-ignore
   const alarmData = queryClient.getQueryData<AlarmData>(['alarmData']);
