@@ -439,8 +439,8 @@ const BriefingPage: React.FC = () => {
   // console.log('alarmStartData:', alarmStartData);
   const briefingContent = alarmStartData?.briefingContent;
   const briefingContentUrl = alarmStartData?.briefingContentUrl ?? '4357e443-9b1d-4417-857f-3ba4c16c7929.mp3';
-  const defaultBriefingContentUrl = '4357e443-9b1d-4417-857f-3ba4c16c7929.mp3';
-  const briefingId = alarmStartData?.briefingId ?? 109;
+  const defaultBriefingContentUrl = 'cbdfdd98-9519-4eda-9f85-f753a74bce7d.mp3';
+  const briefingId = 81;
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const flippedCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -594,7 +594,7 @@ const BriefingPage: React.FC = () => {
         return fetchAudio(briefingId);
       } else {
         // briefingId가 없으면 기본 URL을 사용해 오디오 설정
-        return Promise.resolve({ audioUrl: defaultBriefingContentUrl });
+        return Promise.resolve({ audioUrl: 'cbdfdd98-9519-4eda-9f85-f753a74bce7d.mp3' });
       }
     },
     onSuccess: ({ audioUrl }) => {
