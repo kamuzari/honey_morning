@@ -9,10 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "alarms")
 @Entity
 public class Alarm extends BaseEntity {
@@ -23,19 +20,21 @@ public class Alarm extends BaseEntity {
 
 	private Long userId;
 
-	private LocalTime alarmTime;
+	private LocalTime wakeUpTime;
 
 	/**
-	 * 한주의 알람을 비트마스킹으로 표현합니다. (총 7비트로 월요일부터 시작)
+	 * 알람을 비트마스킹으로 표현합니다.
+	 * 맨 오른쪽 부터 월요일입니다.
+	 * 맨 왼쪽 비트는 사용하지 않아요.
 	 * 예시)
-	 * - 0000001 = Sunday only
-	 * - 1000001 = Monday and Sunday
-	 * - 0110010 = TuesDay and Thursday and Saturday
-	 * - 1111111 = Every day
+	 * - 0100 0000 = Sunday only
+	 * - 0100 0001 = Monday and Sunday
+	 * - 0011 0010 = TuesDay and Thursday and Saturday
+	 * - 0111 1111 = Every day
 	 */
-	private String daysOfWeek;
+	private byte weekdays;
 
-	private Integer repeatFrequency = 0;
+	private Integer repeatFrequency;
 
 	private Integer repeatInterval;
 
@@ -43,11 +42,19 @@ public class Alarm extends BaseEntity {
 
 	private String musicFilePath;
 
-	public Alarm(Long userId, LocalTime alarmTime, String daysOfWeek, Integer repeatFrequency,
-		Integer repeatInterval, boolean isActive, String musicFilePath) {
+	protected Alarm() {
+	}
+
+	public Alarm(Long userId,
+		LocalTime wakeUpTime,
+		byte weekdays,
+		Integer repeatFrequency,
+		Integer repeatInterval,
+		boolean isActive,
+		String musicFilePath) {
 		this.userId = userId;
-		this.alarmTime = alarmTime;
-		this.daysOfWeek = daysOfWeek;
+		this.wakeUpTime = wakeUpTime;
+		this.weekdays = weekdays;
 		this.repeatFrequency = repeatFrequency;
 		this.repeatInterval = repeatInterval;
 		this.isActive = isActive;
@@ -58,7 +65,7 @@ public class Alarm extends BaseEntity {
 		return new Alarm(
 			userId,
 			LocalTime.of(7, 0),
-			"0000000",
+			(byte)0,
 			0,
 			0,
 			false,
@@ -74,12 +81,12 @@ public class Alarm extends BaseEntity {
 		return userId;
 	}
 
-	public LocalTime getAlarmTime() {
-		return alarmTime;
+	public LocalTime getWakeUpTime() {
+		return wakeUpTime;
 	}
 
-	public String getDaysOfWeek() {
-		return daysOfWeek;
+	public byte getWeekdays() {
+		return weekdays;
 	}
 
 	public Integer getRepeatFrequency() {
@@ -98,10 +105,10 @@ public class Alarm extends BaseEntity {
 		return musicFilePath;
 	}
 
-	public void set(LocalTime alarmTime, String daysOfWeek, Integer repeatFrequency, Integer repeatInterval,
+	public void set(LocalTime alarmTime, byte weekDays, Integer repeatFrequency, Integer repeatInterval,
 		boolean isActive) {
-		this.alarmTime = alarmTime;
-		this.daysOfWeek = daysOfWeek;
+		this.wakeUpTime = alarmTime;
+		this.weekdays = weekDays;
 		this.repeatFrequency = repeatFrequency;
 		this.repeatInterval = repeatInterval;
 		this.isActive = isActive;

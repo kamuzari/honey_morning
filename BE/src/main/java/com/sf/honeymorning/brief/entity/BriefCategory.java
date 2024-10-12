@@ -31,7 +31,7 @@ public class BriefCategory extends BaseEntity {
 
 	@JoinColumn(name = "brief_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private com.sf.honeymorning.domain.brief.entity.Brief brief;
+	private Brief brief;
 
 	@JoinColumn(name = "tag_id")
 	@ManyToOne(fetch = FetchType.LAZY)

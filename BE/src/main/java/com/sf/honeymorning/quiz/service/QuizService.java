@@ -13,9 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.sf.honeymorning.auth.service.AuthService;
+import com.sf.honeymorning.brief.entity.Brief;
+import com.sf.honeymorning.brief.repository.BriefRepository;
 import com.sf.honeymorning.domain.brief.dto.response.detail.QuizResponseDto;
-import com.sf.honeymorning.domain.brief.entity.Brief;
-import com.sf.honeymorning.domain.brief.repository.BriefRepository;
 import com.sf.honeymorning.quiz.dto.QuizRequestDto;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
@@ -86,7 +86,7 @@ public class QuizService {
 	public Resource getQuizAudio(Long quizId) throws IOException {
 		Quiz quiz = quizRepository.findById(quizId)
 			.orElseThrow(
-				() -> new EntityNotFoundException("Quiz not found with id: " + quizId));
+				() -> new EntityNotFoundException("Quiz not found with alarmId: " + quizId));
 
 		log.debug("quizPath: {}", quizPath);
 		log.debug("quiz file path: {}", quiz.getQuizFilePath());

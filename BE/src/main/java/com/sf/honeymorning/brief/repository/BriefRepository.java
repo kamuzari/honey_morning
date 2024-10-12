@@ -1,4 +1,4 @@
-package com.sf.honeymorning.domain.brief.repository;
+package com.sf.honeymorning.brief.repository;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.sf.honeymorning.domain.brief.entity.Brief;
-import com.sf.honeymorning.domain.user.entity.User;
+import com.sf.honeymorning.brief.entity.Brief;
+import com.sf.honeymorning.user.entity.User;
 
 public interface BriefRepository extends JpaRepository<Brief, Long> {
 	Page<Brief> findByUser(User user, Pageable pageable);

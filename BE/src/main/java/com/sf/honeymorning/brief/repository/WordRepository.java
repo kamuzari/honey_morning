@@ -1,4 +1,4 @@
-package com.sf.honeymorning.domain.brief.repository;
+package com.sf.honeymorning.brief.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

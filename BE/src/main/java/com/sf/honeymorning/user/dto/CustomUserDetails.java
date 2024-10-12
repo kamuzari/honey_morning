@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.sf.honeymorning.domain.user.entity.User;
+import com.sf.honeymorning.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
 

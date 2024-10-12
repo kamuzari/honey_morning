@@ -1,4 +1,4 @@
-package com.sf.honeymorning.domain.alarm.dto;
+package com.sf.honeymorning.alarm.dto;
 
 import java.time.LocalDateTime;
 

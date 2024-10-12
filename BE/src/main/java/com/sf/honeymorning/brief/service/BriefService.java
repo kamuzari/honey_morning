@@ -15,21 +15,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.sf.honeymorning.auth.service.AuthService;
+import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.brief.entity.BriefCategory;
 import com.sf.honeymorning.brief.repository.BriefCategoryRepository;
+import com.sf.honeymorning.brief.repository.BriefRepository;
+import com.sf.honeymorning.brief.repository.WordCloudRepository;
 import com.sf.honeymorning.domain.brief.dto.response.BriefDetailResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.BriefHistoryResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.briefs.BriefHistoryDto;
 import com.sf.honeymorning.domain.brief.dto.response.detail.BriefResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.detail.SummaryResponseDto;
-import com.sf.honeymorning.domain.brief.entity.Brief;
-import com.sf.honeymorning.domain.brief.repository.BriefRepository;
-import com.sf.honeymorning.domain.brief.repository.WordCloudRepository;
-import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
 import com.sf.honeymorning.tag.entity.Tag;
+import com.sf.honeymorning.user.entity.User;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -97,7 +97,7 @@ public class BriefService {
 	public Resource getBriefSummaryAudio(Long briefId) throws IOException {
 		Brief brief = briefRepository.findById(briefId)
 			.orElseThrow(
-				() -> new EntityNotFoundException("Brief not found with id: " + briefId));
+				() -> new EntityNotFoundException("Brief not found with alarmId: " + briefId));
 
 		Path filePath = Paths.get(summaryPath, brief.getSummaryFilePath());
 		log.info("파일을 찾습니다: " + filePath);
@@ -114,7 +114,7 @@ public class BriefService {
 	public Resource getBrieContentAudio(Long briefId) throws IOException {
 		Brief brief = briefRepository.findById(briefId)
 			.orElseThrow(
-				() -> new EntityNotFoundException("Brief not found with id: " + briefId));
+				() -> new EntityNotFoundException("Brief not found with alarmId: " + briefId));
 
 		Path filePath = Paths.get(contentPath, brief.getContentFilePath());
 		log.info("파일을 찾습니다: " + filePath);

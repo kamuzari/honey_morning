@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sf.honeymorning.domain.brief.entity.Brief;
+import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.quiz.entity.Quiz;
 
 public interface QuizRepository extends JpaRepository<Quiz, Long> {

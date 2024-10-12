@@ -1,11 +1,11 @@
-package com.sf.honeymorning.alarm.dto;
+package com.sf.honeymorning.alarm.dto.response;
 
 import java.time.LocalTime;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "알람 응답 DTO")
-public record AlarmResponseDto(
+public record AlarmResponse(
 	@Schema(description = "아이디", example = "1")
 	Long id,
 
@@ -13,7 +13,7 @@ public record AlarmResponseDto(
 	LocalTime alarmTime,
 
 	@Schema(description = "요일", example = "1111111")
-	String daysOfWeek,
+	byte daysOfWeek,
 
 	@Schema(description = "반복 횟수", example = "3")
 	Integer repeatFrequency,

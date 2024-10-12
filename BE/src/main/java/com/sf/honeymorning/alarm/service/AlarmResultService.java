@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.sf.honeymorning.alarm.dto.AlarmResultDto;
 import com.sf.honeymorning.alarm.entity.AlarmResult;
 import com.sf.honeymorning.alarm.repository.AlarmResultRepository;
 import com.sf.honeymorning.auth.service.AuthService;
-import com.sf.honeymorning.domain.alarm.dto.AlarmResultDto;
-import com.sf.honeymorning.domain.user.entity.User;
+import com.sf.honeymorning.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
 

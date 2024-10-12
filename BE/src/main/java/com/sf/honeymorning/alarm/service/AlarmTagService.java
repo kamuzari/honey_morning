@@ -15,11 +15,11 @@ import com.sf.honeymorning.alarm.entity.AlarmTag;
 import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.auth.service.AuthService;
-import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.exception.alarm.AlarmFatalException;
 import com.sf.honeymorning.exception.user.DuplicateException;
 import com.sf.honeymorning.tag.entity.Tag;
 import com.sf.honeymorning.tag.repository.TagRepository;
+import com.sf.honeymorning.user.entity.User;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;

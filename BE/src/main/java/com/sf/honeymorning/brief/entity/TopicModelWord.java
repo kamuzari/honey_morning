@@ -1,5 +1,6 @@
 package com.sf.honeymorning.domain.brief.entity;
 
+import com.sf.honeymorning.brief.entity.TopicModel;
 import com.sf.honeymorning.domain.common.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -30,7 +31,7 @@ public class TopicModelWord extends BaseEntity {
 
 	@JoinColumn(name = "topic_model_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private com.sf.honeymorning.domain.brief.entity.TopicModel topicModel;
+	private TopicModel topicModel;
 
 	@JoinColumn(name = "word_id")
 	@ManyToOne(fetch = FetchType.LAZY)

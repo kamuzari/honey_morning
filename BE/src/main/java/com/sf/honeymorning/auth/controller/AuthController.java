@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sf.honeymorning.auth.service.AuthService;
 import com.sf.honeymorning.domain.user.dto.response.UserDetailDto;
-import com.sf.honeymorning.domain.user.entity.User;
+import com.sf.honeymorning.user.entity.User;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

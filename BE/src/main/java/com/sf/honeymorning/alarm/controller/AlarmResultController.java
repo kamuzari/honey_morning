@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sf.honeymorning.domain.alarm.dto.AlarmResultDto;
+import com.sf.honeymorning.alarm.dto.AlarmResultDto;
 import com.sf.honeymorning.domain.alarm.service.AlarmResultService;
 
 import io.swagger.v3.oas.annotations.Operation;

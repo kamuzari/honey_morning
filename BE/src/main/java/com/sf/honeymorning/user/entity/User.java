@@ -1,4 +1,4 @@
-package com.sf.honeymorning.domain.user.entity;
+package com.sf.honeymorning.user.entity;
 
 import com.sf.honeymorning.domain.common.entity.BaseEntity;
 
@@ -35,7 +35,8 @@ public class User extends BaseEntity {
 	private String role;
 
 	@Builder
-	public User(String email, String password, String username, String role) {
+	public User(Long id, String email, String password, String username, String role) {
+		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.username = username;

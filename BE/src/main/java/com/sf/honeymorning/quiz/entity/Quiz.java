@@ -1,7 +1,7 @@
 package com.sf.honeymorning.quiz.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sf.honeymorning.domain.brief.entity.Brief;
+import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.domain.common.entity.BaseEntity;
 
 import jakarta.persistence.Column;

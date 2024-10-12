@@ -1,7 +1,7 @@
 package com.sf.honeymorning.alarm.entity;
 
 import com.sf.honeymorning.domain.common.entity.BaseEntity;
-import com.sf.honeymorning.domain.user.entity.User;
+import com.sf.honeymorning.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

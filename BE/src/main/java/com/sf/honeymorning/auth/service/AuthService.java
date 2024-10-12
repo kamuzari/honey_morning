@@ -9,11 +9,11 @@ import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.auth.repository.RefreshTokenRepository;
 import com.sf.honeymorning.auth.util.JWTUtil;
 import com.sf.honeymorning.domain.user.dto.response.UserDetailDto;
-import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.exception.user.DuplicateException;
 import com.sf.honeymorning.exception.user.UserNotFoundException;
 import com.sf.honeymorning.user.constant.LoginMessage;
 import com.sf.honeymorning.user.dto.CustomUserDetails;
+import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.repository.UserRepository;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -82,7 +82,12 @@ public class AuthService {
 			throw new DuplicateException("해당 이메일을 사용하는 유저가 존재합니다.");
 		}
 
-		User newUser = new User(user.getEmail(), user.getUsername(), user.getPassword(), "ROLE_USER");
+		User newUser = User.builder()
+			.email(user.getEmail())
+			.username(user.getEmail())
+			.password(bCryptPasswordEncoder.encode(user.getPassword()))
+			.role("ROLE_USER")
+			.build();
 
 		User createdUser = userRepository.save(newUser);
 		Alarm alarm = Alarm.initialize(createdUser.getId());

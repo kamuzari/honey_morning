@@ -1,6 +1,6 @@
 package com.sf.honeymorning.alarm.service;
 
-import java.time.Duration;
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,50 +20,53 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sf.honeymorning.alarm.dto.AlarmDateDto;
-import com.sf.honeymorning.alarm.dto.AlarmResponseDto;
-import com.sf.honeymorning.alarm.dto.AlarmSetRequestDto;
+import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
+import com.sf.honeymorning.alarm.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.entity.AlarmTag;
-import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
+import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
 import com.sf.honeymorning.auth.service.AuthService;
+import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.brief.entity.BriefCategory;
+import com.sf.honeymorning.brief.entity.TopicModel;
 import com.sf.honeymorning.brief.repository.BriefCategoryRepository;
+import com.sf.honeymorning.brief.repository.BriefRepository;
+import com.sf.honeymorning.brief.repository.TopicModelRepository;
+import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
+import com.sf.honeymorning.brief.repository.WordRepository;
 import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
 import com.sf.honeymorning.domain.alarm.dto.QuizDto;
 import com.sf.honeymorning.domain.brief.dto.response.TopicAiResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.TopicResponse;
 import com.sf.honeymorning.domain.brief.dto.response.TopicWord;
-import com.sf.honeymorning.domain.brief.entity.Brief;
-import com.sf.honeymorning.domain.brief.entity.TopicModel;
 import com.sf.honeymorning.domain.brief.entity.TopicModelWord;
 import com.sf.honeymorning.domain.brief.entity.Word;
-import com.sf.honeymorning.domain.brief.repository.BriefRepository;
-import com.sf.honeymorning.domain.brief.repository.TopicModelRepository;
-import com.sf.honeymorning.domain.brief.repository.TopicModelWordRepository;
-import com.sf.honeymorning.domain.brief.repository.WordRepository;
-import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.exception.alarm.AlarmFatalException;
+import com.sf.honeymorning.exception.model.BusinessException;
+import com.sf.honeymorning.exception.model.ErrorProtocol;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
 import com.sf.honeymorning.tag.entity.Tag;
+import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.repository.UserRepository;
 import com.sf.honeymorning.util.TtsUtil;
 
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class AlarmService {
 
 	private static final Logger log = LoggerFactory.getLogger(AlarmService.class);
+
 	private final TopicModelRepository topicModelRepository;
 	private final TopicModelWordRepository topicModelWordRepository;
 	private final WordRepository wordRepository;
@@ -77,6 +80,7 @@ public class AlarmService {
 	private final TtsUtil ttsUtil;
 	private final int timeGap = 5;
 	private final BriefCategoryRepository briefCategoryRepository;
+
 	@Value("${ai.url.briefing}")
 	private String briefingAi;
 	@Value("${ai.url.quiz}")
@@ -86,120 +90,36 @@ public class AlarmService {
 	@Value("${ai.url.topic-model}")
 	private String topicModelAi;
 
-	public AlarmResponseDto findAlarmByUsername() {
+	public AlarmResponse findAlarmByUsername() {
 		User user = authService.getLoginUser();
 		Alarm alarm = alarmRepository.findByUserId(user.getId())
-			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
-		return new AlarmResponseDto(
+			.orElseThrow(() -> new BusinessException(
+				MessageFormat.format("알람이 반드시 존재했어야합니다. userId -> {0}", user.getId())
+				, ErrorProtocol.POLICY_VIOLATION));
+		return new AlarmResponse(
 			alarm.getId(),
-			alarm.getAlarmTime(),
-			alarm.getDaysOfWeek(),
+			alarm.getWakeUpTime(),
+			alarm.getWeekdays(),
 			alarm.getRepeatFrequency(),
 			alarm.getRepeatInterval(),
 			alarm.isActive()
 		);
 	}
 
-	public AlarmDateDto set(AlarmSetRequestDto alarmRequestDto) {
-		User user = authService.getLoginUser();
+	@Transactional
+	public void set(AlarmSetRequest alarmRequestDto, String username) {
+		User user = userRepository.findByEmail(username)
+			.orElseThrow(() -> new EntityNotFoundException("not found Resources. username : {}" + username));
 		Alarm alarm = alarmRepository.findByUserId(user.getId())
-			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+			.orElseThrow(() -> new BusinessException(
+				MessageFormat.format("알람이 반드시 존재했어야합니다. userId -> {0}", user.getId())
+				, ErrorProtocol.POLICY_VIOLATION));
+
 		alarm.set(alarmRequestDto.alarmTime(),
-			alarmRequestDto.daysOfWeek(),
+			alarmRequestDto.weekdays(),
 			alarmRequestDto.repeatFrequency(),
 			alarmRequestDto.repeatInterval(),
 			alarmRequestDto.isActive());
-
-		// 현재 시간
-		LocalDateTime nowDateTime = LocalDateTime.now();
-		LocalTime nowTime = LocalTime.now();
-		int currentDayOfWeek = nowDateTime.getDayOfWeek().getValue() - 1; // 현재 요일 (0 ~ 6)
-
-		// 오늘 날짜에 해당하는 요일부터 차례로 list에 들어간다.
-		List<Integer> alarmDayOfWeekList = new ArrayList<>();
-
-		// 설정한 알람 시각
-		LocalTime alarmTime = alarmRequestDto.alarmTime();
-		int alarmHour = alarmTime.getHour();
-		int alarmMinute = alarmTime.getMinute();
-		// 설정한 알람 요일
-		String alarmWeek = alarmRequestDto.daysOfWeek();
-
-		for (int i = 0; i < alarmWeek.length(); i++) {
-			if (alarmWeek.substring((i + currentDayOfWeek) % 7, (i + currentDayOfWeek) % 7 + 1)
-				.equals("1")) {
-				alarmDayOfWeekList.add((i + currentDayOfWeek));
-			}
-		}
-
-		String binary = "";
-
-		for (int i = 0; i < 7; i++) {
-			if (i == currentDayOfWeek) {
-				binary += "1";
-			} else {
-				binary += "0";
-			}
-		}
-
-		// 알람 설정 요일 중, 당일의 요일 또한 설정이 되어있으며,
-		if (alarmWeek.substring(currentDayOfWeek, currentDayOfWeek + 1).equals("1")) {
-			// 알람 설정 시간이 현재보다 이후라면,
-			if (ChronoUnit.SECONDS.between(nowTime, alarmTime) > 0) {
-				Duration duration = Duration.between(nowTime, alarmTime);
-
-				AlarmDateDto alarmDateDto = AlarmDateDto.builder()
-					.alarmDate(nowDateTime.plus(duration)
-						.withHour(alarmHour)
-						.withMinute(alarmMinute)
-						.truncatedTo(ChronoUnit.MINUTES))
-					.day(0L)
-					.hour(duration.toHours())
-					.minuet(duration.toMinutes())
-					.dayOfWeek(binary)
-					.build();
-
-				return alarmDateDto;
-
-			}
-		}
-
-		for (int i = 0; i < alarmDayOfWeekList.size(); i++) {
-			if (i == 0 && currentDayOfWeek == alarmDayOfWeekList.get(i)) {
-				continue;
-			}
-
-			int dow = alarmDayOfWeekList.get(i % alarmDayOfWeekList.size());
-
-			Duration duration = Duration.between(nowTime, alarmTime);
-
-			LocalDateTime alarmDateTime = nowDateTime.plusDays(dow - currentDayOfWeek)
-				.plus(duration);
-
-			Duration duration1 = Duration.between(nowDateTime, alarmDateTime);
-
-			long totalMinutes = duration1.toMinutes();
-			long days = totalMinutes / (24 * 60);
-			long hours = (totalMinutes % (24 * 60)) / 60;
-			long minutes = totalMinutes % 60;
-
-			AlarmDateDto alarmDateDto = AlarmDateDto.builder()
-				.alarmDate(nowDateTime.plusDays(dow - currentDayOfWeek)
-					.plus(duration)
-					.withHour(alarmHour)
-					.withMinute(alarmMinute)
-					.truncatedTo(ChronoUnit.MINUTES))
-				.day(days)
-				.hour(hours)
-				.minuet(minutes)
-				.dayOfWeek(binary)
-				.build();
-
-			return alarmDateDto;
-		}
-
-		throw new IllegalArgumentException("알람 시간 설정에 실패하였습니다.");
-
 	}
 
 	@Transactional
@@ -447,8 +367,8 @@ public class AlarmService {
 			}
 		}
 
-		int alarmWeek = Integer.parseInt(alarm.getDaysOfWeek());
-		LocalTime alarmTime = alarm.getAlarmTime();
+		int alarmWeek = alarm.getWeekdays();
+		LocalTime alarmTime = alarm.getWakeUpTime();
 
 		// 알람이 요일만 설정 되어 있고, 이후 시간이며, 5시간 이전에 설정되어 있을 때.
 		// equal이 아닌 &연산을 통해서 비교할 것.

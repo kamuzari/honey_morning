@@ -9,8 +9,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.sf.honeymorning.auth.util.JWTUtil;
-import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.user.dto.CustomUserDetails;
+import com.sf.honeymorning.user.entity.User;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class QuizDto {
-	@Schema(example = " 숫자 - 퀴즈 id")
+	@Schema(example = " 숫자 - 퀴즈 alarmId")
 	private Long id;
 	@Schema(example = "문제")
 	private String question;

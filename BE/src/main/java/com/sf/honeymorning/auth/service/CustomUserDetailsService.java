@@ -5,8 +5,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.sf.honeymorning.domain.user.entity.User;
 import com.sf.honeymorning.user.dto.CustomUserDetails;
+import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
