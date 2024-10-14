@@ -2,7 +2,7 @@ package com.sf.honeymorning.brief.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sf.honeymorning.domain.brief.entity.Word;
+import com.sf.honeymorning.brief.entity.Word;
 
 public interface WordRepository extends JpaRepository<Word, Long> {
 	Boolean existsByWord(String word);

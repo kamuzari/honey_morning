@@ -2,6 +2,7 @@ package com.sf.honeymorning.alarm.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -20,7 +21,7 @@ import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
-import com.sf.honeymorning.auth.service.AuthService;
+import com.sf.honeymorning.authentication.service.AuthService;
 import com.sf.honeymorning.brief.repository.BriefCategoryRepository;
 import com.sf.honeymorning.brief.repository.BriefRepository;
 import com.sf.honeymorning.brief.repository.TopicModelRepository;
@@ -97,19 +98,19 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 			FAKER.file().fileName()
 		);
 
-		given(userRepository.findByEmail(AUTH_USER.getUsername())).willReturn(Optional.of(AUTH_USER));
+		given(userRepository.findByUsername(AUTH_USER.getNickName())).willReturn(Optional.of(AUTH_USER));
 		given(alarmRepository.findByUserId(AUTH_USER.getId())).willReturn(Optional.of(previousAlarm));
 
 		//when
-		alarmService.set(requestDto, AUTH_USER.getUsername());
+		alarmService.set(requestDto, AUTH_USER.getNickName());
 
 		//then
 		assertThat(previousAlarm.getRepeatFrequency()).isEqualTo(requestDto.repeatFrequency());
 		assertThat(previousAlarm.getRepeatInterval()).isEqualTo(requestDto.repeatInterval());
 		assertThat(previousAlarm.isActive()).isEqualTo(requestDto.isActive());
 		assertThat(previousAlarm.getWeekdays()).isEqualTo(requestDto.weekdays());
-		verify(userRepository, times(1)).findByEmail(AUTH_USER.getUsername());
-		verify(alarmRepository, times(1)).findByUserId(anyLong());
+		verify(userRepository, times(1)).findByUsername(AUTH_USER.getNickName());
+		verify(alarmRepository, times(1)).findByUserId(any());
 	}
 
 	@Test
@@ -124,11 +125,11 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 			FAKER.number().numberBetween(1, 10),
 			true
 		);
-		given(userRepository.findByEmail(AUTH_USER.getUsername())).willReturn(Optional.of(AUTH_USER));
+		given(userRepository.findByUsername(AUTH_USER.getNickName())).willReturn(Optional.of(AUTH_USER));
 
 		//when
 		//then
-		assertThatThrownBy(() -> alarmService.set(requestDto, AUTH_USER.getUsername()))
+		assertThatThrownBy(() -> alarmService.set(requestDto, AUTH_USER.getNickName()))
 			.isInstanceOf(BusinessException.class);
 	}
 }

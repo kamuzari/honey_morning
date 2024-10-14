@@ -27,24 +27,6 @@ public class UserController {
 	private final UserService userService;
 	private final AlarmService alarmService;
 
-	//	@Operation(
-	//		summary = "회원탈퇴"
-	//	)
-	//	@ApiResponses(value = {
-	//		@ApiResponse(
-	//			responseCode = "200",
-	//			description = "탈퇴 성공",
-	//			content = @Content(schema = @Schema(type = "string", example = "success"))
-	//		)
-	//	})
-	//	@DeleteMapping
-	//	public ResponseEntity<String> withdraw(HttpServletRequest request) {
-	//		System.out.println("check0");
-	//		alarmService.deleteAlarm();
-	//		userService.deleteUser(request);
-	//		return ResponseEntity.ok("탈퇴를 성공적으로 진행하였습니다.");
-	//	}
-
 	@Operation(
 		summary = "이메일 중복 조회"
 	)

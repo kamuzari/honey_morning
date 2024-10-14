@@ -1,6 +1,6 @@
 package com.sf.honeymorning.alarm.entity;
 
-import com.sf.honeymorning.domain.common.entity.BaseEntity;
+import com.sf.honeymorning.common.entity.BaseEntity;
 import com.sf.honeymorning.tag.entity.Tag;
 
 import jakarta.persistence.Entity;

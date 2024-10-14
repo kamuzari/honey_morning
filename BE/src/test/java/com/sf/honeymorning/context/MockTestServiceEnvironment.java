@@ -5,14 +5,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.javafaker.Faker;
 import com.sf.honeymorning.user.entity.User;
+import com.sf.honeymorning.user.entity.UserRole;
 
 @ExtendWith(MockitoExtension.class)
 public class MockTestServiceEnvironment {
 	protected static final Faker FAKER = new Faker();
-	protected static final User AUTH_USER = User.builder()
-		.id(1L)
-		.email(FAKER.internet().emailAddress())
-		.role("ROLE_USER")
-		.username(FAKER.name().username())
-		.build();
+	protected static final User AUTH_USER = new User(
+		FAKER.internet().emailAddress(),
+		"",
+		FAKER.name().username(),
+		UserRole.ROLE_USER
+	);
 }

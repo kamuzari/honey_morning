@@ -12,11 +12,10 @@ import org.springframework.stereotype.Service;
 import com.sf.honeymorning.alarm.dto.AlarmTagResponseDto;
 import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.entity.AlarmTag;
-import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
-import com.sf.honeymorning.auth.service.AuthService;
+import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
+import com.sf.honeymorning.authentication.service.AuthService;
 import com.sf.honeymorning.exception.alarm.AlarmFatalException;
-import com.sf.honeymorning.exception.user.DuplicateException;
 import com.sf.honeymorning.tag.entity.Tag;
 import com.sf.honeymorning.tag.repository.TagRepository;
 import com.sf.honeymorning.user.entity.User;
@@ -89,7 +88,7 @@ public class AlarmTagService {
 		// 똑같은 알람 카테고리를 추가했는지 확인.
 		AlarmTag alarmTag = alarmTagRepository.findByTag(tag);
 		if (alarmTag != null) {
-			throw new DuplicateException("이미 존재하는 알람 카테고리입니다.");
+			throw new RuntimeException("이미 존재하는 알람 카테고리입니다.");
 		}
 
 		// alarmCategory 추가.

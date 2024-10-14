@@ -1,4 +1,4 @@
-package com.sf.honeymorning.auth.entity;
+package com.sf.honeymorning.authentication.entity;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;

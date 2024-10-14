@@ -2,7 +2,7 @@ package com.sf.honeymorning.alarm.entity;
 
 import java.time.LocalTime;
 
-import com.sf.honeymorning.domain.common.entity.BaseEntity;
+import com.sf.honeymorning.common.entity.BaseEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,6 +1,5 @@
 package com.sf.honeymorning.alarm.dto;
 
-
 public record AlarmTagResponseDto(
 	Long alarmCategoryId,
 	Long alarmId,

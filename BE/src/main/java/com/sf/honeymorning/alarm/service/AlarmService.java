@@ -31,10 +31,12 @@ import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.entity.AlarmTag;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
-import com.sf.honeymorning.auth.service.AuthService;
+import com.sf.honeymorning.authentication.service.AuthService;
 import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.brief.entity.BriefCategory;
 import com.sf.honeymorning.brief.entity.TopicModel;
+import com.sf.honeymorning.brief.entity.TopicModelWord;
+import com.sf.honeymorning.brief.entity.Word;
 import com.sf.honeymorning.brief.repository.BriefCategoryRepository;
 import com.sf.honeymorning.brief.repository.BriefRepository;
 import com.sf.honeymorning.brief.repository.TopicModelRepository;
@@ -45,8 +47,6 @@ import com.sf.honeymorning.domain.alarm.dto.QuizDto;
 import com.sf.honeymorning.domain.brief.dto.response.TopicAiResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.TopicResponse;
 import com.sf.honeymorning.domain.brief.dto.response.TopicWord;
-import com.sf.honeymorning.domain.brief.entity.TopicModelWord;
-import com.sf.honeymorning.domain.brief.entity.Word;
 import com.sf.honeymorning.exception.alarm.AlarmFatalException;
 import com.sf.honeymorning.exception.model.BusinessException;
 import com.sf.honeymorning.exception.model.ErrorProtocol;
@@ -108,7 +108,7 @@ public class AlarmService {
 
 	@Transactional
 	public void set(AlarmSetRequest alarmRequestDto, String username) {
-		User user = userRepository.findByEmail(username)
+		User user = userRepository.findByUsername(username)
 			.orElseThrow(() -> new EntityNotFoundException("not found Resources. username : {}" + username));
 		Alarm alarm = alarmRepository.findByUserId(user.getId())
 			.orElseThrow(() -> new BusinessException(

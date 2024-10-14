@@ -1,11 +1,11 @@
-package com.sf.honeymorning.auth.filter;
+package com.sf.honeymorning.authentication.filter;
 
 import java.io.IOException;
 
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.sf.honeymorning.auth.repository.RefreshTokenRepository;
-import com.sf.honeymorning.auth.util.JWTUtil;
+import com.sf.honeymorning.authentication.repository.RefreshTokenRepository;
+import com.sf.honeymorning.authentication.util.JWTUtil;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

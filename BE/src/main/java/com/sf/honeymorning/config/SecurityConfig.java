@@ -6,25 +6,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 
-import com.sf.honeymorning.auth.filter.CustomLogoutFilter;
-import com.sf.honeymorning.auth.filter.JWTFilter;
-import com.sf.honeymorning.auth.filter.LoginFilter;
-import com.sf.honeymorning.auth.repository.RefreshTokenRepository;
-import com.sf.honeymorning.auth.util.JWTUtil;
-
-import jakarta.servlet.http.HttpServletRequest;
+import com.sf.honeymorning.authentication.filter.CustomLogoutFilter;
+import com.sf.honeymorning.authentication.filter.JWTFilter;
+import com.sf.honeymorning.authentication.filter.LoginFilter;
+import com.sf.honeymorning.authentication.repository.RefreshTokenRepository;
+import com.sf.honeymorning.authentication.util.JWTUtil;
 
 @Configuration
 public class SecurityConfig {
@@ -50,72 +46,41 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		return http
+			.httpBasic(Customizer.withDefaults())
+			.authorizeHttpRequests(authorize -> authorize
+				.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/api/auth/**", "/api/users/**").permitAll()
+				.anyRequest().authenticated()
+			)
+			.formLogin(AbstractHttpConfigurer::disable)
+			.logout(AbstractHttpConfigurer::disable)
+			.csrf(AbstractHttpConfigurer::disable)
+			.rememberMe(AbstractHttpConfigurer::disable)
+			.sessionManagement(AbstractHttpConfigurer::disable)
+			.cors(httpSecurityCorsConfigurer -> {
+				CorsConfiguration configuration = new CorsConfiguration();
 
-		http
-			.cors((cors) -> cors
-				.configurationSource(new CorsConfigurationSource() {
+				// 허용할 포트
+				configuration.setAllowedOrigins(Collections.singletonList(allowedOrigins));
+				configuration.addAllowedOriginPattern("http://localhost:5173");
+				// 허용할 메서드
+				configuration.setAllowedMethods(Collections.singletonList("*"));
+				// 요청이 오는 곳의 credential을 true로 변경
+				configuration.setAllowCredentials(true);
 
-					@Override
-					public CorsConfiguration getCorsConfiguration(
-						HttpServletRequest request) {
+				configuration.setAllowedHeaders(Collections.singletonList("*"));
+				configuration.setMaxAge(3600L);
 
-						CorsConfiguration configuration = new CorsConfiguration();
+				// 응답시 Authorization을 같이 보내준다.
+				configuration.setExposedHeaders(Collections.singletonList("access"));
 
-						// 허용할 포트
-						configuration.setAllowedOrigins(Collections.singletonList(allowedOrigins));
-						configuration.addAllowedOriginPattern("http://localhost:5173");
-						// 허용할 메서드
-						configuration.setAllowedMethods(Collections.singletonList("*"));
-						// 요청이 오는 곳의 credential을 true로 변경
-						configuration.setAllowCredentials(true);
-
-						configuration.setAllowedHeaders(Collections.singletonList("*"));
-						configuration.setMaxAge(3600L);
-
-						// 응답시 Authorization을 같이 보내준다.
-						configuration.setExposedHeaders(Collections.singletonList("access"));
-
-						return configuration;
-					}
-
-				}));
-
-		// 경로별 인가
-		http
-			.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/api/auth/**").permitAll()
-				.requestMatchers("/api/users/**").permitAll()
-				.requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**",
-					"/v3/api-docs/**").permitAll()
-				.requestMatchers("/error", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg",
-					"/**/*.html", "/**/*.css", "/**/*.js").permitAll()
-				.anyRequest().authenticated());
-
-		http
-			.csrf(AbstractHttpConfigurer::disable);
-
-		http.addFilterBefore(new JWTFilter(jwtUtil),
-			UsernamePasswordAuthenticationFilter.class);
-
-		http.addFilterAt(
-			new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil,
-				refreshTokenRepository),
-			UsernamePasswordAuthenticationFilter.class);
-
-		http
-			.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository),
-				LogoutFilter.class);
-
-		http.sessionManagement((session) -> session
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-		return http.build();
+			}).addFilterBefore(new JWTFilter(jwtUtil),
+				UsernamePasswordAuthenticationFilter.class)
+			.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshTokenRepository),
+				UsernamePasswordAuthenticationFilter.class)
+			.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository), LogoutFilter.class)
+			.build();
 	}
 
 }

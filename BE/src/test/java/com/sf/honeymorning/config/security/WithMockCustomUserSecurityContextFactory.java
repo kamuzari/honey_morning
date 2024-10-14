@@ -7,16 +7,19 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 
 import com.sf.honeymorning.user.dto.CustomUserDetails;
 import com.sf.honeymorning.user.entity.User;
+import com.sf.honeymorning.user.entity.UserRole;
 
 public class WithMockCustomUserSecurityContextFactory implements WithSecurityContextFactory<WithMockCustomUser> {
 
 	@Override
 	public SecurityContext createSecurityContext(WithMockCustomUser customUser) {
 		SecurityContext context = SecurityContextHolder.createEmptyContext();
-		User userEntity = User.builder()
-			.email(customUser.username())
-			.role(customUser.roles()[0])
-			.build();
+		User userEntity = new User(
+			customUser.username(),
+			"",
+			"",
+			UserRole.ROLE_USER
+		);
 		CustomUserDetails principal = new CustomUserDetails(userEntity);
 
 		UsernamePasswordAuthenticationToken auth =

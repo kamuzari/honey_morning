@@ -19,9 +19,10 @@ import com.github.javafaker.Faker;
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
-import com.sf.honeymorning.auth.service.AuthService;
-import com.sf.honeymorning.auth.util.JWTUtil;
+import com.sf.honeymorning.authentication.service.AuthService;
+import com.sf.honeymorning.authentication.util.JWTUtil;
 import com.sf.honeymorning.user.entity.User;
+import com.sf.honeymorning.user.entity.UserRole;
 import com.sf.honeymorning.user.repository.UserRepository;
 
 import io.restassured.RestAssured;
@@ -57,14 +58,14 @@ public class AlarmIntegrationTest {
 	public void setup() {
 		RestAssured.port = port;
 		authenticationUser = userRepository.save(
-			User.builder()
-				.email(FAKER.internet().emailAddress())
-				.password("{encrypt password}")
-				.role("ROLE_USER")
-				.username(FAKER.name().username())
-				.build()
+			new User(
+				FAKER.internet().emailAddress(),
+				"{encrypt password}",
+				FAKER.name().username(),
+				UserRole.ROLE_USER
+			)
 		);
-		accessToken = jwtUtil.createAccessJwt("access", authenticationUser.getEmail(), authenticationUser.getRole());
+		accessToken = jwtUtil.createAccessJwt("access", authenticationUser.getUsername(), authenticationUser.getRole().name());
 		authUserAlarm = alarmRepository.save(Alarm.initialize(authenticationUser.getId()));
 	}
 

@@ -1,4 +1,4 @@
-package com.sf.honeymorning.auth.filter;
+package com.sf.honeymorning.authentication.filter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,9 +8,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.sf.honeymorning.auth.util.JWTUtil;
+import com.sf.honeymorning.authentication.util.JWTUtil;
 import com.sf.honeymorning.user.dto.CustomUserDetails;
 import com.sf.honeymorning.user.entity.User;
+import com.sf.honeymorning.user.entity.UserRole;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -69,10 +70,12 @@ public class JWTFilter extends OncePerRequestFilter {
 		// username, role 값을 획득
 		String username = jwtUtil.getUsername(accessToken);
 		String role = jwtUtil.getRole(accessToken);
-		User userEntity = User.builder()
-			.email(username)
-			.role(role)
-			.build();
+		User userEntity = new User(
+			username,
+			"",
+			"",
+			UserRole.ROLE_USER
+		);
 
 		CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
 

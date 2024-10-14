@@ -1,45 +1,43 @@
 package com.sf.honeymorning.user.entity;
 
-import com.sf.honeymorning.domain.common.entity.BaseEntity;
+import com.sf.honeymorning.common.entity.BaseEntity;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Table(name = "users")
+@AttributeOverride(name = "createdAt", column = @Column(name = "signup_at"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class User extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "user_id")
 	private Long id;
 
-	@Column(length = 100, nullable = false)
-	private String email;
-
-	@Column(length = 255, nullable = false)
-	private String password;
-
-	@Column(length = 50, nullable = false)
+	@Column(unique = true)
 	private String username;
 
-	// TODO : type, role, isActive 필드도 고려사항
-	private String role;
+	private String password;
 
-	@Builder
-	public User(Long id, String email, String password, String username, String role) {
-		this.id = id;
-		this.email = email;
-		this.password = password;
+	private String nickName;
+
+	@Enumerated(value = EnumType.STRING)
+	private UserRole role;
+
+	public User(String username, String password, String nickName, UserRole role) {
 		this.username = username;
+		this.password = password;
+		this.nickName = nickName;
 		this.role = role;
 	}
 
@@ -47,19 +45,19 @@ public class User extends BaseEntity {
 		return id;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getUsername() {
+		return username;
 	}
 
 	public String getPassword() {
 		return password;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getNickName() {
+		return nickName;
 	}
 
-	public String getRole() {
+	public UserRole getRole() {
 		return role;
 	}
 }

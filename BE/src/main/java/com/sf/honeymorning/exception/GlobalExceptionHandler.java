@@ -25,7 +25,6 @@ import com.sf.honeymorning.exception.alarm.AlarmFatalException;
 import com.sf.honeymorning.exception.model.BusinessException;
 import com.sf.honeymorning.exception.model.ErrorProtocol;
 import com.sf.honeymorning.exception.user.AlarmCategoryNotFoundException;
-import com.sf.honeymorning.exception.user.DuplicateException;
 import com.sf.honeymorning.exception.user.UserNotFoundException;
 import com.sf.honeymorning.exception.user.UserUpdateException;
 
@@ -90,12 +89,6 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(UserNotFoundException.class)
 	public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
 		return new ResponseEntity<>(null, OK);
-	}
-
-	// 중복값 오류
-	@ExceptionHandler(DuplicateException.class)
-	public ResponseEntity<String> handleDuplicateException(final DuplicateException e) {
-		return new ResponseEntity<>(e.getMessage(), CONFLICT);
 	}
 
 	// 업데이트 오류

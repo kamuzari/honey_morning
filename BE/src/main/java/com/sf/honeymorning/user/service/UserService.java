@@ -13,7 +13,7 @@ public class UserService {
 	private final UserRepository userRepository;
 
 	public Boolean validateEmail(String email) {
-		return userRepository.existsByEmail(email);
+		return userRepository.existsByUsername(email);
 	}
 
 }

@@ -15,7 +15,6 @@ public class CustomUserDetails implements UserDetails {
 
 	private final User user;
 
-	// role을 반환
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
@@ -24,7 +23,7 @@ public class CustomUserDetails implements UserDetails {
 		collection.add(new GrantedAuthority() {
 			@Override
 			public String getAuthority() {
-				return user.getRole();
+				return user.getRole().name();
 			}
 		});
 
@@ -38,7 +37,7 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return user.getEmail();
+		return user.getUsername();
 	}
 
 	@Override

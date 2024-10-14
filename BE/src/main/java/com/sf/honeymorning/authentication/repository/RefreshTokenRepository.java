@@ -1,9 +1,8 @@
-package com.sf.honeymorning.auth.repository;
+package com.sf.honeymorning.authentication.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.sf.honeymorning.auth.entity.RefreshToken;
-
+import com.sf.honeymorning.authentication.entity.RefreshToken;
 
 public interface RefreshTokenRepository extends CrudRepository<RefreshToken, String> {
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import com.sf.honeymorning.alarm.dto.AlarmResultDto;
 import com.sf.honeymorning.alarm.entity.AlarmResult;
 import com.sf.honeymorning.alarm.repository.AlarmResultRepository;
-import com.sf.honeymorning.auth.service.AuthService;
+import com.sf.honeymorning.authentication.service.AuthService;
 import com.sf.honeymorning.user.entity.User;
 
 import lombok.RequiredArgsConstructor;

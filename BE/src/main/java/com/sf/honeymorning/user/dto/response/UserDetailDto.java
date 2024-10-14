@@ -2,6 +2,8 @@ package com.sf.honeymorning.domain.user.dto.response;
 
 import java.time.LocalDateTime;
 
+import com.sf.honeymorning.user.entity.UserRole;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +11,7 @@ import lombok.Data;
 @Data
 public class UserDetailDto {
 	private Long id;
-	private String role;
+	private UserRole role;
 	private String email;
 	private String username;
 	private LocalDateTime createdAt;

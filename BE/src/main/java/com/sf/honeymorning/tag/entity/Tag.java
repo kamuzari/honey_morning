@@ -2,7 +2,7 @@ package com.sf.honeymorning.tag.entity;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.sf.honeymorning.domain.common.entity.BaseEntity;
+import com.sf.honeymorning.common.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

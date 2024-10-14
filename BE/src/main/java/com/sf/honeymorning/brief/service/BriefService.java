@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.sf.honeymorning.auth.service.AuthService;
+import com.sf.honeymorning.authentication.service.AuthService;
 import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.brief.entity.BriefCategory;
 import com.sf.honeymorning.brief.repository.BriefCategoryRepository;

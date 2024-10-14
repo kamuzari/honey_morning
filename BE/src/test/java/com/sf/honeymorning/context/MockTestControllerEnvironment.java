@@ -7,8 +7,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
-import com.sf.honeymorning.auth.repository.RefreshTokenRepository;
-import com.sf.honeymorning.auth.util.JWTUtil;
+import com.sf.honeymorning.authentication.repository.RefreshTokenRepository;
+import com.sf.honeymorning.authentication.util.JWTUtil;
 import com.sf.honeymorning.config.SecurityConfig;
 import com.sf.honeymorning.config.security.WithMockCustomUser;
 

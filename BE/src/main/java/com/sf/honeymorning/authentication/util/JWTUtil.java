@@ -1,4 +1,4 @@
-package com.sf.honeymorning.auth.util;
+package com.sf.honeymorning.authentication.util;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
@@ -35,7 +35,7 @@ public class JWTUtil {
 			.build()
 			.parseSignedClaims(token)
 			.getPayload()
-			.get("email", String.class);
+			.get("username", String.class);
 	}
 
 	public String getUsername(String token) {
