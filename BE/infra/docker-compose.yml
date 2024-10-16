@@ -1,0 +1,12 @@
+services:
+  database:
+    image: mysql:8.0
+    container_name: database
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: honeymorning
+      MYSQL_USER: ssafy
+      MYSQL_PASSWORD: ssafy
+    ports:
+      - "3306:3306"
