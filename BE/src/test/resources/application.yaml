@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:mydb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  jwt:
+    secret: ${TEST_JWT_SECRET:W2SwTG0AFmzMTa/30eyIfTLKgZDD7HSv2pIAGL43JCn1ITnOpSzCuGjRZ3IyybHY0BDmDHLAn9Veko7PHmLdWg==}
+
+  sql:
+    init:
+      mode: always
+
+jasypt:
+  password: ${JASYPT_PASSWORD:honeymorning}
+
+cors:
+  allowedOrigins:
+    frontend: http://localhost:5173
+
+ai:
+  url:
+    briefing: ENC(Vctnoxd7vvLZNQJA/9gTYU+bU9224Z0LJCErqOvPnLApiFHsT5Eh61/8Bt1sglkk)
+    quiz: ENC(iPGCMk5OuYjylnz/P5pTfVFmXM4x5fNHrpQcpq9QzykcUr7Ti8IbhA==)
+    music: ENC(Ihp/8Uz6a3eoBaagYUxdW7Uv2g58fo9K/x9jJwM/eXuKvEdEqFiswAIO2i79z6ZE)
+    topic-model: ENC(K37CfhnlVJ4Z2ruV7bR8UG+v2+x+Ee9yNAqPCRrTAHCouTtuU/nrqAd2ApocmUyN)
+
+api:
+  key:
+    elevenlabs: ENC(DbOylaGVSiQWQLIOgVUa42Cjb7gcVq6OYS6+Siue3IPChv66oT6uaj0iiRNAkLpO/Ibdfdp01e80BRHQGUdogw==)
+
+file:
+  directory:
+    path:
+      content: ENC(2HQTjTbC8xySkIgz6ktS4Y5VzA+5D3cKxew9VXunOGnHCMk8LlTX4zVS4YPu1fbqAZTxdFxKVWA=)
+      summary: ENC(Cj301Z07a9MFTvutszAHTDpTgPDHSJC2FFKmTQu1a5nFEf0BlmdvbGltFp9AYa58yzW7CPYGSkg=)
+      quiz: ENC(zW3TcGnHTLX5Na1Q3LeYkp9doE1F3u5L1bYSvUtrSKq4IJ/Q2OkM3+R/f0Epggu6xFtRksKPShs=)
+      music: ENC(v8uwAbdOo/41AGKIKDSi5a+Po/vYAzWFHpkoQZhfD82FFaqcqGotm77x51dnvEGedxAxdkmFRPI=)
+
+jwt:
+  accessToken:
+    expireTime: 3600
+  refreshToken:
+    expireTime: 360000
+
+logging:
+  level:
+    root: info

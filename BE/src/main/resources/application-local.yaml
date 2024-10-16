@@ -1,0 +1,65 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(xZDkAzthzyGE1C72KPqfJOuxhc3ayV4fQGZ5md/pzjIPv+QquUXpKEtB/7CVnaqkcxJf4XU/dTpDd3y6k5ntzbRuUN6SxC5Khjzl5MHLUpaWMV05G7qE4tzpLZ9C4GIlXDLPiIHQvif8u8N4H7L9hb6dKHPl08bS)
+    username: ENC(XXcXcJHIF39mDqw6o+Irxg==)
+    password: ENC(SkduHISnU361zi9ZDMawSA==)
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create-drop
+      show-sql: false
+    defer-datasource-initialization: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  jwt:
+    secret: ENC(zL30mQkQoxfP+KLlbGsOehR+8EsP15IchrJetQlYJ/uGlA4hmzVdAulHD5W/aOf2T7fLp2Io9sXxrWi9tKArVqleD5pVjtgr)
+
+  sql:
+    init:
+      mode: always
+
+jwt:
+  accessToken:
+    expireTime: ENC(ISdphSLRbBmK/gojGczS1gbW+KEySkcm)
+  refreshToken:
+    expireTime: ENC(ti/Q5jJcooWOzbKKNoxJYe/0wviQZm+W)
+
+cors:
+  allowedOrigins:
+    frontend: http://localhost:5173
+
+ai:
+  url:
+    briefing: ENC(Vctnoxd7vvLZNQJA/9gTYU+bU9224Z0LJCErqOvPnLApiFHsT5Eh61/8Bt1sglkk)
+    quiz: ENC(iPGCMk5OuYjylnz/P5pTfVFmXM4x5fNHrpQcpq9QzykcUr7Ti8IbhA==)
+    music: ENC(Ihp/8Uz6a3eoBaagYUxdW7Uv2g58fo9K/x9jJwM/eXuKvEdEqFiswAIO2i79z6ZE)
+    topic-model: ENC(K37CfhnlVJ4Z2ruV7bR8UG+v2+x+Ee9yNAqPCRrTAHCouTtuU/nrqAd2ApocmUyN)
+
+api:
+  key:
+    elevenlabs: ENC(DbOylaGVSiQWQLIOgVUa42Cjb7gcVq6OYS6+Siue3IPChv66oT6uaj0iiRNAkLpO/Ibdfdp01e80BRHQGUdogw==)
+
+file:
+  directory:
+    path:
+      content: ENC(2HQTjTbC8xySkIgz6ktS4Y5VzA+5D3cKxew9VXunOGnHCMk8LlTX4zVS4YPu1fbqAZTxdFxKVWA=)
+      summary: ENC(Cj301Z07a9MFTvutszAHTDpTgPDHSJC2FFKmTQu1a5nFEf0BlmdvbGltFp9AYa58yzW7CPYGSkg=)
+      quiz: ENC(zW3TcGnHTLX5Na1Q3LeYkp9doE1F3u5L1bYSvUtrSKq4IJ/Q2OkM3+R/f0Epggu6xFtRksKPShs=)
+      music: ENC(v8uwAbdOo/41AGKIKDSi5a+Po/vYAzWFHpkoQZhfD82FFaqcqGotm77x51dnvEGedxAxdkmFRPI=)
+
+logging:
+  level:
+    root: info
+    org:
+      hibernate.SQL: debug
+      springframework.web: debug
+      hibernate: error

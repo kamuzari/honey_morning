@@ -10,7 +10,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -19,7 +18,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import com.sf.honeymorning.authentication.filter.CustomLogoutFilter;
 import com.sf.honeymorning.authentication.filter.JWTFilter;
 import com.sf.honeymorning.authentication.filter.LoginFilter;
-import com.sf.honeymorning.authentication.repository.RefreshTokenRepository;
 import com.sf.honeymorning.authentication.util.JWTUtil;
 
 @Configuration
@@ -27,13 +25,10 @@ public class SecurityConfig {
 
 	private final AuthenticationConfiguration authenticationConfiguration;
 	private final JWTUtil jwtUtil;
-	private final RefreshTokenRepository refreshTokenRepository;
 
-	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil,
-		RefreshTokenRepository refreshTokenRepository) {
+	public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
 		this.authenticationConfiguration = authenticationConfiguration;
 		this.jwtUtil = jwtUtil;
-		this.refreshTokenRepository = refreshTokenRepository;
 	}
 
 	@Value("${cors.allowedOrigins.frontend}")
@@ -77,9 +72,10 @@ public class SecurityConfig {
 
 			}).addFilterBefore(new JWTFilter(jwtUtil),
 				UsernamePasswordAuthenticationFilter.class)
-			.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshTokenRepository),
+			.addFilterAt(
+				new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil),
 				UsernamePasswordAuthenticationFilter.class)
-			.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshTokenRepository), LogoutFilter.class)
+			.addFilterBefore(new CustomLogoutFilter(jwtUtil), LogoutFilter.class)
 			.build();
 	}
 

@@ -1,82 +1,8 @@
 spring:
   application:
     name: honeymorning
-  data:
-    redis:
-      host: localhost
-      port: 6379
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/${mysql.database}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useUnicode=true
-    username: ${mysql.username}
-    password: ${mysql.password}
+  profiles:
+    active: local
 
-  jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    hibernate:
-      ddl-auto: create-drop
-      show-sql: false
-    defer-datasource-initialization: true
-    generate-ddl: true
-    properties:
-      hibernate:
-        format_sql: true
-
-  sql:
-    init:
-      mode: always
-
-  jwt:
-    secret: thdckddydrlaquddusgksehgudqotjdwlsghdwnguddlarkgus
-
-server:
-  port: 8080
-
-backend:
-  server:
-    url: http://localhost:${server.port}
-
-cors:
-  allowedOrigins:
-    frontend: http://localhost:5173
-
-ai:
-  url:
-    briefing: http://hm-ai-briefing:8000/ai/briefing/
-    quiz: http://hm-ai-quiz:8001/ai/quiz/
-    music: http://hm-ai-music:8002/ai/music/music
-    topic-model: http://hm-ai-topic:8003/ai/topic/
-
-mysql:
-  database: honeymorning
-  username: ssafy
-  password: ssafy
-
-file:
-  directory:
-    path:
-      content: C:\\SSH\\HoneyMorning\\project_data\\content
-      summary: C:\\SSH\\HoneyMorning\\project_data\\summary
-      quiz: C:\\SSH\\HoneyMorning\\project_data\\quiz
-      music: C:\\SSH\\HoneyMorning\\project_data\\music
-
-jwt:
-  accessToken:
-    expireTime: 36000000
-  refreshToken:
-    expireTime: 604800000
-  timeToLive: 14400
-
-api:
-  key:
-    elevenlabs: ${ELEVENTLABS_API_KEY:go_jdji10288d92k-skdsd}
-
-
-logging:
-  level:
-    root: info
-    org:
-      hibernate.SQL: debug
-      springframework.web: debug
-      hibernate: error
+jasypt:
+  password: ${JASYPT_PASSWORD}
