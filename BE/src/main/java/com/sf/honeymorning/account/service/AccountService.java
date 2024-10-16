@@ -40,4 +40,8 @@ public class AccountService {
 				UserRole.ROLE_USER));
 		alarmRepository.save(Alarm.initialize(user.getId()));
 	}
+
+	public boolean validateEmail(String email) {
+		return userRepository.existsByUsername(email);
+	}
 }

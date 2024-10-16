@@ -5,7 +5,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
-import com.sf.honeymorning.authentication.repository.RefreshTokenRepository;
 import com.sf.honeymorning.authentication.util.JWTUtil;
 import com.sf.honeymorning.exception.user.UserNotFoundException;
 import com.sf.honeymorning.user.dto.CustomUserDetails;
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthService {
 
 	private final JWTUtil jwtUtil;
-	private final RefreshTokenRepository refreshTokenRepository;
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final AlarmRepository alarmRepository;

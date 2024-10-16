@@ -11,8 +11,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.sf.honeymorning.authentication.entity.RefreshToken;
-import com.sf.honeymorning.authentication.repository.RefreshTokenRepository;
 import com.sf.honeymorning.authentication.util.JWTUtil;
 import com.sf.honeymorning.user.dto.CustomUserDetails;
 
@@ -27,14 +25,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 	private final AuthenticationManager authenticationManager;
 	private final JWTUtil jwtUtil;
-	private final RefreshTokenRepository refreshTokenRepository;
 
-	public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil,
-		RefreshTokenRepository refreshTokenRepository) {
+	public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
 		this.authenticationManager = authenticationManager;
 		this.jwtUtil = jwtUtil;
 		setFilterProcessesUrl("/api/auth/login");
-		this.refreshTokenRepository = refreshTokenRepository;
 	}
 
 	@Override
@@ -70,12 +65,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 		// refresh 토큰 생성 및 발급
 		String refresh = jwtUtil.createRefreshJwt("refresh", username, role);
 		res.addCookie(createCookie("refresh", refresh));
-
-		// Refresh 토큰 저장 (redis)
-		RefreshToken redis = new RefreshToken(refresh, customUserDetails.getUsername());
-
-		// Refresh 토큰 저장 (repository)
-		refreshTokenRepository.save(redis);
 
 		// 응답 설정
 		res.setStatus(HttpStatus.OK.value());
