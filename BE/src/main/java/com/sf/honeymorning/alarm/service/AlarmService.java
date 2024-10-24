@@ -55,6 +55,7 @@ import com.sf.honeymorning.quiz.repository.QuizRepository;
 import com.sf.honeymorning.tag.entity.Tag;
 import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.repository.UserRepository;
+import com.sf.honeymorning.user.service.UserService;
 import com.sf.honeymorning.util.TtsUtil;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -80,6 +81,7 @@ public class AlarmService {
 	private final TtsUtil ttsUtil;
 	private final int timeGap = 5;
 	private final BriefCategoryRepository briefCategoryRepository;
+	private final UserService userService;
 
 	@Value("${ai.url.briefing}")
 	private String briefingAi;
@@ -90,16 +92,18 @@ public class AlarmService {
 	@Value("${ai.url.topic-model}")
 	private String topicModelAi;
 
-	public AlarmResponse findAlarmByUsername() {
-		User user = authService.getLoginUser();
+	public AlarmResponse getMyAlarm(String username) {
+		User user = userRepository.findByUsername(username)
+			.orElseThrow(() -> new EntityNotFoundException("not found Resources. username : {}" + username));
 		Alarm alarm = alarmRepository.findByUserId(user.getId())
 			.orElseThrow(() -> new BusinessException(
 				MessageFormat.format("알람이 반드시 존재했어야합니다. userId -> {0}", user.getId())
 				, ErrorProtocol.POLICY_VIOLATION));
+
 		return new AlarmResponse(
 			alarm.getId(),
 			alarm.getWakeUpTime(),
-			alarm.getWeekdays(),
+			alarm.getDayOfWeek(),
 			alarm.getRepeatFrequency(),
 			alarm.getRepeatInterval(),
 			alarm.isActive()
@@ -367,7 +371,7 @@ public class AlarmService {
 			}
 		}
 
-		int alarmWeek = alarm.getWeekdays();
+		int alarmWeek = alarm.getDayOfWeek();
 		LocalTime alarmTime = alarm.getWakeUpTime();
 
 		// 알람이 요일만 설정 되어 있고, 이후 시간이며, 5시간 이전에 설정되어 있을 때.
