@@ -26,13 +26,14 @@ public class Alarm extends BaseEntity {
 	 * 알람을 비트마스킹으로 표현합니다.
 	 * 맨 오른쪽 부터 월요일입니다.
 	 * 맨 왼쪽 비트는 사용하지 않아요.
+	 * 왜냐하면 2의 보수의 원리로 인한 이슈가 있기 때문이에요 :)
 	 * 예시)
 	 * - 0100 0000 = Sunday only
 	 * - 0100 0001 = Monday and Sunday
 	 * - 0011 0010 = TuesDay and Thursday and Saturday
 	 * - 0111 1111 = Every day
 	 */
-	private byte weekdays;
+	private byte dayOfWeek;
 
 	private Integer repeatFrequency;
 
@@ -47,14 +48,14 @@ public class Alarm extends BaseEntity {
 
 	public Alarm(Long userId,
 		LocalTime wakeUpTime,
-		byte weekdays,
+		byte dayOfWeek,
 		Integer repeatFrequency,
 		Integer repeatInterval,
 		boolean isActive,
 		String musicFilePath) {
 		this.userId = userId;
 		this.wakeUpTime = wakeUpTime;
-		this.weekdays = weekdays;
+		this.dayOfWeek = dayOfWeek;
 		this.repeatFrequency = repeatFrequency;
 		this.repeatInterval = repeatInterval;
 		this.isActive = isActive;
@@ -85,8 +86,8 @@ public class Alarm extends BaseEntity {
 		return wakeUpTime;
 	}
 
-	public byte getWeekdays() {
-		return weekdays;
+	public byte getDayOfWeek() {
+		return dayOfWeek;
 	}
 
 	public Integer getRepeatFrequency() {
@@ -108,7 +109,7 @@ public class Alarm extends BaseEntity {
 	public void set(LocalTime alarmTime, byte weekDays, Integer repeatFrequency, Integer repeatInterval,
 		boolean isActive) {
 		this.wakeUpTime = alarmTime;
-		this.weekdays = weekDays;
+		this.dayOfWeek = weekDays;
 		this.repeatFrequency = repeatFrequency;
 		this.repeatInterval = repeatInterval;
 		this.isActive = isActive;

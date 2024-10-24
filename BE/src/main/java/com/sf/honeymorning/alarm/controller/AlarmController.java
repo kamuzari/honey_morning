@@ -1,6 +1,5 @@
 package com.sf.honeymorning.alarm.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,7 +54,7 @@ public class AlarmController {
 	}
 
 	@Operation(
-		summary = "사용자 알람 조회"
+		summary = "나의 알람 조회"
 	)
 	@ApiResponses(value = {
 		@ApiResponse(
@@ -65,10 +64,8 @@ public class AlarmController {
 		)
 	})
 	@GetMapping
-	public ResponseEntity<AlarmResponse> read() {
-		// 사용자가 알람 설정창에 들어갈 때 알람 정보 조회
-		AlarmResponse alarmResponse = alarmService.findAlarmByUsername();
-		return new ResponseEntity<>(alarmResponse, HttpStatus.OK);
+	public AlarmResponse read(@AuthenticationPrincipal CustomUserDetails user) {
+		return alarmService.getMyAlarm(user.getUsername());
 	}
 
 	@Operation(
