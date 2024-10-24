@@ -1,14 +1,15 @@
 package com.sf.honeymorning.alarm.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalTime;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -106,7 +107,20 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 					.content(body))
 				.andDo(print());
 		}
+	}
 
+	@Test
+	@DisplayName("나의 알람 설정을 가져온다")
+	void testGetMyAlarm() throws Exception {
+		//given
+		//when
+		ResultActions perform = mockMvc.perform(get(URI_PREFIX)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print());
+
+		//then
+		perform.andExpect(status().isOk());
+		verify(alarmService, times(1)).getMyAlarm(any(String.class));
 	}
 
 }

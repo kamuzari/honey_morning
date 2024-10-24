@@ -2,8 +2,10 @@ package com.sf.honeymorning.alarm;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static org.hamcrest.Matchers.equalTo;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +29,7 @@ import com.sf.honeymorning.user.repository.UserRepository;
 
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
+import jakarta.transaction.Transactional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AlarmIntegrationTest {
@@ -65,7 +68,8 @@ public class AlarmIntegrationTest {
 				UserRole.ROLE_USER
 			)
 		);
-		accessToken = jwtUtil.createAccessJwt("access", authenticationUser.getUsername(), authenticationUser.getRole().name());
+		accessToken = jwtUtil.createAccessJwt("access", authenticationUser.getUsername(),
+			authenticationUser.getRole().name());
 		authUserAlarm = alarmRepository.save(Alarm.initialize(authenticationUser.getId()));
 	}
 
@@ -82,12 +86,12 @@ public class AlarmIntegrationTest {
 			true
 		);
 		String body = objectMapper.writeValueAsString(requestDto);
-		Header AUTH_HEADER = new Header("access", accessToken);
+		Header authenticationHeader = new Header("access", accessToken);
 
 		//when
 		//then
 		given()
-			.header(AUTH_HEADER)
+			.header(authenticationHeader)
 			.contentType(JSON)
 			.body(body)
 			.when()
@@ -95,6 +99,34 @@ public class AlarmIntegrationTest {
 			.then()
 			.statusCode(HttpStatus.OK.value())
 			.log();
+	}
+
+	@Test
+	@DisplayName("사용자가 나의 알람 설정 내용들을 가져온다")
+	void testGetMyAlarm() {
+		//given
+		Header authenticationHeader = new Header("access", accessToken);
+		System.out.println("@@@@@@@@@@@@@@@");
+		System.out.println(authUserAlarm.getWakeUpTime());
+		System.out.println(LocalTime.of(7 ,0).withSecond(0).withNano(0));
+		System.out.println("@@@@@@@@@@@@@@@");
+		//when
+		//then
+		given()
+			.header(authenticationHeader)
+			.contentType(JSON)
+			.when()
+			.get("/api/alarms")
+			.then()
+			.statusCode(HttpStatus.OK.value())
+			.body("id", equalTo(authUserAlarm.getId().intValue()))
+			.body("wakeUpTime", equalTo(authUserAlarm.getWakeUpTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"))))
+			.body("daysOfWeek", equalTo((int)authUserAlarm.getDayOfWeek()))
+			.body("repeatFrequency", equalTo(authUserAlarm.getRepeatFrequency()))
+			.body("repeatInterval", equalTo(authUserAlarm.getRepeatInterval()))
+			.body("isActive", equalTo(authUserAlarm.isActive()))
+			.log();
+
 	}
 
 }
