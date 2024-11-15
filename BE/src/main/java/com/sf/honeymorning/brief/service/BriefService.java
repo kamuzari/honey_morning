@@ -55,7 +55,7 @@ public class BriefService {
 
 	public BriefHistoryResponseDto getBriefs(int page) {
 		User user = authService.getLoginUser();
-		Page<Brief> briefPage = briefRepository.findByUser(user, PageRequest.of(page - 1, 5));
+		Page<Brief> briefPage = briefRepository.findByUserId(user.getId(), PageRequest.of(page - 1, 5));
 		List<Brief> briefs = briefPage.getContent();
 		List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(briefs);
 		List<Quiz> quizzes = quizRepository.findByBriefIn(briefs);
@@ -74,9 +74,9 @@ public class BriefService {
 
 	public BriefDetailResponseDto getBrief(Long briefId) {
 		User user = authService.getLoginUser();
-		Brief brief = briefRepository.findByUserAndId(user, briefId)
+		Brief brief = briefRepository.findByUserIdAndId(user.getId(), briefId)
 			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
-		boolean canAccess = brief.getUser().getId().equals(user.getId());
+		boolean canAccess = brief.getUserId().equals(user.getId());
 		if (!canAccess) {
 			throw new IllegalArgumentException("invalid brief");
 		}
@@ -88,7 +88,7 @@ public class BriefService {
 				briefCategories.stream()
 					.map(briefCategory -> briefCategory.getTag().getWord()).toList()),
 			new BriefResponseDto(brief.getSummary(), brief.getContent(),
-				brief.getContentFilePath()), quizzes.stream()
+				brief.getVoiceContentUrl()), quizzes.stream()
 			.map(quiz -> new QuizResponseDto(quiz.getQuestion(), quiz.getOption1(),
 				quiz.getOption2(), quiz.getOption3(), quiz.getOption4(),
 				quiz.getSelection(), quiz.getAnswer())).toList(), brief.getCreatedAt());
@@ -99,7 +99,7 @@ public class BriefService {
 			.orElseThrow(
 				() -> new EntityNotFoundException("Brief not found with alarmId: " + briefId));
 
-		Path filePath = Paths.get(summaryPath, brief.getSummaryFilePath());
+		Path filePath = Paths.get(summaryPath, brief.getVoiceContentUrl());
 		log.info("파일을 찾습니다: " + filePath);
 		Resource resource = new UrlResource(filePath.toUri());
 
@@ -107,7 +107,7 @@ public class BriefService {
 			log.info("파일을 찾았습니다: " + resource.getFilename());
 			return resource;
 		} else {
-			throw new IOException("Could not read the file: " + brief.getSummaryFilePath());
+			throw new IOException("Could not read the file: " + brief.getVoiceContentUrl());
 		}
 	}
 
@@ -116,7 +116,7 @@ public class BriefService {
 			.orElseThrow(
 				() -> new EntityNotFoundException("Brief not found with alarmId: " + briefId));
 
-		Path filePath = Paths.get(contentPath, brief.getContentFilePath());
+		Path filePath = Paths.get(contentPath, brief.getVoiceContentUrl());
 		log.info("파일을 찾습니다: " + filePath);
 		Resource resource = new UrlResource(filePath.toUri());
 
@@ -124,7 +124,7 @@ public class BriefService {
 			log.info("파일을 찾았습니다: " + resource.getFilename());
 			return resource;
 		} else {
-			throw new IOException("Could not read the file: " + brief.getSummaryFilePath());
+			throw new IOException("Could not read the file: " + brief.getVoiceContentUrl());
 		}
 	}
 

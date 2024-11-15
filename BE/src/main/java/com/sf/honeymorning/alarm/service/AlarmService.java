@@ -1,30 +1,28 @@
 package com.sf.honeymorning.alarm.service;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sf.honeymorning.alarm.client.BriefingClient;
+import com.sf.honeymorning.alarm.client.QuizGeneratorClient;
+import com.sf.honeymorning.alarm.client.TopicModelingClient;
+import com.sf.honeymorning.alarm.client.WakeUpCallSongClient;
+import com.sf.honeymorning.alarm.client.dto.QuizOption;
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.entity.Alarm;
@@ -44,18 +42,13 @@ import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
 import com.sf.honeymorning.brief.repository.WordRepository;
 import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
 import com.sf.honeymorning.domain.alarm.dto.QuizDto;
-import com.sf.honeymorning.domain.brief.dto.response.TopicAiResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.TopicResponse;
-import com.sf.honeymorning.domain.brief.dto.response.TopicWord;
 import com.sf.honeymorning.exception.alarm.AlarmFatalException;
 import com.sf.honeymorning.exception.model.BusinessException;
 import com.sf.honeymorning.exception.model.ErrorProtocol;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
-import com.sf.honeymorning.tag.entity.Tag;
 import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.repository.UserRepository;
-import com.sf.honeymorning.user.service.UserService;
 import com.sf.honeymorning.util.TtsUtil;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -67,6 +60,13 @@ import lombok.RequiredArgsConstructor;
 public class AlarmService {
 
 	private static final Logger log = LoggerFactory.getLogger(AlarmService.class);
+
+	private final BriefingClient briefingClient;
+	private final TopicModelingClient topicModelingClient;
+	private final WakeUpCallSongClient wakeUpCallSongClient;
+	private final QuizGeneratorClient quizGeneratorClient;
+
+	private final ReadyAlarmService readyAlarmService;
 
 	private final TopicModelRepository topicModelRepository;
 	private final TopicModelWordRepository topicModelWordRepository;
@@ -81,16 +81,6 @@ public class AlarmService {
 	private final TtsUtil ttsUtil;
 	private final int timeGap = 5;
 	private final BriefCategoryRepository briefCategoryRepository;
-	private final UserService userService;
-
-	@Value("${ai.url.briefing}")
-	private String briefingAi;
-	@Value("${ai.url.quiz}")
-	private String quizAi;
-	@Value("${ai.url.music}")
-	private String musicAi;
-	@Value("${ai.url.topic-model}")
-	private String topicModelAi;
 
 	public AlarmResponse getMyAlarm(String username) {
 		User user = userRepository.findByUsername(username)
@@ -129,174 +119,76 @@ public class AlarmService {
 	@Transactional
 	@Scheduled(fixedRate = 60000)
 	public void readyBriefing() {
-		log.warn("=============================== ready Briefing ===============================");
+		readyAlarmService.getReadyAlarm()
+			.forEach(alarm -> {
+				// todo : 브리핑 AI 서버에게 요청, 토픽 모델링 AI 서버에게 요청 with feign
+				List<AlarmTag> alarmWithTag = alarmTagRepository.findByAlarmWithTag(alarm);
+				List<String> tags = alarmWithTag.stream().map(AlarmTag::getTag)
+					.map(tag -> tag.getWord())
+					.toList();
 
-		LocalTime start = LocalTime.now().plusMinutes(40).withSecond(0).withNano(0);
-		LocalTime end = LocalTime.now().plusMinutes(40).withSecond(59).withNano(0);
+				var briefingResponse = briefingClient.send(tags);
+				var wakeUpCallSongResponse = wakeUpCallSongClient.send(briefingResponse.voiceContent());
+				var quizResponseDtos = quizGeneratorClient.send(briefingResponse.readContent());
 
-		List<Alarm> alarms = alarmRepository.findAlarmsWithinTimeRange(start, end, 1);
-		log.warn("alarms: {}, start --- > {} , end --- > {}", alarms, start, end);
-
-		for (int j = 0; j < alarms.size(); j++) {
-			Alarm alarm = alarms.get(j);
-			User user = userRepository.findById(alarm.getUserId()).orElseThrow();
-			List<AlarmTag> alarmTagList = alarmTagRepository.findByAlarm(alarm);
-			List<String> tags = new ArrayList<>();
-			for (int i = 0; i < alarmTagList.size(); i++) {
-				AlarmTag alarmTag = alarmTagList.get(i);
-				Tag tag = alarmTag.getTag();
-				if (tag.getIsCustom() == 1) {
-					continue;
+				// voiceContent 에 대한 음성 url 만들기
+				String voiceContentUrl = null;
+				try {
+					voiceContentUrl = ttsUtil.textToSpeech(briefingResponse.voiceContent(), "summary");
+				} catch (IOException e) {
+					throw new RuntimeException(e);
 				}
 
-				tags.add(alarmTag.getTag().getWord());
-			}
-			log.warn("tags params : {}", tags);
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-			Map<String, Object> body = new HashMap<>();
-			body.put("tags", tags);
-			HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+				Brief savedBrief = briefRepository.save(new Brief(alarm.getUserId(),
+					briefingResponse.voiceContent(),
+					briefingResponse.readContent(),
+					voiceContentUrl
+				));
 
-			try {
-				ResponseEntity<String> briefResponse = restTemplate.exchange(briefingAi,
-					HttpMethod.POST, requestEntity,
-					String.class);
-				ResponseEntity<String> topicModelResponse = restTemplate.exchange(topicModelAi,
-					HttpMethod.POST,
-					requestEntity, String.class);
-				if (briefResponse.getStatusCode().is2xxSuccessful()
-					&& topicModelResponse.getStatusCode()
-					.is2xxSuccessful()) {
-					log.info(
-						"@@@@@@@@@@@@@@@@@@@@briefResponse , topicModelResponse success@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-					String data = briefResponse.getBody();
-					ObjectMapper objectMapper = new ObjectMapper();
-					JsonNode jsonNode = objectMapper.readTree(data);
-					String shortBriefing = jsonNode.get("data").get("shortBriefing").asText();
-					String longBriefing = jsonNode.get("data").get("longBriefing").asText();
-					System.out.println("Short Briefing: " + shortBriefing);
-					System.out.println("Long Briefing: " + longBriefing);
-					String summaryPath = ttsUtil.textToSpeech(shortBriefing, "summary");
-					String contentPath = ttsUtil.textToSpeech(longBriefing, "content");
-					Brief newBrief = briefRepository.save(
-						Brief.builder()
-							.user(user)
-							.summary(shortBriefing)
-							.content(longBriefing)
-							.summaryFilePath(summaryPath)
-							.contentFilePath(contentPath)
-							.build()
+				alarmWithTag.stream()
+					.forEach(
+						alarmTag -> briefCategoryRepository.save(new BriefCategory(savedBrief, alarmTag.getTag())));
+				alarm.addMusicFilePath(wakeUpCallSongResponse.url());
+				List<Quiz> quiz = quizResponseDtos.stream().map(quizResponseDto -> {
+					String quizVoiceUrl = null;
+					try {
+						quizVoiceUrl = ttsUtil.textToSpeech(quizResponseDto.problem(), "quiz");
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+
+					List<String> quizOption = quizResponseDto.quizOptions().stream()
+						.sorted(Comparator.comparingInt(QuizOption::order))
+						.map(QuizOption::content)
+						.collect(Collectors.toList());
+
+					return new Quiz(
+						savedBrief,
+						quizResponseDto.problem(),
+						quizResponseDto.answer(),
+						quizOption,
+						quizVoiceUrl
 					);
+				}).toList();
+				quizRepository.saveAll(quiz);
 
-					for (int i = 0; i < alarmTagList.size(); i++) {
-						AlarmTag alarmTag = alarmTagList.get(i);
-						briefCategoryRepository.save(
-							BriefCategory.builder()
-								.brief(newBrief)
-								.tag(alarmTag.getTag())
-								.build()
-						);
-					}
+				var topicModelingResponse = topicModelingClient.send(tags);
+				topicModelingResponse.sections().entrySet()
+					.forEach(entry -> {
+						Long sectionId = entry.getKey();
+						TopicModel savedTopicModel = topicModelRepository.save(new TopicModel(savedBrief, sectionId));
 
-					data = topicModelResponse.getBody();
-					objectMapper = new ObjectMapper();
-					TopicResponse topicResponse = objectMapper.readValue(data, TopicResponse.class);
-					for (TopicAiResponseDto responseDto : topicResponse.getData()) {
-						TopicModel topicModel = topicModelRepository.save(TopicModel.builder()
-							.topicId((long)responseDto.getTopic_id())
-							.brief(newBrief)
-							.build());
-						for (TopicWord topicWord : responseDto.getTopic_words()) {
-							Word word = wordRepository.save(
-								Word.builder()
-									.word(topicWord.getWord())
-									.build()
-							);
+						entry.getValue()
+							.stream()
+							.map(detail -> {
+								Word savedWord = wordRepository.save(new Word(detail.word()));
+								return new TopicModelWord(savedTopicModel, savedWord, detail.percentage());
+							})
+							.forEach(topicModelWord -> topicModelWordRepository.save(topicModelWord));
+					});
 
-							topicModelWordRepository.save(
-								TopicModelWord.builder()
-									.word(word)
-									.weight(topicWord.getWeight())
-									.topicModel(topicModel)
-									.build()
-							);
-						}
-					}
+			});
 
-					headers = new HttpHeaders();
-					headers.setContentType(MediaType.APPLICATION_JSON);
-					headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-					body = new HashMap<>();
-					body.put("briefing", newBrief.getSummary());
-					requestEntity = new HttpEntity<>(body, headers);
-					ResponseEntity<String> songResponse = restTemplate.exchange(musicAi,
-						HttpMethod.POST, requestEntity,
-						String.class);
-
-					if (songResponse.getStatusCode().is2xxSuccessful()) {
-						data = songResponse.getBody();
-						objectMapper = new ObjectMapper();
-						jsonNode = objectMapper.readTree(data);
-						String url = jsonNode.get("url").asText();
-						// alarm.setMusicFilePath(url);
-						System.out.println("url: " + url);
-
-					} else {
-						System.out.println("POST 요청 실패: " + briefResponse.getStatusCode());
-					}
-
-					headers = new HttpHeaders();
-					headers.setContentType(MediaType.APPLICATION_JSON);
-					headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-					body = new HashMap<>();
-					body.put("text", newBrief.getSummary());
-					requestEntity = new HttpEntity<>(body, headers);
-					ResponseEntity<String> quizResponse = restTemplate.exchange(
-						quizAi, HttpMethod.POST, requestEntity, String.class);
-					if (quizResponse.getStatusCode().is2xxSuccessful()) {
-						String body1 = quizResponse.getBody();
-						objectMapper = new ObjectMapper();
-						JsonNode rootNode = objectMapper.readTree(body1);
-						JsonNode dataArray = rootNode.get("data");
-						for (JsonNode jNode : dataArray) {
-							String problem = jNode.get("problem").asText();
-							System.out.println("문제: " + problem);
-							Quiz quiz = new Quiz();
-							quiz.setQuestion(problem);
-							JsonNode choices = jNode.get("choices");
-							List<String> items = new ArrayList<>();
-							for (JsonNode choice : choices) {
-								int id = choice.get("id").asInt();
-								String item = choice.get("item").asText();
-								System.out.println("선택지 " + id + ": " + item);
-								items.add(item);
-							}
-							quiz.setOption1(items.get(0));
-							quiz.setOption2(items.get(1));
-							quiz.setOption3(items.get(2));
-							quiz.setOption4(items.get(3));
-							int answer = jNode.get("answer").asInt();
-							quiz.setAnswer(answer);
-							quiz.setBrief(newBrief);
-							System.out.println("정답: " + answer);
-							System.out.println("---------------------------");
-							String quizPath = ttsUtil.textToSpeech(quiz.getQuestion(), "quiz");
-							quiz.setQuizFilePath(quizPath);
-							Quiz saveQuiz = quizRepository.save(quiz);
-						}
-					} else {
-						System.out.println("POST 요청 실패: " + briefResponse.getStatusCode());
-					}
-				} else {
-					System.out.println("POST 요청 실패: " + briefResponse.getStatusCode());
-					System.out.println("POST 요청 실패: " + topicModelResponse.getStatusCode());
-				}
-			} catch (Exception e) {
-				System.out.println("에러 발생: " + e.getMessage());
-			}
-		}
 	}
 
 	public AlarmStartDto getThings() {
@@ -304,7 +196,7 @@ public class AlarmService {
 		LocalDate today = LocalDate.now();
 		LocalDateTime startOfDay = today.atStartOfDay();
 		LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();  // Midnight of next day
-		Brief brief = briefRepository.findByUserAndCreatedAtToday(user, startOfDay, endOfDay)
+		Brief brief = briefRepository.findByUserAndCreatedAtToday(user.getId(), startOfDay, endOfDay)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		List<Quiz> quizzes = quizRepository.findByBrief(brief)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
@@ -321,7 +213,7 @@ public class AlarmService {
 				quiz.getOption2(),
 				quiz.getOption3(),
 				quiz.getOption4(),
-				quiz.getQuizFilePath()
+				quiz.getQuizVoiceUrl()
 			));
 		}
 		return new AlarmStartDto(
@@ -329,7 +221,7 @@ public class AlarmService {
 			quizDtos,
 			brief.getId(),
 			brief.getSummary(),
-			brief.getSummaryFilePath()
+			brief.getVoiceContentUrl()
 		);
 	}
 

@@ -13,11 +13,11 @@ import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.user.entity.User;
 
 public interface BriefRepository extends JpaRepository<Brief, Long> {
-	Page<Brief> findByUser(User user, Pageable pageable);
+	Page<Brief> findByUserId(Long userId, Pageable pageable);
 
-	Optional<Brief> findByUserAndId(User user, Long id);
+	Optional<Brief> findByUserIdAndId(Long userId, Long id);
 
-	@Query("SELECT b FROM Brief b WHERE b.user = :user AND b.createdAt >= :startOfDay AND b.createdAt < :endOfDay")
-	Optional<Brief> findByUserAndCreatedAtToday(@Param("user") User user, @Param("startOfDay") LocalDateTime startOfDay,
+	@Query("SELECT b FROM Brief b WHERE b.userId= :user AND b.createdAt >= :startOfDay AND b.createdAt < :endOfDay")
+	Optional<Brief> findByUserAndCreatedAtToday(@Param("user") Long userId, @Param("startOfDay") LocalDateTime startOfDay,
 		@Param("endOfDay") LocalDateTime endOfDay);
 }

@@ -38,10 +38,10 @@ cors:
     frontend: http://localhost:5173
 
 ai:
-  url:
-    briefing: ENC(Vctnoxd7vvLZNQJA/9gTYU+bU9224Z0LJCErqOvPnLApiFHsT5Eh61/8Bt1sglkk)
+  client:
+    brief: ENC(Vctnoxd7vvLZNQJA/9gTYU+bU9224Z0LJCErqOvPnLApiFHsT5Eh61/8Bt1sglkk)
     quiz: ENC(iPGCMk5OuYjylnz/P5pTfVFmXM4x5fNHrpQcpq9QzykcUr7Ti8IbhA==)
-    music: ENC(Ihp/8Uz6a3eoBaagYUxdW7Uv2g58fo9K/x9jJwM/eXuKvEdEqFiswAIO2i79z6ZE)
+    song: ENC(Ihp/8Uz6a3eoBaagYUxdW7Uv2g58fo9K/x9jJwM/eXuKvEdEqFiswAIO2i79z6ZE)
     topic-model: ENC(K37CfhnlVJ4Z2ruV7bR8UG+v2+x+Ee9yNAqPCRrTAHCouTtuU/nrqAd2ApocmUyN)
 
 api:

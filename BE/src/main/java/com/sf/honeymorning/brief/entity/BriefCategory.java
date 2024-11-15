@@ -17,10 +17,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 public class BriefCategory extends BaseEntity {
 
@@ -37,4 +35,8 @@ public class BriefCategory extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Tag tag;
 
+	public BriefCategory(Brief brief, Tag tag) {
+		this.brief = brief;
+		this.tag = tag;
+	}
 }

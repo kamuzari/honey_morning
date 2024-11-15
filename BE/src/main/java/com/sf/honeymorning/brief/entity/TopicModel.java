@@ -1,6 +1,5 @@
 package com.sf.honeymorning.brief.entity;
 
-
 import com.sf.honeymorning.common.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -12,16 +11,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@AllArgsConstructor
-@Builder
 public class TopicModel extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +26,22 @@ public class TopicModel extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Brief brief;
 
-	@Column(name = "topic_id", nullable = false)
-	private Long topicId;
+	private Long sectionId;
+
+	public TopicModel(Brief brief, Long sectionId) {
+		this.brief = brief;
+		this.sectionId = sectionId;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Brief getBrief() {
+		return brief;
+	}
+
+	public Long getSectionId() {
+		return sectionId;
+	}
 }

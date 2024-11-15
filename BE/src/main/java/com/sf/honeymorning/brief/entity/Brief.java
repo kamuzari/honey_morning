@@ -1,27 +1,20 @@
 package com.sf.honeymorning.brief.entity;
 
 import com.sf.honeymorning.common.entity.BaseEntity;
-import com.sf.honeymorning.user.entity.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@AllArgsConstructor
 public class Brief extends BaseEntity {
 
 	@Id
@@ -29,9 +22,7 @@ public class Brief extends BaseEntity {
 	@Column(name = "brief_id")
 	private Long id;
 
-	@JoinColumn(name = "user_id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private User user;
+	private Long userId;
 
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String summary;
@@ -39,10 +30,13 @@ public class Brief extends BaseEntity {
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String content;
 
-	@Column(length = 1000, nullable = true)
-	private String summaryFilePath;
+	@Column(length = 1000)
+	private String voiceContentUrl;
 
-	@Column(length = 1000, nullable = true)
-	private String contentFilePath;
-
+	public Brief(Long userId, String voiceContent, String readContent, String voiceContentUrl) {
+		this.userId = userId;
+		this.summary = voiceContent;
+		this.content = readContent;
+		this.voiceContentUrl = voiceContentUrl;
+	}
 }

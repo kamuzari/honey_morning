@@ -1,6 +1,7 @@
 package com.sf.honeymorning.alarm.entity;
 
 import java.time.LocalTime;
+import java.util.StringJoiner;
 
 import com.sf.honeymorning.common.entity.BaseEntity;
 
@@ -113,5 +114,23 @@ public class Alarm extends BaseEntity {
 		this.repeatFrequency = repeatFrequency;
 		this.repeatInterval = repeatInterval;
 		this.isActive = isActive;
+	}
+
+	public void addMusicFilePath(String musicFilePath) {
+		this.musicFilePath = musicFilePath;
+	}
+
+	@Override
+	public String toString() {
+		return new StringJoiner(", ", Alarm.class.getSimpleName() + "[", "]")
+			.add("id=" + id)
+			.add("userId=" + userId)
+			.add("wakeUpTime=" + wakeUpTime)
+			.add("dayOfWeek=" + dayOfWeek)
+			.add("repeatFrequency=" + repeatFrequency)
+			.add("repeatInterval=" + repeatInterval)
+			.add("isActive=" + isActive)
+			.add("musicFilePath='" + musicFilePath + "'")
+			.toString();
 	}
 }
