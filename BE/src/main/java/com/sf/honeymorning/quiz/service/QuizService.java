@@ -89,9 +89,9 @@ public class QuizService {
 				() -> new EntityNotFoundException("Quiz not found with alarmId: " + quizId));
 
 		log.debug("quizPath: {}", quizPath);
-		log.debug("quiz file path: {}", quiz.getQuizFilePath());
+		log.debug("quiz file path: {}", quiz.getQuizVoiceUrl());
 
-		Path filePath = Paths.get(quizPath, quiz.getQuizFilePath());
+		Path filePath = Paths.get(quizPath, quiz.getQuizVoiceUrl());
 		log.info("파일을 찾습니다: " + filePath);
 		Resource resource = new UrlResource(filePath.toUri());
 
@@ -99,7 +99,7 @@ public class QuizService {
 			log.info("파일을 찾았습니다: " + resource.getFilename());
 			return resource;
 		} else {
-			throw new IOException("Could not read the file: " + quiz.getQuizFilePath());
+			throw new IOException("Could not read the file: " + quiz.getQuizVoiceUrl());
 		}
 	}
 }

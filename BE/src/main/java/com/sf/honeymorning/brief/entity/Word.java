@@ -29,4 +29,8 @@ public class Word extends BaseEntity {
 	@JoinColumn(name = "brief_id")
 	@Column(length = 50, nullable = false)
 	private String word;
+
+	public Word(String word) {
+		this.word = word;
+	}
 }

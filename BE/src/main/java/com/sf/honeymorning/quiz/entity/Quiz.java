@@ -1,5 +1,7 @@
 package com.sf.honeymorning.quiz.entity;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.common.entity.BaseEntity;
@@ -13,7 +15,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,8 +24,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
-@Builder
-@AllArgsConstructor
 public class Quiz extends BaseEntity {
 
 	@Id
@@ -55,6 +54,25 @@ public class Quiz extends BaseEntity {
 	private Integer selection;
 
 	@Column(length = 1000, nullable = true)
-	private String quizFilePath;
+	private String quizVoiceUrl;
 
+	public Quiz(Brief brief,
+		String question,
+		Integer answer,
+		List<String> options,
+		String quizVoiceUrl) {
+		if (options.size() != 4) {
+			throw new IllegalArgumentException("객관식은 4지 선다형 입니다.");
+		}
+
+		this.brief = brief;
+		this.question = question;
+		this.answer = answer;
+		this.option1 = options.get(0);
+		this.option2 = options.get(1);
+		this.option3 = options.get(2);
+		this.option4 = options.get(3);
+		this.selection = null;
+		this.quizVoiceUrl = quizVoiceUrl;
+	}
 }

@@ -32,12 +32,16 @@ public class TtsUtil {
 	private final double stability = 0.5;
 	private final double similarityBoost = 0.5;
 	private final double style = 0.5;
+
 	@Value("${file.directory.path.content}")
+
 	private String contentPath;
 	@Value("${file.directory.path.summary}")
 	private String summaryPath;
+
 	@Value("${file.directory.path.quiz}")
 	private String quizPath;
+
 	@Value("${api.key.elevenlabs}")
 	private String elevenlabsKey;
 

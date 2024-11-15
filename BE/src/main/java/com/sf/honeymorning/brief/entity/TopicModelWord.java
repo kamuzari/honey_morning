@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @AllArgsConstructor
-@Builder
 public class TopicModelWord extends BaseEntity {
 
 	@Id
@@ -39,5 +38,10 @@ public class TopicModelWord extends BaseEntity {
 	@Column(nullable = false, columnDefinition = "DECIMAL(20, 18) DEFAULT 0.0")
 	private Double weight = 0.0;
 
+	public TopicModelWord(TopicModel topicModel, Word word, Double weight) {
+		this.topicModel = topicModel;
+		this.word = word;
+		this.weight = weight;
+	}
 }
 

@@ -6,7 +6,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: honeymorning
-      MYSQL_USER: ssafy
-      MYSQL_PASSWORD: ssafy
+      MYSQL_USER: honeymorning
+      MYSQL_PASSWORD: honeymorning
+      TZ: Asia/Seoul
     ports:
       - "3306:3306"
