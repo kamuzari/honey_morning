@@ -23,6 +23,7 @@ import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.authentication.service.AuthService;
 import com.sf.honeymorning.authentication.util.JWTUtil;
+import com.sf.honeymorning.context.IntegrationEnvironment;
 import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.entity.UserRole;
 import com.sf.honeymorning.user.repository.UserRepository;
@@ -31,8 +32,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import jakarta.transaction.Transactional;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AlarmIntegrationTest {
+public class AlarmIntegrationTest extends IntegrationEnvironment {
 	@SpyBean
 	UserRepository userRepository;
 

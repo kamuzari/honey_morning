@@ -11,7 +11,7 @@ import com.sf.honeymorning.alarm.client.dto.TopicModelingResponse;
 
 @FeignClient(name = "topicModelingClient", url = "${ai.client.topic-model}")
 public interface TopicModelingClient {
-	@PostMapping(value = "/ai/topicModeling",
+	@PostMapping(value = "/ai/topic-model",
 		consumes = MediaType.APPLICATION_JSON_VALUE,
 		produces = MediaType.APPLICATION_JSON_VALUE)
 	TopicModelingResponse send(@RequestBody List<String> categories);
