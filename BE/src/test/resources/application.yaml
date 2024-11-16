@@ -1,13 +1,14 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:mydb
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
-
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create-drop
+      type:
+        descriptor:
+          sql:
+            BasicBinder: TRACE
+    generate-ddl: true
   jwt:
     secret: ${TEST_JWT_SECRET:W2SwTG0AFmzMTa/30eyIfTLKgZDD7HSv2pIAGL43JCn1ITnOpSzCuGjRZ3IyybHY0BDmDHLAn9Veko7PHmLdWg==}
 
@@ -23,11 +24,11 @@ cors:
     frontend: http://localhost:5173
 
 ai:
-  url:
-    briefing: ENC(Vctnoxd7vvLZNQJA/9gTYU+bU9224Z0LJCErqOvPnLApiFHsT5Eh61/8Bt1sglkk)
-    quiz: ENC(iPGCMk5OuYjylnz/P5pTfVFmXM4x5fNHrpQcpq9QzykcUr7Ti8IbhA==)
-    music: ENC(Ihp/8Uz6a3eoBaagYUxdW7Uv2g58fo9K/x9jJwM/eXuKvEdEqFiswAIO2i79z6ZE)
-    topic-model: ENC(K37CfhnlVJ4Z2ruV7bR8UG+v2+x+Ee9yNAqPCRrTAHCouTtuU/nrqAd2ApocmUyN)
+  client:
+    brief: localhost:8089
+    quiz: localhost:8089
+    song: localhost:8089
+    topic-model: localhost:8089
 
 api:
   key:
