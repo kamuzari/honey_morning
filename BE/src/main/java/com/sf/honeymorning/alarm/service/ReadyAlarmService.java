@@ -22,7 +22,6 @@ public class ReadyAlarmService {
 		this.alarmRepository = alarmRepository;
 	}
 
-	// todo: 이게 1만개라면 어쩔건데? 그 이상이면 메모리 터져 임마!
 	public List<Alarm> getReadyAlarm() {
 		LocalTime timeAfter40Minutes = TimeUtils.getNow().plusMinutes(FIXED_NEXT_MINUTE);
 		byte dayOfWeekMask = DayOfWeek.getToday();

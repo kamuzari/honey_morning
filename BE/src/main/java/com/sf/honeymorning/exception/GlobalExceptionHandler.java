@@ -12,6 +12,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import javax.naming.AuthenticationException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
@@ -29,13 +33,21 @@ import com.sf.honeymorning.exception.user.UserNotFoundException;
 import com.sf.honeymorning.exception.user.UserUpdateException;
 
 import jakarta.persistence.PersistenceException;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
 	private static final String MESSAGE_PROPERTY_KEY = "errorMessages";
+
+	@ExceptionHandler(AuthenticationException.class)
+	public ErrorResponse handleAuthenticationExceptions(AuthenticationException exception) {
+		log.warn("Authentication Error: {}", exception.getMessage(), exception);
+		return ErrorResponse.builder(exception, HttpStatus.INTERNAL_SERVER_ERROR, "")
+			.detail("[authentication error] - authentication check")
+			.property(MESSAGE_PROPERTY_KEY, LocalTime.now())
+			.build();
+	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ErrorResponse handleValidationExceptions(MethodArgumentNotValidException exception) {
@@ -114,10 +126,4 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> handleAlarmFatalException(final AlarmFatalException e) {
 		return new ResponseEntity<>(e.getMessage(), SERVICE_UNAVAILABLE);
 	}
-
-	// 그 외 모든 오류
-	//    @ExceptionHandler(Exception.class)
-	//    public ResponseEntity<String> handleGeneralException(Exception ex) {
-	//        return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-	//    }
 }

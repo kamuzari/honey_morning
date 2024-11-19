@@ -6,12 +6,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
 import com.sf.honeymorning.brief.service.BriefService;
 import com.sf.honeymorning.domain.brief.dto.response.BriefDetailResponseDto;
 import com.sf.honeymorning.domain.brief.dto.response.BriefHistoryResponseDto;
@@ -48,9 +50,12 @@ public class BriefController {
 	})
 	@GetMapping("/{brief_id}")
 	public ResponseEntity<BriefDetailResponseDto> read(
+		@AuthenticationPrincipal
+		JwtAuthentication principal,
+
 		@Parameter(description = "조회할 브리핑의 ID", example = "12345")
 		@PathVariable(name = "brief_id") Long briefId) {
-		BriefDetailResponseDto data = briefService.getBrief(briefId);
+		BriefDetailResponseDto data = briefService.getBrief(principal.id(),briefId);
 
 		return ResponseEntity.ok(data);
 	}
@@ -67,8 +72,10 @@ public class BriefController {
 	})
 	@GetMapping("/all")
 	public ResponseEntity<BriefHistoryResponseDto> readAll(
+		@AuthenticationPrincipal
+		JwtAuthentication principal,
 		@RequestParam(value = "page") Integer page) {
-		BriefHistoryResponseDto briefs = briefService.getBriefs(page);
+		BriefHistoryResponseDto briefs = briefService.getBriefs(principal.id(),page);
 		return ResponseEntity.ok(briefs);
 	}
 

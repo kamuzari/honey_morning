@@ -39,11 +39,13 @@ dependencies {
     // Encrypt
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 
-    // JWT
-    implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+    // Jwt
+    implementation 'com.auth0:java-jwt:3.18.1'
 
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Feign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
@@ -57,6 +59,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'org.testcontainers:mysql'
+    testImplementation 'org.testcontainers:redis'
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation 'org.springframework.cloud:spring-cloud-contract-stub-runner'
     testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:4.0.4'

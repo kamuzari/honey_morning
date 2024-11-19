@@ -14,7 +14,6 @@ import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.entity.AlarmTag;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
-import com.sf.honeymorning.authentication.service.AuthService;
 import com.sf.honeymorning.exception.alarm.AlarmFatalException;
 import com.sf.honeymorning.tag.entity.Tag;
 import com.sf.honeymorning.tag.repository.TagRepository;
@@ -28,19 +27,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class AlarmTagService {
-
-	private final AuthService authService;
 	private final AlarmRepository alarmRepository;
 	private final TagRepository tagRepository;
 	private final AlarmTagRepository alarmTagRepository;
 	private final Set<String> wordList = new HashSet<>(
 		Arrays.asList("정치", "경제", "사회", "생활/문화", "IT/과학", "세계", "연예", "스포츠"));
 
-	public List<AlarmTagResponseDto> getAlarmTags() {
-
-		User user = authService.getLoginUser();
-
-		Alarm alarm = alarmRepository.findByUserId(user.getId())
+	public List<AlarmTagResponseDto> getAlarmTags(Long userId) {
+		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		List<AlarmTag> alarmTagList = alarmTagRepository.findByAlarm(alarm);
@@ -60,7 +54,7 @@ public class AlarmTagService {
 	}
 
 	// 알람 카테고리 추가
-	public void addAlarmCategory(String word) {
+	public void addAlarmCategory(Long userId,String word) {
 
 		Tag tag = tagRepository.findByWord(word)
 			.orElseThrow(() -> new EntityNotFoundException("tag가 존재하지 않습니다."));
@@ -92,18 +86,16 @@ public class AlarmTagService {
 		}
 
 		// alarmCategory 추가.
-		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUserId(user.getId())
+		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		alarmTagRepository.save(new AlarmTag(alarm, tag));
 	}
 
 	// 알람 카테고리 삭제
-	public void deleteAlarmCategory(String word) {
+	public void deleteAlarmCategory(Long userId,String word) {
 		// tag는 공유되는 것이기 때문에 alarmCategory만 삭제한다.
-		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUserId(user.getId())
+		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 
 		Tag tag = tagRepository.findByWord(word)
@@ -112,9 +104,8 @@ public class AlarmTagService {
 	}
 
 	// 알람 카테고리 수정
-	public void patchAlarmCategory(List<String> wordList) {
-		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUserId(user.getId())
+	public void patchAlarmCategory(Long userId,List<String> wordList) {
+		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		List<AlarmTag> alarmTagList = alarmTagRepository.findByAlarm(
 			alarm);

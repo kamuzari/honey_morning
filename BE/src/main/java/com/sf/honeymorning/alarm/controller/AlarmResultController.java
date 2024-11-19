@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
 import com.sf.honeymorning.alarm.dto.AlarmResultDto;
 import com.sf.honeymorning.domain.alarm.service.AlarmResultService;
 
@@ -38,8 +40,10 @@ public class AlarmResultController {
 		)
 	})
 	@GetMapping
-	public ResponseEntity<List<AlarmResultDto>> getAlarmResult() {
-		List<AlarmResultDto> alarmResultDtoList = alarmResultService.findAlarmResult();
+	public ResponseEntity<List<AlarmResultDto>> getAlarmResult(
+		@AuthenticationPrincipal
+	JwtAuthentication principal) {
+		List<AlarmResultDto> alarmResultDtoList = alarmResultService.findAlarmResult(principal.id());
 		return new ResponseEntity<>(alarmResultDtoList, HttpStatus.OK);
 	}
 
@@ -53,8 +57,11 @@ public class AlarmResultController {
 		)
 	})
 	@PostMapping
-	public ResponseEntity<String> addAlarmResult(@RequestBody AlarmResultDto alarmResultDto) {
-		alarmResultService.saveAlarmResult(alarmResultDto);
+	public ResponseEntity<String> addAlarmResult(
+		@AuthenticationPrincipal
+		JwtAuthentication principal,
+		@RequestBody AlarmResultDto alarmResultDto) {
+		alarmResultService.saveAlarmResult(principal.id(),alarmResultDto);
 		return new ResponseEntity<>("알람 결과가 성공적으로 저장되었습니다.", HttpStatus.OK);
 	}
 
@@ -69,8 +76,10 @@ public class AlarmResultController {
 		)
 	})
 	@GetMapping("/streak")
-	public ResponseEntity<?> getStreak() {
-		int streak = alarmResultService.getStreak();
+	public ResponseEntity<?> getStreak(
+		@AuthenticationPrincipal
+	JwtAuthentication principal) {
+		int streak = alarmResultService.getStreak(principal.id());
 		return new ResponseEntity<>(streak, HttpStatus.OK);
 	}
 }

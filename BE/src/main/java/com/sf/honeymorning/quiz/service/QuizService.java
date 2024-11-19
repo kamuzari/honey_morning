@@ -12,7 +12,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.sf.honeymorning.authentication.service.AuthService;
 import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.brief.repository.BriefRepository;
 import com.sf.honeymorning.domain.brief.dto.response.detail.QuizResponseDto;
@@ -32,7 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 public class QuizService {
 
 	private final QuizRepository quizRepository;
-	private final AuthService authService;
 	private final BriefRepository briefRepository;
 	@Value("${file.directory.path.quiz}")
 	private String quizPath;
