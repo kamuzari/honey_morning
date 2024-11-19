@@ -1,6 +1,7 @@
 package com.sf.honeymorning.alarm.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,11 +21,22 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.sf.honeymorning.account.authenticater.constant.JwtProperty;
+import com.sf.honeymorning.account.authenticater.jwt.JwtProviderManager;
+import com.sf.honeymorning.account.handler.LoginSuccessHandler;
+import com.sf.honeymorning.account.handler.LogoutSuccessHandler;
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.service.AlarmService;
+import com.sf.honeymorning.config.WebSecurityConfig;
+import com.sf.honeymorning.config.security.customSecurity.WithJwtMockUser;
 import com.sf.honeymorning.context.MockTestControllerEnvironment;
 
-@WebMvcTest(AlarmController.class)
+@WebMvcTest({AlarmController.class,
+	WebSecurityConfig.class,
+	JwtProviderManager.class,
+	LoginSuccessHandler.class,
+	LogoutSuccessHandler.class,
+	JwtProperty.class})
 class AlarmControllerTest extends MockTestControllerEnvironment {
 
 	final String URI_PREFIX = "/api/alarms";
@@ -54,7 +66,7 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 
 		//then
 		perform.andExpect(status().isOk());
-		verify(alarmService, times(1)).set(alarmSetRequest, USERNAME);
+		verify(alarmService, times(1)).set(alarmSetRequest, 1L);
 	}
 
 	@DisplayName("알람 설정을 할 때, ")
@@ -120,7 +132,7 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 
 		//then
 		perform.andExpect(status().isOk());
-		verify(alarmService, times(1)).getMyAlarm(any(String.class));
+		verify(alarmService, times(1)).getMyAlarm(anyLong());
 	}
 
 }
