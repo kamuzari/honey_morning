@@ -59,7 +59,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'org.testcontainers:mysql'
-    testImplementation 'org.testcontainers:redis'
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation 'org.springframework.cloud:spring-cloud-contract-stub-runner'
     testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:4.0.4'
