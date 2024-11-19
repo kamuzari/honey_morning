@@ -29,7 +29,6 @@ import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.entity.AlarmTag;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
-import com.sf.honeymorning.authentication.service.AuthService;
 import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.brief.entity.BriefCategory;
 import com.sf.honeymorning.brief.entity.TopicModel;
@@ -65,15 +64,12 @@ public class AlarmService {
 	private final TopicModelingClient topicModelingClient;
 	private final WakeUpCallSongClient wakeUpCallSongClient;
 	private final QuizGeneratorClient quizGeneratorClient;
-
 	private final ReadyAlarmService readyAlarmService;
-
 	private final TopicModelRepository topicModelRepository;
 	private final TopicModelWordRepository topicModelWordRepository;
 	private final WordRepository wordRepository;
 	private final AlarmRepository alarmRepository;
 	private final UserRepository userRepository;
-	private final AuthService authService;
 	private final AlarmTagRepository alarmTagRepository;
 	private final BriefRepository briefRepository;
 	private final QuizRepository quizRepository;
@@ -82,12 +78,10 @@ public class AlarmService {
 	private final int timeGap = 5;
 	private final BriefCategoryRepository briefCategoryRepository;
 
-	public AlarmResponse getMyAlarm(String username) {
-		User user = userRepository.findByUsername(username)
-			.orElseThrow(() -> new EntityNotFoundException("not found Resources. username : {}" + username));
-		Alarm alarm = alarmRepository.findByUserId(user.getId())
+	public AlarmResponse getMyAlarm(Long userId) {
+		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new BusinessException(
-				MessageFormat.format("알람이 반드시 존재했어야합니다. userId -> {0}", user.getId())
+				MessageFormat.format("알람이 반드시 존재했어야합니다. userId -> {0}", userId)
 				, ErrorProtocol.POLICY_VIOLATION));
 
 		return new AlarmResponse(
@@ -101,12 +95,10 @@ public class AlarmService {
 	}
 
 	@Transactional
-	public void set(AlarmSetRequest alarmRequestDto, String username) {
-		User user = userRepository.findByUsername(username)
-			.orElseThrow(() -> new EntityNotFoundException("not found Resources. username : {}" + username));
-		Alarm alarm = alarmRepository.findByUserId(user.getId())
+	public void set(AlarmSetRequest alarmRequestDto, Long userId) {
+		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new BusinessException(
-				MessageFormat.format("알람이 반드시 존재했어야합니다. userId -> {0}", user.getId())
+				MessageFormat.format("알람이 반드시 존재했어야합니다. userId -> {0}", userId)
 				, ErrorProtocol.POLICY_VIOLATION));
 
 		alarm.set(alarmRequestDto.alarmTime(),
@@ -121,7 +113,6 @@ public class AlarmService {
 	public void readyBriefing() {
 		readyAlarmService.getReadyAlarm()
 			.forEach(alarm -> {
-				// todo : 브리핑 AI 서버에게 요청, 토픽 모델링 AI 서버에게 요청 with feign
 				List<AlarmTag> alarmWithTag = alarmTagRepository.findByAlarmWithTag(alarm);
 				List<String> tags = alarmWithTag.stream().map(AlarmTag::getTag)
 					.map(tag -> tag.getWord())
@@ -131,7 +122,6 @@ public class AlarmService {
 				var wakeUpCallSongResponse = wakeUpCallSongClient.send(briefingResponse.voiceContent());
 				var quizResponseDtos = quizGeneratorClient.send(briefingResponse.readContent());
 
-				// voiceContent 에 대한 음성 url 만들기
 				String voiceContentUrl = null;
 				try {
 					voiceContentUrl = ttsUtil.textToSpeech(briefingResponse.voiceContent(), "summary");
@@ -191,16 +181,15 @@ public class AlarmService {
 
 	}
 
-	public AlarmStartDto getThings() {
-		User user = authService.getLoginUser();
+	public AlarmStartDto getThings(Long userId) {
 		LocalDate today = LocalDate.now();
 		LocalDateTime startOfDay = today.atStartOfDay();
 		LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();  // Midnight of next day
-		Brief brief = briefRepository.findByUserAndCreatedAtToday(user.getId(), startOfDay, endOfDay)
+		Brief brief = briefRepository.findByUserAndCreatedAtToday(userId, startOfDay, endOfDay)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		List<Quiz> quizzes = quizRepository.findByBrief(brief)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
-		Alarm alarm = alarmRepository.findByUserId(user.getId())
+		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		List<QuizDto> quizDtos = new ArrayList<>();
 		for (int i = 0; i < quizzes.size(); i++) {
@@ -225,7 +214,7 @@ public class AlarmService {
 		);
 	}
 
-	public void getSleep() {
+	public void getSleep(Long userId) {
 
 		/**
 		 *
@@ -234,8 +223,7 @@ public class AlarmService {
 		 *
 		 */
 
-		User user = authService.getLoginUser();
-		Alarm alarm = alarmRepository.findByUserId(user.getId())
+		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		;
 

@@ -8,7 +8,7 @@ import com.sf.honeymorning.alarm.entity.AlarmResult;
 import com.sf.honeymorning.user.entity.User;
 
 public interface AlarmResultRepository extends JpaRepository<AlarmResult, Long> {
-	List<AlarmResult> findByUser(User user);
+	List<AlarmResult> findByUserId(Long userId);
 
-	List<AlarmResult> findByUserOrderByCreatedAt(User user);
+	List<AlarmResult> findByUserIdOrderByCreatedAt(Long userId);
 }

@@ -2,11 +2,17 @@ server:
   port: ${SERVER_PORT:8080}
 
 spring:
+  data:
+    redis:
+      host: ENC(Mdm3ZYu19EpQS7ZSZ1d/kKG8d/2RGVBy)
+      port: 6379
+      connect-timeout: 30s
+      timeout: 10s
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ENC(xZDkAzthzyGE1C72KPqfJOuxhc3ayV4fQGZ5md/pzjIPv+QquUXpKEtB/7CVnaqkcxJf4XU/dTpDd3y6k5ntzbRuUN6SxC5Khjzl5MHLUpaWMV05G7qE4tzpLZ9C4GIlXDLPiIHQvif8u8N4H7L9hb6dKHPl08bS)
-    username: ENC(XXcXcJHIF39mDqw6o+Irxg==)
-    password: ENC(SkduHISnU361zi9ZDMawSA==)
+    username: ENC(4bVSlObkLOxikway4Ip0czodcbatpmA4)
+    password: ENC(dP/YyZ2a7IEf5ybHgc357/iIDu8jAe1H)
 
   jpa:
     database: mysql
@@ -20,22 +26,68 @@ spring:
       hibernate:
         format_sql: true
 
-  jwt:
-    secret: ENC(zL30mQkQoxfP+KLlbGsOehR+8EsP15IchrJetQlYJ/uGlA4hmzVdAulHD5W/aOf2T7fLp2Io9sXxrWi9tKArVqleD5pVjtgr)
-
   sql:
     init:
       mode: always
 
-jwt:
-  accessToken:
-    expireTime: ENC(ISdphSLRbBmK/gojGczS1gbW+KEySkcm)
-  refreshToken:
-    expireTime: ENC(ti/Q5jJcooWOzbKKNoxJYe/0wviQZm+W)
 
-cors:
-  allowedOrigins:
-    frontend: http://localhost:5173
+jwt:
+  issuer: ENC(PazcZ21ocRNS74Kr3cHrkhdSjvfSCMzq)
+  access-token:
+    header: ENC(XXHVYj0tsPfymXbzxScERFFPhkiwf08S)
+    expiry-seconds: ${ACCESS_EXPIRY_SECOND:ENC(TDrBoMkhMZrTt/cwfl0qug==)}
+  refresh-token:
+    header: ENC(qbKLojrcSZlXAfg3KyXmTuIKMrggnMzv)
+    expiry-seconds: ${REFRESH_EXPIRY_SECOND:ENC(qgEqfPLe7Yv9XLDNhHpaIA==)}
+  secret-key: ${SECRET_KEY:ENC(Puo2Y1vQGKk7B/xVoELd0yK63SxRUvnMf1NIew9jXXo=)}
+
+web:
+  cors:
+    allowed-origins:
+      - ENC(FUAQL1i0rUJejed6pnrQxK/Ax5PTUpr7wxzTQOLw+PI=)
+      - ENC(LCEPAqi3qsGsegiqgzk9CI8yv+VaSzSBru8XOWBM0+n+nJK4+K8dFA==)
+    allowed-methods:
+      - ENC(G7ZLJaKSHLuKLIEgEhxClA==)
+      - ENC(OMhFJ+01FoMZlyliLnz3bQ==)
+      - ENC(ZZ3LCf1IGbXIdl8JaPF3Iw==)
+      - ENC(RlYaFglzgIDnTCqQUqw4Uw==)
+      - ENC(q/IeMV+hvW+iitIVRXfpQQ==)
+      - ENC(SPetTvoUtSqpHEboxuh4xQ==)
+    allowed-headers:
+      - ENC(udJaeOPv6tro8S/PvD4b8Wfswl3W0qQC)
+    exposed-headers:
+      - ENC(zawNibKZ37XbuF99U1MuPgxupXbsepFL)
+    allow-credentials: true
+
+security:
+  url-pattern-config:
+    ignoring:
+      GET:
+        - ENC(c8vD1N66eJO/GxFSlgRXXKsMOL0+/84U)
+        - ENC(UYACp25SidA7SyaRwTxQQ4iu58KbmgQc)
+        - ENC(Jj5DshZnYbCcus185YtARn0yNrwecuFkLjfD1K6UgrI=)
+        - ENC(0y1hnS8NwQvpq14+aB5Lpw==)
+        - ENC(hkWrBlWf8qbdK0T0+jBcCDDOvCQ/H661)
+      POST:
+        - ENC(cX06x50vqq0M7qcxpQKaU64V8LvxkUDS1+L6lUl8PMQ=)
+      PATCH:
+        - ENC(iv1dk6YjfwUZCP4o2mbeAi+RpQwpTAs5)
+      PUT:
+        - ENC(DDJCSLreDqSw9wmniZUkXJ9DPe7mz6ua)
+      DELETE:
+        - ENC(XoRy7x2VBG1Kg87v3PaSceQqYzDxkGfB)
+    permit-all:
+      GET: [ ]
+      POST: [ ]
+      PATCH: [ ]
+      PUT: [ ]
+      DELETE: [ ]
+      OPTIONS: /**
+
+cookie:
+  secure: ${COOKIE_SECURE:ENC(HDfUXBUpjV2TFLDs+cDo2w==)}
+  same-site: ${COOKIE_SAME_SITE:ENC(lNIKQoe0yCJO8bYchDCtLA==)}
+  domain: ${DOMAIN:ENC(8oopqns3PXQmdpHYwqvGLUEVS51gnVcm)}
 
 ai:
   client:

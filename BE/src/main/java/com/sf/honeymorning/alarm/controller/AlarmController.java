@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
+import com.sf.honeymorning.account.authenticater.model.JwtAuthenticationToken;
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.service.AlarmService;
@@ -46,11 +48,11 @@ public class AlarmController {
 	})
 	@PatchMapping
 	public void set(
-		@AuthenticationPrincipal CustomUserDetails user
+		@AuthenticationPrincipal
+		JwtAuthentication principal
 		, @Valid @RequestBody AlarmSetRequest alarmRequestDto) {
 
-		System.out.println("user = " + user);
-		alarmService.set(alarmRequestDto, user.getUsername());
+		alarmService.set(alarmRequestDto, principal.id());
 	}
 
 	@Operation(
@@ -64,8 +66,9 @@ public class AlarmController {
 		)
 	})
 	@GetMapping
-	public AlarmResponse read(@AuthenticationPrincipal CustomUserDetails user) {
-		return alarmService.getMyAlarm(user.getUsername());
+	public AlarmResponse read(@AuthenticationPrincipal
+	JwtAuthentication principal) {
+		return alarmService.getMyAlarm(principal.id());
 	}
 
 	@Operation(
@@ -79,9 +82,8 @@ public class AlarmController {
 		)
 	})
 	@PostMapping("/start")
-	public ResponseEntity<AlarmStartDto> start() {
-		AlarmStartDto alarmStartDto = alarmService.getThings();
-		return ResponseEntity.ok(alarmStartDto);
+	public AlarmStartDto start(Long userId) {
+		return alarmService.getThings(userId);
 	}
 
 	@Operation(
@@ -94,8 +96,11 @@ public class AlarmController {
 		)
 	})
 	@GetMapping("/sleep")
-	public ResponseEntity<?> sleep() {
-		alarmService.getSleep();
+	public ResponseEntity<?> sleep(
+		@AuthenticationPrincipal
+		JwtAuthentication principal
+	) {
+		alarmService.getSleep(principal.id());
 		return ResponseEntity.ok(null);
 	}
 }

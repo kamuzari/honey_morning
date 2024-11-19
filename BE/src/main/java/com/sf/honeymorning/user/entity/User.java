@@ -60,4 +60,6 @@ public class User extends BaseEntity {
 	public UserRole getRole() {
 		return role;
 	}
+
+
 }

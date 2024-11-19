@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.sf.honeymorning.authentication.service.AuthService;
 import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.brief.entity.BriefCategory;
 import com.sf.honeymorning.brief.repository.BriefCategoryRepository;
@@ -42,7 +41,6 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 public class BriefService {
 
-	private final AuthService authService;
 	private final BriefRepository briefRepository;
 	private final BriefCategoryRepository briefCategoryRepository;
 	private final WordCloudRepository wordCloudRepository;
@@ -53,9 +51,8 @@ public class BriefService {
 	@Value("${file.directory.path.content}")
 	private String contentPath;
 
-	public BriefHistoryResponseDto getBriefs(int page) {
-		User user = authService.getLoginUser();
-		Page<Brief> briefPage = briefRepository.findByUserId(user.getId(), PageRequest.of(page - 1, 5));
+	public BriefHistoryResponseDto getBriefs(Long userId, int page) {
+		Page<Brief> briefPage = briefRepository.findByUserId(userId, PageRequest.of(page - 1, 5));
 		List<Brief> briefs = briefPage.getContent();
 		List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(briefs);
 		List<Quiz> quizzes = quizRepository.findByBriefIn(briefs);
@@ -72,11 +69,10 @@ public class BriefService {
 					.count())).toList(), briefPage.getTotalPages());
 	}
 
-	public BriefDetailResponseDto getBrief(Long briefId) {
-		User user = authService.getLoginUser();
-		Brief brief = briefRepository.findByUserIdAndId(user.getId(), briefId)
+	public BriefDetailResponseDto getBrief(Long userId, Long briefId) {
+		Brief brief = briefRepository.findByUserIdAndId(userId, briefId)
 			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
-		boolean canAccess = brief.getUserId().equals(user.getId());
+		boolean canAccess = brief.getUserId().equals(userId);
 		if (!canAccess) {
 			throw new IllegalArgumentException("invalid brief");
 		}

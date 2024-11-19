@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import com.sf.honeymorning.alarm.dto.AlarmResultDto;
 import com.sf.honeymorning.alarm.entity.AlarmResult;
 import com.sf.honeymorning.alarm.repository.AlarmResultRepository;
-import com.sf.honeymorning.authentication.service.AuthService;
-import com.sf.honeymorning.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,14 +16,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AlarmResultService {
 
-	private final AuthService authService;
 	private final AlarmResultRepository alarmResultRepository;
 
 	// 알람 결과 조회
-	public List<AlarmResultDto> findAlarmResult() {
-		User user = authService.getLoginUser();
+	public List<AlarmResultDto> findAlarmResult(Long userId) {
 
-		List<AlarmResult> alarmResultList = alarmResultRepository.findByUser(user);
+		List<AlarmResult> alarmResultList = alarmResultRepository.findByUserId(userId);
 
 		List<AlarmResultDto> alarmResultDtoList = new ArrayList<>();
 		for (AlarmResult alarmResult : alarmResultList) {
@@ -40,11 +36,9 @@ public class AlarmResultService {
 	}
 
 	// 알람 결과 추가
-	public void saveAlarmResult(AlarmResultDto alarmResultDto) {
-		User user = authService.getLoginUser();
-
+	public void saveAlarmResult(Long userId, AlarmResultDto alarmResultDto) {
 		AlarmResult alarmResult = AlarmResult.builder()
-			.user(user)
+			.userId(userId)
 			.count(alarmResultDto.getCount())
 			.isAttended(alarmResultDto.getIsAttending())
 			.build();
@@ -52,8 +46,7 @@ public class AlarmResultService {
 		alarmResultRepository.save(alarmResult);
 	}
 
-	public int getStreak() {
-		User user = authService.getLoginUser();
+	public int getStreak(Long userId) {
 
 		// 현재 날짜를 LocalDate 객체로 가져옴 (년, 월, 일)
 		LocalDate today = LocalDate.now();
@@ -64,7 +57,7 @@ public class AlarmResultService {
 		int todayDay = today.getDayOfMonth();
 
 		// 유저의 모든 알람_결과 테이블 데이터를 가져온다.
-		List<AlarmResult> alarmResultList = alarmResultRepository.findByUserOrderByCreatedAt(user);
+		List<AlarmResult> alarmResultList = alarmResultRepository.findByUserIdOrderByCreatedAt(userId);
 
 		// 유저의 모든 알람_결과 테이블 데이터에서 출석에 성공한 알람_결과만을 따로 모아둔다.
 		List<AlarmResult> attendedAlarmResultList = new ArrayList<>();

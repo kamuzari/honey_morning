@@ -28,9 +28,7 @@ public class AlarmResult extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@JoinColumn(name = "user_id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private User user;
+	private Long userId;
 
 	@Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
 	private Integer count = 0;
