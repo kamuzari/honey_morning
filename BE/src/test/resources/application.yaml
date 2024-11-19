@@ -1,7 +1,11 @@
 spring:
+  data:
+    redis:
+      connect-timeout: 30s
+      timeout: 10s
   datasource:
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: create-drop
       type:
@@ -41,13 +45,52 @@ file:
       summary: ENC(Cj301Z07a9MFTvutszAHTDpTgPDHSJC2FFKmTQu1a5nFEf0BlmdvbGltFp9AYa58yzW7CPYGSkg=)
       quiz: ENC(zW3TcGnHTLX5Na1Q3LeYkp9doE1F3u5L1bYSvUtrSKq4IJ/Q2OkM3+R/f0Epggu6xFtRksKPShs=)
       music: ENC(v8uwAbdOo/41AGKIKDSi5a+Po/vYAzWFHpkoQZhfD82FFaqcqGotm77x51dnvEGedxAxdkmFRPI=)
-
 jwt:
-  accessToken:
-    expireTime: 3600
-  refreshToken:
-    expireTime: 360000
+  issuer: honeymorning
+  access-token:
+    header: access-token
+    expiry-seconds: ${ACCESS_EXPIRY_SECOND:30000}
+  refresh-token:
+    header: refresh-token
+    expiry-seconds: ${REFRESH_EXPIRY_SECOND:60000}
+  secret-key: ${SECRET_KEY:honey-morning-jwt}
+
+security:
+  url-pattern-config:
+    ignoring:
+      GET:
+        - /v3/api-docs/**
+        - /swagger-ui/**
+        - /swagger-ui.html/**
+        - /health
+        - /actuator/**
+      POST:
+        - /api/accounts/**
+      PATCH:
+        - /health/**
+      PUT:
+        - /health/**
+      DELETE:
+        - /health/**
+    permit-all:
+      GET: [ ]
+      POST: [ ]
+      PATCH: [ ]
+      PUT: [ ]
+      DELETE: [ ]
+      OPTIONS: /**
+
+cookie:
+  secure: false
+  same-site: lax
 
 logging:
   level:
     root: info
+
+
+test(authenticate): 인증 요청 및 인증 관련 코드 일괄 변경
+
+  - 토큰 존재 여부에 따른 인증 및 인가 처리 검증
+  - 인증 방식 변경에 따라 전체 코드 구조에 맞춘 테스트 코드 리팩터링
+  - JWT 구조 개선 사항 반영하여 테스트 케이스 수정 및 추가
