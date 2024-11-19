@@ -14,8 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 import com.sf.honeymorning.alarm.service.AlarmTagService;
+import com.sf.honeymorning.config.security.customSecurity.WithJwtMockUser;
 import com.sf.honeymorning.context.MockTestControllerEnvironment;
 
+@WithJwtMockUser
 @WebMvcTest(AlarmTagController.class)
 class AlarmTagControllerTest extends MockTestControllerEnvironment {
 
@@ -28,11 +30,11 @@ class AlarmTagControllerTest extends MockTestControllerEnvironment {
 	@DisplayName("나의 알람카테고리를 조회한다")
 	void testGetAlarmCategories() throws Exception {
 		//given
-		given(alarmTagService.getAlarmTags()).willReturn((List.of()));
+		given(alarmTagService.getAlarmTags(1L)).willReturn((List.of()));
 		//when
 		mockMvc.perform(get(URI_PREFIX)
 			.contentType(MediaType.APPLICATION_JSON));
 		//then
-		verify(alarmTagService, times(1)).getAlarmTags();
+		verify(alarmTagService, times(1)).getAlarmTags(1L);
 	}
 }
