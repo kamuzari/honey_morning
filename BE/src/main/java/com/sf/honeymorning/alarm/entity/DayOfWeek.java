@@ -24,7 +24,7 @@ public enum DayOfWeek {
 	}
 
 	public static byte getToday() {
-		return (byte)(LocalDate.now().getDayOfWeek().getValue() - 1);
+		return (byte)(LocalDate.now().getDayOfWeek().getValue());
 	}
 
 	public static byte toBit(DayOfWeek... days) {

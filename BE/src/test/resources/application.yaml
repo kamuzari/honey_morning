@@ -4,6 +4,9 @@ spring:
       connect-timeout: 30s
       timeout: 10s
   datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+    username: sa
+    password:
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
@@ -86,11 +89,6 @@ cookie:
 
 logging:
   level:
-    root: info
-
-
-test(authenticate): 인증 요청 및 인증 관련 코드 일괄 변경
-
-  - 토큰 존재 여부에 따른 인증 및 인가 처리 검증
-  - 인증 방식 변경에 따라 전체 코드 구조에 맞춘 테스트 코드 리팩터링
-  - JWT 구조 개선 사항 반영하여 테스트 케이스 수정 및 추가
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
