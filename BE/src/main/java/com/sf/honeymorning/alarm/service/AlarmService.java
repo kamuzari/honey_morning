@@ -46,11 +46,9 @@ import com.sf.honeymorning.exception.model.BusinessException;
 import com.sf.honeymorning.exception.model.ErrorProtocol;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
-import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.repository.UserRepository;
 import com.sf.honeymorning.util.TtsUtil;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -137,7 +135,8 @@ public class AlarmService {
 
 				alarmWithTag.stream()
 					.forEach(
-						alarmTag -> briefCategoryRepository.save(new BriefCategory(savedBrief, alarmTag.getTag())));
+						alarmTag -> briefCategoryRepository.save(
+							new BriefCategory(savedBrief, alarmTag.getTag())));
 				alarm.addMusicFilePath(wakeUpCallSongResponse.url());
 				List<Quiz> quiz = quizResponseDtos.stream().map(quizResponseDto -> {
 					String quizVoiceUrl = null;
@@ -166,7 +165,8 @@ public class AlarmService {
 				topicModelingResponse.sections().entrySet()
 					.forEach(entry -> {
 						Long sectionId = entry.getKey();
-						TopicModel savedTopicModel = topicModelRepository.save(new TopicModel(savedBrief, sectionId));
+						TopicModel savedTopicModel = topicModelRepository.save(
+							new TopicModel(savedBrief, sectionId));
 
 						entry.getValue()
 							.stream()

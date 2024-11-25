@@ -17,7 +17,6 @@ import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
 import com.sf.honeymorning.exception.alarm.AlarmFatalException;
 import com.sf.honeymorning.tag.entity.Tag;
 import com.sf.honeymorning.tag.repository.TagRepository;
-import com.sf.honeymorning.user.entity.User;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -54,7 +53,7 @@ public class AlarmTagService {
 	}
 
 	// 알람 카테고리 추가
-	public void addAlarmCategory(Long userId,String word) {
+	public void addAlarmCategory(Long userId, String word) {
 
 		Tag tag = tagRepository.findByWord(word)
 			.orElseThrow(() -> new EntityNotFoundException("tag가 존재하지 않습니다."));
@@ -93,7 +92,7 @@ public class AlarmTagService {
 	}
 
 	// 알람 카테고리 삭제
-	public void deleteAlarmCategory(Long userId,String word) {
+	public void deleteAlarmCategory(Long userId, String word) {
 		// tag는 공유되는 것이기 때문에 alarmCategory만 삭제한다.
 		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
@@ -104,7 +103,7 @@ public class AlarmTagService {
 	}
 
 	// 알람 카테고리 수정
-	public void patchAlarmCategory(Long userId,List<String> wordList) {
+	public void patchAlarmCategory(Long userId, List<String> wordList) {
 		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		List<AlarmTag> alarmTagList = alarmTagRepository.findByAlarm(

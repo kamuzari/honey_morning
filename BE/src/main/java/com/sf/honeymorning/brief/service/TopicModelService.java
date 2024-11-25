@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.brief.entity.TopicModel;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
-import com.sf.honeymorning.brief.entity.Word;
 import com.sf.honeymorning.brief.repository.BriefRepository;
 import com.sf.honeymorning.brief.repository.TopicModelRepository;
 import com.sf.honeymorning.brief.repository.TopicModelWordRepository;

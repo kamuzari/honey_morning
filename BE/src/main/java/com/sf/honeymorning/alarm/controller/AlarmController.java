@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
-import com.sf.honeymorning.account.authenticater.model.JwtAuthenticationToken;
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.service.AlarmService;
 import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
-import com.sf.honeymorning.user.dto.CustomUserDetails;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

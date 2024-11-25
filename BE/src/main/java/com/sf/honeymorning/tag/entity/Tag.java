@@ -35,8 +35,7 @@ public class Tag extends BaseEntity {
 	private String word;
 
 	/**
-	 * 커스텀 태그인지 확인합니다.
-	 * 0일 경우 커스텀하지 않은 태그이며, 1일 경우 커스텀한 태그입니다.
+	 * 커스텀 태그인지 확인합니다. 0일 경우 커스텀하지 않은 태그이며, 1일 경우 커스텀한 태그입니다.
 	 */
 	@Column(nullable = false, columnDefinition = "INTEGER DEFAULT 1")
 	private Integer isCustom;

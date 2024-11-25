@@ -26,33 +26,10 @@ import com.sf.honeymorning.context.IntegrationEnvironment;
 @AutoConfigureWireMock(port = 8089)
 class QuizGeneratorClientTest extends IntegrationEnvironment {
 	static final int FIXED_QUIZ_SIZE = 2;
-
-	@Autowired
-	private QuizGeneratorClient quizGeneratorClient;
-
 	@Autowired
 	ObjectMapper objectMapper;
-
-	@DisplayName("브리핑 데이터를 응답 받은 후, 이를 기반으로 퀴즈 문제를 만든다 ")
-	@Test
-	void testSend() throws JsonProcessingException {
-		/// given
-		List<QuizResponseDto> expectedResponse = getExpectedResponse();
-		String briefingReadContent = "트럼프 당선이후 많은 비트 코인들이 역대 최고치를 찍으며 경제적 ... ";
-		String expectedBody = objectMapper.writeValueAsString(expectedResponse);
-
-		// when
-		WireMock.stubFor(post(urlEqualTo("/ai/quiz"))
-			.willReturn(aResponse()
-				.withStatus(OK.value())
-				.withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				.withBody(expectedBody)));
-
-		var response = quizGeneratorClient.send(briefingReadContent);
-
-		// then
-		assertThat(response).hasSize(FIXED_QUIZ_SIZE);
-	}
+	@Autowired
+	private QuizGeneratorClient quizGeneratorClient;
 
 	private static @NotNull List<QuizResponseDto> getExpectedResponse() {
 		return List.of(
@@ -73,5 +50,26 @@ class QuizGeneratorClientTest extends IntegrationEnvironment {
 				2
 			)
 		);
+	}
+
+	@DisplayName("브리핑 데이터를 응답 받은 후, 이를 기반으로 퀴즈 문제를 만든다 ")
+	@Test
+	void testSend() throws JsonProcessingException {
+		/// given
+		List<QuizResponseDto> expectedResponse = getExpectedResponse();
+		String briefingReadContent = "트럼프 당선이후 많은 비트 코인들이 역대 최고치를 찍으며 경제적 ... ";
+		String expectedBody = objectMapper.writeValueAsString(expectedResponse);
+
+		// when
+		WireMock.stubFor(post(urlEqualTo("/ai/quiz"))
+			.willReturn(aResponse()
+				.withStatus(OK.value())
+				.withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+				.withBody(expectedBody)));
+
+		var response = quizGeneratorClient.send(briefingReadContent);
+
+		// then
+		assertThat(response).hasSize(FIXED_QUIZ_SIZE);
 	}
 }

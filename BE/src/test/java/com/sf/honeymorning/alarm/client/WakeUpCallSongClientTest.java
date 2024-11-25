@@ -23,10 +23,9 @@ import com.sf.honeymorning.context.IntegrationEnvironment;
 public class WakeUpCallSongClientTest extends IntegrationEnvironment {
 
 	@Autowired
-	private WakeUpCallSongClient songClientTest;
-
-	@Autowired
 	ObjectMapper objectMapper;
+	@Autowired
+	private WakeUpCallSongClient songClientTest;
 
 	@DisplayName("브리핑 데이터를 응답 받은 후, 이를 기반으로 AI 모닝콜 음악을 만든다")
 	@Test

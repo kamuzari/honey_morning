@@ -1,6 +1,5 @@
 package com.sf.honeymorning.alarm.controller;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
@@ -28,7 +27,6 @@ import com.sf.honeymorning.account.handler.LogoutSuccessHandler;
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.service.AlarmService;
 import com.sf.honeymorning.config.WebSecurityConfig;
-import com.sf.honeymorning.config.security.customSecurity.WithJwtMockUser;
 import com.sf.honeymorning.context.MockTestControllerEnvironment;
 
 @WebMvcTest({AlarmController.class,
@@ -67,6 +65,20 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 		//then
 		perform.andExpect(status().isOk());
 		verify(alarmService, times(1)).set(alarmSetRequest, 1L);
+	}
+
+	@Test
+	@DisplayName("나의 알람 설정을 가져온다")
+	void testGetMyAlarm() throws Exception {
+		//given
+		//when
+		ResultActions perform = mockMvc.perform(get(URI_PREFIX)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print());
+
+		//then
+		perform.andExpect(status().isOk());
+		verify(alarmService, times(1)).getMyAlarm(anyLong());
 	}
 
 	@DisplayName("알람 설정을 할 때, ")
@@ -119,20 +131,6 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 					.content(body))
 				.andDo(print());
 		}
-	}
-
-	@Test
-	@DisplayName("나의 알람 설정을 가져온다")
-	void testGetMyAlarm() throws Exception {
-		//given
-		//when
-		ResultActions perform = mockMvc.perform(get(URI_PREFIX)
-				.contentType(MediaType.APPLICATION_JSON))
-			.andDo(print());
-
-		//then
-		perform.andExpect(status().isOk());
-		verify(alarmService, times(1)).getMyAlarm(anyLong());
 	}
 
 }

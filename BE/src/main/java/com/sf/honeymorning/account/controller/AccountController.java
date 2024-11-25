@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
 import com.sf.honeymorning.account.dto.request.AccountSignUpRequest;
 import com.sf.honeymorning.account.dto.request.LoginAuthRequestDto;
 import com.sf.honeymorning.account.dto.response.LoginAuthResponseDto;
@@ -16,7 +17,6 @@ import com.sf.honeymorning.account.dto.response.LogoutAuthResponseDto;
 import com.sf.honeymorning.account.handler.LoginSuccessHandler;
 import com.sf.honeymorning.account.handler.LogoutSuccessHandler;
 import com.sf.honeymorning.account.service.AccountService;
-import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -71,7 +71,6 @@ public class AccountController {
 	public boolean emailCheck(@RequestParam("email") String email) {
 		return accountService.validateEmail(email);
 	}
-
 
 	@Operation(summary = "인증", description = "인증에 성공하면 엑세스 토큰과 리프레시 토큰을 부여 받습니다.")
 	@PostMapping("/login")
