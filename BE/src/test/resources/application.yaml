@@ -48,6 +48,7 @@ file:
       summary: ENC(Cj301Z07a9MFTvutszAHTDpTgPDHSJC2FFKmTQu1a5nFEf0BlmdvbGltFp9AYa58yzW7CPYGSkg=)
       quiz: ENC(zW3TcGnHTLX5Na1Q3LeYkp9doE1F3u5L1bYSvUtrSKq4IJ/Q2OkM3+R/f0Epggu6xFtRksKPShs=)
       music: ENC(v8uwAbdOo/41AGKIKDSi5a+Po/vYAzWFHpkoQZhfD82FFaqcqGotm77x51dnvEGedxAxdkmFRPI=)
+
 jwt:
   issuer: honeymorning
   access-token:
