@@ -33,7 +33,8 @@ public class AccountService {
 	private final JwtProperty jwtProperty;
 
 	public AccountService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder,
-		AlarmRepository alarmRepository, AccountMapper accountMapper, JwtProviderManager jwtProviderManager,
+		AlarmRepository alarmRepository, AccountMapper accountMapper,
+		JwtProviderManager jwtProviderManager,
 		JwtProperty jwtProperty) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;

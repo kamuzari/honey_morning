@@ -14,7 +14,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
 
 import com.sf.honeymorning.account.authenticater.constant.CookieProperty;
@@ -68,11 +67,13 @@ public class WebSecurityConfig {
 			.permitAll()
 			.requestMatchers(HttpMethod.PATCH, this.securityUrlProperty.urlPatternConfig().permitAll().get("PATCH"))
 			.permitAll()
-			.requestMatchers(HttpMethod.DELETE, this.securityUrlProperty.urlPatternConfig().permitAll().get("DELETE"))
+			.requestMatchers(HttpMethod.DELETE,
+				this.securityUrlProperty.urlPatternConfig().permitAll().get("DELETE"))
 			.permitAll()
 			.requestMatchers(HttpMethod.PUT, this.securityUrlProperty.urlPatternConfig().permitAll().get("PUT"))
 			.permitAll()
-			.requestMatchers(HttpMethod.OPTIONS, this.securityUrlProperty.urlPatternConfig().permitAll().get("OPTIONS"))
+			.requestMatchers(HttpMethod.OPTIONS,
+				this.securityUrlProperty.urlPatternConfig().permitAll().get("OPTIONS"))
 			.permitAll()
 			.anyRequest().authenticated()
 			.and()

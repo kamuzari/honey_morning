@@ -28,7 +28,6 @@ import com.sf.honeymorning.domain.brief.dto.response.detail.SummaryResponseDto;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
 import com.sf.honeymorning.tag.entity.Tag;
-import com.sf.honeymorning.user.entity.User;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;

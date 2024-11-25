@@ -24,15 +24,9 @@ public class Alarm extends BaseEntity {
 	private LocalTime wakeUpTime;
 
 	/**
-	 * 알람을 비트마스킹으로 표현합니다.
-	 * 맨 오른쪽 부터 월요일입니다.
-	 * 맨 왼쪽 비트는 사용하지 않아요.
-	 * 왜냐하면 2의 보수의 원리로 인한 이슈가 있기 때문이에요 :)
-	 * 예시)
-	 * - 0100 0000 = Sunday only
-	 * - 0100 0001 = Monday and Sunday
-	 * - 0011 0010 = TuesDay and Thursday and Saturday
-	 * - 0111 1111 = Every day
+	 * 알람을 비트마스킹으로 표현합니다. 맨 오른쪽 부터 월요일입니다. 맨 왼쪽 비트는 사용하지 않아요. 왜냐하면 2의 보수의 원리로 인한 이슈가 있기 때문이에요 :) 예시) - 0100 0000 =
+	 * Sunday only - 0100 0001 = Monday and Sunday - 0011 0010 = TuesDay and Thursday and Saturday - 0111 1111 = Every
+	 * day
 	 */
 	private byte dayOfWeek;
 

@@ -19,10 +19,6 @@ public enum DayOfWeek {
 		this.dayName = dayName;
 	}
 
-	public int getBit() {
-		return bit;
-	}
-
 	public static byte getToday() {
 		return (byte)(LocalDate.now().getDayOfWeek().getValue());
 	}
@@ -31,5 +27,9 @@ public enum DayOfWeek {
 		return (byte)java.util.Arrays.stream(days)
 			.mapToInt(DayOfWeek::getBit)
 			.reduce(0, (a, b) -> a | b);
+	}
+
+	public int getBit() {
+		return bit;
 	}
 }

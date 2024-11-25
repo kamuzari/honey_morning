@@ -1,6 +1,5 @@
 package com.sf.honeymorning.brief.entity;
 
-import com.sf.honeymorning.brief.entity.Brief;
 import com.sf.honeymorning.common.entity.BaseEntity;
 
 import jakarta.persistence.Column;

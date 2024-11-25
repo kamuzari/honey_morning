@@ -25,10 +25,9 @@ import com.sf.honeymorning.context.IntegrationEnvironment;
 public class BriefingClientTest extends IntegrationEnvironment {
 
 	@Autowired
-	private BriefingClient briefingClient;
-
-	@Autowired
 	ObjectMapper objectMapper;
+	@Autowired
+	private BriefingClient briefingClient;
 
 	@DisplayName("알람 브리핑에 필요한 데이터를 외부 요청으로 가져온다")
 	@Test

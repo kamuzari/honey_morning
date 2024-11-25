@@ -29,12 +29,10 @@ class TopicModelingClientTest extends IntegrationEnvironment {
 
 	static final int FIXED_RESPONSE_SECTION_SIZE = 5;
 	static final int FIXED_RESPONSE_DETAIL_WORD_SIZE = 10;
-
-	@Autowired
-	private TopicModelingClient topicModelingClient;
-
 	@Autowired
 	ObjectMapper objectMapper;
+	@Autowired
+	private TopicModelingClient topicModelingClient;
 
 	@DisplayName("브리핑 데이터에서 출현한 주요 관심 키워드들을 가져온다")
 	@Test

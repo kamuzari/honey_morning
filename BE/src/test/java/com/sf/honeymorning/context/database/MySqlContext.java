@@ -10,17 +10,17 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public interface MySqlContext {
-    @Container
-    MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0")
-            .withDatabaseName("test_db")
-            .withUsername("test")
-            .withPassword("test")
-            .withReuse(true);
+	@Container
+	MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0")
+		.withDatabaseName("test_db")
+		.withUsername("test")
+		.withPassword("test")
+		.withReuse(true);
 
-    @DynamicPropertySource
-    static void setDataSourceProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", mysqlContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", mysqlContainer::getUsername);
-        registry.add("spring.datasource.password", mysqlContainer::getPassword);
-    }
+	@DynamicPropertySource
+	static void setDataSourceProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.datasource.url", mysqlContainer::getJdbcUrl);
+		registry.add("spring.datasource.username", mysqlContainer::getUsername);
+		registry.add("spring.datasource.password", mysqlContainer::getPassword);
+	}
 }

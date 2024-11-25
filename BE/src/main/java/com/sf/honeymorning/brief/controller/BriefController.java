@@ -55,7 +55,7 @@ public class BriefController {
 
 		@Parameter(description = "조회할 브리핑의 ID", example = "12345")
 		@PathVariable(name = "brief_id") Long briefId) {
-		BriefDetailResponseDto data = briefService.getBrief(principal.id(),briefId);
+		BriefDetailResponseDto data = briefService.getBrief(principal.id(), briefId);
 
 		return ResponseEntity.ok(data);
 	}
@@ -75,7 +75,7 @@ public class BriefController {
 		@AuthenticationPrincipal
 		JwtAuthentication principal,
 		@RequestParam(value = "page") Integer page) {
-		BriefHistoryResponseDto briefs = briefService.getBriefs(principal.id(),page);
+		BriefHistoryResponseDto briefs = briefService.getBriefs(principal.id(), page);
 		return ResponseEntity.ok(briefs);
 	}
 

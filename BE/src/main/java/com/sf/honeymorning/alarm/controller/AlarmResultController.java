@@ -42,7 +42,7 @@ public class AlarmResultController {
 	@GetMapping
 	public ResponseEntity<List<AlarmResultDto>> getAlarmResult(
 		@AuthenticationPrincipal
-	JwtAuthentication principal) {
+		JwtAuthentication principal) {
 		List<AlarmResultDto> alarmResultDtoList = alarmResultService.findAlarmResult(principal.id());
 		return new ResponseEntity<>(alarmResultDtoList, HttpStatus.OK);
 	}
@@ -61,7 +61,7 @@ public class AlarmResultController {
 		@AuthenticationPrincipal
 		JwtAuthentication principal,
 		@RequestBody AlarmResultDto alarmResultDto) {
-		alarmResultService.saveAlarmResult(principal.id(),alarmResultDto);
+		alarmResultService.saveAlarmResult(principal.id(), alarmResultDto);
 		return new ResponseEntity<>("알람 결과가 성공적으로 저장되었습니다.", HttpStatus.OK);
 	}
 
@@ -78,7 +78,7 @@ public class AlarmResultController {
 	@GetMapping("/streak")
 	public ResponseEntity<?> getStreak(
 		@AuthenticationPrincipal
-	JwtAuthentication principal) {
+		JwtAuthentication principal) {
 		int streak = alarmResultService.getStreak(principal.id());
 		return new ResponseEntity<>(streak, HttpStatus.OK);
 	}
