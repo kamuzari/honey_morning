@@ -5,4 +5,4 @@ spring:
     active: local
 
 jasypt:
-  password: ${JASYPT_PASSWORD}
+  password: ${JASYPT_PASSWORD:honeymorning}
