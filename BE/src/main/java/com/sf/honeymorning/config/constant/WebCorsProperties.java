@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
 
-@ConfigurationProperties(prefix = "app.cors")
+@ConfigurationProperties(prefix = "web.cors")
 public record WebCorsProperties(
 	List<String> allowedOrigins,
 	List<String> allowedMethods,
