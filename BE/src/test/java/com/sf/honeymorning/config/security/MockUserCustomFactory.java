@@ -1,4 +1,4 @@
-package com.sf.honeymorning.config.security.customSecurity;
+package com.sf.honeymorning.config.security;
 
 import java.util.Arrays;
 import java.util.List;

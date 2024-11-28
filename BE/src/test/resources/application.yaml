@@ -83,7 +83,23 @@ security:
       PUT: [ ]
       DELETE: [ ]
       OPTIONS: /**
-
+web:
+  cors:
+    allowed-origins:
+      - http://localhost:3000
+      - https://www.honeymorning.com
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+      - OPTIONS
+    allowed-headers:
+      - SET-COOKIE
+    exposed-headers:
+      - SET-COOKIE
+    allow-credentials: true
 cookie:
   secure: false
   same-site: lax
