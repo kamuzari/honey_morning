@@ -14,16 +14,22 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.sf.honeymorning.account.authenticater.constant.CookieProperty;
 import com.sf.honeymorning.account.authenticater.constant.JwtProperty;
 import com.sf.honeymorning.account.authenticater.constant.SecurityUrlProperty;
 import com.sf.honeymorning.account.authenticater.jwt.JwtAuthenticationFilter;
 import com.sf.honeymorning.account.authenticater.jwt.JwtProviderManager;
+import com.sf.honeymorning.config.constant.WebCorsProperties;
 
 @Configuration
-@EnableConfigurationProperties({SecurityUrlProperty.class, JwtProperty.class, CookieProperty.class})
+@EnableConfigurationProperties({SecurityUrlProperty.class,
+	JwtProperty.class,
+	CookieProperty.class,
+	WebCorsProperties.class})
 @EnableWebSecurity
 public class WebSecurityConfig {
 
@@ -31,13 +37,18 @@ public class WebSecurityConfig {
 	private final CookieProperty cookieProperty;
 	private final SecurityUrlProperty securityUrlProperty;
 	private final JwtProperty jwtProperty;
+	private final WebCorsProperties webCorsProperties;
 
-	public WebSecurityConfig(JwtProviderManager jwtProviderManager, CookieProperty cookieProperty,
-		SecurityUrlProperty securityUrlProperty, JwtProperty jwtProperty) {
+	public WebSecurityConfig(JwtProviderManager jwtProviderManager,
+		CookieProperty cookieProperty,
+		SecurityUrlProperty securityUrlProperty,
+		JwtProperty jwtProperty,
+		WebCorsProperties webCorsProperties) {
 		this.jwtProviderManager = jwtProviderManager;
 		this.cookieProperty = cookieProperty;
 		this.securityUrlProperty = securityUrlProperty;
 		this.jwtProperty = jwtProperty;
+		this.webCorsProperties = webCorsProperties;
 	}
 
 	@Bean
@@ -59,24 +70,28 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		return httpSecurity
-			.authorizeRequests()
-			.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-			.requestMatchers(HttpMethod.GET, this.securityUrlProperty.urlPatternConfig().permitAll().get("GET"))
-			.permitAll()
-			.requestMatchers(HttpMethod.POST, this.securityUrlProperty.urlPatternConfig().permitAll().get("POST"))
-			.permitAll()
-			.requestMatchers(HttpMethod.PATCH, this.securityUrlProperty.urlPatternConfig().permitAll().get("PATCH"))
-			.permitAll()
-			.requestMatchers(HttpMethod.DELETE,
-				this.securityUrlProperty.urlPatternConfig().permitAll().get("DELETE"))
-			.permitAll()
-			.requestMatchers(HttpMethod.PUT, this.securityUrlProperty.urlPatternConfig().permitAll().get("PUT"))
-			.permitAll()
-			.requestMatchers(HttpMethod.OPTIONS,
-				this.securityUrlProperty.urlPatternConfig().permitAll().get("OPTIONS"))
-			.permitAll()
-			.anyRequest().authenticated()
-			.and()
+			.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+				authorizationManagerRequestMatcherRegistry.requestMatchers(CorsUtils::isPreFlightRequest)
+					.permitAll()
+					.requestMatchers(HttpMethod.GET, this.securityUrlProperty.urlPatternConfig().permitAll().get("GET"))
+					.permitAll()
+					.requestMatchers(HttpMethod.POST,
+						this.securityUrlProperty.urlPatternConfig().permitAll().get("POST"))
+					.permitAll()
+					.requestMatchers(HttpMethod.PATCH,
+						this.securityUrlProperty.urlPatternConfig().permitAll().get("PATCH"))
+					.permitAll()
+					.requestMatchers(HttpMethod.DELETE,
+						this.securityUrlProperty.urlPatternConfig().permitAll().get("DELETE"))
+					.permitAll()
+					.requestMatchers(HttpMethod.PUT, this.securityUrlProperty.urlPatternConfig().permitAll().get("PUT"))
+					.permitAll()
+					.requestMatchers(HttpMethod.OPTIONS,
+						this.securityUrlProperty.urlPatternConfig().permitAll().get("OPTIONS"))
+					.permitAll()
+					.anyRequest()
+					.authenticated()
+			)
 			.formLogin(AbstractHttpConfigurer::disable)
 			.csrf(AbstractHttpConfigurer::disable)
 			.headers(AbstractHttpConfigurer::disable)
@@ -84,13 +99,25 @@ public class WebSecurityConfig {
 			.rememberMe(AbstractHttpConfigurer::disable)
 			.logout(AbstractHttpConfigurer::disable)
 			.sessionManagement(AbstractHttpConfigurer::disable)
-			.exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(
-				authenticationEntryPoint()))
+			.exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(authenticationEntryPoint()))
 			.addFilterBefore(
 				new JwtAuthenticationFilter(jwtProviderManager, jwtProperty, cookieProperty),
 				UsernamePasswordAuthenticationFilter.class
 			)
-			// .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(new CorsConfiguration()))
+			.cors(
+				httpSecurityCorsConfigurer -> {
+					CorsConfiguration configuration = new CorsConfiguration();
+					configuration.setAllowedOrigins(webCorsProperties.allowedOrigins());
+					configuration.setAllowedMethods(webCorsProperties.allowedMethods());
+					configuration.setAllowedHeaders(webCorsProperties.allowedHeaders());
+					configuration.setExposedHeaders(webCorsProperties.exposedHeaders());
+					configuration.setAllowCredentials(webCorsProperties.allowCredentials());
+
+					UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+					source.registerCorsConfiguration("/**", configuration);
+
+					httpSecurityCorsConfigurer.configurationSource(source);
+				})
 			.build();
 
 	}
