@@ -4,6 +4,18 @@ import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.equalTo;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
@@ -16,55 +28,35 @@ import com.sf.honeymorning.context.IntegrationEnvironment;
 import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.entity.UserRole;
 import com.sf.honeymorning.user.repository.UserRepository;
+
 import io.restassured.RestAssured;
-import io.restassured.http.Cookie;
 import io.restassured.http.Cookie.Builder;
 import io.restassured.http.Cookies;
-import io.restassured.http.Header;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
 
 public class AlarmIntegrationTest extends IntegrationEnvironment {
 
+	static final Faker FAKER = new Faker();
 	@Value("${jwt.access-token.header}")
 	String accessTokenHeaderName;
-
 	@Value("${jwt.refresh-token.header}")
 	String refreshTokenHeaderName;
-
 	@SpyBean
 	UserRepository userRepository;
-
 	@SpyBean
 	AlarmRepository alarmRepository;
-
 	@SpyBean
 	JwtProviderManager jwtProviderManager;
-
 	@SpyBean
 	ObjectMapper objectMapper;
-
 	@MockBean
 	TokenService tokenService;
-
-	static final Faker FAKER = new Faker();
-
-	@LocalServerPort
-	private int port;
-
 	User authenticationUser;
 	Alarm authUserAlarm;
 	String accessToken;
 	String refreshToken;
 	Cookies authenticationTokens;
+	@LocalServerPort
+	private int port;
 
 	@BeforeEach
 	public void setup() {
@@ -79,7 +71,7 @@ public class AlarmIntegrationTest extends IntegrationEnvironment {
 		);
 		JwtProviderManager.CustomClaim claim = JwtProviderManager.CustomClaim.builder()
 			.userId(authenticationUser.getId())
-			.roles(new String[]{authenticationUser.getRole().name()})
+			.roles(new String[] {authenticationUser.getRole().name()})
 			.build();
 
 		accessToken = jwtProviderManager.generateAccessToken(claim);
@@ -106,7 +98,7 @@ public class AlarmIntegrationTest extends IntegrationEnvironment {
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			authUserAlarm.getId(),
 			LocalTime.now().plusHours(7),
-			(byte) FAKER.number().numberBetween(1, 127),
+			(byte)FAKER.number().numberBetween(1, 127),
 			FAKER.number().numberBetween(1, 10),
 			FAKER.number().numberBetween(1, 10),
 			true
@@ -140,7 +132,7 @@ public class AlarmIntegrationTest extends IntegrationEnvironment {
 			.body("id", equalTo(authUserAlarm.getId().intValue()))
 			.body("wakeUpTime",
 				equalTo(authUserAlarm.getWakeUpTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"))))
-			.body("daysOfWeek", equalTo((int) authUserAlarm.getDayOfWeek()))
+			.body("daysOfWeek", equalTo((int)authUserAlarm.getDayOfWeek()))
 			.body("repeatFrequency", equalTo(authUserAlarm.getRepeatFrequency()))
 			.body("repeatInterval", equalTo(authUserAlarm.getRepeatInterval()))
 			.body("isActive", equalTo(authUserAlarm.isActive()))

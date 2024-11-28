@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 import com.sf.honeymorning.alarm.service.AlarmTagService;
-import com.sf.honeymorning.config.security.customSecurity.WithJwtMockUser;
+import com.sf.honeymorning.config.security.WithJwtMockUser;
 import com.sf.honeymorning.context.MockTestControllerEnvironment;
 
 @WithJwtMockUser
