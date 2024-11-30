@@ -34,7 +34,7 @@ import com.sf.honeymorning.account.handler.LoginSuccessHandler;
 import com.sf.honeymorning.account.handler.LogoutSuccessHandler;
 import com.sf.honeymorning.account.service.AccountService;
 import com.sf.honeymorning.config.WebSecurityConfig;
-import com.sf.honeymorning.config.security.WithJwtMockUser;
+import com.sf.honeymorning.security.WithJwtMockUser;
 import com.sf.honeymorning.user.entity.User;
 
 @WebMvcTest({AccountController.class,

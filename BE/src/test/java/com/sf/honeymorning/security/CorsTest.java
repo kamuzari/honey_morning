@@ -1,4 +1,4 @@
-package com.sf.honeymorning.config.security;
+package com.sf.honeymorning.security;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;

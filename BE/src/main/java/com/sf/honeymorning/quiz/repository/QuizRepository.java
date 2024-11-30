@@ -5,11 +5,11 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sf.honeymorning.brief.entity.Brief;
+import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.quiz.entity.Quiz;
 
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
-	List<Quiz> findByBriefIn(List<Brief> briefs);
+	List<Quiz> findByBriefingIn(List<Briefing> briefing);
 
-	Optional<List<Quiz>> findByBrief(Brief brief);
+	List<Quiz> findByBriefing(Briefing briefing);
 }

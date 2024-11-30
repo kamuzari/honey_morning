@@ -23,12 +23,12 @@ public class TopicModel extends BaseEntity {
 
 	@JoinColumn(name = "brief_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Brief brief;
+	private Briefing briefing;
 
 	private Long sectionId;
 
-	public TopicModel(Brief brief, Long sectionId) {
-		this.brief = brief;
+	public TopicModel(Briefing briefing, Long sectionId) {
+		this.briefing = briefing;
 		this.sectionId = sectionId;
 	}
 
@@ -36,8 +36,8 @@ public class TopicModel extends BaseEntity {
 		return id;
 	}
 
-	public Brief getBrief() {
-		return brief;
+	public Briefing getBriefing() {
+		return briefing;
 	}
 
 	public Long getSectionId() {

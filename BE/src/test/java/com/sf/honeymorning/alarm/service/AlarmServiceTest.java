@@ -20,8 +20,8 @@ import com.sf.honeymorning.alarm.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
-import com.sf.honeymorning.brief.repository.BriefCategoryRepository;
-import com.sf.honeymorning.brief.repository.BriefRepository;
+import com.sf.honeymorning.brief.repository.BriefingTagRepository;
+import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.repository.TopicModelRepository;
 import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
 import com.sf.honeymorning.brief.repository.WordRepository;
@@ -55,7 +55,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 	private AlarmTagRepository alarmTagRepository;
 
 	@Mock
-	private BriefRepository briefRepository;
+	private BriefingRepository briefingRepository;
 
 	@Mock
 	private QuizRepository quizRepository;
@@ -67,7 +67,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 	private TtsUtil ttsUtil;
 
 	@Mock
-	private BriefCategoryRepository briefCategoryRepository;
+	private BriefingTagRepository briefingTagRepository;
 
 	@Test
 	@DisplayName("알람 설정 일부문을 변경한다")
@@ -77,33 +77,33 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			alarmId,
 			LocalTime.now(),
-			(byte)FAKER.number().numberBetween(1, 127),
-			FAKER.number().numberBetween(1, 10),
-			FAKER.number().numberBetween(1, 10),
+			(byte)FAKER_DATE_FACTORY.number().numberBetween(1, 127),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			true
 		);
 
 		Alarm previousAlarm = new Alarm(
 			alarmId,
 			LocalTime.now(),
-			(byte)FAKER.number().numberBetween(1, 127),
-			FAKER.number().numberBetween(1, 10),
-			FAKER.number().numberBetween(1, 10),
+			(byte)FAKER_DATE_FACTORY.number().numberBetween(1, 127),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			true,
-			FAKER.file().fileName()
+			FAKER_DATE_FACTORY.file().fileName()
 		);
 
-		given(alarmRepository.findByUserId(AUTH_ID)).willReturn(Optional.of(previousAlarm));
+		given(alarmRepository.findByUserId(AUTH_USER.getId())).willReturn(Optional.of(previousAlarm));
 
 		//when
-		alarmService.set(requestDto, AUTH_ID);
+		alarmService.set(requestDto, AUTH_USER.getId());
 
 		//then
 		assertThat(previousAlarm.getRepeatFrequency()).isEqualTo(requestDto.repeatFrequency());
 		assertThat(previousAlarm.getRepeatInterval()).isEqualTo(requestDto.repeatInterval());
 		assertThat(previousAlarm.isActive()).isEqualTo(requestDto.isActive());
 		assertThat(previousAlarm.getDayOfWeek()).isEqualTo(requestDto.weekdays());
-		verify(alarmRepository, times(1)).findByUserId(AUTH_ID);
+		verify(alarmRepository, times(1)).findByUserId(AUTH_USER.getId());
 	}
 
 	@Test
@@ -113,15 +113,15 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			1L,
 			LocalTime.now(),
-			(byte)FAKER.number().numberBetween(1, 127),
-			FAKER.number().numberBetween(1, 10),
-			FAKER.number().numberBetween(1, 10),
+			(byte)FAKER_DATE_FACTORY.number().numberBetween(1, 127),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			true
 		);
 
 		//when
 		//then
-		assertThatThrownBy(() -> alarmService.set(requestDto, AUTH_ID))
+		assertThatThrownBy(() -> alarmService.set(requestDto, AUTH_USER.getId()))
 			.isInstanceOf(BusinessException.class);
 	}
 
@@ -132,16 +132,16 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		Alarm expectedMyAlarm = new Alarm(
 			1L,
 			LocalTime.now(),
-			(byte)FAKER.number().numberBetween(1, 127),
-			FAKER.number().numberBetween(1, 10),
-			FAKER.number().numberBetween(1, 10),
+			(byte)FAKER_DATE_FACTORY.number().numberBetween(1, 127),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			true,
-			FAKER.file().fileName()
+			FAKER_DATE_FACTORY.file().fileName()
 		);
 
-		given(alarmRepository.findByUserId(AUTH_ID)).willReturn(Optional.of(expectedMyAlarm));
+		given(alarmRepository.findByUserId(AUTH_USER.getId())).willReturn(Optional.of(expectedMyAlarm));
 		//when
-		AlarmResponse myAlarm = alarmService.getMyAlarm(AUTH_ID);
+		AlarmResponse myAlarm = alarmService.getMyAlarm(AUTH_USER.getId());
 
 		//then
 		assertThat(myAlarm).isNotNull();

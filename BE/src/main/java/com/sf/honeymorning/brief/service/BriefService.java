@@ -13,55 +13,61 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.sf.honeymorning.brief.entity.Brief;
-import com.sf.honeymorning.brief.entity.BriefCategory;
-import com.sf.honeymorning.brief.repository.BriefCategoryRepository;
-import com.sf.honeymorning.brief.repository.BriefRepository;
-import com.sf.honeymorning.brief.repository.WordCloudRepository;
-import com.sf.honeymorning.domain.brief.dto.response.BriefDetailResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.BriefHistoryResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.briefs.BriefHistoryDto;
-import com.sf.honeymorning.domain.brief.dto.response.detail.BriefResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.detail.QuizResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.detail.SummaryResponseDto;
+import com.sf.honeymorning.brief.controller.dto.response.BriefDetailResponseDto;
+import com.sf.honeymorning.brief.controller.dto.response.BriefHistoryResponseDto;
+import com.sf.honeymorning.brief.controller.dto.response.briefs.MyBriefing;
+import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
+import com.sf.honeymorning.brief.entity.Briefing;
+import com.sf.honeymorning.brief.entity.BriefingTag;
+import com.sf.honeymorning.brief.repository.BriefingRepository;
+import com.sf.honeymorning.brief.repository.BriefingTagRepository;
+import com.sf.honeymorning.exception.model.BusinessException;
+import com.sf.honeymorning.exception.model.ErrorProtocol;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
 import com.sf.honeymorning.tag.entity.Tag;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
-@Transactional
 public class BriefService {
 
-	private final BriefRepository briefRepository;
-	private final BriefCategoryRepository briefCategoryRepository;
-	private final WordCloudRepository wordCloudRepository;
-	private final QuizRepository quizRepository;
-	private final com.sf.honeymorning.domain.brief.service.TopicModelService topicModelService;
 	@Value("${file.directory.path.summary}")
 	private String summaryPath;
 	@Value("${file.directory.path.content}")
 	private String contentPath;
 
-	public BriefHistoryResponseDto getBriefs(Long userId, int page) {
-		Page<Brief> briefPage = briefRepository.findByUserId(userId, PageRequest.of(page - 1, 5));
-		List<Brief> briefs = briefPage.getContent();
-		List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(briefs);
-		List<Quiz> quizzes = quizRepository.findByBriefIn(briefs);
-		Map<Long, List<BriefCategory>> briefCategoryByBrief = briefCategories.stream()
-			.collect(Collectors.groupingBy(v -> v.getBrief().getId()));
+	private final BriefingRepository briefingRepository;
+	private final BriefingTagRepository briefingTagRepository;
+	private final QuizRepository quizRepository;
+	private final TopicModelService topicModelService;
+
+	public BriefService(BriefingRepository briefingRepository, BriefingTagRepository briefingTagRepository,
+		QuizRepository quizRepository, TopicModelService topicModelService) {
+		this.briefingRepository = briefingRepository;
+		this.briefingTagRepository = briefingTagRepository;
+		this.quizRepository = quizRepository;
+		this.topicModelService = topicModelService;
+	}
+
+	public BriefHistoryResponseDto getMyBriefings(Long userId, int page) {
+		Page<Briefing> briefPage = briefingRepository.findByUserId(userId, PageRequest.of(page - 1, 5));
+		List<Briefing> briefings = briefPage.getContent();
+		List<BriefingTag> briefCategories = briefingTagRepository.findByBrief(briefings);
+		List<Quiz> quizzes = quizRepository.findByBriefingIn(briefings);
+		Map<Long, List<BriefingTag>> briefCategoryByBrief = briefCategories.stream()
+			.collect(Collectors.groupingBy(v -> v.getBriefing().getId()));
 		Map<Long, List<Quiz>> quizzesByBrief = quizzes.stream()
-			.collect(Collectors.groupingBy(v -> v.getBrief().getId()));
-		return new BriefHistoryResponseDto(briefs.stream()
-			.map(brief -> new BriefHistoryDto(brief.getId(), brief.getCreatedAt(),
-				briefCategoryByBrief.get(brief.getId()).stream().map(BriefCategory::getTag)
+			.collect(Collectors.groupingBy(v -> v.getBriefing().getId()));
+
+		return new BriefHistoryResponseDto(briefings.stream()
+			.map(brief -> new MyBriefing(brief.getId(), brief.getCreatedAt(),
+				briefCategoryByBrief.get(brief.getId()).stream().map(BriefingTag::getTag)
 					.map(Tag::getWord).toList(), brief.getSummary(),
 				quizzesByBrief.get(brief.getId()).stream()
 					.filter(quiz -> quiz.getAnswer().equals(quiz.getSelection()))
@@ -69,32 +75,50 @@ public class BriefService {
 	}
 
 	public BriefDetailResponseDto getBrief(Long userId, Long briefId) {
-		Brief brief = briefRepository.findByUserIdAndId(userId, briefId)
+		Briefing briefing = briefingRepository.findByUserIdAndId(userId, briefId)
 			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
-		boolean canAccess = brief.getUserId().equals(userId);
+		boolean canAccess = briefing.getUserId().equals(userId);
 		if (!canAccess) {
-			throw new IllegalArgumentException("invalid brief");
+			throw new BusinessException("잘못된 접근입니다.", ErrorProtocol.BUSINESS_VIOLATION);
 		}
-		List<BriefCategory> briefCategories = briefCategoryRepository.findByBrief(brief);
-		List<Quiz> quizzes = quizRepository.findByBrief(brief)
-			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
-		return new BriefDetailResponseDto(briefId,
-			new SummaryResponseDto(topicModelService.getTopicModel(briefId),
-				briefCategories.stream()
-					.map(briefCategory -> briefCategory.getTag().getWord()).toList()),
-			new BriefResponseDto(brief.getSummary(), brief.getContent(),
-				brief.getVoiceContentUrl()), quizzes.stream()
-			.map(quiz -> new QuizResponseDto(quiz.getQuestion(), quiz.getOption1(),
-				quiz.getOption2(), quiz.getOption3(), quiz.getOption4(),
-				quiz.getSelection(), quiz.getAnswer())).toList(), brief.getCreatedAt());
+
+		List<BriefingTag> briefCategories = briefingTagRepository.findByBriefing(briefing);
+		List<Quiz> quizzes = quizRepository.findByBriefing(briefing);
+
+		return toBriefDetailResponse(briefing, briefCategories, quizzes);
+	}
+
+	private BriefDetailResponseDto toBriefDetailResponse(
+		Briefing briefing,
+		List<BriefingTag> briefCategories,
+		List<Quiz> quizzes) {
+
+		return new BriefDetailResponseDto(
+			briefing.getId(),
+			briefing.getSummary(),
+			briefing.getContent(),
+			briefing.getVoiceContentUrl(),
+			topicModelService.getTopicModel(briefing.getId()),
+			briefCategories.stream().map(briefingTag -> briefingTag.getTag().getWord()).toList(),
+			quizzes.stream()
+				.map(quiz -> new QuizResponseDto(
+					quiz.getQuestion(),
+					quiz.getOption1(),
+					quiz.getOption2(),
+					quiz.getOption3(),
+					quiz.getOption4(),
+					quiz.getSelection(),
+					quiz.getAnswer()
+				)).toList(),
+			briefing.getCreatedAt());
 	}
 
 	public Resource getBriefSummaryAudio(Long briefId) throws IOException {
-		Brief brief = briefRepository.findById(briefId)
+		Briefing briefing = briefingRepository.findById(briefId)
 			.orElseThrow(
 				() -> new EntityNotFoundException("Brief not found with alarmId: " + briefId));
 
-		Path filePath = Paths.get(summaryPath, brief.getVoiceContentUrl());
+		Path filePath = Paths.get(summaryPath, briefing.getVoiceContentUrl());
 		log.info("파일을 찾습니다: " + filePath);
 		Resource resource = new UrlResource(filePath.toUri());
 
@@ -102,16 +126,16 @@ public class BriefService {
 			log.info("파일을 찾았습니다: " + resource.getFilename());
 			return resource;
 		} else {
-			throw new IOException("Could not read the file: " + brief.getVoiceContentUrl());
+			throw new IOException("Could not read the file: " + briefing.getVoiceContentUrl());
 		}
 	}
 
 	public Resource getBrieContentAudio(Long briefId) throws IOException {
-		Brief brief = briefRepository.findById(briefId)
+		Briefing briefing = briefingRepository.findById(briefId)
 			.orElseThrow(
 				() -> new EntityNotFoundException("Brief not found with alarmId: " + briefId));
 
-		Path filePath = Paths.get(contentPath, brief.getVoiceContentUrl());
+		Path filePath = Paths.get(contentPath, briefing.getVoiceContentUrl());
 		log.info("파일을 찾습니다: " + filePath);
 		Resource resource = new UrlResource(filePath.toUri());
 
@@ -119,7 +143,7 @@ public class BriefService {
 			log.info("파일을 찾았습니다: " + resource.getFilename());
 			return resource;
 		} else {
-			throw new IOException("Could not read the file: " + brief.getVoiceContentUrl());
+			throw new IOException("Could not read the file: " + briefing.getVoiceContentUrl());
 		}
 	}
 

@@ -1,4 +1,4 @@
-package com.sf.honeymorning.domain.brief.dto.response.detail;
+package com.sf.honeymorning.brief.controller.dto.response.detail;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

@@ -11,10 +11,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Brief extends BaseEntity {
+public class Briefing extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,10 +31,30 @@ public class Brief extends BaseEntity {
 	@Column(length = 1000)
 	private String voiceContentUrl;
 
-	public Brief(Long userId, String voiceContent, String readContent, String voiceContentUrl) {
+	public Briefing(Long userId, String voiceContent, String readContent, String voiceContentUrl) {
 		this.userId = userId;
 		this.summary = voiceContent;
 		this.content = readContent;
 		this.voiceContentUrl = voiceContentUrl;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public String getSummary() {
+		return summary;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public String getVoiceContentUrl() {
+		return voiceContentUrl;
 	}
 }

@@ -26,7 +26,7 @@ public class WordCloud extends BaseEntity {
 
 	@JoinColumn(name = "brief_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Brief brief;
+	private Briefing briefing;
 
 	@Column(length = 50, nullable = false)
 	private String keyword;

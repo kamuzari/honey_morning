@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -29,13 +30,13 @@ import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.entity.AlarmTag;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
-import com.sf.honeymorning.brief.entity.Brief;
-import com.sf.honeymorning.brief.entity.BriefCategory;
+import com.sf.honeymorning.brief.entity.Briefing;
+import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModel;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
 import com.sf.honeymorning.brief.entity.Word;
-import com.sf.honeymorning.brief.repository.BriefCategoryRepository;
-import com.sf.honeymorning.brief.repository.BriefRepository;
+import com.sf.honeymorning.brief.repository.BriefingTagRepository;
+import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.repository.TopicModelRepository;
 import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
 import com.sf.honeymorning.brief.repository.WordRepository;
@@ -46,6 +47,7 @@ import com.sf.honeymorning.exception.model.BusinessException;
 import com.sf.honeymorning.exception.model.ErrorProtocol;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
+import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.repository.UserRepository;
 import com.sf.honeymorning.util.TtsUtil;
 
@@ -69,12 +71,12 @@ public class AlarmService {
 	private final AlarmRepository alarmRepository;
 	private final UserRepository userRepository;
 	private final AlarmTagRepository alarmTagRepository;
-	private final BriefRepository briefRepository;
+	private final BriefingRepository briefingRepository;
 	private final QuizRepository quizRepository;
 	private final RestTemplate restTemplate = new RestTemplate();
 	private final TtsUtil ttsUtil;
 	private final int timeGap = 5;
-	private final BriefCategoryRepository briefCategoryRepository;
+	private final BriefingTagRepository briefingTagRepository;
 
 	public AlarmResponse getMyAlarm(Long userId) {
 		Alarm alarm = alarmRepository.findByUserId(userId)
@@ -94,6 +96,10 @@ public class AlarmService {
 
 	@Transactional
 	public void set(AlarmSetRequest alarmRequestDto, Long userId) {
+		List<Alarm> all = alarmRepository.findAll();
+		Optional<User> byId = userRepository.findById(userId);
+
+
 		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new BusinessException(
 				MessageFormat.format("알람이 반드시 존재했어야합니다. userId -> {0}", userId)
@@ -122,12 +128,12 @@ public class AlarmService {
 
 				String voiceContentUrl = null;
 				try {
-					voiceContentUrl = ttsUtil.textToSpeech(briefingResponse.voiceContent(), "summary");
+					voiceContentUrl = ttsUtil.textToSpeech(briefingResponse.voiceContent(), "summaryText");
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
 
-				Brief savedBrief = briefRepository.save(new Brief(alarm.getUserId(),
+				Briefing savedBriefing = briefingRepository.save(new Briefing(alarm.getUserId(),
 					briefingResponse.voiceContent(),
 					briefingResponse.readContent(),
 					voiceContentUrl
@@ -135,8 +141,8 @@ public class AlarmService {
 
 				alarmWithTag.stream()
 					.forEach(
-						alarmTag -> briefCategoryRepository.save(
-							new BriefCategory(savedBrief, alarmTag.getTag())));
+						alarmTag -> briefingTagRepository.save(
+							new BriefingTag(savedBriefing, alarmTag.getTag())));
 				alarm.addMusicFilePath(wakeUpCallSongResponse.url());
 				List<Quiz> quiz = quizResponseDtos.stream().map(quizResponseDto -> {
 					String quizVoiceUrl = null;
@@ -152,7 +158,7 @@ public class AlarmService {
 						.collect(Collectors.toList());
 
 					return new Quiz(
-						savedBrief,
+						savedBriefing,
 						quizResponseDto.problem(),
 						quizResponseDto.answer(),
 						quizOption,
@@ -166,7 +172,7 @@ public class AlarmService {
 					.forEach(entry -> {
 						Long sectionId = entry.getKey();
 						TopicModel savedTopicModel = topicModelRepository.save(
-							new TopicModel(savedBrief, sectionId));
+							new TopicModel(savedBriefing, sectionId));
 
 						entry.getValue()
 							.stream()
@@ -185,10 +191,9 @@ public class AlarmService {
 		LocalDate today = LocalDate.now();
 		LocalDateTime startOfDay = today.atStartOfDay();
 		LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();  // Midnight of next day
-		Brief brief = briefRepository.findByUserAndCreatedAtToday(userId, startOfDay, endOfDay)
+		Briefing briefing = briefingRepository.findByUserAndCreatedAtToday(userId, startOfDay, endOfDay)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
-		List<Quiz> quizzes = quizRepository.findByBrief(brief)
-			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
+		List<Quiz> quizzes = quizRepository.findByBriefing(briefing);
 		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new AlarmFatalException("알람 준비가 안됬어요. 큰일이에요. ㅠ"));
 		List<QuizDto> quizDtos = new ArrayList<>();
@@ -208,9 +213,9 @@ public class AlarmService {
 		return new AlarmStartDto(
 			alarm.getMusicFilePath(),
 			quizDtos,
-			brief.getId(),
-			brief.getSummary(),
-			brief.getVoiceContentUrl()
+			briefing.getId(),
+			briefing.getSummary(),
+			briefing.getVoiceContentUrl()
 		);
 	}
 

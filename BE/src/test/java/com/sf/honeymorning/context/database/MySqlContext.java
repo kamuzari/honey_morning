@@ -10,17 +10,27 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public interface MySqlContext {
+	String VERSION = "mysql:8.0";
+
+	String DATABASE_NAME = "honeymorning";
+	String DATABASE_USERNAME = "test_honeymorning";
+	String DATABASE_PASSWORD = "wldkwhdkkiskkj";
+
+	String DATASOURCE_URL = "spring.datasource.url";
+	String DATASOURCE_USERNAME = "spring.datasource.username";
+	String DATASOURCE_PASSWORD = "spring.datasource.password";
+
 	@Container
-	MySQLContainer<?> mysqlContainer = new MySQLContainer<>("mysql:8.0")
-		.withDatabaseName("test_db")
-		.withUsername("test")
-		.withPassword("test")
+	MySQLContainer<?> mysqlContainer = new MySQLContainer<>(VERSION)
+		.withDatabaseName(DATABASE_NAME)
+		.withUsername(DATABASE_USERNAME)
+		.withPassword(DATABASE_PASSWORD)
 		.withReuse(true);
 
 	@DynamicPropertySource
 	static void setDataSourceProperties(DynamicPropertyRegistry registry) {
-		registry.add("spring.datasource.url", mysqlContainer::getJdbcUrl);
-		registry.add("spring.datasource.username", mysqlContainer::getUsername);
-		registry.add("spring.datasource.password", mysqlContainer::getPassword);
+		registry.add(DATASOURCE_URL, mysqlContainer::getJdbcUrl);
+		registry.add(DATASOURCE_USERNAME, mysqlContainer::getUsername);
+		registry.add(DATASOURCE_PASSWORD, mysqlContainer::getPassword);
 	}
 }

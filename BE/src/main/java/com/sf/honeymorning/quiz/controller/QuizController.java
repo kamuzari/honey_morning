@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sf.honeymorning.domain.brief.dto.response.detail.QuizResponseDto;
+import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.quiz.dto.QuizRequestDto;
 import com.sf.honeymorning.quiz.service.QuizService;
 

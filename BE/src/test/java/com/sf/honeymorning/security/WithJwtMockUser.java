@@ -1,4 +1,4 @@
-package com.sf.honeymorning.config.security;
+package com.sf.honeymorning.security;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
