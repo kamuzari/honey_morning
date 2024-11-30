@@ -21,10 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.sf.honeymorning.alarm.client.dto.QuizOption;
 import com.sf.honeymorning.alarm.client.dto.QuizResponseDto;
-import com.sf.honeymorning.context.IntegrationEnvironment;
+import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
 
 @AutoConfigureWireMock(port = 8089)
-class QuizGeneratorClientTest extends IntegrationEnvironment {
+class QuizGeneratorClientTest extends EndPointIntegrationEnvironment {
 	static final int FIXED_QUIZ_SIZE = 2;
 	@Autowired
 	ObjectMapper objectMapper;

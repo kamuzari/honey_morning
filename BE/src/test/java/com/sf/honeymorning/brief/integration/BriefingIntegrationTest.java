@@ -8,19 +8,23 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+import com.github.javafaker.Faker;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.repository.BriefingTagRepository;
 import com.sf.honeymorning.brief.service.BriefService;
-import com.sf.honeymorning.context.IntegrationEnvironment;
+import com.sf.honeymorning.context.ServiceIntegrationTest;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
 import com.sf.honeymorning.tag.entity.Tag;
 import com.sf.honeymorning.tag.repository.TagRepository;
 
-class BriefingIntegrationTest extends IntegrationEnvironment {
+class BriefingIntegrationTest extends ServiceIntegrationTest {
+
+	protected static final Faker FAKE_DATA_FACTORY = new Faker();
 
 	@Autowired
 	BriefService briefService;
@@ -47,6 +51,7 @@ class BriefingIntegrationTest extends IntegrationEnvironment {
 
 		//when
 		var myBriefings = briefService.getMyBriefings(authUserid, initialPageNumber);
+
 		//then
 		assertThat(myBriefings).isNotNull();
 		assertThat(myBriefings.getMyBriefings()).isNotNull();
@@ -67,7 +72,7 @@ class BriefingIntegrationTest extends IntegrationEnvironment {
 		assertThat(myBriefings.getTotalPage()).isZero();
 	}
 
-	private PageSampleResponse createPagingSampleData(Long authUserId) {
+	PageSampleResponse createPagingSampleData(Long authUserId) {
 		Briefing briefing = briefingRepository.save(new Briefing(
 			authUserId,
 			FAKE_DATA_FACTORY.lorem().sentence(3),

@@ -1,4 +1,4 @@
-package com.sf.honeymorning.alarm;
+package com.sf.honeymorning.alarm.integration;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.equalTo;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,12 +20,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.account.authenticater.jwt.JwtProviderManager;
 import com.sf.honeymorning.account.authenticater.service.TokenService;
-import com.sf.honeymorning.account.dto.request.AccountSignUpRequest;
 import com.sf.honeymorning.account.service.AccountService;
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
-import com.sf.honeymorning.context.IntegrationEnvironment;
+import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
 import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.entity.UserRole;
 import com.sf.honeymorning.user.repository.UserRepository;
@@ -35,7 +33,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.Cookie.Builder;
 import io.restassured.http.Cookies;
 
-public class AlarmIntegrationTest extends IntegrationEnvironment {
+public class AlarmEndPointIntegrationTest extends EndPointIntegrationEnvironment {
 
 	@Value("${jwt.access-token.header}")
 	String accessTokenHeaderName;
@@ -115,7 +113,6 @@ public class AlarmIntegrationTest extends IntegrationEnvironment {
 			FAKE_DATA_FACTORY.number().numberBetween(1, 10),
 			true
 		);
-		List<Alarm> all = alarmRepository.findAll();
 		//when
 		//then
 		given()
