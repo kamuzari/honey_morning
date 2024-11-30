@@ -34,8 +34,9 @@ public class TtsUtil {
 	private final double style = 0.5;
 
 	@Value("${file.directory.path.content}")
-
 	private String contentPath;
+
+
 	@Value("${file.directory.path.summary}")
 	private String summaryPath;
 
@@ -49,7 +50,7 @@ public class TtsUtil {
 	 * TTS API를 활용하여 주어진 텍스트를 음성 파일로 변환하고 저장합니다. 음성 파일 경로를 받은 뒤, 파일 경로를 각 DB에 저장해야 합니다.
 	 *
 	 * @param text     음성으로 변화할 텍스트입니다.
-	 * @param fileType TTS로 만들 타입입니다. 파일 경로가 달라집니다. (ex. "summary", "content", "quiz").
+	 * @param fileType TTS로 만들 타입입니다. 파일 경로가 달라집니다. (ex. "summaryText", "content", "quiz").
 	 * @return 음성 파일 경로를 반환합니다.
 	 * @throws IOException 파일 저장 시 발생한 에러를 반환합니다.
 	 */
@@ -105,7 +106,7 @@ public class TtsUtil {
 		switch (fileType.toLowerCase()) {
 			case "content":
 				return contentPath;
-			case "summary":
+			case "summaryText":
 				return summaryPath;
 			case "quiz":
 				return quizPath;

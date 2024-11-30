@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,9 +19,10 @@ import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.javafaker.Faker;
 import com.sf.honeymorning.account.authenticater.jwt.JwtProviderManager;
 import com.sf.honeymorning.account.authenticater.service.TokenService;
+import com.sf.honeymorning.account.dto.request.AccountSignUpRequest;
+import com.sf.honeymorning.account.service.AccountService;
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
@@ -35,37 +37,47 @@ import io.restassured.http.Cookies;
 
 public class AlarmIntegrationTest extends IntegrationEnvironment {
 
-	static final Faker FAKER = new Faker();
 	@Value("${jwt.access-token.header}")
 	String accessTokenHeaderName;
 	@Value("${jwt.refresh-token.header}")
 	String refreshTokenHeaderName;
+
 	@SpyBean
 	UserRepository userRepository;
+
+	@SpyBean
+	AccountService accountService;
+
 	@SpyBean
 	AlarmRepository alarmRepository;
+
 	@SpyBean
 	JwtProviderManager jwtProviderManager;
+
 	@SpyBean
 	ObjectMapper objectMapper;
+
 	@MockBean
 	TokenService tokenService;
+
+	@LocalServerPort
+	private int port;
+
 	User authenticationUser;
 	Alarm authUserAlarm;
 	String accessToken;
 	String refreshToken;
 	Cookies authenticationTokens;
-	@LocalServerPort
-	private int port;
 
 	@BeforeEach
 	public void setup() {
 		RestAssured.port = port;
-		authenticationUser = userRepository.save(
+
+		authenticationUser = userRepository.saveAndFlush(
 			new User(
-				FAKER.internet().emailAddress(),
+				FAKE_DATA_FACTORY.internet().emailAddress(),
 				"{encrypt password}",
-				FAKER.name().username(),
+				FAKE_DATA_FACTORY.name().username(),
 				UserRole.ROLE_USER
 			)
 		);
@@ -76,7 +88,7 @@ public class AlarmIntegrationTest extends IntegrationEnvironment {
 
 		accessToken = jwtProviderManager.generateAccessToken(claim);
 		refreshToken = jwtProviderManager.generateRefreshToken(authenticationUser.getId());
-		authUserAlarm = alarmRepository.save(Alarm.initialize(authenticationUser.getId()));
+		authUserAlarm = alarmRepository.saveAndFlush(Alarm.initialize(authenticationUser.getId()));
 		authenticationTokens = new Cookies(new Builder(accessTokenHeaderName, accessToken)
 			.setPath("/")
 			.setSameSite("lax")
@@ -98,11 +110,12 @@ public class AlarmIntegrationTest extends IntegrationEnvironment {
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			authUserAlarm.getId(),
 			LocalTime.now().plusHours(7),
-			(byte)FAKER.number().numberBetween(1, 127),
-			FAKER.number().numberBetween(1, 10),
-			FAKER.number().numberBetween(1, 10),
+			(byte)FAKE_DATA_FACTORY.number().numberBetween(1, 127),
+			FAKE_DATA_FACTORY.number().numberBetween(1, 10),
+			FAKE_DATA_FACTORY.number().numberBetween(1, 10),
 			true
 		);
+		List<Alarm> all = alarmRepository.findAll();
 		//when
 		//then
 		given()

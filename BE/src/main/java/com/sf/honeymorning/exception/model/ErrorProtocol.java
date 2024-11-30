@@ -5,7 +5,8 @@ import java.util.StringJoiner;
 import org.springframework.http.HttpStatus;
 
 public enum ErrorProtocol {
-	POLICY_VIOLATION(HttpStatus.INTERNAL_SERVER_ERROR, 1000, "관리자에게 코드로 문의해주세요.", "정책 비즈니스 위반하였습니다.");
+	POLICY_VIOLATION(HttpStatus.INTERNAL_SERVER_ERROR, 1000, "관리자에게 코드로 문의해주세요.", "정책 비즈니스 위반하였습니다."),
+	BUSINESS_VIOLATION(HttpStatus.INTERNAL_SERVER_ERROR, 4004, "잘못된 접근입니다.", "허용하지 않는 접근입니다.");
 
 	private final HttpStatus status;
 	private final int customCode;

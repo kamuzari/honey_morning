@@ -12,9 +12,9 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.sf.honeymorning.brief.entity.Brief;
-import com.sf.honeymorning.brief.repository.BriefRepository;
-import com.sf.honeymorning.domain.brief.dto.response.detail.QuizResponseDto;
+import com.sf.honeymorning.brief.entity.Briefing;
+import com.sf.honeymorning.brief.repository.BriefingRepository;
+import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.quiz.dto.QuizRequestDto;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
@@ -31,29 +31,27 @@ import lombok.extern.slf4j.Slf4j;
 public class QuizService {
 
 	private final QuizRepository quizRepository;
-	private final BriefRepository briefRepository;
+	private final BriefingRepository briefingRepository;
 	@Value("${file.directory.path.quiz}")
 	private String quizPath;
 
-	// 하나의 브리핑에 묶인 두 개의 퀴즈 반환
 	public List<QuizResponseDto> getQuiz(Long briefId) {
-		Brief brief = briefRepository.findById(briefId)
+		Briefing briefing = briefingRepository.findById(briefId)
 			.orElseThrow(() -> new EntityNotFoundException("id에 해당하는 브리핑이 존재하지 않습니다."));
-		List<Quiz> quizList = quizRepository.findByBrief(brief)
-			.orElseThrow(() -> new EntityNotFoundException("브리핑에 해당하는 퀴즈가 존재하지 않습니다."));
+		List<Quiz> quizList = quizRepository.findByBriefing(briefing);
 
 		List<QuizResponseDto> quizResponseDtoList = new ArrayList<>();
 
 		for (Quiz quiz : quizList) {
-			QuizResponseDto quizResponseDto = QuizResponseDto.builder()
-				.question(quiz.getQuestion())
-				.option1(quiz.getOption1())
-				.option2(quiz.getOption2())
-				.option3(quiz.getOption3())
-				.option4(quiz.getOption4())
-				.selectedOption(quiz.getSelection())
-				.answerNumber(quiz.getAnswer())
-				.build();
+			QuizResponseDto quizResponseDto = new QuizResponseDto(
+				quiz.getQuestion(),
+				quiz.getOption1(),
+				quiz.getOption2(),
+				quiz.getOption3(),
+				quiz.getOption4(),
+				quiz.getSelection(),
+				quiz.getAnswer()
+				);
 
 			quizResponseDtoList.add(quizResponseDto);
 		}

@@ -1,4 +1,4 @@
-package com.sf.honeymorning.domain.brief.dto.response;
+package com.sf.honeymorning.brief.controller.dto.response;
 
 public class TopicWord {
 

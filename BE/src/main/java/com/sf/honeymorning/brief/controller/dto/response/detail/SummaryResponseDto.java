@@ -1,4 +1,4 @@
-package com.sf.honeymorning.domain.brief.dto.response.detail;
+package com.sf.honeymorning.brief.controller.dto.response.detail;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class SummaryResponseDto {
-	private List<com.sf.honeymorning.domain.brief.dto.response.detail.TopicModelWordDto> topicModelResponses;
+	private List<TopicModelWordResponse> topicModelResponses;
 
 	@Schema(example = "카테고리리스트 - ['경제', '정치', '고냥이']")
-	private List<String> categories;
+	private List<String> tagNames;
 }

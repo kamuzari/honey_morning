@@ -3,7 +3,7 @@ package com.sf.honeymorning.quiz.entity;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sf.honeymorning.brief.entity.Brief;
+import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.common.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -33,7 +33,7 @@ public class Quiz extends BaseEntity {
 	@JoinColumn(name = "brief_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Brief brief;
+	private Briefing briefing;
 
 	@Column(length = 200, nullable = false)
 	private String question;
@@ -55,7 +55,7 @@ public class Quiz extends BaseEntity {
 	@Column(length = 1000, nullable = true)
 	private String quizVoiceUrl;
 
-	public Quiz(Brief brief,
+	public Quiz(Briefing briefing,
 		String question,
 		Integer answer,
 		List<String> options,
@@ -64,7 +64,7 @@ public class Quiz extends BaseEntity {
 			throw new IllegalArgumentException("객관식은 4지 선다형 입니다.");
 		}
 
-		this.brief = brief;
+		this.briefing = briefing;
 		this.question = question;
 		this.answer = answer;
 		this.option1 = options.get(0);

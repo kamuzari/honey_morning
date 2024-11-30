@@ -1,4 +1,4 @@
-package com.sf.honeymorning.domain.brief.dto.response.detail;
+package com.sf.honeymorning.brief.controller.dto.response.detail;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class WordDto {
+public class WordResponseDto {
 	private String word;
 	private double weight;
 }

@@ -21,7 +21,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @Builder
 public class Tag extends BaseEntity {

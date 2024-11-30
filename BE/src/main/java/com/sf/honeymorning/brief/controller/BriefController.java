@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
+import com.sf.honeymorning.brief.controller.dto.response.BriefHistoryResponseDto;
 import com.sf.honeymorning.brief.service.BriefService;
-import com.sf.honeymorning.domain.brief.dto.response.BriefDetailResponseDto;
-import com.sf.honeymorning.domain.brief.dto.response.BriefHistoryResponseDto;
+import com.sf.honeymorning.brief.controller.dto.response.BriefDetailResponseDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -75,7 +75,7 @@ public class BriefController {
 		@AuthenticationPrincipal
 		JwtAuthentication principal,
 		@RequestParam(value = "page") Integer page) {
-		BriefHistoryResponseDto briefs = briefService.getBriefs(principal.id(), page);
+		BriefHistoryResponseDto briefs = briefService.getMyBriefings(principal.id(), page);
 		return ResponseEntity.ok(briefs);
 	}
 
