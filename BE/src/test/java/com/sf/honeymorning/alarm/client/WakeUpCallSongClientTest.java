@@ -17,10 +17,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.sf.honeymorning.alarm.client.dto.WakeUpCallSongResponse;
-import com.sf.honeymorning.context.IntegrationEnvironment;
+import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
 
 @AutoConfigureWireMock(port = 8089)
-public class WakeUpCallSongClientTest extends IntegrationEnvironment {
+public class WakeUpCallSongClientTest extends EndPointIntegrationEnvironment {
 
 	@Autowired
 	ObjectMapper objectMapper;

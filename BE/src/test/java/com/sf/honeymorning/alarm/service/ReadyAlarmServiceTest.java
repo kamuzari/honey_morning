@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.entity.DayOfWeek;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
-import com.sf.honeymorning.context.IntegrationEnvironment;
+import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
 import com.sf.honeymorning.context.database.MySqlContext;
 import com.sf.honeymorning.util.TimeUtils;
 
-class ReadyAlarmServiceTest extends IntegrationEnvironment implements MySqlContext {
+class ReadyAlarmServiceTest extends EndPointIntegrationEnvironment implements MySqlContext {
 
 	static final byte TOMORROW = (byte)(LocalDate.now().getDayOfWeek().getValue());
 
