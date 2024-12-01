@@ -73,21 +73,21 @@ public class WebSecurityConfig {
 			.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
 				authorizationManagerRequestMatcherRegistry.requestMatchers(CorsUtils::isPreFlightRequest)
 					.permitAll()
-					.requestMatchers(HttpMethod.GET, this.securityUrlProperty.urlPatternConfig().permitAll().get("GET"))
+					.requestMatchers(HttpMethod.GET, this.securityUrlProperty.urlPattern().permitAll().get("GET"))
 					.permitAll()
 					.requestMatchers(HttpMethod.POST,
-						this.securityUrlProperty.urlPatternConfig().permitAll().get("POST"))
+						this.securityUrlProperty.urlPattern().permitAll().get("POST"))
 					.permitAll()
 					.requestMatchers(HttpMethod.PATCH,
-						this.securityUrlProperty.urlPatternConfig().permitAll().get("PATCH"))
+						this.securityUrlProperty.urlPattern().permitAll().get("PATCH"))
 					.permitAll()
 					.requestMatchers(HttpMethod.DELETE,
-						this.securityUrlProperty.urlPatternConfig().permitAll().get("DELETE"))
+						this.securityUrlProperty.urlPattern().permitAll().get("DELETE"))
 					.permitAll()
-					.requestMatchers(HttpMethod.PUT, this.securityUrlProperty.urlPatternConfig().permitAll().get("PUT"))
+					.requestMatchers(HttpMethod.PUT, this.securityUrlProperty.urlPattern().permitAll().get("PUT"))
 					.permitAll()
 					.requestMatchers(HttpMethod.OPTIONS,
-						this.securityUrlProperty.urlPatternConfig().permitAll().get("OPTIONS"))
+						this.securityUrlProperty.urlPattern().permitAll().get("OPTIONS"))
 					.permitAll()
 					.anyRequest()
 					.authenticated()
@@ -123,7 +123,7 @@ public class WebSecurityConfig {
 	}
 
 	private String[] getIgnoringUrl(HttpMethod httpMethod) {
-		return this.securityUrlProperty.urlPatternConfig().ignoring().get(httpMethod.name());
+		return this.securityUrlProperty.urlPattern().ignoring().get(httpMethod.name());
 	}
 }
 
