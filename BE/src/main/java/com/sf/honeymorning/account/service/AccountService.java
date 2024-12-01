@@ -44,6 +44,7 @@ public class AccountService {
 		this.jwtProperty = jwtProperty;
 	}
 
+	@Transactional
 	public void create(AccountSignUpRequest accountSignUpRequest) {
 		if (userRepository.existsByUsername(accountSignUpRequest.username())) {
 			throw new BusinessException("중복된 이메일로 회원가입을 할 수 없어요", ErrorProtocol.POLICY_VIOLATION);

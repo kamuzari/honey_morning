@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TokenService {
+	private static final String PREFIX_KEY = "refreshToken:userId:";
+
 	private final RedisTemplate<String, String> redisTemplate;
 
 	public TokenService(RedisTemplate<String, String> redisTemplate) {
@@ -15,17 +17,24 @@ public class TokenService {
 	}
 
 	public void saveRefreshToken(Long userId, String refreshToken, long timeToLive) {
+		String key = createKey(userId);
 		redisTemplate.opsForValue()
-			.set(userId.toString(), refreshToken, Duration.ofMillis(timeToLive));
+			.set(key, refreshToken, Duration.ofMillis(timeToLive));
 	}
 
 	public String findRefreshTokenByUserId(Long userId) {
+		String key = createKey(userId);
 		ValueOperations<String, String> operations = redisTemplate.opsForValue();
 
-		return operations.get(userId.toString());
+		return operations.get(key);
 	}
 
 	public void remove(Long userId) {
-		redisTemplate.delete(userId.toString());
+		String key = createKey(userId);
+		redisTemplate.delete(key);
+	}
+
+	private String createKey(Long userId) {
+		return String.join("", PREFIX_KEY, userId.toString());
 	}
 }

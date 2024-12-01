@@ -60,7 +60,7 @@ jwt:
   secret-key: ${SECRET_KEY:honey-morning-jwt}
 
 security:
-  url-pattern-config:
+  url-pattern:
     ignoring:
       GET:
         - /v3/api-docs/**

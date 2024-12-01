@@ -5,9 +5,10 @@ spring:
   data:
     redis:
       host: ENC(Mdm3ZYu19EpQS7ZSZ1d/kKG8d/2RGVBy)
-      port: 6379
-      connect-timeout: 30s
-      timeout: 10s
+      port: ENC(u7qkh3ysOlEOXaVQlVJRdw==)
+      connect-timeout: ENC(BR+NA152pLTvtizL5hBrxQ==)
+      timeout: ENC(w952krjtcayAnH1nsIEiSw==)
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ENC(xZDkAzthzyGE1C72KPqfJOuxhc3ayV4fQGZ5md/pzjIPv+QquUXpKEtB/7CVnaqkcxJf4XU/dTpDd3y6k5ntzbRuUN6SxC5Khjzl5MHLUpaWMV05G7qE4tzpLZ9C4GIlXDLPiIHQvif8u8N4H7L9hb6dKHPl08bS)
@@ -16,7 +17,7 @@ spring:
 
   jpa:
     database: mysql
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: create-drop
       show-sql: false
@@ -29,7 +30,6 @@ spring:
   sql:
     init:
       mode: always
-
 
 jwt:
   issuer: ENC(PazcZ21ocRNS74Kr3cHrkhdSjvfSCMzq)
@@ -46,6 +46,8 @@ web:
     allowed-origins:
       - ENC(FUAQL1i0rUJejed6pnrQxK/Ax5PTUpr7wxzTQOLw+PI=)
       - ENC(LCEPAqi3qsGsegiqgzk9CI8yv+VaSzSBru8XOWBM0+n+nJK4+K8dFA==)
+      - ENC(HEdYY0KD9C7eEER+Ma7h4K++mBc66RCVHhLc9/y1j54=)
+      - ENC(6UqINXqO8U6UqkUAIgc71GemHdKAAR9hzMWp+ABL6LE=)
     allowed-methods:
       - ENC(G7ZLJaKSHLuKLIEgEhxClA==)
       - ENC(OMhFJ+01FoMZlyliLnz3bQ==)
@@ -60,7 +62,7 @@ web:
     allow-credentials: true
 
 security:
-  url-pattern-config:
+  url-pattern:
     ignoring:
       GET:
         - ENC(c8vD1N66eJO/GxFSlgRXXKsMOL0+/84U)
@@ -70,6 +72,7 @@ security:
         - ENC(hkWrBlWf8qbdK0T0+jBcCDDOvCQ/H661)
       POST:
         - ENC(cX06x50vqq0M7qcxpQKaU64V8LvxkUDS1+L6lUl8PMQ=)
+        - /api/accounts/login
       PATCH:
         - ENC(iv1dk6YjfwUZCP4o2mbeAi+RpQwpTAs5)
       PUT:

@@ -45,10 +45,8 @@ public class AlarmController {
 		)
 	})
 	@PatchMapping
-	public void set(
-		@AuthenticationPrincipal
-		JwtAuthentication principal
-		, @Valid @RequestBody AlarmSetRequest alarmRequestDto) {
+	public void set(@AuthenticationPrincipal JwtAuthentication principal,
+		@Valid @RequestBody AlarmSetRequest alarmRequestDto) {
 
 		alarmService.set(alarmRequestDto, principal.id());
 	}
@@ -64,8 +62,7 @@ public class AlarmController {
 		)
 	})
 	@GetMapping
-	public AlarmResponse read(@AuthenticationPrincipal
-	JwtAuthentication principal) {
+	public AlarmResponse readMine(@AuthenticationPrincipal JwtAuthentication principal) {
 		return alarmService.getMyAlarm(principal.id());
 	}
 

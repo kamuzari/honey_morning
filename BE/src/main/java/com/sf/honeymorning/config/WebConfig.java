@@ -10,6 +10,8 @@ import com.sf.honeymorning.config.constant.WebCorsProperties;
 @EnableConfigurationProperties(WebCorsProperties.class)
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+	private static final String PATH_PATTERN = "/**";
+
 	private final WebCorsProperties webCorsProperties;
 
 	public WebConfig(WebCorsProperties webCorsProperties) {
@@ -18,12 +20,12 @@ public class WebConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**")
-			.allowedOrigins("http://localhost:5173")
-			.allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-			.allowedHeaders("Set-Cookie")
-			.exposedHeaders("Set-Cookie")
-			.allowCredentials(true);
+		registry.addMapping(PATH_PATTERN)
+			.allowedOrigins(webCorsProperties.allowedOrigins().toArray(String[]::new))
+			.allowedMethods(webCorsProperties.allowedMethods().toArray(String[]::new))
+			.allowedHeaders(webCorsProperties.allowedHeaders().toArray(String[]::new))
+			.exposedHeaders(webCorsProperties.allowedHeaders().toArray(String[]::new))
+			.allowCredentials(webCorsProperties.allowCredentials());
 	}
 
 }
