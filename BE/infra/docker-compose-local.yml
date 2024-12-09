@@ -1,8 +1,12 @@
+version: "3.8"
+
 services:
   database:
     image: mysql:8.0
     container_name: database
     restart: unless-stopped
+    mem_limit: "1g"
+    cpus: "1.5"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: honeymorning
@@ -16,6 +20,8 @@ services:
     image: redis:6.2
     container_name: redis
     restart: unless-stopped
+    mem_limit: "1g"
+    cpus: "1.5"
     environment:
       TZ: Asia/Seoul
     ports:
@@ -52,5 +58,35 @@ services:
     depends_on:
       - redis
 
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15692:15692"
+    mem_limit: "1g"
+    cpus: "1.5"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+      RABBITMQ_PROMETHEUS_EXPORTER: true
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./configuration/local/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
 volumes:
   redis_data:

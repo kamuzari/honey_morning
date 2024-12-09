@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: honeymorning
   data:
     redis:
       connect-timeout: 30s
@@ -22,6 +24,14 @@ spring:
   sql:
     init:
       mode: always
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+    publisher-confirm-type: correlated
+    publisher-returns: true
 
 jasypt:
   password: ${JASYPT_PASSWORD:honeymorning}
@@ -83,6 +93,7 @@ security:
       PUT: [ ]
       DELETE: [ ]
       OPTIONS: /**
+
 web:
   cors:
     allowed-origins:
@@ -100,12 +111,28 @@ web:
     exposed-headers:
       - SET-COOKIE
     allow-credentials: true
+
 cookie:
   secure: false
   same-site: lax
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, health
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    enable:
+      all: true
 
 logging:
   level:
     root: INFO
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.amqp: DEBUG
+    org.springframework.amqp.rabbit: DEBUG
+    com.rabbitmq.client: DEBUG
