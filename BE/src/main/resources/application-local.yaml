@@ -111,6 +111,17 @@ file:
       quiz: ENC(zW3TcGnHTLX5Na1Q3LeYkp9doE1F3u5L1bYSvUtrSKq4IJ/Q2OkM3+R/f0Epggu6xFtRksKPShs=)
       music: ENC(v8uwAbdOo/41AGKIKDSi5a+Po/vYAzWFHpkoQZhfD82FFaqcqGotm77x51dnvEGedxAxdkmFRPI=)
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, health
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    enable:
+      all: true
 logging:
   level:
     root: info
