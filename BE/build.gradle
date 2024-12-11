@@ -48,6 +48,13 @@ dependencies {
     // Feign
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
+    // RabbitMQ
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
+    // Metric
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
     implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     implementation 'org.json:json:20210307'
 
@@ -58,9 +65,11 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'io.rest-assured:rest-assured'
-    testImplementation 'org.testcontainers:mysql'
     testImplementation 'com.h2database:h2'
-    testImplementation "org.testcontainers:junit-jupiter"
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:rabbitmq'
+    testImplementation 'org.testcontainers:mysql'
     testImplementation 'org.springframework.cloud:spring-cloud-contract-stub-runner'
     testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:4.0.4'
 

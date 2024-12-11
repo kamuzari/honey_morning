@@ -31,6 +31,21 @@ spring:
     init:
       mode: always
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+    publisher-confirm-type: correlated
+    publisher-returns: true
+
+
+    queues:
+      dead-letter:
+        name: "ai-dead-letter-queue"
+        durable: true
+        exchange: "dead-letter-exchange"
+
 jwt:
   issuer: ENC(PazcZ21ocRNS74Kr3cHrkhdSjvfSCMzq)
   access-token:

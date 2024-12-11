@@ -26,6 +26,8 @@ public class TopicModelWord extends BaseEntity {
 	@Column(name = "topic_model_word_id")
 	private Long id;
 
+	private Long sectionId;
+
 	@JoinColumn(name = "topic_model_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private TopicModel topicModel;
