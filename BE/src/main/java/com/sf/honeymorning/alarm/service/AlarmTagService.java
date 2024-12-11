@@ -70,10 +70,10 @@ public class AlarmTagService {
 				}
 			}
 
-			Tag tempTag = Tag.builder()
-				.word(word)
-				.isCustom(customNum)
-				.build();
+			Tag tempTag = new Tag(
+				word,
+				customNum
+			);
 
 			tag = tagRepository.save(tempTag);
 		}
@@ -114,10 +114,9 @@ public class AlarmTagService {
 		for (String word : wordList) {
 			Tag tag = tagRepository.findByWord(word)
 				.orElseGet(() -> tagRepository.save(
-					Tag.builder()
-						.word(word)
-						.isCustom(0) // 커스텀하지 않은 태그로 추가
-						.build()
+					new Tag(
+						word, 0
+					)
 				));
 			newTags.add(tag);
 		}

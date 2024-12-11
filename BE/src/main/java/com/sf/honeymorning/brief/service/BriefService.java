@@ -37,15 +37,14 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class BriefService {
 
-	@Value("${file.directory.path.summary}")
-	private String summaryPath;
-	@Value("${file.directory.path.content}")
-	private String contentPath;
-
 	private final BriefingRepository briefingRepository;
 	private final BriefingTagRepository briefingTagRepository;
 	private final QuizRepository quizRepository;
 	private final TopicModelService topicModelService;
+	@Value("${file.directory.path.summary}")
+	private String summaryPath;
+	@Value("${file.directory.path.content}")
+	private String contentPath;
 
 	public BriefService(BriefingRepository briefingRepository, BriefingTagRepository briefingTagRepository,
 		QuizRepository quizRepository, TopicModelService topicModelService) {

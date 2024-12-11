@@ -91,7 +91,7 @@ public class BriefingServiceTest extends MockTestServiceEnvironment {
 
 		//when
 		//then
-		assertThatThrownBy(()-> sut.getBrief(AUTH_USER.getId(), briefing.getId()))
+		assertThatThrownBy(() -> sut.getBrief(AUTH_USER.getId(), briefing.getId()))
 			.isInstanceOf(BusinessException.class);
 		verify(briefingRepository, times(1)).findByUserIdAndId(any(), any());
 	}

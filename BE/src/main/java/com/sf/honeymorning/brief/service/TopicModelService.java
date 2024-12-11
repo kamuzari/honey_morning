@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.sf.honeymorning.brief.controller.dto.response.detail.TopicModelWordResponse;
+import com.sf.honeymorning.brief.controller.dto.response.detail.WordResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.TopicModel;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
@@ -12,8 +14,6 @@ import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.repository.TopicModelRepository;
 import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
 import com.sf.honeymorning.brief.repository.WordRepository;
-import com.sf.honeymorning.brief.controller.dto.response.detail.TopicModelWordResponse;
-import com.sf.honeymorning.brief.controller.dto.response.detail.WordResponseDto;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -52,8 +52,8 @@ public class TopicModelService {
 			}
 			TopicModelWordResponse topicModelWordResponse =
 				TopicModelWordResponse.builder().id(tm.getSectionId())
-				.words(wordResponseDtoList)
-				.build();
+					.words(wordResponseDtoList)
+					.build();
 
 			topicModelWordResponseList.add(topicModelWordResponse);
 		}

@@ -20,9 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 public class RabbitConfig {
 	public static final String AI_GENERATIVE_ALARM_CONTENTS_QUEUE_NAME = "ai.generative.alarm_contents";
 	public static final String AI_GENERATED_ALARM_CONTENTS_RESPONSE_QUEUE_NAME = "ai.generated.alarm_contents_response";
-
-	private static final String DEAD_LETTER_ROUTING_KEY_HEADER_NAME = "x-dead-letter-routing-key";
 	public static final String DEAD_LETTER_EXCHANGE_HEADER_NAME = "x-dead-letter-exchange";
+	private static final String DEAD_LETTER_ROUTING_KEY_HEADER_NAME = "x-dead-letter-routing-key";
 
 	@Bean
 	public Jackson2JsonMessageConverter jsonMessageConverter() {

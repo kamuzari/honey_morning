@@ -12,9 +12,9 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
-import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.quiz.dto.QuizRequestDto;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
@@ -51,7 +51,7 @@ public class QuizService {
 				quiz.getOption4(),
 				quiz.getSelection(),
 				quiz.getAnswer()
-				);
+			);
 
 			quizResponseDtoList.add(quizResponseDto);
 		}

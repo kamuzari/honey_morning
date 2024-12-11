@@ -99,7 +99,8 @@ public class WebSecurityConfig {
 			.rememberMe(AbstractHttpConfigurer::disable)
 			.logout(AbstractHttpConfigurer::disable)
 			.sessionManagement(AbstractHttpConfigurer::disable)
-			.exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(authenticationEntryPoint()))
+			.exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer.authenticationEntryPoint(
+				authenticationEntryPoint()))
 			.addFilterBefore(
 				new JwtAuthenticationFilter(jwtProviderManager, jwtProperty, cookieProperty),
 				UsernamePasswordAuthenticationFilter.class
