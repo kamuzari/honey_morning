@@ -2,7 +2,6 @@ package com.sf.honeymorning.brief.entity;
 
 import java.util.List;
 
-import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.common.entity.BaseEntity;
 import com.sf.honeymorning.quiz.entity.Quiz;
 
@@ -79,7 +78,6 @@ public class Briefing extends BaseEntity {
 		this.quizzes = quizzes;
 		this.topicModels = topicModels;
 	}
-
 
 	public Long getId() {
 		return id;

@@ -57,15 +57,13 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationEnvironment
 
 	@MockBean
 	TokenService tokenService;
-
-	@LocalServerPort
-	private int port;
-
 	User authenticationUser;
 	Alarm authUserAlarm;
 	String accessToken;
 	String refreshToken;
 	Cookies authenticationTokens;
+	@LocalServerPort
+	private int port;
 
 	@BeforeEach
 	public void setup() {

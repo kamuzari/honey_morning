@@ -21,10 +21,9 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class SwaggerConfig {
 
+	private final JwtProperty jwtProperty;
 	@Value("${spring.application.name}")
 	String applicationName;
-
-	private final JwtProperty jwtProperty;
 
 	public SwaggerConfig(JwtProperty jwtProperty) {
 		this.jwtProperty = jwtProperty;

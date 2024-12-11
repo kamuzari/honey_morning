@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.entity.DayOfWeek;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
+import com.sf.honeymorning.brief.entity.Briefing;
+import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.util.TimeUtils;
 
 @Transactional(readOnly = true)
@@ -17,9 +19,11 @@ public class ReadyAlarmService {
 
 	public static final int FIXED_NEXT_MINUTE = 40;
 	private final AlarmRepository alarmRepository;
+	private final BriefingRepository briefingRepository;
 
-	public ReadyAlarmService(AlarmRepository alarmRepository) {
+	public ReadyAlarmService(AlarmRepository alarmRepository, BriefingRepository briefingRepository) {
 		this.alarmRepository = alarmRepository;
+		this.briefingRepository = briefingRepository;
 	}
 
 	public List<Alarm> getReadyAlarm() {
@@ -27,6 +31,11 @@ public class ReadyAlarmService {
 		byte dayOfWeekMask = DayOfWeek.getToday();
 
 		return alarmRepository.findActiveAlarmsForToday(dayOfWeekMask, timeAfter40Minutes);
+	}
+
+	@Transactional
+	public void bulkSave(Briefing briefing) {
+		briefingRepository.save(briefing);
 	}
 
 }

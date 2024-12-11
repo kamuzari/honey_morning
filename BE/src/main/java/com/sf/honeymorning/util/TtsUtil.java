@@ -36,7 +36,6 @@ public class TtsUtil {
 	@Value("${file.directory.path.content}")
 	private String contentPath;
 
-
 	@Value("${file.directory.path.summary}")
 	private String summaryPath;
 

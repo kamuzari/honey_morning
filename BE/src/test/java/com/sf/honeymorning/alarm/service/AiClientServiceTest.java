@@ -15,15 +15,10 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.amqp.core.ReturnedMessage;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.RabbitMQContainer;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -116,7 +111,8 @@ class AiClientServiceTest extends ServiceIntegrationTest implements RabbitMqCont
 			"https://cdn.ycloud.com/03jidmmk39d"
 		);
 
-		rabbitTemplate.convertAndSend("", RabbitConfig.AI_GENERATED_ALARM_CONTENTS_RESPONSE_QUEUE_NAME, expectResponseDto);
+		rabbitTemplate.convertAndSend("", RabbitConfig.AI_GENERATED_ALARM_CONTENTS_RESPONSE_QUEUE_NAME,
+			expectResponseDto);
 
 		//when
 		//then

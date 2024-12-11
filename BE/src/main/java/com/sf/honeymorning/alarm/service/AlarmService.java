@@ -35,8 +35,8 @@ import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModel;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
 import com.sf.honeymorning.brief.entity.Word;
-import com.sf.honeymorning.brief.repository.BriefingTagRepository;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
+import com.sf.honeymorning.brief.repository.BriefingTagRepository;
 import com.sf.honeymorning.brief.repository.TopicModelRepository;
 import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
 import com.sf.honeymorning.brief.repository.WordRepository;
@@ -98,7 +98,6 @@ public class AlarmService {
 	public void set(AlarmSetRequest alarmRequestDto, Long userId) {
 		List<Alarm> all = alarmRepository.findAll();
 		Optional<User> byId = userRepository.findById(userId);
-
 
 		Alarm alarm = alarmRepository.findByUserId(userId)
 			.orElseThrow(() -> new BusinessException(
@@ -172,7 +171,7 @@ public class AlarmService {
 					.forEach(entry -> {
 						Long sectionId = entry.getKey();
 						TopicModel savedTopicModel = topicModelRepository.save(
-							new TopicModel(savedBriefing, sectionId));
+							new TopicModel(savedBriefing, sectionId.intValue()));
 
 						entry.getValue()
 							.stream()

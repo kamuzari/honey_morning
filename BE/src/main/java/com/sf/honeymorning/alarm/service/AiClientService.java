@@ -92,7 +92,7 @@ public class AiClientService {
 
 	private String textToSpeechSafe(String text, String type) {
 		try {
-			return ttsUtil.createVoice(text, type);
+			return ttsUtil.textToSpeech(text, type);
 		} catch (IOException e) {
 			throw new BusinessException("TTS 생성 실패", e, ErrorProtocol.READY_TO_ALARM_VOICE_TRANSLATION_FAIL);
 		}
