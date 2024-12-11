@@ -82,7 +82,6 @@ class BriefingIntegrationTest extends ServiceIntegrationTest {
 
 		Tag tag = tagRepository.save(
 			new Tag(
-				FAKE_DATA_FACTORY.number().randomNumber(),
 				"경제"
 				, 0
 			));
