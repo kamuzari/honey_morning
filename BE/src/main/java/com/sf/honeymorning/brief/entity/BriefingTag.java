@@ -35,4 +35,8 @@ public class BriefingTag extends BaseEntity {
 		this.briefing = briefing;
 		this.tag = tag;
 	}
+
+	public BriefingTag(Tag tag) {
+		this.tag = tag;
+	}
 }

@@ -25,11 +25,23 @@ public class TopicModel extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Briefing briefing;
 
-	private Long sectionId;
+	private int sectionId;
 
-	public TopicModel(Briefing briefing, Long sectionId) {
+	@Column(length = 50, nullable = false)
+	private String word;
+
+	@Column(nullable = false, columnDefinition = "DECIMAL(20, 18) DEFAULT 0.0")
+	private Double weight = 0.0;
+
+	public TopicModel(Briefing briefing, int sectionId) {
 		this.briefing = briefing;
 		this.sectionId = sectionId;
+	}
+
+	public TopicModel(int sectionId, String word, Double weight) {
+		this.sectionId = sectionId;
+		this.word = word;
+		this.weight = weight;
 	}
 
 	public Long getId() {
@@ -40,7 +52,7 @@ public class TopicModel extends BaseEntity {
 		return briefing;
 	}
 
-	public Long getSectionId() {
+	public long getSectionId() {
 		return sectionId;
 	}
 }
