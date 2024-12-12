@@ -1,4 +1,4 @@
-package com.sf.honeymorning.alarm.service;
+package com.sf.honeymorning.alarm.integration;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,16 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.entity.DayOfWeek;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
+import com.sf.honeymorning.alarm.service.PreparedAlarmContentService;
 import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
 import com.sf.honeymorning.context.database.MySqlContext;
 import com.sf.honeymorning.util.TimeUtils;
 
-class ReadyAlarmServiceTest extends EndPointIntegrationEnvironment implements MySqlContext {
+class PreparedAlarmContentServiceIntegrationTest extends EndPointIntegrationEnvironment implements MySqlContext {
 
 	static final byte TOMORROW = (byte)(LocalDate.now().getDayOfWeek().getValue());
 
 	@Autowired
-	ReadyAlarmService readyAlarmService;
+	PreparedAlarmContentService preparedAlarmContentService;
 
 	@Autowired
 	AlarmRepository alarmRepository;
@@ -71,7 +72,7 @@ class ReadyAlarmServiceTest extends EndPointIntegrationEnvironment implements My
 	void testGetTodayScheduledAlarms() {
 		//given
 		//when
-		List<Alarm> alarms = readyAlarmService.getReadyAlarm();
+		List<Alarm> alarms = preparedAlarmContentService.getReadyAlarm();
 		//then
 		Assertions.assertThat(alarms).hasSize(todayScheduledAlarmSize);
 	}
