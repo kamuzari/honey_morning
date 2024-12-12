@@ -4,15 +4,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
+import com.sf.honeymorning.alarm.controller.dto.response.PreparedAlarmContentResponse;
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.service.AlarmService;
+import com.sf.honeymorning.alarm.service.PreparedAlarmContentService;
 import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,9 +30,11 @@ import jakarta.validation.Valid;
 public class AlarmController {
 
 	private final AlarmService alarmService;
+	private final PreparedAlarmContentService preparedAlarmContentService;
 
-	public AlarmController(AlarmService alarmService) {
+	public AlarmController(AlarmService alarmService, PreparedAlarmContentService preparedAlarmContentService) {
 		this.alarmService = alarmService;
+		this.preparedAlarmContentService = preparedAlarmContentService;
 	}
 
 	@Operation(
@@ -67,18 +70,18 @@ public class AlarmController {
 	}
 
 	@Operation(
-		summary = "사용자 알람 시작"
+		summary = "알람 시작 전에 준비된 알람 콘텐츠들을 모두 가져옵니다."
 	)
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "알람 시작 성공",
+			description = "준비된 콘텐츠 전달 성공",
 			content = @Content(schema = @Schema(implementation = AlarmStartDto.class))
 		)
 	})
-	@PostMapping("/start")
-	public AlarmStartDto start(Long userId) {
-		return alarmService.getThings(userId);
+	@GetMapping("/prepared")
+	public PreparedAlarmContentResponse getPreparedAlarmContents(@AuthenticationPrincipal JwtAuthentication principal) {
+		return preparedAlarmContentService.getPreparedAlarmContents(principal.id());
 	}
 
 	@Operation(
@@ -92,6 +95,24 @@ public class AlarmController {
 	})
 	@GetMapping("/sleep")
 	public ResponseEntity<?> sleep(
+		@AuthenticationPrincipal
+		JwtAuthentication principal
+	) {
+		alarmService.getSleep(principal.id());
+		return ResponseEntity.ok(null);
+	}
+
+	@Operation(
+		summary = "수면 모드 확인"
+	)
+	@ApiResponses(value = {
+		@ApiResponse(
+			responseCode = "200",
+			description = "알람 시작 성공"
+		)
+	})
+	@GetMapping("/sleep")
+	public ResponseEntity<?> canSleepMode(
 		@AuthenticationPrincipal
 		JwtAuthentication principal
 	) {
