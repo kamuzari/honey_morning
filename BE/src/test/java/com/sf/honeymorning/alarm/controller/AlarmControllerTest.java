@@ -26,6 +26,7 @@ import com.sf.honeymorning.account.handler.LoginSuccessHandler;
 import com.sf.honeymorning.account.handler.LogoutSuccessHandler;
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.service.AlarmService;
+import com.sf.honeymorning.alarm.service.PreparedAlarmContentService;
 import com.sf.honeymorning.config.WebSecurityConfig;
 import com.sf.honeymorning.context.MockTestControllerEnvironment;
 
@@ -41,6 +42,9 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 
 	@MockBean
 	AlarmService alarmService;
+
+	@MockBean
+	PreparedAlarmContentService preparedAlarmContentService;
 
 	@Test
 	@DisplayName("나의 알람 설정 일부문을 변경한다")

@@ -1,4 +1,4 @@
-package com.sf.honeymorning.exception.alarm;
+package com.sf.honeymorning.alarm.exception;
 
 public class AlarmFatalException extends RuntimeException {
 	public AlarmFatalException(String message) {

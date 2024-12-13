@@ -1,4 +1,4 @@
-package com.sf.honeymorning.acount;
+package com.sf.honeymorning.acount.controller;
 
 import static com.sf.honeymorning.user.entity.UserRole.ROLE_USER;
 import static org.mockito.ArgumentMatchers.any;

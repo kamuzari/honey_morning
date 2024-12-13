@@ -26,4 +26,6 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 		@Param("dayOfWeekMask") byte dayOfWeekMask,
 		@Param("endTime") LocalTime endTime
 	);
+
+	Optional<Alarm> findByUserIdAndIsActiveTrue(Long userId);
 }

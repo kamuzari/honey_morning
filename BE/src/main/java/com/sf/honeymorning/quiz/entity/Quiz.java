@@ -27,12 +27,10 @@ public class Quiz extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "quiz_id")
 	private Long id;
 
-	@JoinColumn(name = "brief_id")
+	@JoinColumn(name = "briefing_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
 	private Briefing briefing;
 
 	@Column(length = 200, nullable = false)

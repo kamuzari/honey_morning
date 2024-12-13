@@ -18,10 +18,10 @@ import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
-import com.sf.honeymorning.brief.entity.TopicModel;
+import com.sf.honeymorning.brief.entity.TopicModelWord;
 import com.sf.honeymorning.config.RabbitConfig;
-import com.sf.honeymorning.exception.model.BusinessException;
-import com.sf.honeymorning.exception.model.ErrorProtocol;
+import com.sf.honeymorning.common.exception.model.BusinessException;
+import com.sf.honeymorning.common.exception.model.ErrorProtocol;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.tag.entity.Tag;
 import com.sf.honeymorning.util.TtsUtil;
@@ -32,14 +32,14 @@ public class AiClientService {
 	public static final String PUBLISH_QUEUE_NAME = RabbitConfig.AI_GENERATIVE_ALARM_CONTENTS_QUEUE_NAME;
 	public static final String SUBSCRIBE_QUEUE_NAME = RabbitConfig.AI_GENERATED_ALARM_CONTENTS_RESPONSE_QUEUE_NAME;
 
-	private final ReadyAlarmService readyAlarmService;
+	private final PreparedAlarmContentService preparedAlarmContentService;
 	private final AlarmTagRepository alarmTagRepository;
 	private final RabbitTemplate rabbitTemplate;
 	private final TtsUtil ttsUtil;
 
-	public AiClientService(ReadyAlarmService readyAlarmService, AlarmTagRepository alarmTagRepository,
+	public AiClientService(PreparedAlarmContentService preparedAlarmContentService, AlarmTagRepository alarmTagRepository,
 		RabbitTemplate rabbitTemplate, TtsUtil ttsUtil) {
-		this.readyAlarmService = readyAlarmService;
+		this.preparedAlarmContentService = preparedAlarmContentService;
 		this.alarmTagRepository = alarmTagRepository;
 		this.rabbitTemplate = rabbitTemplate;
 		this.ttsUtil = ttsUtil;
@@ -47,7 +47,7 @@ public class AiClientService {
 
 	@Scheduled(fixedRate = 60000)
 	public void ready() {
-		readyAlarmService.getReadyAlarm()
+		preparedAlarmContentService.getReadyAlarm()
 			.forEach(alarm -> {
 				List<AlarmTag> alarmWithTag = alarmTagRepository.findByAlarmWithTag(alarm);
 				List<String> tags = alarmWithTag.stream().map(AlarmTag::getTag)
@@ -64,13 +64,16 @@ public class AiClientService {
 
 	@RabbitListener(queues = SUBSCRIBE_QUEUE_NAME)
 	public void setAllBriefing(AiResponseDto response) {
+		String wakeUpCallPath = response.AiWakeUpCallPath();
+
+
 		String briefingVoice = textToSpeechSafe(response.aiBriefings().voiceContent(), "summaryText");
 		Map<AiQuizDto, String> quizVoices = response.aiQuizzes()
 			.stream()
 			.map(aiQuizDto -> Map.entry(aiQuizDto, textToSpeechSafe(aiQuizDto.problem(), "quiz")))
 			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-		readyAlarmService.bulkSave(
+		preparedAlarmContentService.bulkSave(
 			new Briefing(
 				response.userId(),
 				response.aiBriefings().voiceContent(),
@@ -83,7 +86,7 @@ public class AiClientService {
 						aiQuizDto.selections(),
 						quizVoices.get(aiQuizDto)
 					)).toList(),
-				response.aiTopics().stream().map(aiTopicDto -> new TopicModel(
+				response.aiTopics().stream().map(aiTopicDto -> new TopicModelWord(
 					aiTopicDto.sectionId(),
 					aiTopicDto.word(),
 					aiTopicDto.weight())).toList()

@@ -22,11 +22,9 @@ import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.repository.BriefingTagRepository;
-import com.sf.honeymorning.brief.repository.TopicModelRepository;
 import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
-import com.sf.honeymorning.brief.repository.WordRepository;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
-import com.sf.honeymorning.exception.model.BusinessException;
+import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
 import com.sf.honeymorning.user.repository.UserRepository;
 import com.sf.honeymorning.util.TtsUtil;
@@ -37,13 +35,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 	AlarmService alarmService;
 
 	@Mock
-	private TopicModelRepository topicModelRepository;
-
-	@Mock
 	private TopicModelWordRepository topicModelWordRepository;
-
-	@Mock
-	private WordRepository wordRepository;
 
 	@Mock
 	private AlarmRepository alarmRepository;

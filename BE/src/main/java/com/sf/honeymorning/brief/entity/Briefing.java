@@ -40,20 +40,20 @@ public class Briefing extends BaseEntity {
 	@OneToMany(
 		cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 		orphanRemoval = true)
-	@JoinColumn(name = "brief_id")
+	@JoinColumn(name = "briefing_id")
 	private List<BriefingTag> briefingTags;
 
 	@OneToMany(
 		cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 		orphanRemoval = true)
-	@JoinColumn(name = "brief_id")
+	@JoinColumn(name = "briefing_id")
 	private List<Quiz> quizzes;
 
 	@OneToMany(
 		cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 		orphanRemoval = true)
-	@JoinColumn(name = "brief_id")
-	private List<TopicModel> topicModels;
+	@JoinColumn(name = "briefing_id")
+	private List<TopicModelWord> topicModelWords;
 
 	public Briefing(Long userId, String voiceContent, String readContent, String voiceContentUrl) {
 		this.userId = userId;
@@ -68,7 +68,7 @@ public class Briefing extends BaseEntity {
 		String voiceContentUrl,
 		List<BriefingTag> briefingTags,
 		List<Quiz> quizzes,
-		List<TopicModel> topicModels
+		List<TopicModelWord> topicModelWords
 	) {
 		this.userId = userId;
 		this.summary = voiceContent;
@@ -76,7 +76,7 @@ public class Briefing extends BaseEntity {
 		this.voiceContentUrl = voiceContentUrl;
 		this.briefingTags = briefingTags;
 		this.quizzes = quizzes;
-		this.topicModels = topicModels;
+		this.topicModelWords = topicModelWords;
 	}
 
 	public Long getId() {
@@ -97,5 +97,17 @@ public class Briefing extends BaseEntity {
 
 	public String getVoiceContentUrl() {
 		return voiceContentUrl;
+	}
+
+	public List<BriefingTag> getBriefingTags() {
+		return briefingTags;
+	}
+
+	public List<Quiz> getQuizzes() {
+		return quizzes;
+	}
+
+	public List<TopicModelWord> getTopicModelWords() {
+		return topicModelWords;
 	}
 }

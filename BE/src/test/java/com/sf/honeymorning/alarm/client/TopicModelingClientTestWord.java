@@ -25,7 +25,7 @@ import com.sf.honeymorning.alarm.client.dto.TopicModelingResponse;
 import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
 
 @AutoConfigureWireMock(port = 8089)
-class TopicModelingClientTest extends EndPointIntegrationEnvironment {
+class TopicModelingClientTestWord extends EndPointIntegrationEnvironment {
 
 	static final int FIXED_RESPONSE_SECTION_SIZE = 5;
 	static final int FIXED_RESPONSE_DETAIL_WORD_SIZE = 10;

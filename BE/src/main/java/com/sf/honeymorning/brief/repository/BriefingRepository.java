@@ -20,4 +20,6 @@ public interface BriefingRepository extends JpaRepository<Briefing, Long> {
 	Optional<Briefing> findByUserAndCreatedAtToday(@Param("user") Long userId,
 		@Param("startOfDay") LocalDateTime startOfDay,
 		@Param("endOfDay") LocalDateTime endOfDay);
+
+	Optional<Briefing> findTopByUserIdOrderByCreatedAtDesc(Long userId);
 }
