@@ -1,6 +1,10 @@
 package com.sf.honeymorning.alarm.entity;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+
+import com.sf.honeymorning.common.exception.model.ErrorProtocol;
+import com.sf.honeymorning.common.exception.model.UnExpectedFatalException;
 
 public enum DayOfWeek {
 	MONDAY(1, "월요일"),
@@ -19,17 +23,25 @@ public enum DayOfWeek {
 		this.dayName = dayName;
 	}
 
-	public static byte getToday() {
-		return (byte)(LocalDate.now().getDayOfWeek().getValue());
+	public static Integer getToday() {
+		return LocalDate.now().getDayOfWeek().getValue();
 	}
 
-	public static byte toBit(DayOfWeek... days) {
-		return (byte)java.util.Arrays.stream(days)
+	public static Integer toBit(DayOfWeek... days) {
+		return Arrays.stream(days)
 			.mapToInt(DayOfWeek::getBit)
 			.reduce(0, (a, b) -> a | b);
 	}
 
-	public int getBit() {
+	public static DayOfWeek getDayOfWeek(String dayName) {
+		return Arrays.stream(DayOfWeek.values())
+			.filter(dayOfWeek -> dayOfWeek.name().equalsIgnoreCase(dayName))
+			.findAny()
+			.orElseThrow(() -> new UnExpectedFatalException("날짜를 불러올 수 없습니다.", ErrorProtocol.UNEXPECTED_FATAL_ERROR));
+	}
+
+	public Integer getBit() {
 		return bit;
 	}
+
 }

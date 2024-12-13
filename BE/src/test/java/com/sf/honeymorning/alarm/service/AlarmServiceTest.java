@@ -69,7 +69,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			alarmId,
 			LocalTime.now(),
-			(byte)FAKER_DATE_FACTORY.number().numberBetween(1, 127),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 127),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			true
@@ -78,7 +78,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		Alarm previousAlarm = new Alarm(
 			alarmId,
 			LocalTime.now(),
-			(byte)FAKER_DATE_FACTORY.number().numberBetween(1, 127),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 127),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			true,
@@ -105,7 +105,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			1L,
 			LocalTime.now(),
-			(byte)FAKER_DATE_FACTORY.number().numberBetween(1, 127),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 127),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			true
@@ -124,7 +124,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		Alarm expectedMyAlarm = new Alarm(
 			1L,
 			LocalTime.now(),
-			(byte)FAKER_DATE_FACTORY.number().numberBetween(1, 127),
+			FAKER_DATE_FACTORY.number().numberBetween(1, 127),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			true,

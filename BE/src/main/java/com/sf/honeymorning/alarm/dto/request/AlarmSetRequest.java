@@ -17,7 +17,7 @@ public record AlarmSetRequest(
 	@Min(1)
 	@Max(127)
 	@NotNull
-	byte weekdays,
+	Integer weekdays,
 
 	@Positive
 	@Min(1)

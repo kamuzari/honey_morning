@@ -1,9 +1,12 @@
 package com.sf.honeymorning.alarm.entity;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.StringJoiner;
 
 import com.sf.honeymorning.common.entity.BaseEntity;
+import com.sf.honeymorning.util.TimeUtils;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +18,7 @@ import jakarta.persistence.Table;
 @Entity
 public class Alarm extends BaseEntity {
 
+	public static final int SLEEP_MODE_INTERVAL_CONDITION = 5;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -34,7 +38,7 @@ public class Alarm extends BaseEntity {
 	 *   - 0011 0010 = TuesDay and Thursday and Saturday
 	 *   - 0111 1111 = Every day
 	 */
-	private byte dayOfWeek;
+	private Integer dayOfWeek;
 
 	private Integer repeatFrequency;
 
@@ -49,7 +53,7 @@ public class Alarm extends BaseEntity {
 
 	public Alarm(Long userId,
 		LocalTime wakeUpTime,
-		byte dayOfWeek,
+		Integer dayOfWeek,
 		Integer repeatFrequency,
 		Integer repeatInterval,
 		boolean isActive,
@@ -67,7 +71,7 @@ public class Alarm extends BaseEntity {
 		return new Alarm(
 			userId,
 			LocalTime.of(7, 0),
-			(byte)0,
+			0,
 			0,
 			0,
 			false,
@@ -87,7 +91,7 @@ public class Alarm extends BaseEntity {
 		return wakeUpTime;
 	}
 
-	public byte getDayOfWeek() {
+	public int getDayOfWeek() {
 		return dayOfWeek;
 	}
 
@@ -107,7 +111,7 @@ public class Alarm extends BaseEntity {
 		return wakeUpCallPath;
 	}
 
-	public void set(LocalTime alarmTime, byte weekDays, Integer repeatFrequency, Integer repeatInterval,
+	public void set(LocalTime alarmTime, Integer weekDays, Integer repeatFrequency, Integer repeatInterval,
 		boolean isActive) {
 		this.wakeUpTime = alarmTime;
 		this.dayOfWeek = weekDays;
@@ -133,4 +137,47 @@ public class Alarm extends BaseEntity {
 			.add("musicFilePath='" + wakeUpCallPath + "'")
 			.toString();
 	}
+
+	public boolean canSleepMode(LocalDateTime now) {
+		DayOfWeek today = DayOfWeek.getDayOfWeek(now.toLocalDate().getDayOfWeek().name());
+		boolean is5HoursBeforeTheAlarmStarts = this.wakeUpTime
+			.minusHours(SLEEP_MODE_INTERVAL_CONDITION)
+			.isAfter(now.toLocalTime().plusMinutes(1));
+		boolean isTodayTheAlarmStartDate = (this.dayOfWeek & today.getBit()) > 0;
+
+		return is5HoursBeforeTheAlarmStarts && isTodayTheAlarmStartDate;
+	}
+
+	public static void main(String[] args) {
+		LocalTime wakeUpTime = TimeUtils.getNow();
+		System.out.println("wakeUpTime = " + wakeUpTime);
+		LocalTime time5HourAgo = wakeUpTime.minusHours(5).plusMinutes(0);
+		System.out.println("time5HourAgo = " + time5HourAgo);
+
+		System.out.println(time5HourAgo.isAfter(TimeUtils.getNow().minusHours(6))); // false
+		// 10:42 분 알람시간인데 현재 5:42분이면 수면모드 가능 5:43분 부터는 모두 불가능
+
+		Arrays.stream(DayOfWeek.values()).forEach(v -> System.out.println(v.getBit()));
+		System.out.println();
+		Integer 월토 = DayOfWeek.toBit(DayOfWeek.MONDAY, DayOfWeek.SATURDAY);
+		System.out.println("월토 = " + 월토);
+		Alarm alarm = new Alarm(1L, TimeUtils.getNow(),
+			월토,
+			1, 1, true, "empty");
+		int dayOfWeek = alarm.getDayOfWeek();
+
+		// Integer today = DayOfWeek.FRIDAY.getBit();
+		// Integer today = DayOfWeek.getToday();
+		Integer today = DayOfWeek.SUNDAY.getBit();
+		System.out.println("today = " + today);
+		// 0111 1111 -> every day , 0010 0001 -> 월,토
+		boolean b = (dayOfWeek & today) > 0;
+		System.out.println(b);
+
+		System.out.println("==========");
+		LocalDateTime now = LocalDateTime.now();
+		java.time.DayOfWeek dayOfWeek1 = now.toLocalDate().getDayOfWeek();
+		System.out.println(dayOfWeek1);
+	}
+
 }

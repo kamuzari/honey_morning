@@ -53,7 +53,7 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 		AlarmSetRequest alarmSetRequest = new AlarmSetRequest(
 			1L,
 			LocalTime.now(),
-			(byte)FAKER.number().numberBetween(1, 127),
+			FAKER.number().numberBetween(1, 127),
 			FAKER.number().numberBetween(1, 10),
 			FAKER.number().numberBetween(1, 10),
 			true
@@ -91,8 +91,8 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 
 		@DisplayName("요일을 설정하기 위한 비트가 128이상이거나, 음수이면 예외가 발생한다")
 		@ParameterizedTest
-		@ValueSource(bytes = {-1, 0, (byte)128})
-		void failInvalidAlarmWeekDays(byte invalidWeekDay) throws Exception {
+		@ValueSource(ints = {-1, 0, 128})
+		void failInvalidAlarmWeekDays(int invalidWeekDay) throws Exception {
 			//given
 			AlarmSetRequest alarmSetRequest = new AlarmSetRequest(
 				1L,
@@ -117,7 +117,7 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 			AlarmSetRequest alarmSetRequest = new AlarmSetRequest(
 				1L,
 				LocalTime.now(),
-				(byte)7,
+				7,
 				invalidFrequency,
 				FAKER.number().numberBetween(1, 10),
 				true

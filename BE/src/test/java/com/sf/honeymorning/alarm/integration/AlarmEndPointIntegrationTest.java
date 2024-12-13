@@ -106,7 +106,7 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationEnvironment
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			authUserAlarm.getId(),
 			LocalTime.now().plusHours(7),
-			(byte)FAKE_DATA_FACTORY.number().numberBetween(1, 127),
+			FAKE_DATA_FACTORY.number().numberBetween(1, 127),
 			FAKE_DATA_FACTORY.number().numberBetween(1, 10),
 			FAKE_DATA_FACTORY.number().numberBetween(1, 10),
 			true

@@ -23,7 +23,7 @@ public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 		"AND a.wake_up_time = :endTime",
 		nativeQuery = true)
 	List<Alarm> findActiveAlarmsForToday(
-		@Param("dayOfWeekMask") byte dayOfWeekMask,
+		@Param("dayOfWeekMask") Integer dayOfWeekMask,
 		@Param("endTime") LocalTime endTime
 	);
 

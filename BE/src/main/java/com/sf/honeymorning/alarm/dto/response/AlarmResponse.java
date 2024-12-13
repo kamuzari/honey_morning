@@ -13,7 +13,7 @@ public record AlarmResponse(
 	LocalTime wakeUpTime,
 
 	@Schema(description = "맨 오른쪽 부터 1이 활성화된 요일이에요", example = "1111111")
-	byte daysOfWeek,
+	Integer daysOfWeek,
 
 	@Schema(description = "반복 횟수", example = "3")
 	Integer repeatFrequency,

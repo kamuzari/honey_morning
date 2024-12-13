@@ -57,7 +57,7 @@ public class PreparedAlarmContentService {
 
 	public List<Alarm> getReadyAlarm() {
 		LocalTime timeAfter40Minutes = TimeUtils.getNow().plusMinutes(FIXED_NEXT_MINUTE);
-		byte dayOfWeekMask = DayOfWeek.getToday();
+		Integer dayOfWeekMask = DayOfWeek.getToday();
 
 		return alarmRepository.findActiveAlarmsForToday(dayOfWeekMask, timeAfter40Minutes);
 	}
