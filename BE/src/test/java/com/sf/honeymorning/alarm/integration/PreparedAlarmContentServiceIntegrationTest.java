@@ -20,7 +20,7 @@ import com.sf.honeymorning.util.TimeUtils;
 
 class PreparedAlarmContentServiceIntegrationTest extends EndPointIntegrationEnvironment implements MySqlContext {
 
-	static final byte TOMORROW = (byte)(LocalDate.now().getDayOfWeek().getValue());
+	static final int TOMORROW = LocalDate.now().getDayOfWeek().getValue();
 
 	@Autowired
 	PreparedAlarmContentService preparedAlarmContentService;

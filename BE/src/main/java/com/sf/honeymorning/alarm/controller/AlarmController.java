@@ -1,11 +1,13 @@
 package com.sf.honeymorning.alarm.controller;
 
-import org.springframework.http.ResponseEntity;
+import java.time.LocalDateTime;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
@@ -94,11 +96,13 @@ public class AlarmController {
 		)
 	})
 	@GetMapping("/sleep")
-	public ResponseEntity<?> canSleepMode(
+	public void canSleepMode(
 		@AuthenticationPrincipal
-		JwtAuthentication principal
+		JwtAuthentication principal,
+
+		@RequestParam("startAt")
+		LocalDateTime startAt
 	) {
-		alarmService.getSleep(principal.id());
-		return ResponseEntity.ok(null);
+		alarmService.canSleepMode(principal.id(), startAt);
 	}
 }

@@ -50,7 +50,7 @@ class PreparedAlarmContentServiceTest extends MockTestServiceEnvironment {
 		Alarm expectedAlarm = new Alarm(
 			AUTH_USER.getId(),
 			LocalTime.now().withSecond(0),
-			(byte)2,
+			2,
 			2,
 			2,
 			true,
