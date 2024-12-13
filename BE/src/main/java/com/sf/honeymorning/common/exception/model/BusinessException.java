@@ -1,4 +1,4 @@
-package com.sf.honeymorning.exception.model;
+package com.sf.honeymorning.common.exception.model;
 
 public class BusinessException extends RuntimeException {
 	private final ErrorProtocol errorProtocol;

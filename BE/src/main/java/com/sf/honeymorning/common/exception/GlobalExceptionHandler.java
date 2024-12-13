@@ -1,10 +1,9 @@
-package com.sf.honeymorning.exception;
+package com.sf.honeymorning.common.exception;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE;
 
 import java.time.LocalTime;
@@ -25,12 +24,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.sf.honeymorning.exception.alarm.AlarmFatalException;
-import com.sf.honeymorning.exception.model.BusinessException;
-import com.sf.honeymorning.exception.model.ErrorProtocol;
-import com.sf.honeymorning.exception.user.AlarmCategoryNotFoundException;
-import com.sf.honeymorning.exception.user.UserNotFoundException;
-import com.sf.honeymorning.exception.user.UserUpdateException;
+import com.sf.honeymorning.alarm.exception.AlarmFatalException;
+import com.sf.honeymorning.common.exception.model.BusinessException;
+import com.sf.honeymorning.common.exception.model.ErrorProtocol;
+import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
+import com.sf.honeymorning.common.exception.user.AlarmCategoryNotFoundException;
+import com.sf.honeymorning.common.exception.user.UserUpdateException;
 
 import jakarta.persistence.PersistenceException;
 
@@ -84,7 +83,6 @@ public class GlobalExceptionHandler {
 			.build();
 	}
 
-	// 트랜잭션 에러 처리
 	@ExceptionHandler(TransactionSystemException.class)
 	public ResponseEntity<String> handleTransactionSystemException(TransactionSystemException ex) {
 		Throwable rootCause = ex.getRootCause();
@@ -97,10 +95,17 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(errorMessage, INTERNAL_SERVER_ERROR);
 	}
 
-	// 유저가 존재하지 않는 오류
-	@ExceptionHandler(UserNotFoundException.class)
-	public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
-		return new ResponseEntity<>(null, OK);
+	@ExceptionHandler(NotFoundResourceException.class)
+	public ErrorResponse handleUserNotFoundException(NotFoundResourceException exception) {
+		log.error("not found resource error: {}, {} ", exception.getErrorProtocol(), exception.getMessage(), exception);
+		ErrorProtocol errorProtocol = exception.getErrorProtocol();
+
+		return ErrorResponse.builder(exception, errorProtocol.getStatus(),
+				errorProtocol.getClientMessage())
+			.detail(errorProtocol.getInternalMessage())
+			.property(MESSAGE_PROPERTY_KEY, errorProtocol.getClientMessage())
+			.property("code", errorProtocol.getCustomCode())
+			.build();
 	}
 
 	// 업데이트 오류

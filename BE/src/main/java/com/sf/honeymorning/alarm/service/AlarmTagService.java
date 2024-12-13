@@ -14,7 +14,7 @@ import com.sf.honeymorning.alarm.entity.Alarm;
 import com.sf.honeymorning.alarm.entity.AlarmTag;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
-import com.sf.honeymorning.exception.alarm.AlarmFatalException;
+import com.sf.honeymorning.alarm.exception.AlarmFatalException;
 import com.sf.honeymorning.tag.entity.Tag;
 import com.sf.honeymorning.tag.repository.TagRepository;
 
@@ -71,8 +71,7 @@ public class AlarmTagService {
 			}
 
 			Tag tempTag = new Tag(
-				word,
-				customNum
+				word
 			);
 
 			tag = tagRepository.save(tempTag);
@@ -115,7 +114,7 @@ public class AlarmTagService {
 			Tag tag = tagRepository.findByWord(word)
 				.orElseGet(() -> tagRepository.save(
 					new Tag(
-						word, 0
+						word
 					)
 				));
 			newTags.add(tag);

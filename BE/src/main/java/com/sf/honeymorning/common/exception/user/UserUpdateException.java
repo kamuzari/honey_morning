@@ -1,4 +1,4 @@
-package com.sf.honeymorning.exception.user;
+package com.sf.honeymorning.common.exception.user;
 
 public class UserUpdateException extends RuntimeException {
 	public UserUpdateException(String message) {

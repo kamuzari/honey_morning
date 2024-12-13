@@ -23,7 +23,7 @@ public class BriefingTag extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@JoinColumn(name = "brief_id")
+	@JoinColumn(name = "briefing_id")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Briefing briefing;
 

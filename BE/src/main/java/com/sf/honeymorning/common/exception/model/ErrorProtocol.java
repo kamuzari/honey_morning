@@ -1,12 +1,12 @@
-package com.sf.honeymorning.exception.model;
+package com.sf.honeymorning.common.exception.model;
 
 import java.util.StringJoiner;
 
 import org.springframework.http.HttpStatus;
 
 public enum ErrorProtocol {
-	POLICY_VIOLATION(HttpStatus.INTERNAL_SERVER_ERROR, 1000, "관리자에게 코드로 문의해주세요.", "정책 비즈니스 위반하였습니다."),
-	BUSINESS_VIOLATION(HttpStatus.INTERNAL_SERVER_ERROR, 4004, "잘못된 접근입니다.", "허용하지 않는 접근입니다."),
+	POLICY_VIOLATION(HttpStatus.CONFLICT, 1000, "관리자에게 코드로 문의해주세요.", "정책 비즈니스 위반하였습니다."),
+	BUSINESS_VIOLATION(HttpStatus.BAD_REQUEST, 4004, "잘못된 접근입니다.", "허용하지 않는 접근입니다."),
 	READY_TO_ALARM_VOICE_TRANSLATION_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, 5000, "관리자에게 코드로 문의해주세요.",
 		"외부 음성 컨텐츠를 만들지 못하였습니다. 음성 콘텐츠 서버를 확인해주세요.");
 

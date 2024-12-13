@@ -11,38 +11,32 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@AllArgsConstructor
 public class TopicModelWord extends BaseEntity {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "topic_model_word_id")
+	@Column(name = "topic_model_id")
 	private Long id;
 
-	private Long sectionId;
-
-	@JoinColumn(name = "topic_model_id")
+	@JoinColumn(name = "briefing_id")
 	@ManyToOne(fetch = FetchType.LAZY)
-	private TopicModel topicModel;
+	private Briefing briefing;
 
-	@JoinColumn(name = "word_id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Word word;
+	private int sectionId;
 
-	@Column(nullable = false, columnDefinition = "DECIMAL(20, 18) DEFAULT 0.0")
-	private Double weight = 0.0;
+	private String word;
 
-	public TopicModelWord(TopicModel topicModel, Word word, Double weight) {
-		this.topicModel = topicModel;
+	private Double weight;
+
+
+	public TopicModelWord(int sectionId, String word, Double weight) {
+		this.sectionId = sectionId;
 		this.word = word;
 		this.weight = weight;
 	}
 }
-

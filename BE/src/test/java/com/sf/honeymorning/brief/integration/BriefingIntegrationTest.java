@@ -82,7 +82,6 @@ class BriefingIntegrationTest extends ServiceIntegrationTest {
 		Tag tag = tagRepository.save(
 			new Tag(
 				"경제"
-				, 0
 			));
 
 		briefingTagRepository.save(new BriefingTag(briefing, tag));

@@ -22,7 +22,7 @@ import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.repository.BriefingTagRepository;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
-import com.sf.honeymorning.exception.model.BusinessException;
+import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
 

@@ -11,4 +11,6 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
 	List<Quiz> findByBriefingIn(List<Briefing> briefing);
 
 	List<Quiz> findByBriefing(Briefing briefing);
+
+	List<Quiz> findByBriefing_Id(Long briefingId);
 }

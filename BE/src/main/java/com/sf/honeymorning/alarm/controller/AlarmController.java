@@ -85,24 +85,6 @@ public class AlarmController {
 	}
 
 	@Operation(
-		summary = "수면 시작"
-	)
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "알람 시작 성공"
-		)
-	})
-	@GetMapping("/sleep")
-	public ResponseEntity<?> sleep(
-		@AuthenticationPrincipal
-		JwtAuthentication principal
-	) {
-		alarmService.getSleep(principal.id());
-		return ResponseEntity.ok(null);
-	}
-
-	@Operation(
 		summary = "수면 모드 확인"
 	)
 	@ApiResponses(value = {
