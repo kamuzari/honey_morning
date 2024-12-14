@@ -6,60 +6,33 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.Optional;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.web.client.RestTemplate;
 
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.entity.Alarm;
+import com.sf.honeymorning.alarm.entity.DayOfTheWeek;
+import com.sf.honeymorning.alarm.exception.AlarmBusinessException;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
-import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
-import com.sf.honeymorning.brief.repository.BriefingRepository;
-import com.sf.honeymorning.brief.repository.BriefingTagRepository;
-import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
-import com.sf.honeymorning.context.MockTestServiceEnvironment;
 import com.sf.honeymorning.common.exception.model.BusinessException;
-import com.sf.honeymorning.quiz.repository.QuizRepository;
-import com.sf.honeymorning.user.repository.UserRepository;
-import com.sf.honeymorning.util.TtsUtil;
+import com.sf.honeymorning.context.MockTestServiceEnvironment;
 
 class AlarmServiceTest extends MockTestServiceEnvironment {
 
 	@InjectMocks
-	AlarmService alarmService;
-
-	@Mock
-	private TopicModelWordRepository topicModelWordRepository;
+	AlarmService systemUnderTest;
 
 	@Mock
 	private AlarmRepository alarmRepository;
-
-	@Mock
-	private UserRepository userRepository;
-
-	@Mock
-	private AlarmTagRepository alarmTagRepository;
-
-	@Mock
-	private BriefingRepository briefingRepository;
-
-	@Mock
-	private QuizRepository quizRepository;
-
-	@Mock
-	private RestTemplate restTemplate;
-
-	@Mock
-	private TtsUtil ttsUtil;
-
-	@Mock
-	private BriefingTagRepository briefingTagRepository;
 
 	@Test
 	@DisplayName("알람 설정 일부문을 변경한다")
@@ -88,13 +61,13 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		given(alarmRepository.findByUserId(AUTH_USER.getId())).willReturn(Optional.of(previousAlarm));
 
 		//when
-		alarmService.set(requestDto, AUTH_USER.getId());
+		systemUnderTest.set(requestDto, AUTH_USER.getId());
 
 		//then
 		assertThat(previousAlarm.getRepeatFrequency()).isEqualTo(requestDto.repeatFrequency());
 		assertThat(previousAlarm.getRepeatInterval()).isEqualTo(requestDto.repeatInterval());
 		assertThat(previousAlarm.isActive()).isEqualTo(requestDto.isActive());
-		assertThat(previousAlarm.getDayOfWeek()).isEqualTo(requestDto.weekdays());
+		assertThat(previousAlarm.getDayOfTheWeeks()).isEqualTo(requestDto.weekdays());
 		verify(alarmRepository, times(1)).findByUserId(AUTH_USER.getId());
 	}
 
@@ -113,7 +86,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 
 		//when
 		//then
-		assertThatThrownBy(() -> alarmService.set(requestDto, AUTH_USER.getId()))
+		assertThatThrownBy(() -> systemUnderTest.set(requestDto, AUTH_USER.getId()))
 			.isInstanceOf(BusinessException.class);
 	}
 
@@ -133,9 +106,54 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 
 		given(alarmRepository.findByUserId(AUTH_USER.getId())).willReturn(Optional.of(expectedMyAlarm));
 		//when
-		AlarmResponse myAlarm = alarmService.getMyAlarm(AUTH_USER.getId());
+		AlarmResponse myAlarm = systemUnderTest.getMyAlarm(AUTH_USER.getId());
 
 		//then
 		assertThat(myAlarm).isNotNull();
 	}
+
+	@Test
+	@DisplayName("슬립모드는 알람시작전 5시간 전이면 가능하다")
+	void testCanSleep() {
+		//given
+		LocalDateTime startAt = LocalDateTime.now();
+		Integer everyDay = Arrays.stream(DayOfTheWeek.values()).map(DayOfTheWeek::getShiftedBit)
+			.reduce(Integer::sum).orElseThrow();
+		Alarm alarm = new Alarm(AUTH_USER.getId(),
+			startAt.toLocalTime().plusHours(5),
+			everyDay,
+			1,
+			1,
+			true,
+			"");
+		given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER.getId())).willReturn(Optional.of(alarm));
+
+		//when
+		systemUnderTest.verifySleepMode(AUTH_USER.getId(), startAt);
+		//then
+		verify(alarmRepository, times(1)).findByUserIdAndIsActiveTrue(AUTH_USER.getId());
+	}
+
+	@Test
+	@DisplayName("슬립모드는 4:59분 이하로 요청하면 실패한다")
+	void failCanSleep() {
+		//given
+		LocalDateTime startAt = LocalDateTime.now();
+		Integer everyDay = Arrays.stream(DayOfTheWeek.values()).map(DayOfTheWeek::getShiftedBit)
+			.reduce(Integer::sum).orElseThrow();
+		Alarm alarm = new Alarm(AUTH_USER.getId(),
+			startAt.toLocalTime().plusHours(4).plusMinutes(59),
+			everyDay,
+			1,
+			1,
+			true,
+			"");
+		given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER.getId())).willReturn(Optional.of(alarm));
+
+		//when
+		//then
+		Assertions.assertThatThrownBy(() -> systemUnderTest.verifySleepMode(AUTH_USER.getId(), startAt))
+			.isInstanceOf(AlarmBusinessException.class);
+	}
+
 }

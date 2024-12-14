@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sf.honeymorning.alarm.controller.dto.response.PreparedAlarmContentResponse;
 import com.sf.honeymorning.alarm.entity.Alarm;
-import com.sf.honeymorning.alarm.entity.DayOfWeek;
+import com.sf.honeymorning.alarm.entity.DayOfTheWeek;
 import com.sf.honeymorning.alarm.exception.NotPreparedAlarmException;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.service.mapper.PreparedAlarmMapper;
@@ -57,7 +57,7 @@ public class PreparedAlarmContentService {
 
 	public List<Alarm> getReadyAlarm() {
 		LocalTime timeAfter40Minutes = TimeUtils.getNow().plusMinutes(FIXED_NEXT_MINUTE);
-		Integer dayOfWeekMask = DayOfWeek.getToday();
+		Integer dayOfWeekMask = DayOfTheWeek.getToday();
 
 		return alarmRepository.findActiveAlarmsForToday(dayOfWeekMask, timeAfter40Minutes);
 	}

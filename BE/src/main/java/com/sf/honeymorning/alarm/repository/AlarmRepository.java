@@ -13,13 +13,13 @@ import com.sf.honeymorning.alarm.entity.Alarm;
 public interface AlarmRepository extends JpaRepository<Alarm, Long> {
 	Optional<Alarm> findByUserId(Long userId);
 
-	@Query("SELECT a FROM Alarm a WHERE a.dayOfWeek BETWEEN :start AND :end AND a.isActive = :isActive")
+	@Query("SELECT a FROM Alarm a WHERE a.dayOfTheWeeks BETWEEN :start AND :end AND a.isActive = :isActive")
 	List<Alarm> findAlarmsWithinTimeRange(@Param("start") LocalTime start, @Param("end") LocalTime end,
 		@Param("isActive") Integer isActive);
 
 	@Query(value = "SELECT * FROM alarms a " +
 		"WHERE a.is_active = true " +
-		"AND (a.day_of_week & :dayOfWeekMask) != 0 " +
+		"AND (a.day_of_the_weeks & :dayOfWeekMask) != 0 " +
 		"AND a.wake_up_time = :endTime",
 		nativeQuery = true)
 	List<Alarm> findActiveAlarmsForToday(

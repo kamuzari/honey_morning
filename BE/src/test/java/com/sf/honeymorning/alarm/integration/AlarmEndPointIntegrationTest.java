@@ -140,7 +140,7 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationEnvironment
 			.body("id", equalTo(authUserAlarm.getId().intValue()))
 			.body("wakeUpTime",
 				equalTo(authUserAlarm.getWakeUpTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"))))
-			.body("daysOfWeek", equalTo((int)authUserAlarm.getDayOfWeek()))
+			.body("daysOfWeek", equalTo((int)authUserAlarm.getDayOfTheWeeks()))
 			.body("repeatFrequency", equalTo(authUserAlarm.getRepeatFrequency()))
 			.body("repeatInterval", equalTo(authUserAlarm.getRepeatInterval()))
 			.body("isActive", equalTo(authUserAlarm.isActive()))

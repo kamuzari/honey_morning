@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.junit.jupiter.api.DisplayName;
@@ -135,6 +136,19 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 					.content(body))
 				.andDo(print());
 		}
+	}
+
+	@Test
+	@DisplayName("슬립 모드가 가능한지 확인한다")
+	void testCanSleep() throws Exception {
+		//given
+		//when
+		//then
+		mockMvc.perform(get(URI_PREFIX + "/sleep")
+				.contentType(MediaType.APPLICATION_JSON)
+				.param("startAt", LocalDateTime.now().toString())
+			).andExpect(status().isOk())
+			.andDo(print());
 	}
 
 }

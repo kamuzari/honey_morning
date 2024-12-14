@@ -4,7 +4,6 @@ import static com.sf.honeymorning.common.exception.model.ErrorProtocol.BUSINESS_
 import static com.sf.honeymorning.common.exception.model.ErrorProtocol.POLICY_VIOLATION;
 
 import java.text.MessageFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
@@ -13,12 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.entity.Alarm;
-import com.sf.honeymorning.alarm.entity.DayOfWeek;
 import com.sf.honeymorning.alarm.exception.AlarmBusinessException;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
-import com.sf.honeymorning.util.TimeUtils;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,7 +36,7 @@ public class AlarmService {
 		return new AlarmResponse(
 			alarm.getId(),
 			alarm.getWakeUpTime(),
-			alarm.getDayOfWeek(),
+			alarm.getDayOfTheWeeks(),
 			alarm.getRepeatFrequency(),
 			alarm.getRepeatInterval(),
 			alarm.isActive()
@@ -60,7 +57,7 @@ public class AlarmService {
 			alarmRequestDto.isActive());
 	}
 
-	public void canSleepMode(Long userId, LocalDateTime sleepStartAt) {
+	public void verifySleepMode(Long userId, LocalDateTime sleepStartAt) {
 		Alarm alarm = alarmRepository.findByUserIdAndIsActiveTrue(userId)
 			.orElseThrow(() -> new NotFoundResourceException("알람이 활성화되지 않았습니다.", BUSINESS_VIOLATION));
 

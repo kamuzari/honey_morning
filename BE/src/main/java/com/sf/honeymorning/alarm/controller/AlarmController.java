@@ -3,6 +3,7 @@ package com.sf.honeymorning.alarm.controller;
 import java.time.LocalDateTime;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ import jakarta.validation.Valid;
 
 @Tag(name = "알람")
 @RequestMapping("/api/alarms")
+@Validated
 @RestController
 public class AlarmController {
 
@@ -96,13 +98,13 @@ public class AlarmController {
 		)
 	})
 	@GetMapping("/sleep")
-	public void canSleepMode(
+	public void verifySleepMode(
 		@AuthenticationPrincipal
 		JwtAuthentication principal,
 
 		@RequestParam("startAt")
 		LocalDateTime startAt
 	) {
-		alarmService.canSleepMode(principal.id(), startAt);
+		alarmService.verifySleepMode(principal.id(), startAt);
 	}
 }

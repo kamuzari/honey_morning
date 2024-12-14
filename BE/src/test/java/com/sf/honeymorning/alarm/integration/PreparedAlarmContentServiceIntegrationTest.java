@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sf.honeymorning.alarm.entity.Alarm;
-import com.sf.honeymorning.alarm.entity.DayOfWeek;
+import com.sf.honeymorning.alarm.entity.DayOfTheWeek;
 import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.service.PreparedAlarmContentService;
 import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
@@ -36,7 +36,7 @@ class PreparedAlarmContentServiceIntegrationTest extends EndPointIntegrationEnvi
 			new Alarm(
 				3L,
 				TimeUtils.getNow().plusMinutes(40),
-				DayOfWeek.getToday(),
+				DayOfTheWeek.getToday(),
 				3,
 				3,
 				true,
@@ -45,7 +45,7 @@ class PreparedAlarmContentServiceIntegrationTest extends EndPointIntegrationEnvi
 			new Alarm(
 				1L,
 				TimeUtils.getNow().plusMinutes(40),
-				DayOfWeek.getToday(),
+				DayOfTheWeek.getToday(),
 				3,
 				3,
 				true,
