@@ -5,73 +5,66 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
-import com.sf.honeymorning.alarm.dto.AlarmResultDto;
-import com.sf.honeymorning.domain.alarm.service.AlarmResultService;
+import com.sf.honeymorning.alarm.controller.dto.request.AlarmResultRequestCreateDto;
+import com.sf.honeymorning.alarm.controller.dto.response.AlarmResultResponseDto;
+import com.sf.honeymorning.alarm.service.AlarmResultService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.AllArgsConstructor;
 
-@Controller
-@AllArgsConstructor
-@RequestMapping("/api/alarms/result")
+@Validated
+@RequestMapping("/api/alarm-results")
 @RestController
 public class AlarmResultController {
 
 	AlarmResultService alarmResultService;
 
-	@Operation(summary = "알람 결과 조회")
+	public AlarmResultController(AlarmResultService alarmResultService) {
+		this.alarmResultService = alarmResultService;
+	}
+
+	@Operation(summary = "알람 결과 커서 페이징 조회")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
 			description = "알람 결과 조회 성공",
-			content = @Content(schema = @Schema(type = "string", example = "success", implementation = AlarmResultDto.class))
+			content = @Content(schema = @Schema(implementation = AlarmResultResponseDto.class))
 		)
 	})
 	@GetMapping
-	public ResponseEntity<List<AlarmResultDto>> getAlarmResult(
-		@AuthenticationPrincipal
-		JwtAuthentication principal) {
-		List<AlarmResultDto> alarmResultDtoList = alarmResultService.findAlarmResult(principal.id());
-		return new ResponseEntity<>(alarmResultDtoList, HttpStatus.OK);
+	public List<AlarmResultResponseDto> getAlarmResult(
+		@AuthenticationPrincipal JwtAuthentication principal,
+		@RequestParam(required = false, value = "lastId", defaultValue = "0") Long lastId) {
+
+		return alarmResultService.getContents(principal.id(), lastId);
 	}
 
-	// 알람 결과 저장
-	@Operation(summary = "알람 결과 저장")
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "알람 결과 저장 성공",
-			content = @Content(schema = @Schema(type = "string", example = "success"))
-		)
-	})
+	@Operation(summary = "알람 콘텐츠 수행 후 퀴즈 맟춘 갯수, 참석 여부 결과 저장")
 	@PostMapping
-	public ResponseEntity<String> addAlarmResult(
-		@AuthenticationPrincipal
-		JwtAuthentication principal,
-		@RequestBody AlarmResultDto alarmResultDto) {
-		alarmResultService.saveAlarmResult(principal.id(), alarmResultDto);
-		return new ResponseEntity<>("알람 결과가 성공적으로 저장되었습니다.", HttpStatus.OK);
+	public void addAlarmResult(
+		@AuthenticationPrincipal JwtAuthentication principal,
+		@RequestBody AlarmResultRequestCreateDto alarmResultResponseDto) {
+
+		alarmResultService.add(principal.id(), alarmResultResponseDto);
 	}
 
-	// 스트릭 일수 조회
 	@Operation(
-		summary = "연속 출석일수 확인")
+		summary = "연속 출석에 대한 최대 스트릭 가져오")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",
-			description = "삭제 성공",
 			content = @Content(schema = @Schema(type = "integer", example = "success", implementation = Integer.class))
 		)
 	})
@@ -79,7 +72,7 @@ public class AlarmResultController {
 	public ResponseEntity<?> getStreak(
 		@AuthenticationPrincipal
 		JwtAuthentication principal) {
-		int streak = alarmResultService.getStreak(principal.id());
+		int streak = alarmResultService.getMaximumStreak(principal.id());
 		return new ResponseEntity<>(streak, HttpStatus.OK);
 	}
 }

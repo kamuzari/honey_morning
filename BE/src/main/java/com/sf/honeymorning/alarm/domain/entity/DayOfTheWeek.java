@@ -1,4 +1,4 @@
-package com.sf.honeymorning.alarm.entity;
+package com.sf.honeymorning.alarm.domain.entity;
 
 import java.time.LocalDate;
 import java.util.Arrays;
