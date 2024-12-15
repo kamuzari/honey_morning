@@ -1,4 +1,4 @@
-package com.sf.honeymorning.alarm.entity;
+package com.sf.honeymorning.alarm.domain.entity;
 
 import com.sf.honeymorning.common.entity.BaseEntity;
 
@@ -8,16 +8,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@AllArgsConstructor
-@Builder
 public class AlarmResult extends BaseEntity {
 
 	@Id
@@ -26,10 +22,17 @@ public class AlarmResult extends BaseEntity {
 
 	private Long userId;
 
-	@Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
-	private Integer count = 0;
+	private Long briefingId;
 
-	@Column(nullable = false, columnDefinition = "INTEGER DEFAULT 0")
-	private Integer isAttended = 0;
+	@Column(columnDefinition = "INTEGER DEFAULT 0")
+	private Integer count;
 
+	private boolean isAttended;
+
+	public AlarmResult(Long userId, Long briefingId, Integer count, boolean isAttended) {
+		this.userId = userId;
+		this.briefingId = briefingId;
+		this.count = count;
+		this.isAttended = isAttended;
+	}
 }

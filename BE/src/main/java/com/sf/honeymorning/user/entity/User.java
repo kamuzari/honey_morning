@@ -31,6 +31,8 @@ public class User extends BaseEntity {
 
 	private String nickName;
 
+	private Integer maximumStreak;
+
 	@Enumerated(value = EnumType.STRING)
 	private UserRole role;
 
@@ -38,6 +40,7 @@ public class User extends BaseEntity {
 		this.username = username;
 		this.password = password;
 		this.nickName = nickName;
+		this.maximumStreak = 0;
 		this.role = role;
 	}
 
@@ -61,4 +64,13 @@ public class User extends BaseEntity {
 		return role;
 	}
 
+	public int getMaxStreak() {
+		return this.maximumStreak;
+	}
+
+	public void updateMaximumStreak(int consecutiveDays) {
+		if (this.maximumStreak < consecutiveDays) {
+			this.maximumStreak = consecutiveDays;
+		}
+	}
 }

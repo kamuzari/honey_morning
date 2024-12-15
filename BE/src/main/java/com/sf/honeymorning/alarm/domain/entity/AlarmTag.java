@@ -1,4 +1,4 @@
-package com.sf.honeymorning.alarm.entity;
+package com.sf.honeymorning.alarm.domain.entity;
 
 import com.sf.honeymorning.common.entity.BaseEntity;
 import com.sf.honeymorning.tag.entity.Tag;
@@ -13,10 +13,8 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class AlarmTag extends BaseEntity {
