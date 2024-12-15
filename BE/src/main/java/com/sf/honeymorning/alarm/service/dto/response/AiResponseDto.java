@@ -13,7 +13,6 @@ public record AiResponseDto(
 	List<String> requestTags,
 	String AiWakeUpCallPath) {
 
-
 	public AiResponseDto {
 		if (aiTopics.size() != TopicWordViolation.TOPIC_WORD_TOTAL_SIZE) {
 			throw new IllegalArgumentException("AI 토픽 모델링 규약에 위반하였습니다.");

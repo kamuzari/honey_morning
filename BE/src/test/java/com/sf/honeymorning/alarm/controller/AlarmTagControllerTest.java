@@ -30,11 +30,11 @@ class AlarmTagControllerTest extends MockTestControllerEnvironment {
 	@DisplayName("나의 알람카테고리를 조회한다")
 	void testGetAlarmCategories() throws Exception {
 		//given
-		given(alarmTagService.getAlarmTags(1L)).willReturn((List.of()));
+		given(alarmTagService.getMyAlarmTags(1L)).willReturn((List.of()));
 		//when
 		mockMvc.perform(get(URI_PREFIX)
 			.contentType(MediaType.APPLICATION_JSON));
 		//then
-		verify(alarmTagService, times(1)).getAlarmTags(1L);
+		verify(alarmTagService, times(1)).getMyAlarmTags(1L);
 	}
 }

@@ -16,8 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 
-import com.sf.honeymorning.alarm.entity.Alarm;
-import com.sf.honeymorning.alarm.repository.AlarmRepository;
+import com.sf.honeymorning.alarm.domain.entity.Alarm;
+import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.service.mapper.PreparedAlarmMapper;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.violation.QuizViolation;

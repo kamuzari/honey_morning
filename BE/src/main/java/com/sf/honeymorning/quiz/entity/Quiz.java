@@ -2,7 +2,6 @@ package com.sf.honeymorning.quiz.entity;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.common.entity.BaseEntity;
 
