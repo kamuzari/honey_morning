@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
+import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
+import com.sf.honeymorning.alarm.controller.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.controller.dto.response.PreparedAlarmContentResponse;
-import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
-import com.sf.honeymorning.alarm.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.service.AlarmService;
 import com.sf.honeymorning.alarm.service.PreparedAlarmContentService;
-import com.sf.honeymorning.domain.alarm.dto.AlarmStartDto;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -70,7 +69,7 @@ public class AlarmController {
 	})
 	@GetMapping
 	public AlarmResponse readMine(@AuthenticationPrincipal JwtAuthentication principal) {
-		return alarmService.getMyAlarm(principal.id());
+		return alarmService.getMyAlarmWithMyTags(principal.id());
 	}
 
 	@Operation(
@@ -80,7 +79,7 @@ public class AlarmController {
 		@ApiResponse(
 			responseCode = "200",
 			description = "준비된 콘텐츠 전달 성공",
-			content = @Content(schema = @Schema(implementation = AlarmStartDto.class))
+			content = @Content(schema = @Schema(implementation = PreparedAlarmContentResponse.class))
 		)
 	})
 	@GetMapping("/prepared")

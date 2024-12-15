@@ -11,17 +11,17 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sf.honeymorning.alarm.entity.AlarmTag;
-import com.sf.honeymorning.alarm.repository.AlarmTagRepository;
+import com.sf.honeymorning.alarm.domain.entity.AlarmTag;
+import com.sf.honeymorning.alarm.domain.repository.AlarmTagRepository;
 import com.sf.honeymorning.alarm.service.dto.request.ToAIRequestDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
-import com.sf.honeymorning.config.RabbitConfig;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.ErrorProtocol;
+import com.sf.honeymorning.config.RabbitConfig;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.tag.entity.Tag;
 import com.sf.honeymorning.util.TtsUtil;
@@ -37,7 +37,8 @@ public class AiClientService {
 	private final RabbitTemplate rabbitTemplate;
 	private final TtsUtil ttsUtil;
 
-	public AiClientService(PreparedAlarmContentService preparedAlarmContentService, AlarmTagRepository alarmTagRepository,
+	public AiClientService(PreparedAlarmContentService preparedAlarmContentService,
+		AlarmTagRepository alarmTagRepository,
 		RabbitTemplate rabbitTemplate, TtsUtil ttsUtil) {
 		this.preparedAlarmContentService = preparedAlarmContentService;
 		this.alarmTagRepository = alarmTagRepository;
@@ -65,7 +66,6 @@ public class AiClientService {
 	@RabbitListener(queues = SUBSCRIBE_QUEUE_NAME)
 	public void setAllBriefing(AiResponseDto response) {
 		String wakeUpCallPath = response.AiWakeUpCallPath();
-
 
 		String briefingVoice = textToSpeechSafe(response.aiBriefings().voiceContent(), "summaryText");
 		Map<AiQuizDto, String> quizVoices = response.aiQuizzes()

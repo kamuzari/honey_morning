@@ -33,7 +33,6 @@ public class TopicModelWord extends BaseEntity {
 
 	private Double weight;
 
-
 	public TopicModelWord(int sectionId, String word, Double weight) {
 		this.sectionId = sectionId;
 		this.word = word;

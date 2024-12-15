@@ -7,6 +7,8 @@ import java.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
+
 class DayOfTheWeekBitTest {
 
 	@Test
@@ -36,7 +38,8 @@ class DayOfTheWeekBitTest {
 	@DisplayName("요일별로 각 비트가 활성화 되도록 반환한다")
 	void testToBit() {
 		//given
-		DayOfTheWeek[] expectedDayOfTheWeeks = {DayOfTheWeek.MONDAY, DayOfTheWeek.WEDNESDAY, DayOfTheWeek.THURSDAY, DayOfTheWeek.FRIDAY};
+		DayOfTheWeek[] expectedDayOfTheWeeks = {DayOfTheWeek.MONDAY, DayOfTheWeek.WEDNESDAY, DayOfTheWeek.THURSDAY,
+			DayOfTheWeek.FRIDAY};
 		Integer expectedVale = Arrays.stream(expectedDayOfTheWeeks).map(DayOfTheWeek::getShiftedBit)
 			.reduce(0, Integer::sum);
 

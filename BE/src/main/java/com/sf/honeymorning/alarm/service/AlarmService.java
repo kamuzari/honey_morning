@@ -2,19 +2,18 @@ package com.sf.honeymorning.alarm.service;
 
 import static com.sf.honeymorning.common.exception.model.ErrorProtocol.BUSINESS_VIOLATION;
 import static com.sf.honeymorning.common.exception.model.ErrorProtocol.POLICY_VIOLATION;
+import static java.text.MessageFormat.format;
 
-import java.text.MessageFormat;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
-import com.sf.honeymorning.alarm.dto.response.AlarmResponse;
-import com.sf.honeymorning.alarm.entity.Alarm;
+import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
+import com.sf.honeymorning.alarm.controller.dto.response.AlarmResponse;
+import com.sf.honeymorning.alarm.domain.entity.Alarm;
+import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.exception.AlarmBusinessException;
-import com.sf.honeymorning.alarm.repository.AlarmRepository;
-import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 
 @Service
@@ -27,10 +26,10 @@ public class AlarmService {
 		this.alarmRepository = alarmRepository;
 	}
 
-	public AlarmResponse getMyAlarm(Long userId) {
+	public AlarmResponse getMyAlarmWithMyTags(Long userId) {
 		Alarm alarm = alarmRepository.findByUserId(userId)
-			.orElseThrow(() -> new BusinessException(
-				MessageFormat.format("알람이 반드시 존재했어야합니다. userId -> {0}", userId)
+			.orElseThrow(() -> new NotFoundResourceException(
+				format("알람이 반드시 존재했어야합니다. userId -> {0}", userId)
 				, POLICY_VIOLATION));
 
 		return new AlarmResponse(
@@ -46,8 +45,8 @@ public class AlarmService {
 	@Transactional
 	public void set(AlarmSetRequest alarmRequestDto, Long userId) {
 		Alarm alarm = alarmRepository.findByUserId(userId)
-			.orElseThrow(() -> new BusinessException(
-				MessageFormat.format("알람이 반드시 존재했어야합니다. userId -> {0}", userId)
+			.orElseThrow(() -> new NotFoundResourceException(
+				format("알람이 반드시 존재했어야합니다. userId -> {0}", userId)
 				, POLICY_VIOLATION));
 
 		alarm.set(alarmRequestDto.alarmTime(),

@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sf.honeymorning.alarm.controller.dto.response.PreparedAlarmContentResponse;
-import com.sf.honeymorning.alarm.entity.Alarm;
-import com.sf.honeymorning.alarm.entity.DayOfTheWeek;
+import com.sf.honeymorning.alarm.domain.entity.Alarm;
+import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
+import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.exception.NotPreparedAlarmException;
-import com.sf.honeymorning.alarm.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.service.mapper.PreparedAlarmMapper;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;

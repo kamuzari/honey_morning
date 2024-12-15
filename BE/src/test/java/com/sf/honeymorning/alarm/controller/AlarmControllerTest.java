@@ -25,7 +25,7 @@ import com.sf.honeymorning.account.authenticater.constant.JwtProperty;
 import com.sf.honeymorning.account.authenticater.jwt.JwtProviderManager;
 import com.sf.honeymorning.account.handler.LoginSuccessHandler;
 import com.sf.honeymorning.account.handler.LogoutSuccessHandler;
-import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
+import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.service.AlarmService;
 import com.sf.honeymorning.alarm.service.PreparedAlarmContentService;
 import com.sf.honeymorning.config.WebSecurityConfig;
@@ -83,7 +83,20 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 
 		//then
 		perform.andExpect(status().isOk());
-		verify(alarmService, times(1)).getMyAlarm(anyLong());
+		verify(alarmService, times(1)).getMyAlarmWithMyTags(anyLong());
+	}
+
+	@Test
+	@DisplayName("슬립 모드가 가능한지 확인한다")
+	void testCanSleep() throws Exception {
+		//given
+		//when
+		//then
+		mockMvc.perform(get(URI_PREFIX + "/sleep")
+				.contentType(MediaType.APPLICATION_JSON)
+				.param("startAt", LocalDateTime.now().toString())
+			).andExpect(status().isOk())
+			.andDo(print());
 	}
 
 	@DisplayName("알람 설정을 할 때, ")
@@ -136,19 +149,6 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 					.content(body))
 				.andDo(print());
 		}
-	}
-
-	@Test
-	@DisplayName("슬립 모드가 가능한지 확인한다")
-	void testCanSleep() throws Exception {
-		//given
-		//when
-		//then
-		mockMvc.perform(get(URI_PREFIX + "/sleep")
-				.contentType(MediaType.APPLICATION_JSON)
-				.param("startAt", LocalDateTime.now().toString())
-			).andExpect(status().isOk())
-			.andDo(print());
 	}
 
 }

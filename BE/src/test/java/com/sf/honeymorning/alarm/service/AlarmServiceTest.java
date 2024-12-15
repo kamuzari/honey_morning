@@ -17,13 +17,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.sf.honeymorning.alarm.dto.request.AlarmSetRequest;
-import com.sf.honeymorning.alarm.dto.response.AlarmResponse;
-import com.sf.honeymorning.alarm.entity.Alarm;
-import com.sf.honeymorning.alarm.entity.DayOfTheWeek;
+import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
+import com.sf.honeymorning.alarm.controller.dto.response.AlarmResponse;
+import com.sf.honeymorning.alarm.domain.entity.Alarm;
+import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
+import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.exception.AlarmBusinessException;
-import com.sf.honeymorning.alarm.repository.AlarmRepository;
-import com.sf.honeymorning.common.exception.model.BusinessException;
+import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
 
 class AlarmServiceTest extends MockTestServiceEnvironment {
@@ -87,12 +87,12 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		//when
 		//then
 		assertThatThrownBy(() -> systemUnderTest.set(requestDto, AUTH_USER.getId()))
-			.isInstanceOf(BusinessException.class);
+			.isInstanceOf(NotFoundResourceException.class);
 	}
 
 	@Test
 	@DisplayName("사용자의 알람 데이터가 없으면 비즈니스 예외가 발생한다")
-	void testGetMyAlarm() {
+	void testGetMyAlarmWithMyTags() {
 		//given
 		Alarm expectedMyAlarm = new Alarm(
 			1L,
@@ -106,7 +106,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 
 		given(alarmRepository.findByUserId(AUTH_USER.getId())).willReturn(Optional.of(expectedMyAlarm));
 		//when
-		AlarmResponse myAlarm = systemUnderTest.getMyAlarm(AUTH_USER.getId());
+		AlarmResponse myAlarm = systemUnderTest.getMyAlarmWithMyTags(AUTH_USER.getId());
 
 		//then
 		assertThat(myAlarm).isNotNull();

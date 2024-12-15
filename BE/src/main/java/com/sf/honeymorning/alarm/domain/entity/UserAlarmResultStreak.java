@@ -45,7 +45,7 @@ public class UserAlarmResultStreak {
 		}
 
 		this.createdAt = now;
-		this.consecutiveDays=1;
+		this.consecutiveDays = 1;
 	}
 
 	private boolean isWithin24Hours(LocalDateTime now) {
