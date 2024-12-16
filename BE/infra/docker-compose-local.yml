@@ -72,6 +72,20 @@ services:
       RABBITMQ_DEFAULT_PASS: admin
       RABBITMQ_PROMETHEUS_EXPORTER: true
 
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - AWS_DEFAULT_REGION=us-northeast-1
+      - DATA_DIR=/var/lib/localstack/data
+    volumes:
+      - ./localstack-data:/var/lib/localstack
+      - ./configuration/local/bootstrap.sh:/etc/localstack/init/ready.d/bootstrap.sh
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -88,5 +102,6 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
+
 volumes:
   redis_data:

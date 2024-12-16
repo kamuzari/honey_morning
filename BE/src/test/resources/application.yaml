@@ -33,6 +33,16 @@ spring:
     publisher-confirm-type: correlated
     publisher-returns: true
 
+aws:
+  s3:
+    client:
+      access-key: ENC(CG2kGpzauXUGc5AMUfvIig==)
+      secret-access-key: ENC(wL4ZBDG69Z9RL91aKTB1tQ==)
+      region: ENC(CurWBvXC9t9keeApu2cA8ijLkS2X5AKN)
+      endpoint: ENC(uksqy4TCBYybyBCR5WRV0ot/QLh2PzCRis98O0w7R7M=)
+    bucket-name:
+      tts: ENC(H+mJWwChPkcvjeQZ3dcNoO1yKYrHSy6H)
+
 jasypt:
   password: ${JASYPT_PASSWORD:honeymorning}
 
