@@ -102,6 +102,16 @@ security:
       DELETE: [ ]
       OPTIONS: /**
 
+aws:
+  s3:
+    client:
+      access-key: ENC(CG2kGpzauXUGc5AMUfvIig==)
+      secret-access-key: ENC(wL4ZBDG69Z9RL91aKTB1tQ==)
+      region: ENC(CurWBvXC9t9keeApu2cA8ijLkS2X5AKN)
+      endpoint: ENC(uksqy4TCBYybyBCR5WRV0ot/QLh2PzCRis98O0w7R7M=)
+    bucket-name:
+      tts: ENC(H+mJWwChPkcvjeQZ3dcNoO1yKYrHSy6H)
+
 cookie:
   secure: ${COOKIE_SECURE:ENC(HDfUXBUpjV2TFLDs+cDo2w==)}
   same-site: ${COOKIE_SAME_SITE:ENC(lNIKQoe0yCJO8bYchDCtLA==)}
