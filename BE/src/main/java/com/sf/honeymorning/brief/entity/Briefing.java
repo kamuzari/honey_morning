@@ -2,11 +2,14 @@ package com.sf.honeymorning.brief.entity;
 
 import java.util.List;
 
-import com.sf.honeymorning.common.entity.BaseEntity;
+import com.sf.honeymorning.common.entity.basic.BaseEntity;
+import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.quiz.entity.Quiz;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,8 +18,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "briefings")
 @Entity
@@ -55,6 +60,10 @@ public class Briefing extends BaseEntity {
 	@JoinColumn(name = "briefing_id")
 	private List<TopicModelWord> topicModelWords;
 
+	@Embedded
+	@AttributeOverride(name = "fileUrl", column = @Column(name = "access_url"))
+	private Content wakeUpBriefingContent;
+
 	public Briefing(Long userId, String voiceContent, String readContent, String voiceContentUrl) {
 		this.userId = userId;
 		this.summary = voiceContent;
@@ -79,35 +88,7 @@ public class Briefing extends BaseEntity {
 		this.topicModelWords = topicModelWords;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public String getSummary() {
-		return summary;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public String getVoiceContentUrl() {
-		return voiceContentUrl;
-	}
-
-	public List<BriefingTag> getBriefingTags() {
-		return briefingTags;
-	}
-
-	public List<Quiz> getQuizzes() {
-		return quizzes;
-	}
-
-	public List<TopicModelWord> getTopicModelWords() {
-		return topicModelWords;
+	public void addWakeUpBriefingContent(Content wakeUpBriefingContent) {
+		this.wakeUpBriefingContent = wakeUpBriefingContent;
 	}
 }

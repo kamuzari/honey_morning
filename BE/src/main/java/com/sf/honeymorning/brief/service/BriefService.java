@@ -101,7 +101,7 @@ public class BriefService {
 			briefCategories.stream().map(briefingTag -> briefingTag.getTag().getWord()).toList(),
 			quizzes.stream()
 				.map(quiz -> new QuizResponseDto(
-					quiz.getQuestion(),
+					quiz.getProblem(),
 					quiz.getOption1(),
 					quiz.getOption2(),
 					quiz.getOption3(),

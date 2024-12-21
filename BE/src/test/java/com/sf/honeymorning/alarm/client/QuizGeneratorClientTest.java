@@ -9,7 +9,6 @@ import static org.springframework.http.HttpStatus.OK;
 
 import java.util.List;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,27 +33,6 @@ class QuizGeneratorClientTest extends EndPointIntegrationEnvironment {
 	@Autowired
 	private QuizGeneratorClient quizGeneratorClient;
 
-	@DisplayName("브리핑 데이터를 응답 받은 후, 이를 기반으로 퀴즈 문제를 만든다 ")
-	@Test
-	void testSend() throws JsonProcessingException {
-		/// given
-		List<QuizResponseDto> expectedResponse = getExpectedResponse();
-		String briefingReadContent = "트럼프 당선이후 많은 비트 코인들이 역대 최고치를 찍으며 경제적 ... ";
-		String expectedBody = objectMapper.writeValueAsString(expectedResponse);
-
-		// when
-		WireMock.stubFor(post(urlEqualTo("/ai/quiz"))
-			.willReturn(aResponse()
-				.withStatus(OK.value())
-				.withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				.withBody(expectedBody)));
-
-		var response = quizGeneratorClient.send(briefingReadContent);
-
-		// then
-		assertThat(response).hasSize(FIXED_QUIZ_SIZE);
-	}
-
 	static List<QuizResponseDto> getExpectedResponse() {
 		return List.of(
 			new QuizResponseDto(
@@ -74,5 +52,26 @@ class QuizGeneratorClientTest extends EndPointIntegrationEnvironment {
 				2
 			)
 		);
+	}
+
+	@DisplayName("브리핑 데이터를 응답 받은 후, 이를 기반으로 퀴즈 문제를 만든다 ")
+	@Test
+	void testSend() throws JsonProcessingException {
+		/// given
+		List<QuizResponseDto> expectedResponse = getExpectedResponse();
+		String briefingReadContent = "트럼프 당선이후 많은 비트 코인들이 역대 최고치를 찍으며 경제적 ... ";
+		String expectedBody = objectMapper.writeValueAsString(expectedResponse);
+
+		// when
+		WireMock.stubFor(post(urlEqualTo("/ai/quiz"))
+			.willReturn(aResponse()
+				.withStatus(OK.value())
+				.withHeader(CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+				.withBody(expectedBody)));
+
+		var response = quizGeneratorClient.send(briefingReadContent);
+
+		// then
+		assertThat(response).hasSize(FIXED_QUIZ_SIZE);
 	}
 }
