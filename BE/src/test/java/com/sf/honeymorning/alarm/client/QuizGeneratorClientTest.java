@@ -25,32 +25,14 @@ import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
 
 @AutoConfigureWireMock(port = 8089)
 class QuizGeneratorClientTest extends EndPointIntegrationEnvironment {
+
 	static final int FIXED_QUIZ_SIZE = 2;
+
 	@Autowired
 	ObjectMapper objectMapper;
+
 	@Autowired
 	private QuizGeneratorClient quizGeneratorClient;
-
-	private static @NotNull List<QuizResponseDto> getExpectedResponse() {
-		return List.of(
-			new QuizResponseDto(
-				FAKE_DATA_FACTORY.rockBand().name(),
-				List.of(new QuizOption(1, FAKE_DATA_FACTORY.internet().emailAddress()),
-					new QuizOption(2, FAKE_DATA_FACTORY.internet().emailAddress()),
-					new QuizOption(3, FAKE_DATA_FACTORY.internet().emailAddress()),
-					new QuizOption(4, FAKE_DATA_FACTORY.internet().emailAddress())),
-				1
-			),
-			new QuizResponseDto(
-				FAKE_DATA_FACTORY.rockBand().name(),
-				List.of(new QuizOption(1, FAKE_DATA_FACTORY.name().username()),
-					new QuizOption(2, FAKE_DATA_FACTORY.name().username()),
-					new QuizOption(3, FAKE_DATA_FACTORY.name().username()),
-					new QuizOption(4, FAKE_DATA_FACTORY.name().username())),
-				2
-			)
-		);
-	}
 
 	@DisplayName("브리핑 데이터를 응답 받은 후, 이를 기반으로 퀴즈 문제를 만든다 ")
 	@Test
@@ -71,5 +53,26 @@ class QuizGeneratorClientTest extends EndPointIntegrationEnvironment {
 
 		// then
 		assertThat(response).hasSize(FIXED_QUIZ_SIZE);
+	}
+
+	static List<QuizResponseDto> getExpectedResponse() {
+		return List.of(
+			new QuizResponseDto(
+				FAKE_DATA_FACTORY.rockBand().name(),
+				List.of(new QuizOption(1, FAKE_DATA_FACTORY.internet().emailAddress()),
+					new QuizOption(2, FAKE_DATA_FACTORY.internet().emailAddress()),
+					new QuizOption(3, FAKE_DATA_FACTORY.internet().emailAddress()),
+					new QuizOption(4, FAKE_DATA_FACTORY.internet().emailAddress())),
+				1
+			),
+			new QuizResponseDto(
+				FAKE_DATA_FACTORY.rockBand().name(),
+				List.of(new QuizOption(1, FAKE_DATA_FACTORY.name().username()),
+					new QuizOption(2, FAKE_DATA_FACTORY.name().username()),
+					new QuizOption(3, FAKE_DATA_FACTORY.name().username()),
+					new QuizOption(4, FAKE_DATA_FACTORY.name().username())),
+				2
+			)
+		);
 	}
 }
