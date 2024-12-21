@@ -3,8 +3,9 @@ package com.sf.honeymorning.alarm.domain.entity;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import com.sf.honeymorning.common.entity.BaseEntity;
+import com.sf.honeymorning.common.entity.basic.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +31,7 @@ public class Alarm extends BaseEntity {
 
 	private Integer repeatInterval;
 
+	@Column(name = "wake_up")
 	private String wakeUpCallPath;
 
 	private boolean isActive;
@@ -106,8 +108,8 @@ public class Alarm extends BaseEntity {
 		this.isActive = isActive;
 	}
 
-	public void addMusicFilePath(String musicFilePath) {
-		this.wakeUpCallPath = musicFilePath;
+	public void addContent(String wakeUpCallPath) {
+		this.wakeUpCallPath = wakeUpCallPath;
 	}
 
 	public boolean canSleepMode(LocalDateTime now) {

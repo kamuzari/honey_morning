@@ -33,23 +33,50 @@ spring:
     publisher-confirm-type: correlated
     publisher-returns: true
 
+aws:
+  s3:
+    client:
+      access-key: ENC(CG2kGpzauXUGc5AMUfvIig==)
+      secret-access-key: ENC(wL4ZBDG69Z9RL91aKTB1tQ==)
+      region: ENC(CurWBvXC9t9keeApu2cA8ijLkS2X5AKN)
+      endpoint: ENC(uksqy4TCBYybyBCR5WRV0ot/QLh2PzCRis98O0w7R7M=)
+    bucket-name:
+      tts: ENC(H+mJWwChPkcvjeQZ3dcNoO1yKYrHSy6H)
+    domain-name: ${mock.server.base-url}
+
+voice:
+  client:
+    base-url: ${mock.server.base-url}
+    resources:
+      path:
+        voice-id: ENC(oHL4IVSptV/dsyyaECzXqmx3baTxkpoPMjHebyvc7Mo=)
+      header:
+        optimize-streaming-Latency: ENC(xLq4jskZeNScCloU837EDw==)
+        output_format: ENC(uINyBGA1XRBMmMkN3xFB+IuQlB2rRMuI)
+        xi-api-key: ENC(fq1nxPppj0fKrnCxz4wdgzxTo+jaIIf9q86P1f3HOKKQQyNvwey4+L4swVM1xJPb5iX4zyepGNQWW50m2QBE1g==)
+      body:
+        model-id: ENC(PVI3+2C/nWQQBn57xf04LUN2FyAUxfj1xF7wxqnS3S4=)
+        stability: ENC(2Hzak7m4jLw/Ph5NWJUMxg==)
+        similarity-boost: ENC(pvPpTDNrUfWqRdPLTeupyw==)
+        style: ENC(jOPHWrXge1pLxMbfVMaS0Q==)
+
 jasypt:
   password: ${JASYPT_PASSWORD:honeymorning}
 
 cors:
   allowedOrigins:
-    frontend: http://localhost:5173
+    frontend: ENC(NbmHQYv2AHMbkpN396oP15GCb7w28sfGUxqKreOFLNE=)
 
 ai:
   client:
-    brief: localhost:8089
-    quiz: localhost:8089
-    song: localhost:8089
-    topic-model: localhost:8089
+    brief: ${mock.server.base-url}
+    quiz: ${mock.server.base-url}
+    song: ${mock.server.base-url}
+    topic-model: ${mock.server.base-url}
 
-api:
-  key:
-    elevenlabs: ENC(DbOylaGVSiQWQLIOgVUa42Cjb7gcVq6OYS6+Siue3IPChv66oT6uaj0iiRNAkLpO/Ibdfdp01e80BRHQGUdogw==)
+mock:
+  server:
+    base-url: http://localhost:8089
 
 file:
   directory:

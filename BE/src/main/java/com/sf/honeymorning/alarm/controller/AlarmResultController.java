@@ -61,7 +61,7 @@ public class AlarmResultController {
 	}
 
 	@Operation(
-		summary = "연속 출석에 대한 최대 스트릭 가져오")
+		summary = "연속 출석에 대한 최대 스트릭 가져오기")
 	@ApiResponses(value = {
 		@ApiResponse(
 			responseCode = "200",

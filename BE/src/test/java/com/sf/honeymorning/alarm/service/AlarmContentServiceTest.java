@@ -18,7 +18,7 @@ import org.mockito.Spy;
 
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
-import com.sf.honeymorning.alarm.service.mapper.PreparedAlarmMapper;
+import com.sf.honeymorning.alarm.service.mapper.AlarmContentServiceMapper;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.violation.QuizViolation;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
@@ -26,13 +26,13 @@ import com.sf.honeymorning.context.MockTestServiceEnvironment;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
 
-class PreparedAlarmContentServiceTest extends MockTestServiceEnvironment {
+class AlarmContentServiceTest extends MockTestServiceEnvironment {
 
 	@InjectMocks
-	PreparedAlarmContentService preparedAlarmContentService;
+	AlarmContentService alarmContentService;
 
 	@Spy
-	PreparedAlarmMapper preparedAlarmMapper;
+	AlarmContentServiceMapper alarmContentServiceMapper;
 
 	@Mock
 	BriefingRepository briefingRepository;
@@ -69,7 +69,7 @@ class PreparedAlarmContentServiceTest extends MockTestServiceEnvironment {
 		given(quizRepository.findByBriefing(expectedBriefing)).willReturn(expectedQuizzes);
 
 		//when
-		var preparedAlarmContents = preparedAlarmContentService.getPreparedAlarmContents(AUTH_USER.getId());
+		var preparedAlarmContents = alarmContentService.getPreparedAlarmContents(AUTH_USER.getId());
 
 		//then
 		verify(alarmRepository, times(1)).findByUserIdAndIsActiveTrue(AUTH_USER.getId());

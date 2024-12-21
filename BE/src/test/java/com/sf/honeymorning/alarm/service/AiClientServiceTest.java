@@ -3,9 +3,13 @@ package com.sf.honeymorning.alarm.service;
 import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.SECTION_MAXIMUM_SIZE;
 import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.SECTION_MINIMUM_SIZE;
 import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.TOPIC_WORD_TOTAL_SIZE;
+import static com.sf.honeymorning.config.RabbitConfig.AI_GENERATED_ALARM_CONTENTS_RESPONSE_QUEUE_NAME;
+import static com.sf.honeymorning.config.RabbitConfig.AI_GENERATIVE_ALARM_CONTENTS_QUEUE_NAME;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.verify;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import java.util.List;
@@ -19,7 +23,6 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,11 +32,9 @@ import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
 import com.sf.honeymorning.brief.entity.violation.QuizViolation;
-import com.sf.honeymorning.config.RabbitConfig;
 import com.sf.honeymorning.context.ServiceIntegrationTest;
 import com.sf.honeymorning.context.message.RabbitMqContext;
 
-@Testcontainers
 class AiClientServiceTest extends ServiceIntegrationTest implements RabbitMqContext {
 
 	@Autowired
@@ -48,6 +49,9 @@ class AiClientServiceTest extends ServiceIntegrationTest implements RabbitMqCont
 	@Autowired
 	ConnectionFactory connectionFactory;
 
+	@SpyBean
+	AlarmContentService alarmContentService;
+
 	@Test
 	@DisplayName("AI 큐에 메시지를 전달하다")
 	void testServeMessage() {
@@ -57,7 +61,7 @@ class AiClientServiceTest extends ServiceIntegrationTest implements RabbitMqCont
 		aiClientService.publish(new ToAIRequestDto(userId, userTags));
 
 		//when
-		Object response = rabbitTemplate.receiveAndConvert(RabbitConfig.AI_GENERATIVE_ALARM_CONTENTS_QUEUE_NAME);
+		Object response = rabbitTemplate.receiveAndConvert(AI_GENERATIVE_ALARM_CONTENTS_QUEUE_NAME);
 		ToAIRequestDto requestDto = objectMapper.convertValue(response, new TypeReference<ToAIRequestDto>() {
 		});
 
@@ -75,7 +79,7 @@ class AiClientServiceTest extends ServiceIntegrationTest implements RabbitMqCont
 		String messageContent = "test";
 		String noRouteMessage = "NO_ROUTE";
 
-		RabbitTemplate subRabbitTemplate = setTemplate();
+		RabbitTemplate subRabbitTemplate = createRabbitTemplate();
 		CountDownLatch latch = new CountDownLatch(1);
 		StringBuilder responseMessage = new StringBuilder();
 
@@ -110,15 +114,15 @@ class AiClientServiceTest extends ServiceIntegrationTest implements RabbitMqCont
 			List.of("정치"),
 			"https://cdn.ycloud.com/03jidmmk39d"
 		);
-
-		rabbitTemplate.convertAndSend("", RabbitConfig.AI_GENERATED_ALARM_CONTENTS_RESPONSE_QUEUE_NAME,
+		doNothing().when(alarmContentService).create(expectResponseDto);
+		rabbitTemplate.convertAndSend("", AI_GENERATED_ALARM_CONTENTS_RESPONSE_QUEUE_NAME,
 			expectResponseDto);
 
 		//when
 		//then
 		await().atMost(5, SECONDS)
 			.untilAsserted(() -> {
-				verify(aiClientService, Mockito.times(1)).setAllBriefing(expectResponseDto);
+				verify(aiClientService, times(1)).createAlarmContents(expectResponseDto);
 			});
 	}
 
@@ -142,7 +146,7 @@ class AiClientServiceTest extends ServiceIntegrationTest implements RabbitMqCont
 			.toList();
 	}
 
-	private RabbitTemplate setTemplate() {
+	private RabbitTemplate createRabbitTemplate() {
 		RabbitTemplate subRabbitTemplate = new RabbitTemplate(connectionFactory);
 		subRabbitTemplate.setMandatory(true);
 
