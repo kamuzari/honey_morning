@@ -32,19 +32,13 @@ spring:
       mode: always
 
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: admin
-    password: admin
-    publisher-confirm-type: correlated
+    host: ENC(ChZOmvL4MK/aGt4d08I9SJrMdKyuKcN9)
+    port: ENC(Sbdp9S/MQv/nWDsXauw71w==)
+    username: ENC(NH0EN4SufTQf8uPsFWN7qQ==)
+    password: ENC(vQTlChpIw7L6XsQDkrRu1A==)
+    publisher-confirm-type: ENC(1V+qvXK6bSUvvFDkXRsgI2fn0RWweTi/)
     publisher-returns: true
 
-
-    queues:
-      dead-letter:
-        name: "ai-dead-letter-queue"
-        durable: true
-        exchange: "dead-letter-exchange"
 
 jwt:
   issuer: ENC(PazcZ21ocRNS74Kr3cHrkhdSjvfSCMzq)
@@ -102,6 +96,17 @@ security:
       DELETE: [ ]
       OPTIONS: /**
 
+aws:
+  s3:
+    client:
+      access-key: ENC(CG2kGpzauXUGc5AMUfvIig==)
+      secret-access-key: ENC(wL4ZBDG69Z9RL91aKTB1tQ==)
+      region: ENC(CurWBvXC9t9keeApu2cA8ijLkS2X5AKN)
+      endpoint: ENC(uksqy4TCBYybyBCR5WRV0ot/QLh2PzCRis98O0w7R7M=)
+    bucket-name:
+      tts: ENC(H+mJWwChPkcvjeQZ3dcNoO1yKYrHSy6H)
+    domain-name: http://localhost:4566/${aws.s3.bucket-name.tts}
+    prod-domain-name: http://${aws.s3.client.bucket-name}.s3.${aws.s3.client.region}.amazonaws.com
 cookie:
   secure: ${COOKIE_SECURE:ENC(HDfUXBUpjV2TFLDs+cDo2w==)}
   same-site: ${COOKIE_SAME_SITE:ENC(lNIKQoe0yCJO8bYchDCtLA==)}
@@ -114,9 +119,21 @@ ai:
     song: ENC(Ihp/8Uz6a3eoBaagYUxdW7Uv2g58fo9K/x9jJwM/eXuKvEdEqFiswAIO2i79z6ZE)
     topic-model: ENC(K37CfhnlVJ4Z2ruV7bR8UG+v2+x+Ee9yNAqPCRrTAHCouTtuU/nrqAd2ApocmUyN)
 
-api:
-  key:
-    elevenlabs: ENC(DbOylaGVSiQWQLIOgVUa42Cjb7gcVq6OYS6+Siue3IPChv66oT6uaj0iiRNAkLpO/Ibdfdp01e80BRHQGUdogw==)
+voice:
+  client:
+    base-url: https://api.elevenlabs.io/v1
+    resources:
+      path:
+        voice-id: ENC(oHL4IVSptV/dsyyaECzXqmx3baTxkpoPMjHebyvc7Mo=)
+      header:
+        optimize-streaming-Latency: ENC(xLq4jskZeNScCloU837EDw==)
+        output_format: ENC(uINyBGA1XRBMmMkN3xFB+IuQlB2rRMuI)
+        xi-api-key: ENC(fq1nxPppj0fKrnCxz4wdgzxTo+jaIIf9q86P1f3HOKKQQyNvwey4+L4swVM1xJPb5iX4zyepGNQWW50m2QBE1g==)
+      body:
+        model-id: ENC(PVI3+2C/nWQQBn57xf04LUN2FyAUxfj1xF7wxqnS3S4=)
+        stability: ENC(2Hzak7m4jLw/Ph5NWJUMxg==)
+        similarity-boost: ENC(pvPpTDNrUfWqRdPLTeupyw==)
+        style: ENC(jOPHWrXge1pLxMbfVMaS0Q==)
 
 file:
   directory:

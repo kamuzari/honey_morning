@@ -16,7 +16,7 @@ import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.controller.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.controller.dto.response.PreparedAlarmContentResponse;
 import com.sf.honeymorning.alarm.service.AlarmService;
-import com.sf.honeymorning.alarm.service.PreparedAlarmContentService;
+import com.sf.honeymorning.alarm.service.AlarmContentService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -33,11 +33,11 @@ import jakarta.validation.Valid;
 public class AlarmController {
 
 	private final AlarmService alarmService;
-	private final PreparedAlarmContentService preparedAlarmContentService;
+	private final AlarmContentService alarmContentService;
 
-	public AlarmController(AlarmService alarmService, PreparedAlarmContentService preparedAlarmContentService) {
+	public AlarmController(AlarmService alarmService, AlarmContentService alarmContentService) {
 		this.alarmService = alarmService;
-		this.preparedAlarmContentService = preparedAlarmContentService;
+		this.alarmContentService = alarmContentService;
 	}
 
 	@Operation(
@@ -84,7 +84,7 @@ public class AlarmController {
 	})
 	@GetMapping("/prepared")
 	public PreparedAlarmContentResponse getPreparedAlarmContents(@AuthenticationPrincipal JwtAuthentication principal) {
-		return preparedAlarmContentService.getPreparedAlarmContents(principal.id());
+		return alarmContentService.getPreparedAlarmContents(principal.id());
 	}
 
 	@Operation(
