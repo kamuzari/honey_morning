@@ -1,6 +1,6 @@
 package com.sf.honeymorning.brief.entity;
 
-import com.sf.honeymorning.common.entity.BaseEntity;
+import com.sf.honeymorning.common.entity.basic.BaseEntity;
 import com.sf.honeymorning.tag.entity.Tag;
 
 import jakarta.persistence.Entity;

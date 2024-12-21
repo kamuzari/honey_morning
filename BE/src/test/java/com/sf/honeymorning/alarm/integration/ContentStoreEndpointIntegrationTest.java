@@ -60,7 +60,8 @@ public class ContentStoreEndpointIntegrationTest extends EndPointIntegrationEnvi
 		byte[] originalContent = resource.getInputStream().readAllBytes();
 
 		// when
-		contentStoreService.upload(fullPath, resource, resource.contentLength(), MediaType.APPLICATION_OCTET_STREAM_VALUE);
+		contentStoreService.upload(fullPath, resource, resource.contentLength(),
+			MediaType.APPLICATION_OCTET_STREAM_VALUE);
 
 		//then
 		String url = String.join("/", awsS3Properties.endpoint(), bucketName, KEY_PREFIX, FILE_NAME);

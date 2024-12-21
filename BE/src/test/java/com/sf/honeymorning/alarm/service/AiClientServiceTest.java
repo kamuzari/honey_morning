@@ -8,8 +8,8 @@ import static com.sf.honeymorning.config.RabbitConfig.AI_GENERATIVE_ALARM_CONTEN
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.verify;
-import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import java.util.List;
@@ -18,7 +18,6 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,9 +3,12 @@ package com.sf.honeymorning.quiz.entity;
 import java.util.List;
 
 import com.sf.honeymorning.brief.entity.Briefing;
-import com.sf.honeymorning.common.entity.BaseEntity;
+import com.sf.honeymorning.common.entity.basic.BaseEntity;
+import com.sf.honeymorning.common.entity.content.Content;
 
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +36,7 @@ public class Quiz extends BaseEntity {
 	private Briefing briefing;
 
 	@Column(length = 200, nullable = false)
-	private String question;
+	private String problem;
 
 	@Column(nullable = false)
 	private Integer answer;
@@ -52,8 +55,12 @@ public class Quiz extends BaseEntity {
 	@Column(length = 1000, nullable = true)
 	private String quizVoiceUrl;
 
+	@Embedded
+	@AttributeOverride(name = "fileUrl", column = @Column(name = "access_url"))
+	private Content wakeUpQuizContent;
+
 	public Quiz(Briefing briefing,
-		String question,
+		String problem,
 		Integer answer,
 		List<String> options,
 		String quizVoiceUrl) {
@@ -62,7 +69,7 @@ public class Quiz extends BaseEntity {
 		}
 
 		this.briefing = briefing;
-		this.question = question;
+		this.problem = problem;
 		this.answer = answer;
 		this.option1 = options.get(0);
 		this.option2 = options.get(1);
@@ -73,7 +80,7 @@ public class Quiz extends BaseEntity {
 	}
 
 	public Quiz(
-		String question,
+		String problem,
 		Integer answer,
 		List<String> options,
 		String quizVoiceUrl) {
@@ -81,7 +88,7 @@ public class Quiz extends BaseEntity {
 			throw new IllegalArgumentException("객관식은 4지 선다형 입니다.");
 		}
 
-		this.question = question;
+		this.problem = problem;
 		this.answer = answer;
 		this.option1 = options.get(0);
 		this.option2 = options.get(1);
@@ -89,5 +96,9 @@ public class Quiz extends BaseEntity {
 		this.option4 = options.get(3);
 		this.selection = null;
 		this.quizVoiceUrl = quizVoiceUrl;
+	}
+
+	public void addWakeUpQuizContent(Content wakeUpQuizContent) {
+		this.wakeUpQuizContent = wakeUpQuizContent;
 	}
 }

@@ -38,19 +38,18 @@ import com.sf.honeymorning.util.TimeUtils;
 @Service
 public class AlarmContentService {
 	public static final int FIXED_NEXT_MINUTE = 40;
-
-	@Value("${aws.s3.domain-name}")
-	String domainName;
-
 	private final BriefingRepository briefingRepository;
 	private final AlarmRepository alarmRepository;
 	private final QuizRepository quizRepository;
 	private final TtsClientService ttsClientService;
 	private final ContentStoreService contentStoreService;
 	private final AlarmContentServiceMapper alarmContentServiceMapper;
+	@Value("${aws.s3.domain-name}")
+	String domainName;
 
 	public AlarmContentService(BriefingRepository briefingRepository, AlarmRepository alarmRepository,
-		QuizRepository quizRepository, AlarmContentServiceMapper alarmContentServiceMapper, ContentStoreService contentStoreService,
+		QuizRepository quizRepository, AlarmContentServiceMapper alarmContentServiceMapper,
+		ContentStoreService contentStoreService,
 		TtsClientService ttsClientService) {
 		this.briefingRepository = briefingRepository;
 		this.alarmRepository = alarmRepository;

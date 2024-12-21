@@ -57,7 +57,8 @@ public class ContentsStoreServiceIntegrationTest extends ServiceIntegrationTest 
 		byte[] originalContent = resource.getInputStream().readAllBytes();
 
 		// when
-		contentStoreService.upload(fullPath, resource, resource.contentLength(), MediaType.APPLICATION_OCTET_STREAM_VALUE);
+		contentStoreService.upload(fullPath, resource, resource.contentLength(),
+			MediaType.APPLICATION_OCTET_STREAM_VALUE);
 
 		//then
 		S3Object s3Object = amazonS3Client.getObject(new GetObjectRequest(bucketName, fullPath));

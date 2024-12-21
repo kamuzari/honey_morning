@@ -44,7 +44,7 @@ public class QuizService {
 
 		for (Quiz quiz : quizList) {
 			QuizResponseDto quizResponseDto = new QuizResponseDto(
-				quiz.getQuestion(),
+				quiz.getProblem(),
 				quiz.getOption1(),
 				quiz.getOption2(),
 				quiz.getOption3(),
@@ -73,8 +73,6 @@ public class QuizService {
 			.orElseThrow(() -> new EntityNotFoundException("id와 일치하는 퀴즈가 존재하지 않습니다."));
 
 		quiz.setSelection(quizRequestDto.getSelection());
-
-		quizRepository.save(quiz);
 
 		return ResponseEntity.ok("퀴즈를 성공적으로 갱신하였습니다.");
 	}
