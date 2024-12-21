@@ -39,7 +39,6 @@ spring:
     publisher-confirm-type: ENC(1V+qvXK6bSUvvFDkXRsgI2fn0RWweTi/)
     publisher-returns: true
 
-
 jwt:
   issuer: ENC(PazcZ21ocRNS74Kr3cHrkhdSjvfSCMzq)
   access-token:
@@ -106,7 +105,7 @@ aws:
     bucket-name:
       tts: ENC(H+mJWwChPkcvjeQZ3dcNoO1yKYrHSy6H)
     domain-name: http://localhost:4566/${aws.s3.bucket-name.tts}
-    prod-domain-name: http://${aws.s3.client.bucket-name}.s3.${aws.s3.client.region}.amazonaws.com
+
 cookie:
   secure: ${COOKIE_SECURE:ENC(HDfUXBUpjV2TFLDs+cDo2w==)}
   same-site: ${COOKIE_SAME_SITE:ENC(lNIKQoe0yCJO8bYchDCtLA==)}

@@ -60,12 +60,13 @@ voice:
         similarity-boost: ENC(pvPpTDNrUfWqRdPLTeupyw==)
         style: ENC(jOPHWrXge1pLxMbfVMaS0Q==)
 
+
 jasypt:
   password: ${JASYPT_PASSWORD:honeymorning}
 
 cors:
   allowedOrigins:
-    frontend: ENC(NbmHQYv2AHMbkpN396oP15GCb7w28sfGUxqKreOFLNE=)
+    frontend: http://localhost:5173
 
 ai:
   client:
