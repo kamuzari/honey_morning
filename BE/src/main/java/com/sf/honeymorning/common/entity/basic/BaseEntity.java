@@ -1,4 +1,4 @@
-package com.sf.honeymorning.common.entity;
+package com.sf.honeymorning.common.entity.basic;
 
 import java.time.LocalDateTime;
 
