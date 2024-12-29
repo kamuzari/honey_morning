@@ -29,14 +29,14 @@ public class S3Config {
 	}
 
 	@Bean
-	public AmazonS3 s3Client(RequestHandler2 requestHandler) {
+	public AmazonS3 s3Client() {
 
 		return AmazonS3ClientBuilder.standard()
 			.withEndpointConfiguration(configureEndpoint())
 			.withClientConfiguration(configureClient())
 			.withCredentials(configureCredential())
 			.enablePathStyleAccess()
-			.withRequestHandlers(requestHandler)
+			.withRequestHandlers(configureRequestHandler())
 			.build();
 	}
 
@@ -58,8 +58,7 @@ public class S3Config {
 			.withThrottledRetries(true);
 	}
 
-	@Bean
-	public RequestHandler2 requestHandler() {
+	private RequestHandler2 configureRequestHandler() {
 		return new RequestHandler2() {
 			@Override
 			public void afterResponse(com.amazonaws.Request<?> request, com.amazonaws.Response<?> response) {

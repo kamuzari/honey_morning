@@ -2,6 +2,10 @@ server:
   port: ${SERVER_PORT:8080}
 
 spring:
+  batch:
+    jdbc:
+      initialize-schema: always
+
   data:
     redis:
       host: ENC(Mdm3ZYu19EpQS7ZSZ1d/kKG8d/2RGVBy)
@@ -32,11 +36,10 @@ spring:
       mode: always
 
   rabbitmq:
-    host: ENC(ChZOmvL4MK/aGt4d08I9SJrMdKyuKcN9)
-    port: ENC(Sbdp9S/MQv/nWDsXauw71w==)
-    username: ENC(NH0EN4SufTQf8uPsFWN7qQ==)
-    password: ENC(vQTlChpIw7L6XsQDkrRu1A==)
-    publisher-confirm-type: ENC(1V+qvXK6bSUvvFDkXRsgI2fn0RWweTi/)
+    host: ENC(3c3rBT0e0I4eLxq2i7WQI3dQQP2m6izd)
+    port: ENC(KgnOnUUSLJbB0N1rtgCfCA==)
+    username: ENC(egHMI2wBoxjsFRgwodbrGw==)
+    password: ENC(2oBor7W8ilV6FGD+BI7rdw==)
     publisher-returns: true
 
 jwt:
@@ -153,10 +156,9 @@ management:
   metrics:
     enable:
       all: true
+
 logging:
   level:
     root: info
-    org:
-      hibernate.SQL: debug
-      springframework.web: debug
-      hibernate: error
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
