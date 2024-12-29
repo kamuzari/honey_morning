@@ -38,12 +38,14 @@ import com.sf.honeymorning.util.TimeUtils;
 @Service
 public class AlarmContentService {
 	public static final int FIXED_NEXT_MINUTE = 40;
+
 	private final BriefingRepository briefingRepository;
 	private final AlarmRepository alarmRepository;
 	private final QuizRepository quizRepository;
 	private final TtsClientService ttsClientService;
 	private final ContentStoreService contentStoreService;
 	private final AlarmContentServiceMapper alarmContentServiceMapper;
+
 	@Value("${aws.s3.domain-name}")
 	String domainName;
 
@@ -73,13 +75,6 @@ public class AlarmContentService {
 		List<Quiz> quizzes = quizRepository.findByBriefing(briefing);
 
 		return alarmContentServiceMapper.toPreparedAlarmContentResponse(alarm, briefing, quizzes);
-	}
-
-	public List<Alarm> getReadyAlarm() {
-		LocalTime timeAfter40Minutes = TimeUtils.getNow().plusMinutes(FIXED_NEXT_MINUTE);
-		Integer dayOfWeekMask = DayOfTheWeek.getToday();
-
-		return alarmRepository.findActiveAlarmsForToday(dayOfWeekMask, timeAfter40Minutes);
 	}
 
 	@Transactional
@@ -113,7 +108,6 @@ public class AlarmContentService {
 			Content content = createContent(quiz.getProblem(), FileType.QUIZ);
 			quiz.addWakeUpQuizContent(content);
 		}
-
 	}
 
 	private Content createContent(String text, FileType type) {

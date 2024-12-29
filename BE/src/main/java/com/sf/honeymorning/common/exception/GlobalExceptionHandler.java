@@ -15,6 +15,7 @@ import javax.naming.AuthenticationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.JobExecutionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.sf.honeymorning.alarm.exception.AlarmFatalException;
+import com.sf.honeymorning.common.exception.alarm.ReadyAlramBatchException;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.ErrorProtocol;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
@@ -102,6 +104,19 @@ public class GlobalExceptionHandler {
 
 		return ErrorResponse.builder(exception, errorProtocol.getStatus(),
 				errorProtocol.getClientMessage())
+			.detail(errorProtocol.getInternalMessage())
+			.property(MESSAGE_PROPERTY_KEY, errorProtocol.getClientMessage())
+			.property("code", errorProtocol.getCustomCode())
+			.build();
+	}
+
+	@ExceptionHandler(ReadyAlramBatchException.class)
+	public ErrorResponse handleBatchExceptions(ReadyAlramBatchException exception) {
+		log.error("Batch Job Error: {}, {}", exception.getErrorProtocol(), exception.getMessage(), exception);
+
+		ErrorProtocol errorProtocol = exception.getErrorProtocol();
+		return ErrorResponse.builder(exception, HttpStatus.INTERNAL_SERVER_ERROR, "배치 작업 중 오류가 발생했습니다.")
+			.detail("배치 작업 실행 중 내부 오류가 발생했습니다. 관리자에게 문의하세요.")
 			.detail(errorProtocol.getInternalMessage())
 			.property(MESSAGE_PROPERTY_KEY, errorProtocol.getClientMessage())
 			.property("code", errorProtocol.getCustomCode())
