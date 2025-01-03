@@ -1,5 +1,6 @@
 package com.sf.honeymorning.alarm.batch.config;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Map;
@@ -55,6 +56,7 @@ public class AlarmContentBatchConfig {
 	@Bean
 	@StepScope
 	public JdbcPagingItemReader<ReadyAlarmDto> reader(
+		@Value("#{jobParameters['startAt']}") LocalDate startAt,
 		@Value("#{jobParameters['startTime']}") LocalTime startTime,
 		@Value("#{jobParameters['endTime']}") LocalTime endTime,
 		@Value("#{jobParameters['today']}") Long today) {
@@ -124,6 +126,7 @@ public class AlarmContentBatchConfig {
 	public Step alarmStep(JdbcPagingItemReader<ReadyAlarmDto> reader,
 		ItemProcessor<ReadyAlarmDto, OutBoxAlarmEvent> processor,
 		ItemWriter<OutBoxAlarmEvent> writer) {
+
 		return new StepBuilder("alarmStep", jobRepository)
 			.<ReadyAlarmDto, OutBoxAlarmEvent>chunk(CHUNK_SIZE, transactionManager)
 			.reader(reader)

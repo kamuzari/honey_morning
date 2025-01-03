@@ -2,6 +2,7 @@ package com.sf.honeymorning.alarm.domain.entity;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.StringJoiner;
 
 import com.sf.honeymorning.common.entity.basic.BaseEntity;
 
@@ -112,5 +113,19 @@ public class Alarm extends BaseEntity {
 		boolean isTodayTheAlarmStartDate = (this.dayOfTheWeeks & toDayOfTheWeek.getShiftedBit()) > 0;
 
 		return is5HoursBeforeTheAlarmStarts && isTodayTheAlarmStartDate;
+	}
+
+	@Override
+	public String toString() {
+		return new StringJoiner(", ", Alarm.class.getSimpleName() + "[", "]")
+			.add("id=" + id)
+			.add("userId=" + userId)
+			.add("wakeUpTime=" + wakeUpTime)
+			.add("dayOfTheWeeks=" + dayOfTheWeeks)
+			.add("repeatFrequency=" + repeatFrequency)
+			.add("repeatInterval=" + repeatInterval)
+			.add("wakeUpCallPath='" + wakeUpCallPath + "'")
+			.add("isActive=" + isActive)
+			.toString();
 	}
 }
