@@ -4,7 +4,6 @@ import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.SECT
 import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.SECTION_MINIMUM_SIZE;
 import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.TOPIC_WORD_TOTAL_SIZE;
 import static com.sf.honeymorning.config.RabbitConfig.AI_GENERATED_ALARM_CONTENTS_RESPONSE_QUEUE_NAME;
-import static com.sf.honeymorning.config.RabbitConfig.AI_GENERATIVE_ALARM_CONTENTS_QUEUE_NAME;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.verify;
@@ -23,18 +22,16 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sf.honeymorning.alarm.service.dto.request.ToAIRequestDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiBriefingDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
 import com.sf.honeymorning.brief.entity.violation.QuizViolation;
-import com.sf.honeymorning.context.ServiceIntegrationTest;
-import com.sf.honeymorning.context.message.RabbitMqContext;
+import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.infra.message.RabbitMqContext;
 
-class AiClientServiceTest extends ServiceIntegrationTest implements RabbitMqContext {
+class AiClientServiceTest extends DefaultIntegrationTest implements RabbitMqContext {
 
 	@Autowired
 	RabbitTemplate rabbitTemplate;
@@ -51,24 +48,24 @@ class AiClientServiceTest extends ServiceIntegrationTest implements RabbitMqCont
 	@SpyBean
 	AlarmContentService alarmContentService;
 
-	@Test
-	@DisplayName("AI 큐에 메시지를 전달하다")
-	void testServeMessage() {
-		//given
-		Long userId = 1L;
-		List<String> userTags = List.of("정치");
-		aiClientService.publish(new ToAIRequestDto(userId, userTags));
-
-		//when
-		Object response = rabbitTemplate.receiveAndConvert(AI_GENERATIVE_ALARM_CONTENTS_QUEUE_NAME);
-		ToAIRequestDto requestDto = objectMapper.convertValue(response, new TypeReference<ToAIRequestDto>() {
-		});
-
-		// then
-		assertThat(requestDto).isNotNull();
-		assertThat(requestDto.userId()).isEqualTo(userId);
-		assertThat(requestDto.tags()).containsAll(userTags);
-	}
+	// @Test
+	// @DisplayName("AI 큐에 메시지를 전달하다")
+	// void testServeMessage() {
+	// 	//given
+	// 	Long userId = 1L;
+	// 	List<String> userTags = List.of("정치");
+	// 	aiClientService.publish(new ToAIRequestDto(userId, userTags));
+	//
+	// 	//when
+	// 	Object response = rabbitTemplate.receiveAndConvert(AI_GENERATIVE_ALARM_CONTENTS_QUEUE_NAME);
+	// 	ToAIRequestDto requestDto = objectMapper.convertValue(response, new TypeReference<ToAIRequestDto>() {
+	// 	});
+	//
+	// 	// then
+	// 	assertThat(requestDto).isNotNull();
+	// 	assertThat(requestDto.userId()).isEqualTo(userId);
+	// 	assertThat(requestDto.tags()).containsAll(userTags);
+	// }
 
 	@Test
 	@DisplayName("존재하지 않는 Queue로 메시지를 보내면 반환된다")

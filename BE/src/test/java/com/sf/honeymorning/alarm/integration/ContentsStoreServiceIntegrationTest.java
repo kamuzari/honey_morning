@@ -21,10 +21,10 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.sf.honeymorning.alarm.service.ContentStoreService;
 import com.sf.honeymorning.config.constant.AwsS3Properties;
-import com.sf.honeymorning.context.ServiceIntegrationTest;
-import com.sf.honeymorning.context.storage.AwsS3Context;
+import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.infra.storage.AwsS3Context;
 
-public class ContentsStoreServiceIntegrationTest extends ServiceIntegrationTest implements AwsS3Context {
+public class ContentsStoreServiceIntegrationTest extends DefaultIntegrationTest implements AwsS3Context {
 
 	static final String KEY_PREFIX = "briefing";
 	static final String FILE_NAME = "sample-sound.mp3";

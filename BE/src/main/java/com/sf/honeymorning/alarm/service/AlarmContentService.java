@@ -4,7 +4,6 @@ import static com.sf.honeymorning.util.ResponseEntityUtils.getContentLength;
 import static com.sf.honeymorning.util.ResponseEntityUtils.getContentType;
 
 import java.text.MessageFormat;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sf.honeymorning.alarm.controller.dto.response.PreparedAlarmContentResponse;
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
-import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.exception.NotPreparedAlarmException;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
@@ -32,7 +30,6 @@ import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.ErrorProtocol;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
-import com.sf.honeymorning.util.TimeUtils;
 
 @Transactional(readOnly = true)
 @Service

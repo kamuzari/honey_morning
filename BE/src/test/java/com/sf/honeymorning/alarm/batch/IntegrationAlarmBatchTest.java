@@ -61,6 +61,8 @@ public class IntegrationAlarmBatchTest extends DefaultIntegrationTest implements
 
 	@Autowired
 	AlarmTagRepository alarmTagRepository;
+	@Autowired
+	JdbcBatchItemWriter<OutBoxAlarmEvent> writer;
 
 	@AfterEach
 	public void tearDown() {
@@ -120,9 +122,6 @@ public class IntegrationAlarmBatchTest extends DefaultIntegrationTest implements
 		assertThat(reader.read()).isNull();
 		assertThat(reader.getPageSize()).isEqualTo(10);
 	}
-
-	@Autowired
-	JdbcBatchItemWriter<OutBoxAlarmEvent> writer;
 
 	@Test
 	@DisplayName("데이터를 정상적으로 저장한다")

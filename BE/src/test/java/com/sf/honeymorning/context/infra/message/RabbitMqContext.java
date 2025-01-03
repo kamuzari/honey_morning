@@ -1,4 +1,4 @@
-package com.sf.honeymorning.context.message;
+package com.sf.honeymorning.context.infra.message;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;

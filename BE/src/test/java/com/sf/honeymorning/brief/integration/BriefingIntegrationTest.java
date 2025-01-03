@@ -15,13 +15,13 @@ import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.repository.BriefingTagRepository;
 import com.sf.honeymorning.brief.service.BriefService;
-import com.sf.honeymorning.context.ServiceIntegrationTest;
+import com.sf.honeymorning.context.DefaultIntegrationTest;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
 import com.sf.honeymorning.tag.entity.Tag;
 import com.sf.honeymorning.tag.repository.TagRepository;
 
-class BriefingIntegrationTest extends ServiceIntegrationTest {
+class BriefingIntegrationTest extends DefaultIntegrationTest {
 
 	protected static final Faker FAKE_DATA_FACTORY = new Faker();
 
