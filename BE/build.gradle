@@ -36,7 +36,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 
+    // AWS
     implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.2.1'
+
+    // AWS S3
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.780'
 
     // BATCH
@@ -61,27 +64,33 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
-    implementation 'org.json:json:20210307'
-
     runtimeOnly 'com.mysql:mysql-connector-j'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'io.rest-assured:rest-assured'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'com.h2database:h2'
+
+    // Rest Assured
+    testImplementation 'io.rest-assured:rest-assured'
+
+    // Test Container
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.testcontainers:localstack'
     testImplementation 'org.testcontainers:rabbitmq'
     testImplementation 'org.testcontainers:mysql'
+
+    // Mock Exterior Server Test
     testImplementation 'org.springframework.cloud:spring-cloud-contract-stub-runner'
     testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:4.0.4'
+
+    // Spring Batch Test
     testImplementation 'org.springframework.batch:spring-batch-test'
 
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Fake Data
     implementation group: 'com.github.javafaker', name: 'javafaker', version: '0.15'
 }
 

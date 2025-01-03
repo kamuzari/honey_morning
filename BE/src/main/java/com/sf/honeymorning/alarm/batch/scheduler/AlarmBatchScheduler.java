@@ -1,6 +1,7 @@
 package com.sf.honeymorning.alarm.batch.scheduler;
 
 import java.text.MessageFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -8,6 +9,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ import com.sf.honeymorning.util.TimeUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
+@Profile({"local", "prod"})
 @Slf4j
 @Component
 public class AlarmBatchScheduler {
@@ -58,6 +61,7 @@ public class AlarmBatchScheduler {
 			log.info("start batch job start time -> {}, end time -> {}, today -> {}", startTime, endTime, today);
 
 			jobLauncher.run(alarmJob, new JobParametersBuilder()
+				.addLocalDate("startAt", LocalDate.now())
 				.addLong("today", (long)today)
 				.addLocalTime("startTime", startTime)
 				.addLocalTime("endTime", endTime)
