@@ -1,4 +1,4 @@
-package com.sf.honeymorning.context.storage;
+package com.sf.honeymorning.context.infra.storage;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;

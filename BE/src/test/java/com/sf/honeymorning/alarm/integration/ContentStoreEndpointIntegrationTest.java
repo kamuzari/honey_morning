@@ -21,7 +21,7 @@ import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.sf.honeymorning.alarm.service.ContentStoreService;
 import com.sf.honeymorning.config.constant.AwsS3Properties;
 import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
-import com.sf.honeymorning.context.storage.AwsS3Context;
+import com.sf.honeymorning.context.infra.storage.AwsS3Context;
 
 public class ContentStoreEndpointIntegrationTest extends EndPointIntegrationEnvironment implements AwsS3Context {
 

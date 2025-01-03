@@ -1,4 +1,4 @@
-package com.sf.honeymorning.context.database;
+package com.sf.honeymorning.context.infra.database;
 
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
