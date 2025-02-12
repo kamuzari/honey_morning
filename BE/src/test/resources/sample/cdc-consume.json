@@ -1,0 +1,69 @@
+{
+  "schema": {
+    "type": "struct",
+    "fields": [
+      {
+        "type": "int64",
+        "optional": true,
+        "field": "alarm_id"
+      },
+      {
+        "type": "int64",
+        "optional": true,
+        "name": "io.debezium.time.MicroTimestamp",
+        "version": 1,
+        "field": "create_at"
+      },
+      {
+        "type": "int64",
+        "optional": false,
+        "field": "id"
+      },
+      {
+        "type": "int64",
+        "optional": true,
+        "name": "io.debezium.time.MicroTimestamp",
+        "version": 1,
+        "field": "processed_at"
+      },
+      {
+        "type": "int64",
+        "optional": true,
+        "name": "io.debezium.time.MicroTimestamp",
+        "version": 1,
+        "field": "send_at"
+      },
+      {
+        "type": "string",
+        "optional": true,
+        "name": "io.debezium.data.Enum",
+        "version": 1,
+        "parameters": {
+          "allowed": "COMPLETED,FAILED,PENDING,PUBLISH"
+        },
+        "field": "event_status"
+      },
+      {
+        "type": "string",
+        "optional": true,
+        "field": "event_type"
+      },
+      {
+        "type": "string",
+        "optional": true,
+        "field": "payload"
+      }
+    ],
+    "optional": true,
+    "name": "alarm_contents.honeymorning.outbox_alarm_event.Value"
+  },
+  "payload": {
+    "alarm_id": 200,
+    "created_at": 1739299716000000,
+    "id": 1,
+    "processed_at": null,
+    "event_status": "PENDING",
+    "event_type": "PENDING",
+    "payload": "\"{\"test\": \"test\"}\""
+  }
+}

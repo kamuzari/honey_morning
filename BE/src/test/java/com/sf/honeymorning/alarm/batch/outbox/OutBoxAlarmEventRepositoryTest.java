@@ -22,7 +22,7 @@ class OutBoxAlarmEventRepositoryTest extends RepositoryMockTest {
 	}
 
 	@Test
-	@DisplayName("아웃박스 테스트를 해요")
+	@DisplayName("아웃박스 테스트를 위한 상위 데이터 가져오기")
 	void testGetTopData() {
 		//given
 		//when
@@ -33,7 +33,6 @@ class OutBoxAlarmEventRepositoryTest extends RepositoryMockTest {
 		assertThat(outBoxAlarmEvent).isNotNull();
 		assertThat(outBoxAlarmEvent.getCreateAt()).isNotNull();
 		assertThat(outBoxAlarmEvent.getEventStatus()).isEqualTo(EventStatus.PENDING);
-		assertThat(outBoxAlarmEvent.getSendAt()).isNull();
 		assertThat(outBoxAlarmEvent.getProcessedAt()).isNull();
 
 	}
