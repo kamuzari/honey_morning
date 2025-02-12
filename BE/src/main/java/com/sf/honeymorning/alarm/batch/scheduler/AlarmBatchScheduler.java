@@ -76,30 +76,30 @@ public class AlarmBatchScheduler {
 		}
 	}
 
-	@Scheduled(cron = CRON_PER_SECONDS)
-	@Transactional
-	public void relayAlarmEvent() {
-		outBoxAlarmEventRepository.findTopByEventStatus(EventStatus.PENDING)
-			.ifPresent(outBoxAlarmEvent -> {
-					outBoxAlarmEvent.update(EventStatus.PUBLISH);
-
-					TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-						@Override
-						public void afterCommit() {
-							log.info("after commit, publish outBoxAlarmEvent : {}", outBoxAlarmEvent);
-							rabbitTemplate.convertAndSend(PUBLISH_QUEUE_NAME, outBoxAlarmEvent.getPayload());
-						}
-
-						@Override
-						public void afterCompletion(int status) {
-							boolean isFail = status != TransactionSynchronization.STATUS_COMMITTED;
-							if (isFail) {
-								log.error("Transaction failed, event was not sent : {}", outBoxAlarmEvent);
-							}
-						}
-					});
-				}
-			);
-	}
+	// @Scheduled(cron = CRON_PER_SECONDS)
+	// @Transactional
+	// public void relayAlarmEvent() {
+	// 	outBoxAlarmEventRepository.findTopByEventStatus(EventStatus.PENDING)
+	// 		.ifPresent(outBoxAlarmEvent -> {
+	// 				outBoxAlarmEvent.update(EventStatus.PUBLISH);
+	//
+	// 				TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+	// 					@Override
+	// 					public void afterCommit() {
+	// 						log.info("after commit, publish outBoxAlarmEvent : {}", outBoxAlarmEvent);
+	// 						rabbitTemplate.convertAndSend(PUBLISH_QUEUE_NAME, outBoxAlarmEvent.getPayload());
+	// 					}
+	//
+	// 					@Override
+	// 					public void afterCompletion(int status) {
+	// 						boolean isFail = status != TransactionSynchronization.STATUS_COMMITTED;
+	// 						if (isFail) {
+	// 							log.error("Transaction failed, event was not sent : {}", outBoxAlarmEvent);
+	// 						}
+	// 					}
+	// 				});
+	// 			}
+	// 		);
+	// }
 
 }

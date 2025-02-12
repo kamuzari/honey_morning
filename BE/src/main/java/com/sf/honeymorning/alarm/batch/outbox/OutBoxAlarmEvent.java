@@ -36,8 +36,6 @@ public class OutBoxAlarmEvent {
 
 	private LocalDateTime createAt;
 
-	private LocalDateTime sendAt;
-
 	private LocalDateTime processedAt;
 
 	protected OutBoxAlarmEvent(Long alarmId,
@@ -76,7 +74,6 @@ public class OutBoxAlarmEvent {
 			.add("eventType='" + eventType + "'")
 			.add("payload='" + payload + "'")
 			.add("createAt=" + createAt)
-			.add("sendAt=" + sendAt)
 			.add("processedAt=" + processedAt)
 			.toString();
 	}
