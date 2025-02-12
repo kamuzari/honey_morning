@@ -6,10 +6,17 @@ spring:
     jdbc:
       initialize-schema: ALWAYS
 
+  kafka:
+    bootstrap-servers: ENC(Hggvm9zvjIATkyaHd5n1Qztzok2H155k)
+    consumer:
+      group-id: "alarm-contents-cdc-group"
+      auto-offset-reset: "earliest"
+
   data:
     redis:
       host: ENC(Mdm3ZYu19EpQS7ZSZ1d/kKG8d/2RGVBy)
       port: ENC(u7qkh3ysOlEOXaVQlVJRdw==)
+      password: ENC(Out1FLk6AczM8qYCZ2r4YGUpt5LCpp7i)
       connect-timeout: ENC(BR+NA152pLTvtizL5hBrxQ==)
       timeout: ENC(w952krjtcayAnH1nsIEiSw==)
 
