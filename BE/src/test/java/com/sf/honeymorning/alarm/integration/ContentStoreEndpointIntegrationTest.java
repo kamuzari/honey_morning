@@ -65,7 +65,6 @@ public class ContentStoreEndpointIntegrationTest extends EndPointIntegrationEnvi
 
 		//then
 		String url = String.join("/", awsS3Properties.endpoint(), bucketName, KEY_PREFIX, FILE_NAME);
-		System.out.println(url);
 		Resource briefingContents = restTemplate.getForObject(url, Resource.class);
 		byte[] browserDownloadedContent = getContent(briefingContents.getInputStream());
 		assertThat(originalContent).isEqualTo(browserDownloadedContent);

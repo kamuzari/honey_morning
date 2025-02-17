@@ -20,7 +20,7 @@ import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.exception.NotPreparedAlarmException;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.mapper.AlarmContentServiceMapper;
-import com.sf.honeymorning.alarm.service.voice.TtsClientService;
+import com.sf.honeymorning.alarm.service.client.TtsClientService;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.entity.content.AccessAuthority;
@@ -39,6 +39,7 @@ public class AlarmContentService {
 	private final BriefingRepository briefingRepository;
 	private final AlarmRepository alarmRepository;
 	private final QuizRepository quizRepository;
+
 	private final TtsClientService ttsClientService;
 	private final ContentStoreService contentStoreService;
 	private final AlarmContentServiceMapper alarmContentServiceMapper;

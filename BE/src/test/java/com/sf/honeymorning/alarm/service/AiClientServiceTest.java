@@ -23,13 +23,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sf.honeymorning.alarm.service.client.AiClientService;
 import com.sf.honeymorning.alarm.service.dto.response.AiBriefingDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
 import com.sf.honeymorning.brief.entity.violation.QuizViolation;
 import com.sf.honeymorning.context.DefaultIntegrationTest;
-import com.sf.honeymorning.context.infra.message.RabbitMqContext;
+import com.sf.honeymorning.context.infra.broker.RabbitMqContext;
 
 class AiClientServiceTest extends DefaultIntegrationTest implements RabbitMqContext {
 
@@ -47,25 +48,6 @@ class AiClientServiceTest extends DefaultIntegrationTest implements RabbitMqCont
 
 	@SpyBean
 	AlarmContentService alarmContentService;
-
-	// @Test
-	// @DisplayName("AI 큐에 메시지를 전달하다")
-	// void testServeMessage() {
-	// 	//given
-	// 	Long userId = 1L;
-	// 	List<String> userTags = List.of("정치");
-	// 	aiClientService.publish(new ToAIRequestDto(userId, userTags));
-	//
-	// 	//when
-	// 	Object response = rabbitTemplate.receiveAndConvert(AI_GENERATIVE_ALARM_CONTENTS_QUEUE_NAME);
-	// 	ToAIRequestDto requestDto = objectMapper.convertValue(response, new TypeReference<ToAIRequestDto>() {
-	// 	});
-	//
-	// 	// then
-	// 	assertThat(requestDto).isNotNull();
-	// 	assertThat(requestDto.userId()).isEqualTo(userId);
-	// 	assertThat(requestDto.tags()).containsAll(userTags);
-	// }
 
 	@Test
 	@DisplayName("존재하지 않는 Queue로 메시지를 보내면 반환된다")
@@ -99,7 +81,7 @@ class AiClientServiceTest extends DefaultIntegrationTest implements RabbitMqCont
 	}
 
 	@Test
-	@DisplayName("AI 응답받은 결과를 소비한다")
+	@DisplayName("AI 서버에서 만들어진 알람 컨텐츠 결과를 소비한다")
 	void testConsume() {
 		//given
 		AiResponseDto expectResponseDto = new AiResponseDto(
