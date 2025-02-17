@@ -58,7 +58,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     // RabbitMQ
-    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp:3.4.2'
 
     // Metric
     implementation 'io.micrometer:micrometer-registry-prometheus'
@@ -85,6 +85,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'org.testcontainers:localstack'
     testImplementation 'org.testcontainers:rabbitmq'
+    testImplementation 'org.testcontainers:kafka'
     testImplementation 'org.testcontainers:mysql'
 
     // Mock Exterior Server Test
