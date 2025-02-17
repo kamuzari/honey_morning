@@ -1,4 +1,4 @@
-package com.sf.honeymorning.alarm.service.voice;
+package com.sf.honeymorning.alarm.service.client;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;

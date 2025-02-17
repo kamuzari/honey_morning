@@ -45,21 +45,23 @@ public class AlarmResultService {
 
 	@Transactional
 	public void add(Long userId, AlarmResultRequestCreateDto requestDto) {
+		LocalDateTime now = LocalDateTime.now();
+		UserAlarmResultStreak userAlarmResultStreak = userAlarmResultStreakRepository.findByUserId(userId).orElseThrow(
+			() -> new NotFoundResourceException(
+				format("스트릭 정보가 존재했어야 합니다.. userId -> {0}", userId)
+				, POLICY_VIOLATION)
+
+		);
+		// RedisRepository
+		userAlarmResultStreak.countConsecutiveDays(now);
+		userAlarmResultStreakRepository.save(userAlarmResultStreak);
+
 		alarmResultRepository.save(new AlarmResult(
 			userId,
 			requestDto.briefingId(),
 			requestDto.matchCount(),
 			true
 		));
-
-		LocalDateTime now = LocalDateTime.now();
-		UserAlarmResultStreak userAlarmResultStreak = userAlarmResultStreakRepository.findByUserId(userId).orElseThrow(
-			() -> new NotFoundResourceException(
-				format("스트릭 정보가 존재했어야 합니다.. userId -> {0}", userId)
-				, POLICY_VIOLATION)
-		);
-		userAlarmResultStreak.countConsecutiveDays(now);
-		userAlarmResultStreakRepository.save(userAlarmResultStreak);
 
 		userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundResourceException(

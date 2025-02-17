@@ -12,16 +12,16 @@ public class UserAlarmResultStreak {
 	@Id
 	private Long userId;
 
-	private LocalDateTime createdAt;
+	private LocalDateTime latestAt;
 
 	private int consecutiveDays;
 
 	protected UserAlarmResultStreak() {
 	}
 
-	public UserAlarmResultStreak(Long userId, LocalDateTime createdAt, int consecutiveDays) {
+	public UserAlarmResultStreak(Long userId, LocalDateTime latestAt, int consecutiveDays) {
 		this.userId = userId;
-		this.createdAt = createdAt;
+		this.latestAt = latestAt;
 		this.consecutiveDays = consecutiveDays;
 	}
 
@@ -29,8 +29,8 @@ public class UserAlarmResultStreak {
 		return userId;
 	}
 
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
+	public LocalDateTime getLatestAt() {
+		return latestAt;
 	}
 
 	public int getConsecutiveDays() {
@@ -40,15 +40,15 @@ public class UserAlarmResultStreak {
 	public void countConsecutiveDays(LocalDateTime now) {
 		if (isWithin24Hours(now)) {
 			this.consecutiveDays++;
-			this.createdAt = now;
+			this.latestAt = now;
 			return;
 		}
 
-		this.createdAt = now;
+		this.latestAt = now;
 		this.consecutiveDays = 1;
 	}
 
 	private boolean isWithin24Hours(LocalDateTime now) {
-		return Duration.between(createdAt, now).toHours() < 24;
+		return Duration.between(latestAt, now).toHours() < 24;
 	}
 }

@@ -1,9 +1,10 @@
-package com.sf.honeymorning.alarm.service;
+package com.sf.honeymorning.alarm.service.client;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sf.honeymorning.alarm.service.AlarmContentService;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.config.RabbitConfig;
 

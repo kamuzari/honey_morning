@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
 
 		return ErrorResponse.builder(exception, BAD_REQUEST, "")
 			.detail("One or more fields are invalid.")
-			.property(MESSAGE_PROPERTY_KEY, errorDetailMessage)  // 필드 오류를 추가로 포함
+			.property(MESSAGE_PROPERTY_KEY, errorDetailMessage)
 			.build();
 	}
 
@@ -122,19 +122,16 @@ public class GlobalExceptionHandler {
 			.build();
 	}
 
-	// 업데이트 오류
 	@ExceptionHandler(UserUpdateException.class)
 	public ResponseEntity<String> handleUserUpdateException(final UserUpdateException e) {
 		return new ResponseEntity<>(e.getMessage(), CONFLICT);
 	}
 
-	// 잘못된 인자 전달
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
 		return new ResponseEntity<>(ex.getMessage(), BAD_REQUEST);
 	}
 
-	// 알람 카테고리가 존재하지 않을 때 오류
 	@ExceptionHandler(AlarmCategoryNotFoundException.class)
 	public ResponseEntity<String> handleAlarmCategoryNotFoundException(
 		final AlarmCategoryNotFoundException e) {
