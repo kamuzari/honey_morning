@@ -1,10 +1,9 @@
 version: "3.8"
 
 services:
-  database:
+  mysql:
     image: mysql:8.0
     platform: linux/arm64
-    container_name: database
     restart: unless-stopped
     mem_limit: "1g"
     cpus: "1.5"
@@ -21,7 +20,6 @@ services:
 
   redis:
     image: redis:6.2
-    container_name: redis
     restart: unless-stopped
     mem_limit: "1g"
     cpus: "1.5"
@@ -40,7 +38,6 @@ services:
 
   rabbitmq:
     image: rabbitmq:management
-    container_name: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -54,7 +51,6 @@ services:
 
   localstack:
     image: localstack/localstack
-    container_name: localstack
     ports:
       - "4566:4566"
     environment:
@@ -68,7 +64,6 @@ services:
 
   prometheus:
     image: prom/prometheus
-    container_name: prometheus
     ports:
       - "9090:9090"
     volumes:
@@ -76,7 +71,6 @@ services:
 
   grafana:
     image: grafana/grafana
-    container_name: grafana
     ports:
       - "3000:3000"
     environment:
@@ -86,7 +80,6 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.1
-    container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
     ports:
@@ -94,7 +87,6 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:7.3.1
-    container_name: kafka
     ports:
       - "9092:9092"
     mem_limit: "1g"
@@ -110,7 +102,6 @@ services:
 
   kafka-connect:
     image: debezium/connect:2.0.1.Final
-    container_name: debezium-connect
     ports:
       - "8083:8083"
     mem_limit: "1g"
@@ -127,7 +118,7 @@ services:
       PLUGIN_PATH: /kafka/connect
     depends_on:
       - kafka
-      - database
+      - mysql
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest

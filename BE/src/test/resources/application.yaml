@@ -6,6 +6,17 @@ spring:
     jdbc:
       initialize-schema: ALWAYS
 
+  kafka:
+    bootstrap-servers: ENC(Hggvm9zvjIATkyaHd5n1Qztzok2H155k)
+    consumer:
+      group-id: "alarm-contents-cdc-group"
+      topic: "alarm_contents.honeymorning.outbox_alarm_event"
+      auto-offset-reset: "earliest"
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual_immediate
   data:
     redis:
       connect-timeout: 30s

@@ -5,6 +5,8 @@ sleep 2
 # 커넥터 삭제
 curl -X DELETE http://localhost:8083/connectors/mysql-outbox-connector
 
+echo "\n\n\n"
+
 echo "커넥터 등록"
 sleep 2
 # 커넥터 등록
@@ -12,7 +14,7 @@ curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json
   "name": "mysql-outbox-connector",
   "config": {
     "connector.class": "io.debezium.connector.mysql.MySqlConnector",
-    "database.hostname": "database","database.allowPublicKeyRetrieval": "true",
+    "database.hostname": "mysql","database.allowPublicKeyRetrieval": "true",
     "database.port": "3306",
     "database.user": "root",
     "database.password": "root",
