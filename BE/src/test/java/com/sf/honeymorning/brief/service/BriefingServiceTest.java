@@ -11,13 +11,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import com.sf.honeymorning.brief.entity.TopicModelWord;
+import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
+import com.sf.honeymorning.brief.service.mapper.BriefingMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.sf.honeymorning.brief.controller.dto.response.BriefDetailResponseDto;
+import com.sf.honeymorning.brief.controller.dto.response.BriefingDetailResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.repository.BriefingTagRepository;
@@ -38,7 +43,10 @@ public class BriefingServiceTest extends MockTestServiceEnvironment {
 	QuizRepository quizRepository;
 
 	@Mock
-	TopicModelService topicModelService;
+	TopicModelWordRepository topicModelWordRepository;
+
+	@Spy
+	BriefingMapper briefingMapper;
 
 	@DisplayName("나의 브리핑 상세목록을 가져온다")
 	@Test
@@ -60,12 +68,20 @@ public class BriefingServiceTest extends MockTestServiceEnvironment {
 				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().sentence()).limit(4).toList(),
 				FAKER_DATE_FACTORY.internet().url())
 		);
+
+		List<TopicModelWord> topicModelWords = Stream.generate(() -> new TopicModelWord(
+				FAKER_DATE_FACTORY.number().numberBetween(1, 5),
+				FAKER_DATE_FACTORY.lorem().word(),
+				FAKER_DATE_FACTORY.number().randomDouble(2, 0, 20)
+		)).limit(150).toList();
+
 		given(briefingRepository.findByUserIdAndId(AUTH_USER.getId(), briefing.getId()))
 			.willReturn(Optional.of(briefing));
 		given(quizRepository.findByBriefing(briefing)).willReturn(quizzes);
+		given(topicModelWordRepository.findByBriefing(briefing)).willReturn(topicModelWords);
 
 		//when
-		BriefDetailResponseDto briefDetailResponseDto = sut.getBrief(AUTH_USER.getId(), briefing.getId());
+		BriefingDetailResponseDto briefDetailResponseDto = sut.getBrief(AUTH_USER.getId(), briefing.getId());
 
 		//then
 		assertThat(briefDetailResponseDto).isNotNull();
@@ -74,6 +90,7 @@ public class BriefingServiceTest extends MockTestServiceEnvironment {
 		verify(briefingRepository, times(1)).findByUserIdAndId(any(), any());
 		verify(briefingTagRepository, times(1)).findByBriefing(any());
 		verify(quizRepository, times(1)).findByBriefing(any());
+		verify(topicModelWordRepository, times(1)).findByBriefing(any());
 	}
 
 	@DisplayName("나의 브리핑 상세목록이 아닌것에 접근할 수 없다")

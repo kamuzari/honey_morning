@@ -1,23 +1,22 @@
 package com.sf.honeymorning.brief.service;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.sf.honeymorning.brief.controller.dto.response.detail.TopicModelWordResponse;
+import com.sf.honeymorning.brief.entity.TopicModelWord;
+import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
+import com.sf.honeymorning.brief.service.mapper.BriefingMapper;
+import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sf.honeymorning.brief.controller.dto.response.BriefDetailResponseDto;
+import com.sf.honeymorning.brief.controller.dto.response.BriefingDetailResponseDto;
 import com.sf.honeymorning.brief.controller.dto.response.BriefHistoryResponseDto;
-import com.sf.honeymorning.brief.controller.dto.response.briefs.MyBriefing;
 import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
@@ -27,123 +26,75 @@ import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.ErrorProtocol;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
-import com.sf.honeymorning.tag.entity.Tag;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
+
+import static com.sf.honeymorning.common.exception.model.ErrorProtocol.POLICY_VIOLATION;
+import static java.text.MessageFormat.format;
 
 @Slf4j
 @Transactional(readOnly = true)
 @Service
 public class BriefService {
 
-	private final BriefingRepository briefingRepository;
-	private final BriefingTagRepository briefingTagRepository;
-	private final QuizRepository quizRepository;
-	private final TopicModelService topicModelService;
-	@Value("${file.directory.path.summary}")
-	private String summaryPath;
-	@Value("${file.directory.path.content}")
-	private String contentPath;
+    private final BriefingRepository briefingRepository;
+    private final BriefingTagRepository briefingTagRepository;
+    private final QuizRepository quizRepository;
+    private final TopicModelWordRepository topicModelWordRepository;
 
-	public BriefService(BriefingRepository briefingRepository, BriefingTagRepository briefingTagRepository,
-		QuizRepository quizRepository, TopicModelService topicModelService) {
-		this.briefingRepository = briefingRepository;
-		this.briefingTagRepository = briefingTagRepository;
-		this.quizRepository = quizRepository;
-		this.topicModelService = topicModelService;
-	}
+    private final BriefingMapper briefingMapper;
 
-	public BriefHistoryResponseDto getMyBriefings(Long userId, int page) {
-		Page<Briefing> briefPage = briefingRepository.findByUserId(userId, PageRequest.of(page - 1, 5));
-		List<Briefing> briefings = briefPage.getContent();
-		List<BriefingTag> briefCategories = briefingTagRepository.findByBrief(briefings);
-		List<Quiz> quizzes = quizRepository.findByBriefingIn(briefings);
-		Map<Long, List<BriefingTag>> briefCategoryByBrief = briefCategories.stream()
-			.collect(Collectors.groupingBy(v -> v.getBriefing().getId()));
-		Map<Long, List<Quiz>> quizzesByBrief = quizzes.stream()
-			.collect(Collectors.groupingBy(v -> v.getBriefing().getId()));
+    public BriefService(BriefingRepository briefingRepository,
+                        BriefingTagRepository briefingTagRepository,
+                        QuizRepository quizRepository,
+                        TopicModelWordRepository topicModelWordRepository,
+                        BriefingMapper briefingMapper) {
 
-		return new BriefHistoryResponseDto(briefings.stream()
-			.map(brief -> new MyBriefing(brief.getId(), brief.getCreatedAt(),
-				briefCategoryByBrief.get(brief.getId()).stream().map(BriefingTag::getTag)
-					.map(Tag::getWord).toList(), brief.getSummary(),
-				quizzesByBrief.get(brief.getId()).stream()
-					.filter(quiz -> quiz.getAnswer().equals(quiz.getSelection()))
-					.count())).toList(), briefPage.getTotalPages());
-	}
+        this.briefingRepository = briefingRepository;
+        this.briefingTagRepository = briefingTagRepository;
+        this.quizRepository = quizRepository;
+        this.topicModelWordRepository = topicModelWordRepository;
+        this.briefingMapper = briefingMapper;
+    }
 
-	public BriefDetailResponseDto getBrief(Long userId, Long briefId) {
-		Briefing briefing = briefingRepository.findByUserIdAndId(userId, briefId)
-			.orElseThrow(() -> new EntityNotFoundException("not exist user"));
-		boolean canAccess = briefing.getUserId().equals(userId);
-		if (!canAccess) {
-			throw new BusinessException("잘못된 접근입니다.", ErrorProtocol.BUSINESS_VIOLATION);
-		}
+    public BriefHistoryResponseDto getMyBriefings(Long userId, int page) {
+        Page<Briefing> briefingPage = briefingRepository.findByUserId(userId, PageRequest.of(page - 1, 5));
+        List<Briefing> briefings = briefingPage.getContent();
+        List<BriefingTag> briefCategories = briefingTagRepository.findByBrief(briefings);
+        List<Quiz> quizzes = quizRepository.findByBriefingIn(briefings);
 
-		List<BriefingTag> briefCategories = briefingTagRepository.findByBriefing(briefing);
-		List<Quiz> quizzes = quizRepository.findByBriefing(briefing);
+        Map<Long, List<BriefingTag>> briefCategoryByBrief = briefCategories.stream()
+                .collect(Collectors.groupingBy(v -> v.getBriefing().getId()));
+        Map<Long, List<Quiz>> quizzesByBrief = quizzes.stream()
+                .collect(Collectors.groupingBy(v -> v.getBriefing().getId()));
 
-		return toBriefDetailResponse(briefing, briefCategories, quizzes);
-	}
+        return briefingMapper.toBriefHistoryResponseDto(briefings, briefCategoryByBrief, quizzesByBrief, briefingPage);
+    }
 
-	private BriefDetailResponseDto toBriefDetailResponse(
-		Briefing briefing,
-		List<BriefingTag> briefCategories,
-		List<Quiz> quizzes) {
+    public BriefingDetailResponseDto getBrief(Long userId, Long briefId) {
+        Briefing briefing = briefingRepository.findByUserIdAndId(userId, briefId)
+                .orElseThrow(() -> new NotFoundResourceException(format("존재하지 않는 사용자입니다. userId -> {0}", userId), POLICY_VIOLATION));
 
-		return new BriefDetailResponseDto(
-			briefing.getId(),
-			briefing.getSummary(),
-			briefing.getContent(),
-			briefing.getVoiceContentUrl(),
-			topicModelService.getTopicModel(briefing.getId()),
-			briefCategories.stream().map(briefingTag -> briefingTag.getTag().getWord()).toList(),
-			quizzes.stream()
-				.map(quiz -> new QuizResponseDto(
-					quiz.getProblem(),
-					quiz.getOption1(),
-					quiz.getOption2(),
-					quiz.getOption3(),
-					quiz.getOption4(),
-					quiz.getSelection(),
-					quiz.getAnswer()
-				)).toList(),
-			briefing.getCreatedAt());
-	}
+        boolean canAccess = briefing.getUserId().equals(userId);
+        if (!canAccess) {
+            throw new BusinessException("잘못된 접근입니다.", ErrorProtocol.BUSINESS_VIOLATION);
+        }
 
-	public Resource getBriefSummaryAudio(Long briefId) throws IOException {
-		Briefing briefing = briefingRepository.findById(briefId)
-			.orElseThrow(
-				() -> new EntityNotFoundException("Brief not found with alarmId: " + briefId));
+        List<BriefingTag> briefCategories = briefingTagRepository.findByBriefing(briefing);
+        List<Quiz> quizzes = quizRepository.findByBriefing(briefing);
+        List<TopicModelWord> topicModelWords = topicModelWordRepository.findByBriefing(briefing);
 
-		Path filePath = Paths.get(summaryPath, briefing.getVoiceContentUrl());
-		log.info("파일을 찾습니다: " + filePath);
-		Resource resource = new UrlResource(filePath.toUri());
+        return toBriefDetailResponse(briefing, briefCategories, quizzes, topicModelWords);
+    }
 
-		if (resource.exists() || resource.isReadable()) {
-			log.info("파일을 찾았습니다: " + resource.getFilename());
-			return resource;
-		} else {
-			throw new IOException("Could not read the file: " + briefing.getVoiceContentUrl());
-		}
-	}
+    private BriefingDetailResponseDto toBriefDetailResponse(
+            Briefing briefing,
+            List<BriefingTag> briefCategories,
+            List<Quiz> quizzes,
+            List<TopicModelWord> topicModelWords) {
 
-	public Resource getBrieContentAudio(Long briefId) throws IOException {
-		Briefing briefing = briefingRepository.findById(briefId)
-			.orElseThrow(
-				() -> new EntityNotFoundException("Brief not found with alarmId: " + briefId));
-
-		Path filePath = Paths.get(contentPath, briefing.getVoiceContentUrl());
-		log.info("파일을 찾습니다: " + filePath);
-		Resource resource = new UrlResource(filePath.toUri());
-
-		if (resource.exists() || resource.isReadable()) {
-			log.info("파일을 찾았습니다: " + resource.getFilename());
-			return resource;
-		} else {
-			throw new IOException("Could not read the file: " + briefing.getVoiceContentUrl());
-		}
-	}
+        return briefingMapper.toBriefingDetailResponseDto(briefing, briefCategories, quizzes, topicModelWords);
+    }
 
 }
