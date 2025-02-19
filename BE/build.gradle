@@ -2,6 +2,63 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.3'
     id 'io.spring.dependency-management' version '1.1.3'
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml') // ✅ HTML 리포트 경로
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect { fileTree(dir: it, exclude: [
+                        '**/config/**',
+                        '**/common/**',
+                        '**/dto/**',
+                        '**/client/**',
+                        '**/exception/**',
+                        '**/service/mapper/**'
+                ]) })
+        )
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+            }
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 100
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+            }
+
+            limit {
+                counter = 'COMPLEXITY'
+                value = 'COVEREDRATIO'
+            }
+        }
+    }
 }
 
 group = 'com.sf'
@@ -101,6 +158,7 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy jacocoTestReport
 
     testLogging {
         events "passed", "skipped", "failed"
@@ -114,4 +172,12 @@ tasks.named('test') {
             }
         }
     }
+}
+
+tasks.jacocoTestReport {
+    dependsOn test
+}
+
+tasks.check {
+    dependsOn jacocoTestCoverageVerification
 }
