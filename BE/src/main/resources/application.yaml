@@ -3,15 +3,6 @@ spring:
     name: honeymorning
   profiles:
     active: local
-  docker:
-    compose:
-      file: ./infra/docker-compose.yml
-      enabled: true  # ✅ Docker Compose 자동 실행 활성화
-      stop:
-        command: down  # ✅ Spring Boot 종료 시 `docker compose down` 실행
-      start:
-        command: up  # ✅ Spring Boot 시작 시 `docker compose up -d` 실행
-      profiles:
-        - local  # ✅ Spring Boot Profiles 지정
+
 jasypt:
   password: ${JASYPT_PASSWORD:honeymorning}
