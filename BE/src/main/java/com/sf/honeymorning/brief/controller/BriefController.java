@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
+import com.sf.honeymorning.user.authentication.model.JwtAuthentication;
 import com.sf.honeymorning.brief.controller.dto.response.BriefingDetailResponseDto;
 import com.sf.honeymorning.brief.controller.dto.response.BriefHistoryResponseDto;
 import com.sf.honeymorning.brief.service.BriefService;

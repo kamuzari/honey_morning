@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import com.sf.honeymorning.account.authenticater.constant.JwtProperty;
+import com.sf.honeymorning.user.authentication.constant.JwtProperty;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

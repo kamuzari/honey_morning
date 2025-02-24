@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
+import com.sf.honeymorning.user.authentication.model.JwtAuthentication;
 import com.sf.honeymorning.alarm.controller.dto.request.AlarmResultRequestCreateDto;
 import com.sf.honeymorning.alarm.controller.dto.response.AlarmResultResponseDto;
 import com.sf.honeymorning.alarm.service.AlarmResultService;
