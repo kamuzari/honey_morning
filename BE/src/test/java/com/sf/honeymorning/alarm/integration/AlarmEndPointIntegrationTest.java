@@ -18,9 +18,9 @@ import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sf.honeymorning.account.authenticater.jwt.JwtProviderManager;
-import com.sf.honeymorning.account.authenticater.service.TokenService;
-import com.sf.honeymorning.account.service.AccountService;
+import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
+import com.sf.honeymorning.user.authentication.service.TokenService;
+import com.sf.honeymorning.user.service.AccountService;
 import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;

@@ -21,10 +21,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.sf.honeymorning.account.authenticater.constant.JwtProperty;
-import com.sf.honeymorning.account.authenticater.jwt.JwtProviderManager;
-import com.sf.honeymorning.account.handler.LoginSuccessHandler;
-import com.sf.honeymorning.account.handler.LogoutSuccessHandler;
+import com.sf.honeymorning.user.authentication.constant.JwtProperty;
+import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
+import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
+import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
 import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.service.AlarmContentService;
 import com.sf.honeymorning.alarm.service.AlarmService;
