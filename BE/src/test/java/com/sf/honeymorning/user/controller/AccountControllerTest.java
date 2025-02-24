@@ -1,4 +1,4 @@
-package com.sf.honeymorning.acount.controller;
+package com.sf.honeymorning.user.controller;
 
 import static com.sf.honeymorning.user.entity.UserRole.ROLE_USER;
 import static org.mockito.ArgumentMatchers.any;
@@ -22,17 +22,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sf.honeymorning.account.authenticater.constant.JwtProperty;
-import com.sf.honeymorning.account.authenticater.jwt.JwtProviderManager;
-import com.sf.honeymorning.account.authenticater.service.TokenService;
-import com.sf.honeymorning.account.controller.AccountController;
-import com.sf.honeymorning.account.dto.request.LoginAuthRequestDto;
-import com.sf.honeymorning.account.dto.response.LoginAuthResponseDto;
-import com.sf.honeymorning.account.dto.response.LogoutAuthResponseDto;
-import com.sf.honeymorning.account.dto.response.TokenResponseDto;
-import com.sf.honeymorning.account.handler.LoginSuccessHandler;
-import com.sf.honeymorning.account.handler.LogoutSuccessHandler;
-import com.sf.honeymorning.account.service.AccountService;
+import com.sf.honeymorning.user.authentication.constant.JwtProperty;
+import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
+import com.sf.honeymorning.user.authentication.service.TokenService;
+import com.sf.honeymorning.user.controller.dto.request.LoginAuthRequestDto;
+import com.sf.honeymorning.user.controller.dto.response.LoginAuthResponseDto;
+import com.sf.honeymorning.user.controller.dto.response.LogoutAuthResponseDto;
+import com.sf.honeymorning.user.controller.dto.response.TokenResponseDto;
+import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
+import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
+import com.sf.honeymorning.user.service.AccountService;
 import com.sf.honeymorning.config.WebSecurityConfig;
 import com.sf.honeymorning.security.WithJwtMockUser;
 import com.sf.honeymorning.user.entity.User;
@@ -69,7 +68,7 @@ public class AccountControllerTest {
 	AccountService accountService;
 
 	@Test
-	@DisplayName("로그인에 성공한다.")
+	@DisplayName("로그인에 성공하면 인증된 사용자임을 식별하기 위한 토큰 2개를 발급받는다")
 	void testLogin() throws Exception {
 		//given
 		User existingUser = new User("whyWhale", "wls3123!", "gentle", ROLE_USER);
@@ -103,7 +102,7 @@ public class AccountControllerTest {
 
 	@Test
 	@WithJwtMockUser
-	@DisplayName("인증된 사용자가 로그아웃 한다.")
+	@DisplayName("토큰 두개를 인증된 사용자가 로그아웃 한다.")
 	void testLogout() throws Exception {
 		//given
 		var logoutResponse = new LogoutAuthResponseDto(

@@ -9,8 +9,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-import com.sf.honeymorning.account.authenticater.model.JwtAuthentication;
-import com.sf.honeymorning.account.authenticater.model.JwtAuthenticationToken;
+import com.sf.honeymorning.user.authentication.model.JwtAuthentication;
+import com.sf.honeymorning.user.authentication.model.JwtAuthenticationToken;
 import com.sf.honeymorning.user.entity.UserRole;
 
 public class MockUserCustomFactory implements WithSecurityContextFactory<WithJwtMockUser> {
