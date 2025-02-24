@@ -19,113 +19,114 @@ import lombok.Getter;
 @Entity
 public class Alarm extends BaseEntity {
 
-	public static final int SLEEP_MODE_INTERVAL_CONDITION = 5;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    public static final int SLEEP_MODE_INTERVAL_CONDITION = 5;
 
-	private Long userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	private LocalTime wakeUpTime;
+    private Long userId;
 
-	private Integer dayOfTheWeeks;
+    private LocalTime wakeUpTime;
 
-	private Integer repeatFrequency;
+    private Integer dayOfTheWeeks;
 
-	private Integer repeatInterval;
+    private Integer repeatFrequency;
 
-	@Column(name = "wake_up")
-	private String wakeUpCallPath;
+    private Integer repeatInterval;
 
-	private boolean isActive;
+    @Column(name = "wake_up")
+    private String wakeUpCallPath;
 
-	protected Alarm() {
-	}
+    private boolean isActive;
 
-	public Alarm(
-		Long id,
-		Long userId,
-		LocalTime wakeUpTime,
-		Integer dayOfTheWeeks,
-		Integer repeatFrequency,
-		Integer repeatInterval,
-		boolean isActive,
-		String wakeUpCallPath) {
-		this.id = id;
-		this.userId = userId;
-		this.wakeUpTime = wakeUpTime;
-		this.dayOfTheWeeks = dayOfTheWeeks;
-		this.repeatFrequency = repeatFrequency;
-		this.repeatInterval = repeatInterval;
-		this.isActive = isActive;
-		this.wakeUpCallPath = wakeUpCallPath;
-	}
+    protected Alarm() {
+    }
 
-	public Alarm(Long userId,
-		LocalTime wakeUpTime,
-		Integer dayOfTheWeeks,
-		Integer repeatFrequency,
-		Integer repeatInterval,
-		boolean isActive,
-		String wakeUpCallPath) {
-		this.userId = userId;
-		this.wakeUpTime = wakeUpTime;
-		this.dayOfTheWeeks = dayOfTheWeeks;
-		this.repeatFrequency = repeatFrequency;
-		this.repeatInterval = repeatInterval;
-		this.isActive = isActive;
-		this.wakeUpCallPath = wakeUpCallPath;
-	}
+    public Alarm(
+            Long id,
+            Long userId,
+            LocalTime wakeUpTime,
+            Integer dayOfTheWeeks,
+            Integer repeatFrequency,
+            Integer repeatInterval,
+            boolean isActive,
+            String wakeUpCallPath) {
+        this.id = id;
+        this.userId = userId;
+        this.wakeUpTime = wakeUpTime;
+        this.dayOfTheWeeks = dayOfTheWeeks;
+        this.repeatFrequency = repeatFrequency;
+        this.repeatInterval = repeatInterval;
+        this.isActive = isActive;
+        this.wakeUpCallPath = wakeUpCallPath;
+    }
 
-	public static Alarm initialize(Long userId) {
-		return new Alarm(
-			userId,
-			LocalTime.of(7, 0),
-			0,
-			0,
-			0,
-			false,
-			""
-		);
-	}
+    public Alarm(Long userId,
+                 LocalTime wakeUpTime,
+                 Integer dayOfTheWeeks,
+                 Integer repeatFrequency,
+                 Integer repeatInterval,
+                 boolean isActive,
+                 String wakeUpCallPath) {
+        this.userId = userId;
+        this.wakeUpTime = wakeUpTime;
+        this.dayOfTheWeeks = dayOfTheWeeks;
+        this.repeatFrequency = repeatFrequency;
+        this.repeatInterval = repeatInterval;
+        this.isActive = isActive;
+        this.wakeUpCallPath = wakeUpCallPath;
+    }
 
-	public void set(LocalTime alarmTime, Integer weekDays, Integer repeatFrequency, Integer repeatInterval,
-		boolean isActive) {
-		this.wakeUpTime = alarmTime;
-		this.dayOfTheWeeks = weekDays;
-		this.repeatFrequency = repeatFrequency;
-		this.repeatInterval = repeatInterval;
-		this.isActive = isActive;
-	}
+    public static Alarm initialize(Long userId) {
+        return new Alarm(
+                userId,
+                LocalTime.of(7, 0),
+                0,
+                0,
+                0,
+                false,
+                ""
+        );
+    }
 
-	public void addContent(String wakeUpCallPath) {
-		this.wakeUpCallPath = wakeUpCallPath;
-	}
+    public void set(LocalTime alarmTime, Integer weekDays, Integer repeatFrequency, Integer repeatInterval,
+                    boolean isActive) {
+        this.wakeUpTime = alarmTime;
+        this.dayOfTheWeeks = weekDays;
+        this.repeatFrequency = repeatFrequency;
+        this.repeatInterval = repeatInterval;
+        this.isActive = isActive;
+    }
 
-	public boolean canSleepMode(LocalDateTime now) {
-		DayOfTheWeek toDayOfTheWeek = DayOfTheWeek.getDayOfWeek(
-			now.plusHours(SLEEP_MODE_INTERVAL_CONDITION)
-				.toLocalDate().getDayOfWeek().name());
+    public void addContent(String wakeUpCallPath) {
+        this.wakeUpCallPath = wakeUpCallPath;
+    }
 
-		boolean is5HoursBeforeTheAlarmStarts = this.wakeUpTime
-			.minusHours(SLEEP_MODE_INTERVAL_CONDITION)
-			.isAfter(now.toLocalTime().minusMinutes(1));
-		boolean isTodayTheAlarmStartDate = (this.dayOfTheWeeks & toDayOfTheWeek.getShiftedBit()) > 0;
+    public boolean canSleepMode(LocalDateTime now) {
+        DayOfTheWeek toDayOfTheWeek = DayOfTheWeek.getDayOfWeek(
+                now.plusHours(SLEEP_MODE_INTERVAL_CONDITION)
+                        .toLocalDate().getDayOfWeek().name());
 
-		return is5HoursBeforeTheAlarmStarts && isTodayTheAlarmStartDate;
-	}
+        boolean is5HoursBeforeTheAlarmStarts = this.wakeUpTime
+                .minusHours(SLEEP_MODE_INTERVAL_CONDITION)
+                .isAfter(now.toLocalTime().minusMinutes(1));
+        boolean isTodayTheAlarmStartDate = (this.dayOfTheWeeks & toDayOfTheWeek.getShiftedBit()) > 0;
 
-	@Override
-	public String toString() {
-		return new StringJoiner(", ", Alarm.class.getSimpleName() + "[", "]")
-			.add("id=" + id)
-			.add("userId=" + userId)
-			.add("wakeUpTime=" + wakeUpTime)
-			.add("dayOfTheWeeks=" + dayOfTheWeeks)
-			.add("repeatFrequency=" + repeatFrequency)
-			.add("repeatInterval=" + repeatInterval)
-			.add("wakeUpCallPath='" + wakeUpCallPath + "'")
-			.add("isActive=" + isActive)
-			.toString();
-	}
+        return is5HoursBeforeTheAlarmStarts && isTodayTheAlarmStartDate;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Alarm.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("userId=" + userId)
+                .add("wakeUpTime=" + wakeUpTime)
+                .add("dayOfTheWeeks=" + dayOfTheWeeks)
+                .add("repeatFrequency=" + repeatFrequency)
+                .add("repeatInterval=" + repeatInterval)
+                .add("wakeUpCallPath='" + wakeUpCallPath + "'")
+                .add("isActive=" + isActive)
+                .toString();
+    }
 }

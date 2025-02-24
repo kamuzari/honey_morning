@@ -18,11 +18,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.sf.honeymorning.account.authenticater.constant.CookieProperty;
-import com.sf.honeymorning.account.authenticater.constant.JwtProperty;
-import com.sf.honeymorning.account.authenticater.constant.SecurityUrlProperty;
-import com.sf.honeymorning.account.authenticater.jwt.JwtAuthenticationFilter;
-import com.sf.honeymorning.account.authenticater.jwt.JwtProviderManager;
+import com.sf.honeymorning.user.authentication.constant.CookieProperty;
+import com.sf.honeymorning.user.authentication.constant.JwtProperty;
+import com.sf.honeymorning.user.authentication.constant.SecurityUrlProperty;
+import com.sf.honeymorning.user.authentication.jwt.JwtAuthenticationFilter;
+import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
 import com.sf.honeymorning.config.constant.WebCorsProperties;
 
 @Configuration
