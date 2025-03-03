@@ -77,7 +77,6 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
 
-
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.1
     environment:
@@ -97,6 +96,8 @@ services:
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:29092, EXTERNAL://localhost:9092"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2          
     depends_on:
       - zookeeper
 
@@ -116,6 +117,9 @@ services:
       VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
       PLUGIN_PATH: /kafka/connect
+      CONNECT_PRODUCER_ENABLE_IDEMPOTENCE: "true"
+      CONNECT_CONSUMER_ISOLATION_LEVEL: "read_committed"
+
     depends_on:
       - kafka
       - mysql
