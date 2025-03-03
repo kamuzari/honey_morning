@@ -17,6 +17,9 @@ spring:
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     listener:
       ack-mode: manual_immediate
+    properties:
+      isolation.level: read_committed
+
   data:
     redis:
       connect-timeout: 30s
