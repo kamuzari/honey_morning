@@ -1,6 +1,6 @@
 package com.sf.honeymorning.common.exception.alarm;
 
-import com.sf.honeymorning.common.exception.model.ErrorProtocol;
+import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
 
 public class ReadyAlramBatchException extends RuntimeException {
 	private final ErrorProtocol errorProtocol;

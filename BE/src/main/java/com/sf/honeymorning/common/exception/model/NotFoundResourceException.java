@@ -1,5 +1,7 @@
 package com.sf.honeymorning.common.exception.model;
 
+import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
+
 public class NotFoundResourceException extends RuntimeException {
 	private final ErrorProtocol errorProtocol;
 

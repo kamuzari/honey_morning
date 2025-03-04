@@ -12,15 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import com.sf.honeymorning.alarm.batch.outbox.EventStatus;
 import com.sf.honeymorning.alarm.batch.outbox.OutBoxAlarmEventRepository;
 import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
 import com.sf.honeymorning.common.exception.alarm.ReadyAlramBatchException;
-import com.sf.honeymorning.common.exception.model.ErrorProtocol;
+import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
 import com.sf.honeymorning.config.RabbitConfig;
 import com.sf.honeymorning.util.TimeUtils;
 

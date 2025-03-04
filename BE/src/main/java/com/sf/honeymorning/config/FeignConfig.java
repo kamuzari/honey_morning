@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.sf.honeymorning.common.exception.model.ErrorProtocol;
+import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import com.sf.honeymorning.common.exception.model.UnExpectedFatalException;
 

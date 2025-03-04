@@ -1,7 +1,7 @@
 package com.sf.honeymorning.alarm.exception;
 
 import com.sf.honeymorning.common.exception.model.BusinessException;
-import com.sf.honeymorning.common.exception.model.ErrorProtocol;
+import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
 
 public class AlarmBusinessException extends BusinessException {
 	public AlarmBusinessException(String detailMessage,

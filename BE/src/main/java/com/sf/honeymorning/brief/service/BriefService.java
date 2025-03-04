@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.sf.honeymorning.brief.controller.dto.response.detail.TopicModelWordResponse;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
 import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
 import com.sf.honeymorning.brief.service.mapper.BriefingMapper;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,20 +15,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sf.honeymorning.brief.controller.dto.response.BriefingDetailResponseDto;
 import com.sf.honeymorning.brief.controller.dto.response.BriefHistoryResponseDto;
-import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.repository.BriefingTagRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
-import com.sf.honeymorning.common.exception.model.ErrorProtocol;
+import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.sf.honeymorning.common.exception.model.ErrorProtocol.POLICY_VIOLATION;
+import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
 import static java.text.MessageFormat.format;
 
 @Slf4j
