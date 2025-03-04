@@ -1,4 +1,4 @@
-package com.sf.honeymorning.common.exception.model;
+package com.sf.honeymorning.common.exception.model.constant;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
