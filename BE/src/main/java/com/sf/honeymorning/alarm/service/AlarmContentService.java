@@ -58,12 +58,10 @@ public class AlarmContentService {
 	@Transactional(rollbackFor = Exception.class)
 	public void create(AiResponseDto aiResponseDto) {
 		alarmRepository.findByUserIdAndIsActiveTrue(aiResponseDto.userId())
-			.orElseThrow(() -> new BusinessException(
-				MessageFormat.format("존재하지 않는 사용자입니다. userId : {0}", aiResponseDto.userId()),
-				ErrorProtocol.BUSINESS_VIOLATION
-			));
-		Briefing totalContents = alarmContentServiceMapper.toTotalAlarmContent(aiResponseDto);
-		Long briefingId = briefingRepository.save(totalContents).getId();
-		EventsProducer.raise(briefingId);
+			.ifPresent(alarm -> {
+				Briefing totalContents = alarmContentServiceMapper.toTotalAlarmContent(aiResponseDto);
+				Long briefingId = briefingRepository.save(totalContents).getId();
+				EventsProducer.raise(briefingId);
+			});
 	}
 }

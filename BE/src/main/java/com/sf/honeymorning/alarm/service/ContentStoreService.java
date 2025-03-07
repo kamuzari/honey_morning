@@ -19,7 +19,8 @@ public class ContentStoreService {
 	private final ProgressListener progressListener;
 
 	public ContentStoreService(AmazonS3 amazonS3,
-		@Value("${aws.s3.bucket-name.tts}") String bucketName, ProgressListener progressListener) {
+		@Value("${aws.s3.bucket-name.tts}") String bucketName,
+		ProgressListener progressListener) {
 		this.amazonS3 = amazonS3;
 		this.bucketName = bucketName;
 		this.progressListener = progressListener;
