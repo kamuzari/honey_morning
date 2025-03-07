@@ -1,6 +1,6 @@
 package com.sf.honeymorning.alarm.cdc;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 

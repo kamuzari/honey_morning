@@ -1,22 +1,22 @@
 package com.sf.honeymorning.user.service;
 
-import static com.sf.honeymorning.user.authentication.jwt.JwtProviderManager.CustomClaim;
+import static com.sf.honeymorning.user.authentication.jwt.JwtProviderManager.*;
 
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sf.honeymorning.alarm.domain.entity.Alarm;
+import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
+import com.sf.honeymorning.common.exception.model.BusinessException;
+import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
 import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
 import com.sf.honeymorning.user.controller.dto.request.AccountSignUpRequest;
 import com.sf.honeymorning.user.controller.dto.request.LoginAuthRequestDto;
 import com.sf.honeymorning.user.controller.dto.response.LoginAuthResponseDto;
 import com.sf.honeymorning.user.controller.dto.response.LogoutAuthResponseDto;
-import com.sf.honeymorning.alarm.domain.entity.Alarm;
-import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
-import com.sf.honeymorning.common.exception.model.BusinessException;
-import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
 import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.entity.UserRole;
 import com.sf.honeymorning.user.repository.UserRepository;
@@ -25,72 +25,72 @@ import com.sf.honeymorning.user.repository.UserRepository;
 @Service
 public class AccountService {
 
-    private final UserRepository userRepository;
-    private final AlarmRepository alarmRepository;
+	private final UserRepository userRepository;
+	private final AlarmRepository alarmRepository;
 
-    private final AccountMapper accountMapper;
+	private final AccountMapper accountMapper;
 
-    private final BCryptPasswordEncoder passwordEncoder;
+	private final BCryptPasswordEncoder passwordEncoder;
 
-    private final JwtProviderManager jwtProviderManager;
-    private final JwtProperty jwtProperty;
+	private final JwtProviderManager jwtProviderManager;
+	private final JwtProperty jwtProperty;
 
-    public AccountService(UserRepository userRepository,
-                          BCryptPasswordEncoder passwordEncoder,
-                          AlarmRepository alarmRepository,
-                          AccountMapper accountMapper,
-                          JwtProviderManager jwtProviderManager,
-                          JwtProperty jwtProperty) {
-        this.userRepository = userRepository;
-        this.alarmRepository = alarmRepository;
-        this.accountMapper = accountMapper;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtProviderManager = jwtProviderManager;
-        this.jwtProperty = jwtProperty;
-    }
+	public AccountService(UserRepository userRepository,
+		BCryptPasswordEncoder passwordEncoder,
+		AlarmRepository alarmRepository,
+		AccountMapper accountMapper,
+		JwtProviderManager jwtProviderManager,
+		JwtProperty jwtProperty) {
+		this.userRepository = userRepository;
+		this.alarmRepository = alarmRepository;
+		this.accountMapper = accountMapper;
+		this.passwordEncoder = passwordEncoder;
+		this.jwtProviderManager = jwtProviderManager;
+		this.jwtProperty = jwtProperty;
+	}
 
-    @Transactional
-    public void create(AccountSignUpRequest accountSignUpRequest) {
-        if (userRepository.existsByUsername(accountSignUpRequest.username())) {
-            throw new BusinessException("중복된 이메일로 회원가입을 할 수 없어요", ErrorProtocol.POLICY_VIOLATION);
-        }
+	@Transactional
+	public void create(AccountSignUpRequest accountSignUpRequest) {
+		if (userRepository.existsByUsername(accountSignUpRequest.username())) {
+			throw new BusinessException("중복된 이메일로 회원가입을 할 수 없어요", ErrorProtocol.POLICY_VIOLATION);
+		}
 
-        User user = userRepository.save(
-                new User(accountSignUpRequest.username(),
-                        passwordEncoder.encode(accountSignUpRequest.rawPassword()),
-                        accountSignUpRequest.nickName(),
-                        UserRole.ROLE_USER));
-        alarmRepository.save(Alarm.initialize(user.getId()));
-    }
+		User user = userRepository.save(
+			new User(accountSignUpRequest.username(),
+				passwordEncoder.encode(accountSignUpRequest.rawPassword()),
+				accountSignUpRequest.nickName(),
+				UserRole.ROLE_USER));
+		alarmRepository.save(Alarm.initialize(user.getId()));
+	}
 
-    public boolean validateEmail(String email) {
-        return userRepository.existsByUsername(email);
-    }
+	public boolean validateEmail(String email) {
+		return userRepository.existsByUsername(email);
+	}
 
-    public LoginAuthResponseDto login(LoginAuthRequestDto loginDto) {
-        User principal = userRepository.findByUsername(loginDto.username())
-                .orElseThrow(() -> new BadCredentialsException("authentication error"));
+	public LoginAuthResponseDto login(LoginAuthRequestDto loginDto) {
+		User principal = userRepository.findByUsername(loginDto.username())
+			.orElseThrow(() -> new BadCredentialsException("authentication error"));
 
-        boolean isMatchCredential = passwordEncoder.matches(loginDto.password(), principal.getPassword());
+		boolean isMatchCredential = passwordEncoder.matches(loginDto.password(), principal.getPassword());
 
-        if (!isMatchCredential) {
-            throw new BadCredentialsException("authentication error");
-        }
+		if (!isMatchCredential) {
+			throw new BadCredentialsException("authentication error");
+		}
 
-        CustomClaim claim = CustomClaim.builder()
-                .userId(principal.getId())
-                .roles(new String[]{principal.getRole().name()})
-                .build();
+		CustomClaim claim = CustomClaim.builder()
+			.userId(principal.getId())
+			.roles(new String[] {principal.getRole().name()})
+			.build();
 
-        String accessToken = jwtProviderManager.generateAccessToken(claim);
-        String refreshToken = jwtProviderManager.generateRefreshToken(principal.getId());
+		String accessToken = jwtProviderManager.generateAccessToken(claim);
+		String refreshToken = jwtProviderManager.generateRefreshToken(principal.getId());
 
-        return accountMapper.toLoginResponse(accessToken, refreshToken, jwtProperty);
-    }
+		return accountMapper.toLoginResponse(accessToken, refreshToken, jwtProperty);
+	}
 
-    public LogoutAuthResponseDto logout(Long id) {
-        jwtProviderManager.removeRefreshToken(id);
+	public LogoutAuthResponseDto logout(Long id) {
+		jwtProviderManager.removeRefreshToken(id);
 
-        return accountMapper.toLogoutResponse(jwtProperty);
-    }
+		return accountMapper.toLogoutResponse(jwtProperty);
+	}
 }

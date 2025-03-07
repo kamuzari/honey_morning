@@ -1,31 +1,31 @@
 package com.sf.honeymorning.brief.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import com.sf.honeymorning.brief.entity.TopicModelWord;
-import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
-import com.sf.honeymorning.brief.service.mapper.BriefingMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sf.honeymorning.brief.controller.dto.response.BriefingDetailResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
+import com.sf.honeymorning.brief.entity.TopicModelWord;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.repository.BriefingTagRepository;
+import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
+import com.sf.honeymorning.brief.service.mapper.BriefingMapper;
+import com.sf.honeymorning.common.entity.content.AccessAuthority;
+import com.sf.honeymorning.common.entity.content.Content;
+import com.sf.honeymorning.common.entity.content.FileType;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
 import com.sf.honeymorning.quiz.entity.Quiz;
@@ -37,8 +37,10 @@ public class BriefingServiceTest extends MockTestServiceEnvironment {
 
 	@Mock
 	BriefingRepository briefingRepository;
+
 	@Mock
 	BriefingTagRepository briefingTagRepository;
+
 	@Mock
 	QuizRepository quizRepository;
 
@@ -56,23 +58,30 @@ public class BriefingServiceTest extends MockTestServiceEnvironment {
 			FAKER_DATE_FACTORY.lorem().sentence(10),
 			FAKER_DATE_FACTORY.lorem().word(),
 			FAKER_DATE_FACTORY.internet().url());
+		briefing.addWakeUpBriefingContent(new Content(
+			FAKER_DATE_FACTORY.internet().domainName(),
+			(long)FAKER_DATE_FACTORY.number().numberBetween(1000, 100_000),
+			FileType.BRIEFING,
+			FAKER_DATE_FACTORY.internet().url().toLowerCase(),
+			AccessAuthority.PART_ALLOWED)
+		);
 		ReflectionTestUtils.setField(briefing, "id", 1L);
-		List<Quiz> quizzes = List.of(new Quiz(briefing,
-				FAKER_DATE_FACTORY.lorem().sentence(),
+		List<Quiz> quizzes = List.of(new Quiz(FAKER_DATE_FACTORY.lorem().sentence(),
 				FAKER_DATE_FACTORY.number().randomDigit(),
 				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().sentence()).limit(4).toList(),
 				FAKER_DATE_FACTORY.internet().url()),
-			new Quiz(briefing,
-				FAKER_DATE_FACTORY.lorem().sentence(),
+			new Quiz(FAKER_DATE_FACTORY.lorem().sentence(),
 				FAKER_DATE_FACTORY.number().randomDigit(),
 				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().sentence()).limit(4).toList(),
 				FAKER_DATE_FACTORY.internet().url())
 		);
 
+		quizzes.forEach(quiz -> ReflectionTestUtils.setField(quiz, "briefing", briefing));
+
 		List<TopicModelWord> topicModelWords = Stream.generate(() -> new TopicModelWord(
-				FAKER_DATE_FACTORY.number().numberBetween(1, 5),
-				FAKER_DATE_FACTORY.lorem().word(),
-				FAKER_DATE_FACTORY.number().randomDouble(2, 0, 20)
+			FAKER_DATE_FACTORY.number().numberBetween(1, 5),
+			FAKER_DATE_FACTORY.lorem().word(),
+			FAKER_DATE_FACTORY.number().randomDouble(2, 0, 20)
 		)).limit(150).toList();
 
 		given(briefingRepository.findByUserIdAndId(AUTH_USER.getId(), briefing.getId()))

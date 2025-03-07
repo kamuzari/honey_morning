@@ -1,6 +1,7 @@
 package com.sf.honeymorning.brief.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -10,16 +11,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.javafaker.Faker;
+import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
+import com.sf.honeymorning.brief.entity.TopicModelWord;
+import com.sf.honeymorning.brief.entity.violation.QuizViolation;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
-import com.sf.honeymorning.brief.repository.BriefingTagRepository;
 import com.sf.honeymorning.brief.service.BriefService;
 import com.sf.honeymorning.context.DefaultIntegrationTest;
 import com.sf.honeymorning.quiz.entity.Quiz;
-import com.sf.honeymorning.quiz.repository.QuizRepository;
-import com.sf.honeymorning.tag.entity.Tag;
-import com.sf.honeymorning.tag.repository.TagRepository;
 
 class BriefingIntegrationTest extends DefaultIntegrationTest {
 
@@ -31,18 +31,9 @@ class BriefingIntegrationTest extends DefaultIntegrationTest {
 	@Autowired
 	BriefingRepository briefingRepository;
 
-	@Autowired
-	BriefingTagRepository briefingTagRepository;
-
-	@Autowired
-	QuizRepository quizRepository;
-
-	@Autowired
-	TagRepository tagRepository;
-
 	@DisplayName("나의 브리핑 기록들을 가져온다. with pagination")
 	@Test
-	void get_my_briefing_histories() {
+	void testGetMyBriefingHistories() {
 		//given
 		Long authUserid = 1L;
 		var pageSampleResponse = createPagingSampleData(authUserid);
@@ -60,7 +51,7 @@ class BriefingIntegrationTest extends DefaultIntegrationTest {
 
 	@DisplayName("나의 브리핑 기록들이 없어도 응답한다. with pagination")
 	@Test
-	void get_my_briefing_histories_empty() {
+	void testMyEmptyBriefingHistories() {
 		//given
 		Long authUserid = 2L;
 		int initialPageNumber = 1;
@@ -76,29 +67,42 @@ class BriefingIntegrationTest extends DefaultIntegrationTest {
 			authUserId,
 			FAKE_DATA_FACTORY.lorem().sentence(3),
 			FAKE_DATA_FACTORY.lorem().sentence(3),
-			FAKE_DATA_FACTORY.internet().url()
+			FAKE_DATA_FACTORY.internet().url(),
+			List.of(new BriefingTag("경제")),
+			List.of(
+				new Quiz(
+					FAKE_DATA_FACTORY.friends().quote(),
+					FAKE_DATA_FACTORY.number().numberBetween(1, 4),
+					Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList(),
+					FAKE_DATA_FACTORY.internet().url()),
+				new Quiz(
+					FAKE_DATA_FACTORY.friends().quote(),
+					FAKE_DATA_FACTORY.number().numberBetween(1, 4),
+					Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList(),
+					FAKE_DATA_FACTORY.internet().url())
+			),
+			Stream.generate(() -> new TopicModelWord(
+					FAKE_DATA_FACTORY.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
+					FAKE_DATA_FACTORY.lorem().word(),
+					FAKE_DATA_FACTORY.number().randomDouble(2, 0, 100)))
+				.limit(150).toList()
 		));
 
-		Tag tag = tagRepository.save(
-			new Tag(
-				"경제"
-			));
-
-		briefingTagRepository.save(new BriefingTag(briefing, tag));
-		quizRepository.saveAll(List.of(
-			new Quiz(briefing,
-				FAKE_DATA_FACTORY.friends().quote(),
-				FAKE_DATA_FACTORY.number().numberBetween(1, 4),
-				Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList(),
-				FAKE_DATA_FACTORY.internet().url()),
-			new Quiz(briefing,
-				FAKE_DATA_FACTORY.friends().quote(),
-				FAKE_DATA_FACTORY.number().numberBetween(1, 4),
-				Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList(),
-				FAKE_DATA_FACTORY.internet().url())
-		));
+		briefingRepository.save(briefing);
 
 		return new PageSampleResponse(1, 1);
+	}
+
+	List<AiQuizDto> createFakeQuizDtos(int size) {
+		return Stream.generate(() -> new AiQuizDto(
+				FAKE_DATA_FACTORY.lorem().sentence(2),
+				1,
+				Stream.generate(() -> FAKE_DATA_FACTORY.lorem().word())
+					.limit(QuizViolation.NUMBER_OF_SELECTION)
+					.toList()
+			))
+			.limit(size)
+			.toList();
 	}
 
 	record PageSampleResponse(

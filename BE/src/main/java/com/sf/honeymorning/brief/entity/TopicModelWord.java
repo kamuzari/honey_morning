@@ -38,4 +38,8 @@ public class TopicModelWord extends BaseEntity {
 		this.word = word;
 		this.weight = weight;
 	}
+
+	void addBriefing(Briefing briefing) {
+		this.briefing = briefing;
+	}
 }

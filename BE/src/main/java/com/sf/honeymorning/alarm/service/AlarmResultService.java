@@ -1,7 +1,7 @@
 package com.sf.honeymorning.alarm.service;
 
-import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
-import static java.text.MessageFormat.format;
+import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.*;
+import static java.text.MessageFormat.*;
 
 import java.time.LocalDateTime;
 import java.util.List;

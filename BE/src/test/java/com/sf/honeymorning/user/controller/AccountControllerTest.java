@@ -1,15 +1,12 @@
 package com.sf.honeymorning.user.controller;
 
-import static com.sf.honeymorning.user.entity.UserRole.ROLE_USER;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static com.sf.honeymorning.user.entity.UserRole.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,19 +19,19 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sf.honeymorning.config.WebSecurityConfig;
+import com.sf.honeymorning.security.WithJwtMockUser;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
+import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
+import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
 import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
 import com.sf.honeymorning.user.authentication.service.TokenService;
 import com.sf.honeymorning.user.controller.dto.request.LoginAuthRequestDto;
 import com.sf.honeymorning.user.controller.dto.response.LoginAuthResponseDto;
 import com.sf.honeymorning.user.controller.dto.response.LogoutAuthResponseDto;
 import com.sf.honeymorning.user.controller.dto.response.TokenResponseDto;
-import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
-import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
-import com.sf.honeymorning.user.service.AccountService;
-import com.sf.honeymorning.config.WebSecurityConfig;
-import com.sf.honeymorning.security.WithJwtMockUser;
 import com.sf.honeymorning.user.entity.User;
+import com.sf.honeymorning.user.service.AccountService;
 
 @WebMvcTest({AccountController.class,
 	WebSecurityConfig.class,

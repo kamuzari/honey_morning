@@ -1,12 +1,10 @@
 package com.sf.honeymorning.alarm.controller;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.times;
-import static org.mockito.BDDMockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -21,15 +19,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.sf.honeymorning.user.authentication.constant.JwtProperty;
-import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
-import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
-import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
 import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.service.AlarmContentService;
 import com.sf.honeymorning.alarm.service.AlarmService;
 import com.sf.honeymorning.config.WebSecurityConfig;
 import com.sf.honeymorning.context.MockTestControllerEnvironment;
+import com.sf.honeymorning.user.authentication.constant.JwtProperty;
+import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
+import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
+import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
 
 @WebMvcTest({AlarmController.class,
 	WebSecurityConfig.class,

@@ -1,8 +1,9 @@
 package com.sf.honeymorning.user.authentication.constant;
 
-import com.sf.honeymorning.user.authentication.model.Token;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
+
+import com.sf.honeymorning.user.authentication.model.Token;
 
 @ConfigurationProperties(prefix = "jwt")
 public record JwtProperty(

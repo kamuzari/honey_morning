@@ -1,6 +1,6 @@
 package com.sf.honeymorning.user.authentication.handler;
 
-import static org.springframework.http.HttpHeaders.SET_COOKIE;
+import static org.springframework.http.HttpHeaders.*;
 
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,6 @@
 package com.sf.honeymorning.brief.entity;
 
 import com.sf.honeymorning.common.entity.basic.BaseEntity;
-import com.sf.honeymorning.tag.entity.Tag;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,16 +26,9 @@ public class BriefingTag extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Briefing briefing;
 
-	@JoinColumn(name = "tag_id")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Tag tag;
+	private String word;
 
-	public BriefingTag(Briefing briefing, Tag tag) {
-		this.briefing = briefing;
-		this.tag = tag;
-	}
-
-	public BriefingTag(Tag tag) {
-		this.tag = tag;
+	public BriefingTag(String word) {
+		this.word = word;
 	}
 }

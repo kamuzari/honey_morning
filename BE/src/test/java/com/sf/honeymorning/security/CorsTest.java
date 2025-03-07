@@ -1,9 +1,7 @@
 package com.sf.honeymorning.security;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,12 +12,12 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sf.honeymorning.config.WebSecurityConfig;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
-import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
-import com.sf.honeymorning.user.authentication.service.TokenService;
 import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
 import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
-import com.sf.honeymorning.config.WebSecurityConfig;
+import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
+import com.sf.honeymorning.user.authentication.service.TokenService;
 
 @WebMvcTest({
 	WebSecurityConfig.class,
@@ -53,7 +51,7 @@ public class CorsTest {
 	}
 
 	@DisplayName("지정한_ORIGIN이_아닐경우_시큐리티의_CORSFilter에서_403상태코드와_오류메시지를_반환한다")
-	@ParameterizedTest( name = "invalidOrigin : {0}")
+	@ParameterizedTest(name = "invalidOrigin : {0}")
 	@ValueSource(strings = {"http://www.honeymorning.com", "https://localhost:3000", "http://www.honey.com"})
 	void failPassFixedOrigin(String invalidOriginUrl) throws Exception {
 		mockMvc.perform(options("/api/test")
