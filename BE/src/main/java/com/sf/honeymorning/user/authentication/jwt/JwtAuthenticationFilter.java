@@ -1,12 +1,10 @@
 package com.sf.honeymorning.user.authentication.jwt;
 
-import static org.springframework.http.HttpHeaders.SET_COOKIE;
+import static org.springframework.http.HttpHeaders.*;
 
 import java.io.IOException;
 import java.util.List;
 
-import com.sf.honeymorning.user.authentication.model.JwtAuthentication;
-import com.sf.honeymorning.user.authentication.model.JwtAuthenticationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseCookie;
@@ -22,6 +20,8 @@ import com.sf.honeymorning.user.authentication.constant.CookieProperty;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
 import com.sf.honeymorning.user.authentication.exception.TokenNotFoundException;
 import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager.CustomClaim;
+import com.sf.honeymorning.user.authentication.model.JwtAuthentication;
+import com.sf.honeymorning.user.authentication.model.JwtAuthenticationToken;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.FilterChain;

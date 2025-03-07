@@ -6,8 +6,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
-import com.sf.honeymorning.user.authentication.service.TokenService;
 import com.sf.honeymorning.security.WithJwtMockUser;
+import com.sf.honeymorning.user.authentication.service.TokenService;
 
 @WithJwtMockUser
 public class MockTestControllerEnvironment {

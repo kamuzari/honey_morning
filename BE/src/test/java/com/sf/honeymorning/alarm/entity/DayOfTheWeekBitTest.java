@@ -1,6 +1,6 @@
 package com.sf.honeymorning.alarm.entity;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Arrays;
 

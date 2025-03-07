@@ -1,9 +1,7 @@
 package com.sf.honeymorning.alarm.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.times;
-import static org.mockito.BDDMockito.verify;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.BDDMockito.*;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -22,6 +20,9 @@ import com.sf.honeymorning.alarm.service.mapper.AlarmContentServiceMapper;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.violation.QuizViolation;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
+import com.sf.honeymorning.common.entity.content.AccessAuthority;
+import com.sf.honeymorning.common.entity.content.Content;
+import com.sf.honeymorning.common.entity.content.FileType;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
 import com.sf.honeymorning.quiz.entity.Quiz;
 import com.sf.honeymorning.quiz.repository.QuizRepository;
@@ -31,9 +32,6 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
 	@InjectMocks
 	AlarmContentService alarmContentService;
 
-	@Spy
-	AlarmContentServiceMapper alarmContentServiceMapper;
-
 	@Mock
 	BriefingRepository briefingRepository;
 
@@ -42,6 +40,9 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
 
 	@Mock
 	QuizRepository quizRepository;
+
+	@Spy
+	AlarmContentServiceMapper alarmContentServiceMapper;
 
 	@Test
 	@DisplayName("기상전 알람 콘텐츠들을 모두 가져온다")
@@ -60,6 +61,13 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
 			FAKER_DATE_FACTORY.lorem().sentence(10),
 			FAKER_DATE_FACTORY.lorem().sentence(20),
 			FAKER_DATE_FACTORY.internet().url().toLowerCase()
+		);
+		expectedBriefing.addWakeUpBriefingContent(new Content(
+			FAKER_DATE_FACTORY.internet().domainName(),
+			(long)FAKER_DATE_FACTORY.number().numberBetween(1000, 100_000),
+			FileType.BRIEFING,
+			FAKER_DATE_FACTORY.internet().url().toLowerCase(),
+			AccessAuthority.PART_ALLOWED)
 		);
 		List<Quiz> expectedQuizzes = createFakeQuiz(QuizViolation.TOTAL_OF_COUNT);
 
@@ -80,7 +88,8 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
 		assertThat(preparedAlarmContents.repeatFrequency()).isEqualTo(expectedAlarm.getRepeatFrequency());
 		assertThat(preparedAlarmContents.repeatInterval()).isEqualTo(expectedAlarm.getRepeatInterval());
 		assertThat(preparedAlarmContents.wakeUpTime()).isEqualTo(expectedAlarm.getWakeUpTime());
-		assertThat(preparedAlarmContents.briefingVoiceUrl()).isEqualTo(expectedBriefing.getVoiceContentUrl());
+		assertThat(preparedAlarmContents.briefingVoiceUrl()).isEqualTo(
+			expectedBriefing.getWakeUpBriefingContent().getFileUrl());
 	}
 
 	private List<Quiz> createFakeQuiz(int size) {

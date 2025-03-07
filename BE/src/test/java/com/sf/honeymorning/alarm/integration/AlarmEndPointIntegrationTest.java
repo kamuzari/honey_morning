@@ -1,8 +1,8 @@
 package com.sf.honeymorning.alarm.integration;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
-import static org.hamcrest.Matchers.equalTo;
+import static io.restassured.RestAssured.*;
+import static io.restassured.http.ContentType.*;
+import static org.hamcrest.Matchers.*;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -18,16 +18,16 @@ import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
-import com.sf.honeymorning.user.authentication.service.TokenService;
-import com.sf.honeymorning.user.service.AccountService;
 import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
+import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
+import com.sf.honeymorning.user.authentication.service.TokenService;
 import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.entity.UserRole;
 import com.sf.honeymorning.user.repository.UserRepository;
+import com.sf.honeymorning.user.service.AccountService;
 
 import io.restassured.RestAssured;
 import io.restassured.http.Cookie.Builder;
@@ -57,13 +57,15 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationEnvironment
 
 	@MockBean
 	TokenService tokenService;
+
+	@LocalServerPort
+	private int port;
+
 	User authenticationUser;
 	Alarm authUserAlarm;
 	String accessToken;
 	String refreshToken;
 	Cookies authenticationTokens;
-	@LocalServerPort
-	private int port;
 
 	@BeforeEach
 	public void setup() {

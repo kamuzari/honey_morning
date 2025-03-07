@@ -40,7 +40,7 @@ public class Briefing extends BaseEntity {
 	private String content;
 
 	@Column(length = 1000)
-	private String voiceContentUrl;
+	private String wakeUpCallPath;
 
 	@OneToMany(
 		cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
@@ -64,17 +64,17 @@ public class Briefing extends BaseEntity {
 	@AttributeOverride(name = "fileUrl", column = @Column(name = "access_url"))
 	private Content wakeUpBriefingContent;
 
-	public Briefing(Long userId, String voiceContent, String readContent, String voiceContentUrl) {
+	public Briefing(Long userId, String voiceContent, String readContent, String wakeUpCallPath) {
 		this.userId = userId;
 		this.summary = voiceContent;
 		this.content = readContent;
-		this.voiceContentUrl = voiceContentUrl;
+		this.wakeUpCallPath = wakeUpCallPath;
 	}
 
 	public Briefing(Long userId,
 		String voiceContent,
 		String readContent,
-		String voiceContentUrl,
+		String wakeUpCallPath,
 		List<BriefingTag> briefingTags,
 		List<Quiz> quizzes,
 		List<TopicModelWord> topicModelWords
@@ -82,7 +82,7 @@ public class Briefing extends BaseEntity {
 		this.userId = userId;
 		this.summary = voiceContent;
 		this.content = readContent;
-		this.voiceContentUrl = voiceContentUrl;
+		this.wakeUpCallPath = wakeUpCallPath;
 		this.briefingTags = briefingTags;
 		this.quizzes = quizzes;
 		this.topicModelWords = topicModelWords;

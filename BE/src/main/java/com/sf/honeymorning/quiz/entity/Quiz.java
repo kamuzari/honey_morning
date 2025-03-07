@@ -59,26 +59,6 @@ public class Quiz extends BaseEntity {
 	@AttributeOverride(name = "fileUrl", column = @Column(name = "access_url"))
 	private Content wakeUpQuizContent;
 
-	public Quiz(Briefing briefing,
-		String problem,
-		Integer answer,
-		List<String> options,
-		String quizVoiceUrl) {
-		if (options.size() != 4) {
-			throw new IllegalArgumentException("객관식은 4지 선다형 입니다.");
-		}
-
-		this.briefing = briefing;
-		this.problem = problem;
-		this.answer = answer;
-		this.option1 = options.get(0);
-		this.option2 = options.get(1);
-		this.option3 = options.get(2);
-		this.option4 = options.get(3);
-		this.selection = null;
-		this.quizVoiceUrl = quizVoiceUrl;
-	}
-
 	public Quiz(
 		String problem,
 		Integer answer,

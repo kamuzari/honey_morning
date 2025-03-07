@@ -1,11 +1,9 @@
 package com.sf.honeymorning.alarm.client;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
-import static org.apache.http.HttpHeaders.CONTENT_TYPE;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpStatus.OK;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.apache.http.HttpHeaders.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.springframework.http.HttpStatus.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
