@@ -3,7 +3,6 @@ package com.sf.honeymorning.brief.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Optional;

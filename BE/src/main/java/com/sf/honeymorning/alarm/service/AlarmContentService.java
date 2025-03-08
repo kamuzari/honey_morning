@@ -14,7 +14,7 @@ import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.mapper.AlarmContentServiceMapper;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
-import com.sf.honeymorning.common.event.EventsProducer;
+import com.sf.honeymorning.common.event.service.EventsProducer;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
 import com.sf.honeymorning.quiz.entity.Quiz;

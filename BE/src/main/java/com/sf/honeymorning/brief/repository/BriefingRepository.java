@@ -22,4 +22,7 @@ public interface BriefingRepository extends JpaRepository<Briefing, Long> {
 		@Param("endOfDay") LocalDateTime endOfDay);
 
 	Optional<Briefing> findTopByUserIdOrderByCreatedAtDesc(Long userId);
+
+	@Query("SELECT b FROM Briefing b join fetch b.quizzes WHERE b.id= :briefingId")
+	Optional<Briefing> findByIdWithQuizzes(@Param("briefingId") Long briefingId);
 }

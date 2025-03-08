@@ -24,32 +24,26 @@ import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
-import com.sf.honeymorning.quiz.entity.Quiz;
-import com.sf.honeymorning.quiz.repository.QuizRepository;
 
 @Service
 public class TtsService {
 	private final BriefingRepository briefingRepository;
-	private final QuizRepository quizRepository;
 	private final ContentStoreService contentStoreService;
 	private final TtsClientService ttsClientService;
 
 	@Value("${aws.s3.domain-name}")
 	private String contentDomainName;
 
-	public TtsService(BriefingRepository briefingRepository, QuizRepository quizRepository,
+	public TtsService(BriefingRepository briefingRepository,
 		ContentStoreService contentStoreService, TtsClientService ttsClientService) {
 		this.briefingRepository = briefingRepository;
-		this.quizRepository = quizRepository;
 		this.contentStoreService = contentStoreService;
 		this.ttsClientService = ttsClientService;
 	}
 
-	@TransactionalEventListener
-	@EventListener(Long.class)
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void create(Long briefingId) {
-		Briefing briefing = briefingRepository.findById(briefingId).orElseThrow(() -> new BusinessException(
+		Briefing briefing = briefingRepository.findByIdWithQuizzes(briefingId).orElseThrow(() -> new BusinessException(
 			MessageFormat.format("브리핑 데이터가 반드시 존재해야 합니다. briefingId : {0}", briefingId),
 			ErrorProtocol.BUSINESS_VIOLATION
 		));
@@ -63,16 +57,14 @@ public class TtsService {
 	}
 
 	private void addQuizContents(Briefing briefing) {
-		List<Quiz> quizzes = quizRepository.findByBriefing(briefing);
-		if (quizzes.isEmpty()) {
+		if (briefing.isEmptyQuizzes()) {
 			throw new BusinessException(
 				MessageFormat.format("브리핑 데이터가 반드시 존재해야 합니다. briefing : {0}", briefing),
 				ErrorProtocol.BUSINESS_VIOLATION
 			);
 		}
 
-		quizzes
-			.forEach(quiz -> {
+		briefing.getQuizzes().forEach(quiz -> {
 				Content content = createContent(quiz.getProblem(), FileType.QUIZ);
 				quiz.addWakeUpQuizContent(content);
 			});

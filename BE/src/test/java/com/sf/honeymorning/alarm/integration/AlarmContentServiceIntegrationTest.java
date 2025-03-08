@@ -1,76 +1,197 @@
 package com.sf.honeymorning.alarm.integration;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.io.IOException;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.CreateBucketRequest;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.service.AlarmContentService;
-import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
+import com.sf.honeymorning.alarm.service.TtsService;
+import com.sf.honeymorning.alarm.service.dto.response.AiBriefingDto;
+import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
+import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
+import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
+import com.sf.honeymorning.brief.entity.Briefing;
+import com.sf.honeymorning.brief.entity.violation.QuizViolation;
+import com.sf.honeymorning.brief.repository.BriefingRepository;
+import com.sf.honeymorning.config.constant.AwsS3Properties;
+import com.sf.honeymorning.context.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
-import com.sf.honeymorning.util.TimeUtils;
+import com.sf.honeymorning.context.infra.storage.AwsS3Context;
+import com.sf.honeymorning.quiz.entity.Quiz;
+import com.sf.honeymorning.user.entity.User;
+import com.sf.honeymorning.user.entity.UserRole;
+import com.sf.honeymorning.user.repository.UserRepository;
 
-class AlarmContentServiceIntegrationTest extends EndPointIntegrationEnvironment implements MySqlContext {
-
-	static final int TOMORROW = LocalDate.now().getDayOfWeek().getValue();
+@AutoConfigureWireMock(port = 8089)
+class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implements MySqlContext, AwsS3Context {
+	static final String MOCK_TTS_PATH = "/text-to-speech/XrExE9yKIg1WjnnlVkGX";
 
 	@Autowired
-	AlarmContentService alarmContentService;
+	AlarmContentService sut;
+
+	@Value("${aws.s3.bucket-name.tts}")
+	String bucketName;
+
+	@Autowired
+	AmazonS3 amazonS3Client;
+
+	@Autowired
+	AwsS3Properties awsS3Properties;
 
 	@Autowired
 	AlarmRepository alarmRepository;
 
-	int todayScheduledAlarmSize;
+	@Autowired
+	UserRepository userRepository;
+
+	@Autowired
+	BriefingRepository briefingRepository;
+
+	@SpyBean
+	TtsService ttsService;
 
 	@BeforeEach
-	public void setUp() {
-		List<Alarm> todayScheduledAlarms = List.of(
-			new Alarm(
-				3L,
-				TimeUtils.getNow().plusMinutes(40),
-				DayOfTheWeek.getToday(),
-				3,
-				3,
-				true,
-				""
-			),
-			new Alarm(
-				1L,
-				TimeUtils.getNow().plusMinutes(40),
-				DayOfTheWeek.getToday(),
-				3,
-				3,
-				true,
-				""
-			)
-		);
-		ArrayList totalAlarms = new ArrayList<>(todayScheduledAlarms);
-		totalAlarms.add(new Alarm(
-			2L,
-			TimeUtils.getNow().plusMinutes(39),
-			TOMORROW,
-			3,
-			3,
-			true,
-			""
-		));
-
-		alarmRepository.saveAll(totalAlarms);
-		todayScheduledAlarmSize = todayScheduledAlarms.size();
+	void setUp() {
+		if(!amazonS3Client.doesBucketExistV2(bucketName)){
+			amazonS3Client.createBucket(new CreateBucketRequest(
+				bucketName, awsS3Properties.region()));
+		}
 	}
 
-	// @DisplayName("40분후에_시작되는_알람들을_가져온다")
-	// @Test
-	// void testGetTodayScheduledAlarms() {
-	// 	//given
-	// 	//when
-	// 	List<Alarm> alarms = alarmContentService.getReadyAlarm();
-	// 	//then
-	// 	Assertions.assertThat(alarms).hasSize(todayScheduledAlarmSize);
-	// }
+	@DisplayName("AI 로부터 응답받은 데이터를 저장하고, 이벤트를 발행하여 tts 콘텐츠를 만들고 tts 정보를 삽입하여 업데이트 한다")
+	@Test
+	void testCreateTotalContents() throws IOException {
+		//given
+		User user = new User(FAKE_DATA_FACTORY.name().username(),
+			FAKE_DATA_FACTORY.internet().password(10, 17),
+			FAKE_DATA_FACTORY.internet().domainName(),
+			UserRole.ROLE_USER
+		);
+
+		userRepository.save(user);
+		Alarm alarm = Alarm.initialize(user.getId());
+		alarm.set(LocalTime.now(), DayOfTheWeek.getToday(), 3, 3, true);
+		alarmRepository.save(alarm);
+
+		AiResponseDto responseDto = new AiResponseDto(
+			user.getId(),
+			new AiBriefingDto(FAKE_DATA_FACTORY.lorem().sentence(10), FAKE_DATA_FACTORY.lorem().sentence(40)),
+			createFakeQuizDtos(QuizViolation.TOTAL_OF_COUNT),
+			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
+			List.of("정치"),
+			"https://cdn.ycloud.com/03jidmmk39d"
+		);
+
+		Resource mockResource = new DefaultResourceLoader()
+			.getResource("classpath:/sample/sample-sound.mp3");
+
+		WireMock.stubFor(post(WireMock.urlEqualTo(MOCK_TTS_PATH))
+			.willReturn(aResponse()
+				.withHeader(HttpHeaders.CONTENT_TYPE, "audio/mpeg")
+				.withHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(mockResource.contentLength()))
+				.withBody(mockResource.getInputStream().readAllBytes())));
+
+		//when
+		sut.create(responseDto);
+
+		//then
+		Briefing briefing = briefingRepository.findByIdWithQuizzes(user.getId()).orElseThrow();
+
+		assertThat(briefing).isNotNull();
+		assertThat(briefing.getBriefingTags()).isNotNull();
+		assertThat(briefing.getSummary()).isEqualTo(responseDto.aiBriefings().voiceContent());
+		assertThat(briefing.getContent()).isEqualTo(responseDto.aiBriefings().readContent());
+		assertThat(briefing.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
+		assertThat(briefing.getWakeUpBriefingContent()).isNotNull();
+		assertThat(briefing.getQuizzes().stream().map(Quiz::getQuizVoiceUrl).toList()).hasSize(2);
+	}
+
+	@DisplayName("이벤트를 발행하고 리스너에서 예외가 나도 일부 데이터는 저장된다")
+	@Test
+	void testCreateTotalContents2()  {
+		//given
+		User user = new User(FAKE_DATA_FACTORY.name().username(),
+			FAKE_DATA_FACTORY.internet().password(10, 17),
+			FAKE_DATA_FACTORY.internet().domainName(),
+			UserRole.ROLE_USER
+		);
+
+		userRepository.save(user);
+		Alarm alarm = Alarm.initialize(user.getId());
+		alarm.set(LocalTime.now(), DayOfTheWeek.getToday(), 3, 3, true);
+		alarmRepository.save(alarm);
+
+		AiResponseDto responseDto = new AiResponseDto(
+			user.getId(),
+			new AiBriefingDto(FAKE_DATA_FACTORY.lorem().sentence(10), FAKE_DATA_FACTORY.lorem().sentence(40)),
+			createFakeQuizDtos(QuizViolation.TOTAL_OF_COUNT),
+			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
+			List.of("정치"),
+			"https://cdn.ycloud.com/03jidmmk39d"
+		);
+
+		doThrow(new RuntimeException("이벤트를 수신 받은 강제 예외 발생")).when(ttsService).create(anyLong());
+
+		//when
+		sut.create(responseDto);
+
+		//then
+		Briefing briefing = briefingRepository.findByIdWithQuizzes(user.getId()).orElseThrow();
+
+		assertThat(briefing).isNotNull();
+		assertThat(briefing.getBriefingTags()).isNotNull();
+		assertThat(briefing.getSummary()).isEqualTo(responseDto.aiBriefings().voiceContent());
+		assertThat(briefing.getContent()).isEqualTo(responseDto.aiBriefings().readContent());
+		assertThat(briefing.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
+		assertThat(briefing.getWakeUpBriefingContent()).isNull();
+		assertThat(briefing.getQuizzes().stream().map(Quiz::getQuizVoiceUrl).toList()).contains("");
+	}
+
+	List<AiTopicDto> createFakeAiTopicDtos(int size) {
+		return Stream.generate(() -> new AiTopicDto(
+				FAKE_DATA_FACTORY.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
+				FAKE_DATA_FACTORY.lorem().word(),
+				FAKE_DATA_FACTORY.number().randomDouble(2, 0, 100)))
+			.limit(size).toList();
+	}
+
+	List<AiQuizDto> createFakeQuizDtos(int size) {
+		return Stream.generate(() -> new AiQuizDto(
+				FAKE_DATA_FACTORY.lorem().sentence(2),
+				1,
+				Stream.generate(() -> FAKE_DATA_FACTORY.lorem().word())
+					.limit(QuizViolation.NUMBER_OF_SELECTION)
+					.toList()
+			))
+			.limit(size)
+			.toList();
+	}
 }
