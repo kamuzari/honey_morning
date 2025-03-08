@@ -6,8 +6,6 @@ import static java.util.concurrent.TimeUnit.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.BDDMockito.verify;
-import static org.mockito.Mockito.*;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.*;
 
 import java.util.List;

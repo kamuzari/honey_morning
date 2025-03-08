@@ -1,7 +1,6 @@
 package com.sf.honeymorning.alarm.controller;
 
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 import java.util.List;

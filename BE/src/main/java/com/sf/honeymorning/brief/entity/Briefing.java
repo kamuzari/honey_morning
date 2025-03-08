@@ -91,4 +91,8 @@ public class Briefing extends BaseEntity {
 	public void addWakeUpBriefingContent(Content wakeUpBriefingContent) {
 		this.wakeUpBriefingContent = wakeUpBriefingContent;
 	}
+
+	public boolean isEmptyQuizzes() {
+		return this.getQuizzes() ==null || this.getQuizzes().isEmpty();
+	}
 }
