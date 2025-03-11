@@ -3,18 +3,15 @@ package com.sf.honeymorning.alarm.service;
 import static com.sf.honeymorning.util.ResponseEntityUtils.*;
 
 import java.text.MessageFormat;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import com.sf.honeymorning.alarm.service.client.TtsClientService;
 import com.sf.honeymorning.brief.entity.Briefing;
@@ -66,7 +63,7 @@ public class TtsService {
 
 		briefing.getQuizzes().forEach(quiz -> {
 				Content content = createContent(quiz.getProblem(), FileType.QUIZ);
-				quiz.addWakeUpQuizContent(content);
+				quiz.addQuizContent(content);
 			});
 	}
 

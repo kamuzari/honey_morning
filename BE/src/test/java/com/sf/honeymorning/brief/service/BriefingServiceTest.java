@@ -1,5 +1,6 @@
 package com.sf.honeymorning.brief.service;
 
+import static com.sf.honeymorning.quiz.common.QuizConstraint.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import com.sf.honeymorning.quiz.common.QuizConstraint;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -27,8 +29,8 @@ import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
-import com.sf.honeymorning.quiz.entity.Quiz;
-import com.sf.honeymorning.quiz.repository.QuizRepository;
+import com.sf.honeymorning.quiz.domain.entity.Quiz;
+import com.sf.honeymorning.quiz.domain.repository.QuizRepository;
 
 public class BriefingServiceTest extends MockTestServiceEnvironment {
 	@InjectMocks
@@ -66,13 +68,11 @@ public class BriefingServiceTest extends MockTestServiceEnvironment {
 		);
 		ReflectionTestUtils.setField(briefing, "id", 1L);
 		List<Quiz> quizzes = List.of(new Quiz(FAKER_DATE_FACTORY.lorem().sentence(),
-				FAKER_DATE_FACTORY.number().randomDigit(),
-				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().sentence()).limit(4).toList(),
-				FAKER_DATE_FACTORY.internet().url()),
+				FAKER_DATE_FACTORY.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE),
+				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().sentence()).limit(4).toList()),
 			new Quiz(FAKER_DATE_FACTORY.lorem().sentence(),
-				FAKER_DATE_FACTORY.number().randomDigit(),
-				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().sentence()).limit(4).toList(),
-				FAKER_DATE_FACTORY.internet().url())
+				FAKER_DATE_FACTORY.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE),
+				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().sentence()).limit(4).toList())
 		);
 
 		quizzes.forEach(quiz -> ReflectionTestUtils.setField(quiz, "briefing", briefing));

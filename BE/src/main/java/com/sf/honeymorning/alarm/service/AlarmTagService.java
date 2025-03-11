@@ -14,8 +14,8 @@ import com.sf.honeymorning.alarm.domain.entity.AlarmTag;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.domain.repository.AlarmTagRepository;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
-import com.sf.honeymorning.tag.entity.Tag;
-import com.sf.honeymorning.tag.repository.TagRepository;
+import com.sf.honeymorning.alarm.domain.entity.Tag;
+import com.sf.honeymorning.alarm.domain.repository.TagRepository;
 
 @Service
 @Transactional(readOnly = true)

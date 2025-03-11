@@ -1,18 +1,11 @@
 package com.sf.honeymorning.alarm.domain.entity;
 
 import com.sf.honeymorning.common.entity.basic.BaseEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
+import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "alarm_results")
 @Entity
 public class AlarmResult extends BaseEntity {
 
@@ -28,6 +21,9 @@ public class AlarmResult extends BaseEntity {
 	private Integer count;
 
 	private boolean isAttended;
+
+	protected AlarmResult() {
+	}
 
 	public AlarmResult(Long userId, Long briefingId, Integer count, boolean isAttended) {
 		this.userId = userId;

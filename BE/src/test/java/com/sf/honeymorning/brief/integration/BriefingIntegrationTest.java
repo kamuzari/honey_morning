@@ -19,7 +19,7 @@ import com.sf.honeymorning.brief.entity.violation.QuizViolation;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.service.BriefService;
 import com.sf.honeymorning.context.DefaultIntegrationTest;
-import com.sf.honeymorning.quiz.entity.Quiz;
+import com.sf.honeymorning.quiz.domain.entity.Quiz;
 
 class BriefingIntegrationTest extends DefaultIntegrationTest {
 
@@ -73,13 +73,12 @@ class BriefingIntegrationTest extends DefaultIntegrationTest {
 				new Quiz(
 					FAKE_DATA_FACTORY.friends().quote(),
 					FAKE_DATA_FACTORY.number().numberBetween(1, 4),
-					Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList(),
-					FAKE_DATA_FACTORY.internet().url()),
+					Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList()
+					),
 				new Quiz(
 					FAKE_DATA_FACTORY.friends().quote(),
 					FAKE_DATA_FACTORY.number().numberBetween(1, 4),
-					Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList(),
-					FAKE_DATA_FACTORY.internet().url())
+					Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList())
 			),
 			Stream.generate(() -> new TopicModelWord(
 					FAKE_DATA_FACTORY.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),

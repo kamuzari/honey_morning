@@ -52,7 +52,6 @@ public class AlarmResultService {
 				, POLICY_VIOLATION)
 
 		);
-		// RedisRepository
 		userAlarmResultStreak.countConsecutiveDays(now);
 		userAlarmResultStreakRepository.save(userAlarmResultStreak);
 

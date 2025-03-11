@@ -11,14 +11,12 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.sf.honeymorning.common.entity.content.Content;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -26,7 +24,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
@@ -45,7 +42,7 @@ import com.sf.honeymorning.config.constant.AwsS3Properties;
 import com.sf.honeymorning.context.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.infra.storage.AwsS3Context;
-import com.sf.honeymorning.quiz.entity.Quiz;
+import com.sf.honeymorning.quiz.domain.entity.Quiz;
 import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.entity.UserRole;
 import com.sf.honeymorning.user.repository.UserRepository;
@@ -131,7 +128,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		assertThat(briefing.getContent()).isEqualTo(responseDto.aiBriefings().readContent());
 		assertThat(briefing.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
 		assertThat(briefing.getWakeUpBriefingContent()).isNotNull();
-		assertThat(briefing.getQuizzes().stream().map(Quiz::getQuizVoiceUrl).toList()).hasSize(2);
+		assertThat(briefing.getQuizzes().stream().map(Quiz::getWakeUpQuizContent).toList()).hasSize(2);
 	}
 
 	@DisplayName("이벤트를 발행하고 리스너에서 예외가 나도 일부 데이터는 저장된다")
@@ -172,7 +169,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		assertThat(briefing.getContent()).isEqualTo(responseDto.aiBriefings().readContent());
 		assertThat(briefing.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
 		assertThat(briefing.getWakeUpBriefingContent()).isNull();
-		assertThat(briefing.getQuizzes().stream().map(Quiz::getQuizVoiceUrl).toList()).contains("");
+		briefing.getQuizzes().forEach(quiz -> assertThat(quiz.getWakeUpQuizContent()).isNull());
 	}
 
 	List<AiTopicDto> createFakeAiTopicDtos(int size) {

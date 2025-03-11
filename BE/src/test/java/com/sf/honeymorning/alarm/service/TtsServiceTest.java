@@ -29,8 +29,8 @@ import com.sf.honeymorning.brief.entity.violation.QuizViolation;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
-import com.sf.honeymorning.quiz.entity.Quiz;
-import com.sf.honeymorning.quiz.repository.QuizRepository;
+import com.sf.honeymorning.quiz.domain.entity.Quiz;
+import com.sf.honeymorning.quiz.domain.repository.QuizRepository;
 
 class TtsServiceTest extends MockTestServiceEnvironment {
 
@@ -85,7 +85,7 @@ class TtsServiceTest extends MockTestServiceEnvironment {
 
 		//then
 		assertThat(savedBriefing.getWakeUpBriefingContent()).isNotNull();
-		assertThat(savedBriefing.getQuizzes().stream().map(Quiz::getQuizVoiceUrl).toList()).isNotNull();
+		assertThat(savedBriefing.getQuizzes().stream().map(Quiz::getWakeUpQuizContent).toList()).isNotNull();
 	}
 
 	@DisplayName("브리핑 데이터가 존재하지 않으면 비즈니스예외가 발생한다")
@@ -134,8 +134,7 @@ class TtsServiceTest extends MockTestServiceEnvironment {
 				1,
 				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().word())
 					.limit(QuizViolation.NUMBER_OF_SELECTION)
-					.toList(),
-				""
+					.toList()
 			)).limit(2)
 			.toList();
 	}
