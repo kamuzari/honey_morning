@@ -1,101 +1,67 @@
 package com.sf.honeymorning.quiz.service;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
 import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
-import com.sf.honeymorning.quiz.dto.QuizRequestDto;
-import com.sf.honeymorning.quiz.entity.Quiz;
-import com.sf.honeymorning.quiz.repository.QuizRepository;
+import com.sf.honeymorning.common.exception.model.BusinessException;
+import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
+import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
+import com.sf.honeymorning.quiz.controller.dto.SelectionRequestDto;
+import com.sf.honeymorning.quiz.domain.entity.Quiz;
+import com.sf.honeymorning.quiz.domain.repository.QuizRepository;
+import com.sf.honeymorning.quiz.service.mapper.QuizMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.text.MessageFormat;
+import java.util.List;
 
+import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
+import static com.sf.honeymorning.quiz.common.QuizConstraint.TOTAL_QUIZ_SIZE;
+import static java.text.MessageFormat.format;
+
+@Transactional(readOnly = true)
 @Service
-@RequiredArgsConstructor
-@Transactional
-@Slf4j
 public class QuizService {
 
-	private final QuizRepository quizRepository;
-	private final BriefingRepository briefingRepository;
-	@Value("${file.directory.path.quiz}")
-	private String quizPath;
+    private final QuizRepository quizRepository;
+    private final BriefingRepository briefingRepository;
+    private final QuizMapper quizMapper;
 
-	public List<QuizResponseDto> getQuiz(Long briefId) {
-		Briefing briefing = briefingRepository.findById(briefId)
-			.orElseThrow(() -> new EntityNotFoundException("id에 해당하는 브리핑이 존재하지 않습니다."));
-		List<Quiz> quizList = quizRepository.findByBriefing(briefing);
+    public QuizService(QuizRepository quizRepository, BriefingRepository briefingRepository, QuizMapper quizMapper) {
+        this.quizRepository = quizRepository;
+        this.briefingRepository = briefingRepository;
+        this.quizMapper = quizMapper;
+    }
 
-		List<QuizResponseDto> quizResponseDtoList = new ArrayList<>();
+    public List<QuizResponseDto> getQuizzes(Long userId, Long briefId) {
+        Briefing briefing = briefingRepository.findByUserIdAndId(userId, briefId)
+                .orElseThrow(() -> new NotFoundResourceException(format("존재하지 않는 사용자입니다. userId -> {0}, briefingId -> {1}", userId, briefId), POLICY_VIOLATION));
+        List<Quiz> quizList = quizRepository.findByBriefing(briefing);
 
-		for (Quiz quiz : quizList) {
-			QuizResponseDto quizResponseDto = new QuizResponseDto(
-				quiz.getProblem(),
-				quiz.getOption1(),
-				quiz.getOption2(),
-				quiz.getOption3(),
-				quiz.getOption4(),
-				quiz.getSelection(),
-				quiz.getAnswer()
-			);
+        return quizList.stream().map(quizMapper::toQuizResponseDto).toList();
+    }
 
-			quizResponseDtoList.add(quizResponseDto);
-		}
+    @Transactional
+    public void addSelections(Long userId, SelectionRequestDto selectionRequestDto) {
+        Briefing briefing = briefingRepository.findByUserIdAndId(userId, selectionRequestDto.briefingId())
+                .orElseThrow(() -> new NotFoundResourceException(format("존재하지 않는 사용자입니다. userId -> {0}, briefingId -> {1}", userId, selectionRequestDto.briefingId()), POLICY_VIOLATION));
+        List<Quiz> quizzes = quizRepository.findByBriefing(briefing);
 
-		return quizResponseDtoList;
-	}
+        if (quizzes.size() != TOTAL_QUIZ_SIZE) {
+            throw new BusinessException(
+                    MessageFormat.format("한개의 브리핑에는 2개의 퀴즈가 존재해야 합니다. briefing : {0}", briefing),
+                    ErrorProtocol.BUSINESS_VIOLATION
+            );
+        }
 
-	// ai에서 가져온 quiz를 저장하는 메서드
-	public void createQuiz(Quiz quiz) {
-		ResponseEntity.ok(quiz);
-	}
-
-	// 퀴즈가 끝난 이후, 선택한 보기를 등록할 메서드
-	public ResponseEntity<?> updateQuiz(QuizRequestDto quizRequestDto) {
-
-		Long quizId = quizRequestDto.getId();
-
-		Quiz quiz = quizRepository.findById(quizId)
-			.orElseThrow(() -> new EntityNotFoundException("id와 일치하는 퀴즈가 존재하지 않습니다."));
-
-		quiz.setSelection(quizRequestDto.getSelection());
-
-		return ResponseEntity.ok("퀴즈를 성공적으로 갱신하였습니다.");
-	}
-
-	public Resource getQuizAudio(Long quizId) throws IOException {
-		Quiz quiz = quizRepository.findById(quizId)
-			.orElseThrow(
-				() -> new EntityNotFoundException("Quiz not found with alarmId: " + quizId));
-
-		log.debug("quizPath: {}", quizPath);
-		log.debug("quiz file path: {}", quiz.getQuizVoiceUrl());
-
-		Path filePath = Paths.get(quizPath, quiz.getQuizVoiceUrl());
-		log.info("파일을 찾습니다: " + filePath);
-		Resource resource = new UrlResource(filePath.toUri());
-
-		if (resource.exists() || resource.isReadable()) {
-			log.info("파일을 찾았습니다: " + resource.getFilename());
-			return resource;
-		} else {
-			throw new IOException("Could not read the file: " + quiz.getQuizVoiceUrl());
-		}
-	}
+        selectionRequestDto.selectionQuizDtos()
+                .forEach(selectionQuizDto -> quizzes.stream().filter(quiz -> quiz.getId().equals(selectionQuizDto.quizId()))
+                        .findAny().orElseThrow(() -> new BusinessException(
+                                MessageFormat.format("클라이언트에서 잘못된 quizId를 전달하였습니다. quizId : {0}", selectionQuizDto.quizId()),
+                                ErrorProtocol.BUSINESS_VIOLATION
+                        )).addSelection(selectionQuizDto.selection()));
+    }
 }
 
 
