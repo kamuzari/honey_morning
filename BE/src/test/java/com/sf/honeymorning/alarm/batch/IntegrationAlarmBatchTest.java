@@ -35,8 +35,8 @@ import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.domain.repository.AlarmTagRepository;
 import com.sf.honeymorning.context.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
-import com.sf.honeymorning.tag.entity.Tag;
-import com.sf.honeymorning.tag.repository.TagRepository;
+import com.sf.honeymorning.alarm.domain.entity.Tag;
+import com.sf.honeymorning.alarm.domain.repository.TagRepository;
 import com.sf.honeymorning.util.TimeUtils;
 
 @SpringBatchTest

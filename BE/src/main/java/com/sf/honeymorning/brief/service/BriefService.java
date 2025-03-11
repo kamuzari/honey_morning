@@ -24,8 +24,8 @@ import com.sf.honeymorning.brief.service.mapper.BriefingMapper;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
-import com.sf.honeymorning.quiz.entity.Quiz;
-import com.sf.honeymorning.quiz.repository.QuizRepository;
+import com.sf.honeymorning.quiz.domain.entity.Quiz;
+import com.sf.honeymorning.quiz.domain.repository.QuizRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

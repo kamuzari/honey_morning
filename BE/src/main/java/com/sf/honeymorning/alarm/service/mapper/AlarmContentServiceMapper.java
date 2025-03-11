@@ -10,7 +10,7 @@ import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
-import com.sf.honeymorning.quiz.entity.Quiz;
+import com.sf.honeymorning.quiz.domain.entity.Quiz;
 
 @Component
 public class AlarmContentServiceMapper {
@@ -23,7 +23,7 @@ public class AlarmContentServiceMapper {
 			alarm.getRepeatFrequency(),
 			alarm.getWakeUpTime(),
 			briefing.getWakeUpBriefingContent().getFileUrl(),
-			quizzes.stream().map(Quiz::getQuizVoiceUrl).toList()
+			quizzes.stream().map(quiz -> quiz.getWakeUpQuizContent().getFileUrl()).toList()
 		);
 	}
 
@@ -37,8 +37,7 @@ public class AlarmContentServiceMapper {
 			response.aiQuizzes().stream().map(aiQuizDto ->
 				new Quiz(aiQuizDto.problem(),
 					aiQuizDto.answer(),
-					aiQuizDto.selections(),
-					""
+					aiQuizDto.selections()
 				)).toList(),
 			response.aiTopics().stream().map(aiTopicDto -> new TopicModelWord(
 				aiTopicDto.sectionId(),

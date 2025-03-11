@@ -14,7 +14,7 @@ import com.sf.honeymorning.brief.controller.dto.response.detail.TopicModelWordRe
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
-import com.sf.honeymorning.quiz.entity.Quiz;
+import com.sf.honeymorning.quiz.domain.entity.Quiz;
 
 @Component
 public class BriefingMapper {
