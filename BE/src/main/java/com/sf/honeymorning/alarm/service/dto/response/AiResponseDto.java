@@ -2,8 +2,8 @@ package com.sf.honeymorning.alarm.service.dto.response;
 
 import java.util.List;
 
-import com.sf.honeymorning.brief.entity.violation.QuizViolation;
-import com.sf.honeymorning.brief.entity.violation.TopicWordViolation;
+import com.sf.honeymorning.brief.common.TopicWordConstraint;
+import com.sf.honeymorning.brief.common.QuizConstraint;
 
 public record AiResponseDto(
 	Long userId,
@@ -14,11 +14,11 @@ public record AiResponseDto(
 	String AiWakeUpCallPath) {
 
 	public AiResponseDto {
-		if (aiTopics.size() != TopicWordViolation.TOPIC_WORD_TOTAL_SIZE) {
+		if (aiTopics.size() != TopicWordConstraint.TOPIC_WORD_TOTAL_SIZE) {
 			throw new IllegalArgumentException("AI 토픽 모델링 규약에 위반하였습니다.");
 		}
 
-		if (aiQuizzes.size() != QuizViolation.TOTAL_OF_COUNT) {
+		if (aiQuizzes.size() != QuizConstraint.TOTAL_QUIZ_SIZE) {
 			throw new IllegalArgumentException("AI 퀴즈 규약에 위반하였습니다.");
 		}
 	}

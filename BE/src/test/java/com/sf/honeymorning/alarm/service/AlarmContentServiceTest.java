@@ -8,14 +8,14 @@ import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
 import com.sf.honeymorning.alarm.service.mapper.AlarmContentServiceMapper;
 import com.sf.honeymorning.brief.entity.Briefing;
-import com.sf.honeymorning.brief.entity.violation.QuizViolation;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.entity.content.AccessAuthority;
 import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
-import com.sf.honeymorning.quiz.domain.repository.QuizRepository;
+import com.sf.honeymorning.brief.common.QuizConstraint;
+import com.sf.honeymorning.brief.entity.Quiz;
+import com.sf.honeymorning.brief.repository.QuizRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.*;
+import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
@@ -74,7 +74,7 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
                 FAKER_DATE_FACTORY.internet().url().toLowerCase(),
                 AccessAuthority.PART_ALLOWED)
         );
-        List<Quiz> expectedQuizzes = createFakeQuiz(QuizViolation.TOTAL_OF_COUNT);
+        List<Quiz> expectedQuizzes = createFakeQuiz(QuizConstraint.TOTAL_QUIZ_SIZE);
 
         given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER.getId())).willReturn(Optional.of(expectedAlarm));
         given(briefingRepository.findTopByUserIdOrderByCreatedAtDesc(AUTH_USER.getId())).willReturn(
@@ -104,7 +104,7 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
         AiResponseDto responseDto = new AiResponseDto(
                 AUTH_USER.getId(),
                 new AiBriefingDto(FAKER_DATE_FACTORY.lorem().sentence(10), FAKER_DATE_FACTORY.lorem().sentence(40)),
-                createFakeQuizDtos(QuizViolation.TOTAL_OF_COUNT),
+                createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
                 createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
                 List.of("정치"),
                 "https://cdn.ycloud.com/03jidmmk39d"
@@ -125,7 +125,7 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
         AiResponseDto responseDto = new AiResponseDto(
                 AUTH_USER.getId(),
                 new AiBriefingDto(FAKER_DATE_FACTORY.lorem().sentence(10), FAKER_DATE_FACTORY.lorem().sentence(40)),
-                createFakeQuizDtos(QuizViolation.TOTAL_OF_COUNT),
+                createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
                 createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
                 List.of("정치"),
                 "https://cdn.ycloud.com/03jidmmk39d"
@@ -158,7 +158,7 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
                         FAKER_DATE_FACTORY.lorem().sentence(2),
                         1,
                         Stream.generate(() -> FAKER_DATE_FACTORY.lorem().word())
-                                .limit(QuizViolation.NUMBER_OF_SELECTION)
+                                .limit(QuizConstraint.OPTION_SIZE)
                                 .toList()
                 ))
                 .limit(size)
@@ -170,7 +170,7 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
                         FAKER_DATE_FACTORY.lorem().sentence(2),
                         1,
                         Stream.generate(() -> FAKER_DATE_FACTORY.lorem().word())
-                                .limit(QuizViolation.NUMBER_OF_SELECTION)
+                                .limit(QuizConstraint.OPTION_SIZE)
                                 .toList()
                 ))
                 .limit(size)

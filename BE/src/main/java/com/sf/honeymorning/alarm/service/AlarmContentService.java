@@ -17,8 +17,8 @@ import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.event.service.EventsProducer;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
-import com.sf.honeymorning.quiz.domain.repository.QuizRepository;
+import com.sf.honeymorning.brief.entity.Quiz;
+import com.sf.honeymorning.brief.repository.QuizRepository;
 
 @Transactional(readOnly = true)
 @Service

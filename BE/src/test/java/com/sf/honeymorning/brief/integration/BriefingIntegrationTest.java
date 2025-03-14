@@ -1,6 +1,6 @@
 package com.sf.honeymorning.brief.integration;
 
-import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.*;
+import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
@@ -15,18 +15,18 @@ import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
-import com.sf.honeymorning.brief.entity.violation.QuizViolation;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
-import com.sf.honeymorning.brief.service.BriefService;
+import com.sf.honeymorning.brief.service.BriefingService;
 import com.sf.honeymorning.context.DefaultIntegrationTest;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
+import com.sf.honeymorning.brief.common.QuizConstraint;
+import com.sf.honeymorning.brief.entity.Quiz;
 
 class BriefingIntegrationTest extends DefaultIntegrationTest {
 
 	protected static final Faker FAKE_DATA_FACTORY = new Faker();
 
 	@Autowired
-	BriefService briefService;
+	BriefingService briefingService;
 
 	@Autowired
 	BriefingRepository briefingRepository;
@@ -40,7 +40,7 @@ class BriefingIntegrationTest extends DefaultIntegrationTest {
 		int initialPageNumber = 1;
 
 		//when
-		var myBriefings = briefService.getMyBriefings(authUserid, initialPageNumber);
+		var myBriefings = briefingService.getMyBriefings(authUserid, initialPageNumber);
 
 		//then
 		assertThat(myBriefings).isNotNull();
@@ -56,7 +56,7 @@ class BriefingIntegrationTest extends DefaultIntegrationTest {
 		Long authUserid = 2L;
 		int initialPageNumber = 1;
 		//when
-		var myBriefings = briefService.getMyBriefings(authUserid, initialPageNumber);
+		var myBriefings = briefingService.getMyBriefings(authUserid, initialPageNumber);
 		//then
 		assertThat(myBriefings).isNotNull();
 		assertThat(myBriefings.getTotalPage()).isZero();
@@ -97,7 +97,7 @@ class BriefingIntegrationTest extends DefaultIntegrationTest {
 				FAKE_DATA_FACTORY.lorem().sentence(2),
 				1,
 				Stream.generate(() -> FAKE_DATA_FACTORY.lorem().word())
-					.limit(QuizViolation.NUMBER_OF_SELECTION)
+					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
 			))
 			.limit(size)

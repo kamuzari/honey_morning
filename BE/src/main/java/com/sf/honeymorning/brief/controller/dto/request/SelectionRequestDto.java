@@ -1,4 +1,4 @@
-package com.sf.honeymorning.quiz.controller.dto;
+package com.sf.honeymorning.brief.controller.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

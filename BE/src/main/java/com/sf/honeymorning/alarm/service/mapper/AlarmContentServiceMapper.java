@@ -10,7 +10,7 @@ import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
+import com.sf.honeymorning.brief.entity.Quiz;
 
 @Component
 public class AlarmContentServiceMapper {

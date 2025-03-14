@@ -1,15 +1,15 @@
-package com.sf.honeymorning.quiz.service;
+package com.sf.honeymorning.brief.integration;
 
 import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
+import com.sf.honeymorning.brief.service.QuizService;
 import com.sf.honeymorning.context.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
-import com.sf.honeymorning.quiz.common.QuizConstraint;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
-import com.sf.honeymorning.quiz.service.mapper.QuizMapper;
+import com.sf.honeymorning.brief.entity.Quiz;
+import com.sf.honeymorning.brief.service.mapper.QuizMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.SECTION_MAXIMUM_SIZE;
-import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.SECTION_MINIMUM_SIZE;
-import static com.sf.honeymorning.quiz.common.QuizConstraint.*;
+import static com.sf.honeymorning.brief.common.TopicWordConstraint.SECTION_MAXIMUM_SIZE;
+import static com.sf.honeymorning.brief.common.TopicWordConstraint.SECTION_MINIMUM_SIZE;
+import static com.sf.honeymorning.brief.common.QuizConstraint.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class QuizServiceIntegrationTest extends DefaultIntegrationTest implements MySqlContext {

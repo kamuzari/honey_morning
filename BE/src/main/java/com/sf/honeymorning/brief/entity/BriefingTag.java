@@ -31,4 +31,8 @@ public class BriefingTag extends BaseEntity {
 	public BriefingTag(String word) {
 		this.word = word;
 	}
+
+	void addBriefing(Briefing briefing) {
+		this.briefing = briefing;
+	}
 }
