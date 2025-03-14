@@ -14,7 +14,7 @@ import com.sf.honeymorning.brief.controller.dto.response.detail.TopicModelWordRe
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
+import com.sf.honeymorning.brief.entity.Quiz;
 
 @Component
 public class BriefingMapper {
@@ -26,7 +26,7 @@ public class BriefingMapper {
 			.map(brief -> new MyBriefing(brief.getId(), brief.getCreatedAt(),
 				briefCategoryByBrief.get(brief.getId()).stream().map(BriefingTag::getWord)
 					.toList(),
-				brief.getSummary(),
+				brief.getSummaryText(),
 				quizzesByBrief.get(brief.getId()).stream()
 					.filter(quiz -> quiz.getAnswer().equals(quiz.getSelection()))
 					.count())).toList(), briefingPage.getTotalPages());
@@ -36,8 +36,8 @@ public class BriefingMapper {
 		List<Quiz> quizzes, List<TopicModelWord> topicModelWords) {
 		return new BriefingDetailResponseDto(
 			briefing.getId(),
-			briefing.getSummary(),
-			briefing.getContent(),
+			briefing.getSummaryText(),
+			briefing.getText(),
 			briefing.getWakeUpBriefingContent().getFileUrl(),
 			topicModelWords.stream()
 				.map(topicModelWord -> new TopicModelWordResponse(topicModelWord.getSectionId(),

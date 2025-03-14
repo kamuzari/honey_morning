@@ -49,7 +49,7 @@ public class TtsService {
 	}
 
 	private void addBriefingContent(Briefing briefing) {
-		Content content = createContent(briefing.getSummary(), FileType.BRIEFING);
+		Content content = createContent(briefing.getSummaryText(), FileType.BRIEFING);
 		briefing.addWakeUpBriefingContent(content);
 	}
 

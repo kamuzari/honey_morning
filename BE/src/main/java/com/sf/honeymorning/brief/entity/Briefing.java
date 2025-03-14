@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.sf.honeymorning.common.entity.basic.BaseEntity;
 import com.sf.honeymorning.common.entity.content.Content;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
@@ -17,9 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Table(name = "briefings")
@@ -33,10 +30,10 @@ public class Briefing extends BaseEntity {
 	private Long userId;
 
 	@Column(nullable = false, columnDefinition = "TEXT")
-	private String summary;
+	private String summaryText;
 
 	@Column(nullable = false, columnDefinition = "TEXT")
-	private String content;
+	private String text;
 
 	@Column(length = 1000)
 	private String wakeUpCallPath;
@@ -66,28 +63,32 @@ public class Briefing extends BaseEntity {
 	protected Briefing() {
 	}
 
-	public Briefing(Long userId, String voiceContent, String readContent, String wakeUpCallPath) {
+	public Briefing(Long userId, String summaryText, String text, String wakeUpCallPath) {
 		this.userId = userId;
-		this.summary = voiceContent;
-		this.content = readContent;
+		this.summaryText = summaryText;
+		this.text = text;
 		this.wakeUpCallPath = wakeUpCallPath;
 	}
 
 	public Briefing(Long userId,
-		String voiceContent,
-		String readContent,
+		String summaryText,
+		String text,
 		String wakeUpCallPath,
 		List<BriefingTag> briefingTags,
 		List<Quiz> quizzes,
 		List<TopicModelWord> topicModelWords
 	) {
 		this.userId = userId;
-		this.summary = voiceContent;
-		this.content = readContent;
+		this.summaryText = summaryText;
+		this.text = text;
 		this.wakeUpCallPath = wakeUpCallPath;
 		this.briefingTags = briefingTags;
 		this.quizzes = quizzes;
 		this.topicModelWords = topicModelWords;
+
+		quizzes.forEach(quiz -> quiz.addBriefing(this));
+		briefingTags.forEach(briefingTag -> briefingTag.addBriefing(this));
+		topicModelWords.forEach(topicModelWord -> topicModelWord.addBriefing(this));
 	}
 
 	public void addWakeUpBriefingContent(Content wakeUpBriefingContent) {
@@ -95,6 +96,6 @@ public class Briefing extends BaseEntity {
 	}
 
 	public boolean isEmptyQuizzes() {
-		return this.getQuizzes() ==null || this.getQuizzes().isEmpty();
+		return this.getQuizzes() == null || this.getQuizzes().isEmpty();
 	}
 }

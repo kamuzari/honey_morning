@@ -1,7 +1,7 @@
-package com.sf.honeymorning.quiz.service.mapper;
+package com.sf.honeymorning.brief.service.mapper;
 
 import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
+import com.sf.honeymorning.brief.entity.Quiz;
 import org.springframework.stereotype.Component;
 
 @Component

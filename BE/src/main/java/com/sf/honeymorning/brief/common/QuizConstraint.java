@@ -1,4 +1,4 @@
-package com.sf.honeymorning.quiz.common;
+package com.sf.honeymorning.brief.common;
 
 public class QuizConstraint {
     public static final int OPTION_SIZE = 4;

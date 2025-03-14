@@ -1,8 +1,8 @@
-package com.sf.honeymorning.quiz.domain.entity;
+package com.sf.honeymorning.brief.entity;
 
-import static com.sf.honeymorning.quiz.common.QuizConstraint.MAXIMUM_VALUE;
-import static com.sf.honeymorning.quiz.common.QuizConstraint.MINIMUM_VALUE;
-import static com.sf.honeymorning.quiz.common.QuizConstraint.OPTION_SIZE;
+import static com.sf.honeymorning.brief.common.QuizConstraint.MAXIMUM_VALUE;
+import static com.sf.honeymorning.brief.common.QuizConstraint.MINIMUM_VALUE;
+import static com.sf.honeymorning.brief.common.QuizConstraint.OPTION_SIZE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

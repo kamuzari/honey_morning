@@ -1,6 +1,6 @@
 package com.sf.honeymorning.alarm.service;
 
-import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.*;
+import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
 import static com.sf.honeymorning.config.RabbitConfig.*;
 import static java.util.concurrent.TimeUnit.*;
 import static org.assertj.core.api.Assertions.*;
@@ -29,9 +29,9 @@ import com.sf.honeymorning.alarm.service.dto.response.AiBriefingDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
-import com.sf.honeymorning.brief.entity.violation.QuizViolation;
 import com.sf.honeymorning.context.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.broker.RabbitMqContext;
+import com.sf.honeymorning.brief.common.QuizConstraint;
 
 class AiClientServiceTest extends DefaultIntegrationTest implements RabbitMqContext {
 
@@ -85,7 +85,7 @@ class AiClientServiceTest extends DefaultIntegrationTest implements RabbitMqCont
 		AiResponseDto expectResponseDto = new AiResponseDto(
 			1L,
 			new AiBriefingDto(FAKE_DATA_FACTORY.lorem().sentence(10), FAKE_DATA_FACTORY.lorem().sentence(40)),
-			createFakeQuizDtos(QuizViolation.TOTAL_OF_COUNT),
+			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
 			"https://cdn.ycloud.com/03jidmmk39d"
@@ -113,7 +113,7 @@ class AiClientServiceTest extends DefaultIntegrationTest implements RabbitMqCont
 		AiResponseDto responseDto = new AiResponseDto(
 			1L,
 			new AiBriefingDto(FAKE_DATA_FACTORY.lorem().sentence(10), FAKE_DATA_FACTORY.lorem().sentence(40)),
-			createFakeQuizDtos(QuizViolation.TOTAL_OF_COUNT),
+			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
 			"https://cdn.ycloud.com/03jidmmk39d"
@@ -145,7 +145,7 @@ class AiClientServiceTest extends DefaultIntegrationTest implements RabbitMqCont
 				FAKE_DATA_FACTORY.lorem().sentence(2),
 				1,
 				Stream.generate(() -> FAKE_DATA_FACTORY.lorem().word())
-					.limit(QuizViolation.NUMBER_OF_SELECTION)
+					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
 			))
 			.limit(size)

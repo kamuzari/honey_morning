@@ -1,4 +1,4 @@
-package com.sf.honeymorning.quiz.service;
+package com.sf.honeymorning.brief.service;
 
 import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
@@ -6,10 +6,10 @@ import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
-import com.sf.honeymorning.quiz.controller.dto.SelectionRequestDto;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
-import com.sf.honeymorning.quiz.domain.repository.QuizRepository;
-import com.sf.honeymorning.quiz.service.mapper.QuizMapper;
+import com.sf.honeymorning.brief.controller.dto.request.SelectionRequestDto;
+import com.sf.honeymorning.brief.entity.Quiz;
+import com.sf.honeymorning.brief.repository.QuizRepository;
+import com.sf.honeymorning.brief.service.mapper.QuizMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +17,7 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
-import static com.sf.honeymorning.quiz.common.QuizConstraint.TOTAL_QUIZ_SIZE;
+import static com.sf.honeymorning.brief.common.QuizConstraint.TOTAL_QUIZ_SIZE;
 import static java.text.MessageFormat.format;
 
 @Transactional(readOnly = true)

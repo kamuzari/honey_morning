@@ -1,7 +1,7 @@
 package com.sf.honeymorning.alarm.integration;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.*;
+import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -11,7 +11,6 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.sf.honeymorning.common.entity.content.Content;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,13 +35,13 @@ import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
 import com.sf.honeymorning.brief.entity.Briefing;
-import com.sf.honeymorning.brief.entity.violation.QuizViolation;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.config.constant.AwsS3Properties;
 import com.sf.honeymorning.context.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.infra.storage.AwsS3Context;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
+import com.sf.honeymorning.brief.common.QuizConstraint;
+import com.sf.honeymorning.brief.entity.Quiz;
 import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.entity.UserRole;
 import com.sf.honeymorning.user.repository.UserRepository;
@@ -101,7 +100,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		AiResponseDto responseDto = new AiResponseDto(
 			user.getId(),
 			new AiBriefingDto(FAKE_DATA_FACTORY.lorem().sentence(10), FAKE_DATA_FACTORY.lorem().sentence(40)),
-			createFakeQuizDtos(QuizViolation.TOTAL_OF_COUNT),
+			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
 			"https://cdn.ycloud.com/03jidmmk39d"
@@ -124,8 +123,8 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 		assertThat(briefing).isNotNull();
 		assertThat(briefing.getBriefingTags()).isNotNull();
-		assertThat(briefing.getSummary()).isEqualTo(responseDto.aiBriefings().voiceContent());
-		assertThat(briefing.getContent()).isEqualTo(responseDto.aiBriefings().readContent());
+		assertThat(briefing.getSummaryText()).isEqualTo(responseDto.aiBriefings().voiceContent());
+		assertThat(briefing.getText()).isEqualTo(responseDto.aiBriefings().readContent());
 		assertThat(briefing.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
 		assertThat(briefing.getWakeUpBriefingContent()).isNotNull();
 		assertThat(briefing.getQuizzes().stream().map(Quiz::getWakeUpQuizContent).toList()).hasSize(2);
@@ -149,7 +148,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		AiResponseDto responseDto = new AiResponseDto(
 			user.getId(),
 			new AiBriefingDto(FAKE_DATA_FACTORY.lorem().sentence(10), FAKE_DATA_FACTORY.lorem().sentence(40)),
-			createFakeQuizDtos(QuizViolation.TOTAL_OF_COUNT),
+			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
 			"https://cdn.ycloud.com/03jidmmk39d"
@@ -165,8 +164,8 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 		assertThat(briefing).isNotNull();
 		assertThat(briefing.getBriefingTags()).isNotNull();
-		assertThat(briefing.getSummary()).isEqualTo(responseDto.aiBriefings().voiceContent());
-		assertThat(briefing.getContent()).isEqualTo(responseDto.aiBriefings().readContent());
+		assertThat(briefing.getSummaryText()).isEqualTo(responseDto.aiBriefings().voiceContent());
+		assertThat(briefing.getText()).isEqualTo(responseDto.aiBriefings().readContent());
 		assertThat(briefing.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
 		assertThat(briefing.getWakeUpBriefingContent()).isNull();
 		briefing.getQuizzes().forEach(quiz -> assertThat(quiz.getWakeUpQuizContent()).isNull());
@@ -185,7 +184,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 				FAKE_DATA_FACTORY.lorem().sentence(2),
 				1,
 				Stream.generate(() -> FAKE_DATA_FACTORY.lorem().word())
-					.limit(QuizViolation.NUMBER_OF_SELECTION)
+					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
 			))
 			.limit(size)

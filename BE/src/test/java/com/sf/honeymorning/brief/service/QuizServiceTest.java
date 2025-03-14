@@ -1,14 +1,14 @@
-package com.sf.honeymorning.quiz.service;
+package com.sf.honeymorning.brief.service;
 
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
-import com.sf.honeymorning.quiz.common.QuizConstraint;
-import com.sf.honeymorning.quiz.controller.dto.SelectionRequestDto;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
-import com.sf.honeymorning.quiz.domain.repository.QuizRepository;
-import com.sf.honeymorning.quiz.service.mapper.QuizMapper;
+import com.sf.honeymorning.brief.common.QuizConstraint;
+import com.sf.honeymorning.brief.controller.dto.request.SelectionRequestDto;
+import com.sf.honeymorning.brief.entity.Quiz;
+import com.sf.honeymorning.brief.repository.QuizRepository;
+import com.sf.honeymorning.brief.service.mapper.QuizMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

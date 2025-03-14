@@ -1,7 +1,7 @@
 package com.sf.honeymorning.brief.service;
 
-import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.*;
-import static java.text.MessageFormat.*;
+import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
+import static java.text.MessageFormat.format;
 
 import java.util.List;
 import java.util.Map;
@@ -16,23 +16,23 @@ import com.sf.honeymorning.brief.controller.dto.response.BriefHistoryResponseDto
 import com.sf.honeymorning.brief.controller.dto.response.BriefingDetailResponseDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
+import com.sf.honeymorning.brief.entity.Quiz;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.repository.BriefingTagRepository;
+import com.sf.honeymorning.brief.repository.QuizRepository;
 import com.sf.honeymorning.brief.repository.TopicModelWordRepository;
 import com.sf.honeymorning.brief.service.mapper.BriefingMapper;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
-import com.sf.honeymorning.quiz.domain.repository.QuizRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Transactional(readOnly = true)
 @Service
-public class BriefService {
+public class BriefingService {
 
 	private final BriefingRepository briefingRepository;
 	private final BriefingTagRepository briefingTagRepository;
@@ -41,7 +41,7 @@ public class BriefService {
 
 	private final BriefingMapper briefingMapper;
 
-	public BriefService(BriefingRepository briefingRepository,
+	public BriefingService(BriefingRepository briefingRepository,
 		BriefingTagRepository briefingTagRepository,
 		QuizRepository quizRepository,
 		TopicModelWordRepository topicModelWordRepository,

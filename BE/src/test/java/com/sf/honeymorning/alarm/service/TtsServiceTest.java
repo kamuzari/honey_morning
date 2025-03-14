@@ -1,6 +1,6 @@
 package com.sf.honeymorning.alarm.service;
 
-import static com.sf.honeymorning.brief.entity.violation.TopicWordViolation.*;
+import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.http.HttpHeaders.*;
@@ -25,12 +25,12 @@ import com.sf.honeymorning.alarm.service.client.TtsClientService;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
-import com.sf.honeymorning.brief.entity.violation.QuizViolation;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
-import com.sf.honeymorning.quiz.domain.repository.QuizRepository;
+import com.sf.honeymorning.brief.common.QuizConstraint;
+import com.sf.honeymorning.brief.entity.Quiz;
+import com.sf.honeymorning.brief.repository.QuizRepository;
 
 class TtsServiceTest extends MockTestServiceEnvironment {
 
@@ -109,7 +109,7 @@ class TtsServiceTest extends MockTestServiceEnvironment {
 			FAKER_DATE_FACTORY.lorem().sentence(40),
 			FAKER_DATE_FACTORY.internet().domainName(),
 			List.of(new BriefingTag(FAKER_DATE_FACTORY.lorem().word())),
-			null,
+			List.of(),
 			createdTopicModels
 		);
 
@@ -133,7 +133,7 @@ class TtsServiceTest extends MockTestServiceEnvironment {
 				FAKER_DATE_FACTORY.lorem().sentence(2),
 				1,
 				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().word())
-					.limit(QuizViolation.NUMBER_OF_SELECTION)
+					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
 			)).limit(2)
 			.toList();

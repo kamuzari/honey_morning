@@ -1,9 +1,10 @@
-package com.sf.honeymorning.quiz.controller;
+package com.sf.honeymorning.brief.controller;
 
+import com.sf.honeymorning.brief.controller.QuizController;
 import com.sf.honeymorning.config.WebSecurityConfig;
 import com.sf.honeymorning.context.MockTestControllerEnvironment;
-import com.sf.honeymorning.quiz.controller.dto.SelectionRequestDto;
-import com.sf.honeymorning.quiz.service.QuizService;
+import com.sf.honeymorning.brief.controller.dto.request.SelectionRequestDto;
+import com.sf.honeymorning.brief.service.QuizService;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
 import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
 import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;

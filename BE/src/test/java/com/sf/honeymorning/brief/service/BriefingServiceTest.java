@@ -1,6 +1,6 @@
 package com.sf.honeymorning.brief.service;
 
-import static com.sf.honeymorning.quiz.common.QuizConstraint.*;
+import static com.sf.honeymorning.brief.common.QuizConstraint.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import com.sf.honeymorning.quiz.common.QuizConstraint;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -29,12 +28,12 @@ import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
-import com.sf.honeymorning.quiz.domain.entity.Quiz;
-import com.sf.honeymorning.quiz.domain.repository.QuizRepository;
+import com.sf.honeymorning.brief.entity.Quiz;
+import com.sf.honeymorning.brief.repository.QuizRepository;
 
 public class BriefingServiceTest extends MockTestServiceEnvironment {
 	@InjectMocks
-	BriefService sut;
+	BriefingService sut;
 
 	@Mock
 	BriefingRepository briefingRepository;
@@ -53,7 +52,7 @@ public class BriefingServiceTest extends MockTestServiceEnvironment {
 
 	@DisplayName("나의 브리핑 상세목록을 가져온다")
 	@Test
-	void get_my_briefing_detail() {
+	void testGetDetailBriefing() {
 		//given
 		Briefing briefing = new Briefing(AUTH_USER.getId(),
 			FAKER_DATE_FACTORY.lorem().sentence(10),
@@ -103,7 +102,7 @@ public class BriefingServiceTest extends MockTestServiceEnvironment {
 
 	@DisplayName("나의 브리핑 상세목록이 아닌것에 접근할 수 없다")
 	@Test
-	void can_not_access_when_getting_not_mine_briefing_detail() {
+	void failGetDetailBriefing() {
 		//given
 		Long anotherUserId = 9L;
 		Briefing briefing = new Briefing(anotherUserId,
