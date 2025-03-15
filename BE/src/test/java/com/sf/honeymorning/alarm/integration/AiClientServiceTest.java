@@ -1,4 +1,4 @@
-package com.sf.honeymorning.alarm.service;
+package com.sf.honeymorning.alarm.integration;
 
 import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
 import static com.sf.honeymorning.config.RabbitConfig.*;
@@ -24,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.transaction.IllegalTransactionStateException;
 
 import com.rabbitmq.client.Channel;
+import com.sf.honeymorning.alarm.service.AlarmContentService;
 import com.sf.honeymorning.alarm.service.client.AiClientService;
 import com.sf.honeymorning.alarm.service.dto.response.AiBriefingDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;

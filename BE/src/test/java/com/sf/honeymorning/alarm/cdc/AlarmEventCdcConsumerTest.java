@@ -45,7 +45,7 @@ class AlarmEventCdcConsumerTest extends DefaultIntegrationTest implements KafkaC
 	@DisplayName("카프카에 적재된 로그 테일링 할 메시지를 소비한다.")
 	void testConsumeMessage() throws IOException {
 		//given
-		setUpLogTailingData();
+		updateUpLogTailingData();
 
 		//when
 		//then
@@ -55,7 +55,7 @@ class AlarmEventCdcConsumerTest extends DefaultIntegrationTest implements KafkaC
 			});
 	}
 
-	private void setUpLogTailingData() throws IOException {
+	private void updateUpLogTailingData() throws IOException {
 		ResourceLoader resourceLoader = new DefaultResourceLoader();
 		Resource resource = resourceLoader.getResource("./sample/cdc-consume.json");
 		publishedOffset = StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);

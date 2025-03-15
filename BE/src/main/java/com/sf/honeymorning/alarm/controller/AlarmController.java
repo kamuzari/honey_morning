@@ -26,7 +26,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@Tag(name = "알람")
 @RequestMapping("/api/alarms")
 @Validated
 @RestController
@@ -40,16 +39,6 @@ public class AlarmController {
 		this.alarmContentService = alarmContentService;
 	}
 
-	@Operation(
-		summary = "알람 설정 일부 수정"
-	)
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "수정 성공",
-			content = @Content(schema = @Schema(implementation = Void.class))
-		)
-	})
 	@PatchMapping
 	public void set(@AuthenticationPrincipal JwtAuthentication principal,
 		@Valid @RequestBody AlarmSetRequest alarmRequestDto) {
@@ -57,45 +46,16 @@ public class AlarmController {
 		alarmService.set(alarmRequestDto, principal.id());
 	}
 
-	@Operation(
-		summary = "나의 알람 조회"
-	)
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "조회 성공",
-			content = @Content(schema = @Schema(implementation = AlarmResponse.class))
-		)
-	})
 	@GetMapping
 	public AlarmResponse readMine(@AuthenticationPrincipal JwtAuthentication principal) {
 		return alarmService.getMyAlarmWithMyTags(principal.id());
 	}
 
-	@Operation(
-		summary = "알람 시작 전에 준비된 알람 콘텐츠들을 모두 가져옵니다."
-	)
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "준비된 콘텐츠 전달 성공",
-			content = @Content(schema = @Schema(implementation = PreparedAlarmContentResponse.class))
-		)
-	})
 	@GetMapping("/prepared")
 	public PreparedAlarmContentResponse getPreparedAlarmContents(@AuthenticationPrincipal JwtAuthentication principal) {
 		return alarmContentService.getPreparedAlarmContents(principal.id());
 	}
 
-	@Operation(
-		summary = "수면 모드 확인"
-	)
-	@ApiResponses(value = {
-		@ApiResponse(
-			responseCode = "200",
-			description = "알람 시작 성공"
-		)
-	})
 	@GetMapping("/sleep")
 	public void verifySleepMode(
 		@AuthenticationPrincipal

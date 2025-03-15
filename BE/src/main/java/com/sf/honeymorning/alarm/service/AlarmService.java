@@ -1,7 +1,8 @@
 package com.sf.honeymorning.alarm.service;
 
-import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.*;
-import static java.text.MessageFormat.*;
+import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.BUSINESS_VIOLATION;
+import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
+import static java.text.MessageFormat.format;
 
 import java.time.LocalDateTime;
 
@@ -13,15 +14,18 @@ import com.sf.honeymorning.alarm.controller.dto.response.AlarmResponse;
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.exception.AlarmBusinessException;
+import com.sf.honeymorning.alarm.service.mapper.AlarmMapper;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 
 @Service
 @Transactional(readOnly = true)
 public class AlarmService {
 
+	private final AlarmMapper alarmMapper;
 	private final AlarmRepository alarmRepository;
 
-	public AlarmService(AlarmRepository alarmRepository) {
+	public AlarmService(AlarmMapper alarmMapper, AlarmRepository alarmRepository) {
+		this.alarmMapper = alarmMapper;
 		this.alarmRepository = alarmRepository;
 	}
 
@@ -31,14 +35,7 @@ public class AlarmService {
 				format("알람이 반드시 존재했어야합니다. userId -> {0}", userId)
 				, POLICY_VIOLATION));
 
-		return new AlarmResponse(
-			alarm.getId(),
-			alarm.getWakeUpTime(),
-			alarm.getDayOfTheWeeks(),
-			alarm.getRepeatFrequency(),
-			alarm.getRepeatInterval(),
-			alarm.isActive()
-		);
+		return alarmMapper.toAlarmResponse(alarm);
 	}
 
 	@Transactional
@@ -48,7 +45,7 @@ public class AlarmService {
 				format("알람이 반드시 존재했어야합니다. userId -> {0}", userId)
 				, POLICY_VIOLATION));
 
-		alarm.set(alarmRequestDto.alarmTime(),
+		alarm.update(alarmRequestDto.alarmTime(),
 			alarmRequestDto.weekdays(),
 			alarmRequestDto.repeatFrequency(),
 			alarmRequestDto.repeatInterval(),

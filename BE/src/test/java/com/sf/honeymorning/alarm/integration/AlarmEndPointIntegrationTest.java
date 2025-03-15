@@ -103,7 +103,7 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationEnvironment
 
 	@Test
 	@DisplayName("사용자가 알람설정을 일부 변경하다")
-	void testSetAlarm() throws JsonProcessingException {
+	void testUpdateAlarm() throws JsonProcessingException {
 		//given
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			authUserAlarm.getId(),

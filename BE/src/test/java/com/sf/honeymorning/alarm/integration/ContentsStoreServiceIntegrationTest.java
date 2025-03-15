@@ -1,6 +1,6 @@
 package com.sf.honeymorning.alarm.integration;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +30,7 @@ public class ContentsStoreServiceIntegrationTest extends DefaultIntegrationTest 
 	static final String FILE_NAME = "sample-sound.mp3";
 	static final String FILE_LOCATION = "./sample/" + FILE_NAME;
 	static final ResourceLoader LOADER = new DefaultResourceLoader();
+
 	@Autowired
 	ContentStoreService contentStoreService;
 
@@ -43,7 +44,7 @@ public class ContentsStoreServiceIntegrationTest extends DefaultIntegrationTest 
 	String bucketName;
 
 	@BeforeEach
-	public void setUp() {
+	void setUp() {
 		amazonS3Client.createBucket(new CreateBucketRequest(
 			bucketName, awsS3Properties.region()));
 	}

@@ -47,7 +47,7 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 
 	@Test
 	@DisplayName("나의 알람 설정 일부문을 변경한다")
-	void testSetAlarm() throws Exception {
+	void testUpdateAlarm() throws Exception {
 		//given
 		AlarmSetRequest alarmSetRequest = new AlarmSetRequest(
 			1L,

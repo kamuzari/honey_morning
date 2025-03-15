@@ -160,7 +160,7 @@ public class IntegrationAlarmBatchTest extends DefaultIntegrationTest implements
 			Tag society = tagRepository.save(new Tag("사회"));
 
 			Alarm alarm = alarmRepository.save(Alarm.initialize(userId));
-			alarm.set(wakeupTime, DayOfTheWeek.getToday(), 1, 1, true);
+			alarm.update(wakeupTime, DayOfTheWeek.getToday(), 1, 1, true);
 			alarmRepository.save(alarm);
 
 			alarmTagRepository.save(new AlarmTag(alarm, society));
