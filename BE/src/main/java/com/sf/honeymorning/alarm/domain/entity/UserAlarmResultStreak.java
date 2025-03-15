@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import lombok.Getter;
+
+@Getter
 @RedisHash("userAlarmResultStreak")
 public class UserAlarmResultStreak {
 
@@ -25,16 +28,8 @@ public class UserAlarmResultStreak {
 		this.consecutiveDays = consecutiveDays;
 	}
 
-	public Long getUserId() {
-		return userId;
-	}
-
-	public LocalDateTime getLatestAt() {
-		return latestAt;
-	}
-
-	public int getConsecutiveDays() {
-		return consecutiveDays;
+	public static UserAlarmResultStreak initialize(Long userId) {
+		return new UserAlarmResultStreak(userId, LocalDateTime.now().minusMonths(1), 1);
 	}
 
 	public void countConsecutiveDays(LocalDateTime now) {

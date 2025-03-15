@@ -13,12 +13,11 @@ import com.sf.honeymorning.brief.entity.TopicModelWord;
 import com.sf.honeymorning.brief.entity.Quiz;
 
 @Component
-public class AlarmContentServiceMapper {
+public class AlarmContentMapper {
 	public PreparedAlarmContentResponse toPreparedAlarmContentResponse(Alarm alarm,
 		Briefing briefing,
 		List<Quiz> quizzes) {
 		return new PreparedAlarmContentResponse(
-			alarm.getWakeUpCallPath(),
 			alarm.getRepeatInterval(),
 			alarm.getRepeatFrequency(),
 			alarm.getWakeUpTime(),

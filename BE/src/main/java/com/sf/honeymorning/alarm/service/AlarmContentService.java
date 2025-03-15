@@ -11,7 +11,7 @@ import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.exception.NotPreparedAlarmException;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
-import com.sf.honeymorning.alarm.service.mapper.AlarmContentServiceMapper;
+import com.sf.honeymorning.alarm.service.mapper.AlarmContentMapper;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.event.service.EventsProducer;
@@ -27,16 +27,17 @@ public class AlarmContentService {
 	private final BriefingRepository briefingRepository;
 	private final AlarmRepository alarmRepository;
 	private final QuizRepository quizRepository;
-	private final AlarmContentServiceMapper alarmContentServiceMapper;
+
+	private final AlarmContentMapper alarmContentMapper;
 
 	public AlarmContentService(BriefingRepository briefingRepository,
 		AlarmRepository alarmRepository,
 		QuizRepository quizRepository,
-		AlarmContentServiceMapper alarmContentServiceMapper) {
+		AlarmContentMapper alarmContentMapper) {
 		this.briefingRepository = briefingRepository;
 		this.alarmRepository = alarmRepository;
 		this.quizRepository = quizRepository;
-		this.alarmContentServiceMapper = alarmContentServiceMapper;
+		this.alarmContentMapper = alarmContentMapper;
 	}
 
 	public PreparedAlarmContentResponse getPreparedAlarmContents(Long userId) {
@@ -52,14 +53,14 @@ public class AlarmContentService {
 			));
 		List<Quiz> quizzes = quizRepository.findByBriefing(briefing);
 
-		return alarmContentServiceMapper.toPreparedAlarmContentResponse(alarm, briefing, quizzes);
+		return alarmContentMapper.toPreparedAlarmContentResponse(alarm, briefing, quizzes);
 	}
 
 	@Transactional(rollbackFor = Exception.class)
 	public void create(AiResponseDto aiResponseDto) {
 		alarmRepository.findByUserIdAndIsActiveTrue(aiResponseDto.userId())
 			.ifPresent(alarm -> {
-				Briefing totalContents = alarmContentServiceMapper.toTotalAlarmContent(aiResponseDto);
+				Briefing totalContents = alarmContentMapper.toTotalAlarmContent(aiResponseDto);
 				Long briefingId = briefingRepository.save(totalContents).getId();
 				EventsProducer.raise(briefingId);
 			});

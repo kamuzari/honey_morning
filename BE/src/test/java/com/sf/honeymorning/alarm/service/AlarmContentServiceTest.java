@@ -6,7 +6,7 @@ import com.sf.honeymorning.alarm.service.dto.response.AiBriefingDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
-import com.sf.honeymorning.alarm.service.mapper.AlarmContentServiceMapper;
+import com.sf.honeymorning.alarm.service.mapper.AlarmContentMapper;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.entity.content.AccessAuthority;
@@ -47,7 +47,7 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
     QuizRepository quizRepository;
 
     @Spy
-    AlarmContentServiceMapper alarmContentServiceMapper;
+    AlarmContentMapper alarmContentMapper;
 
     @Test
     @DisplayName("기상전 알람 콘텐츠들을 모두 가져온다")
@@ -59,8 +59,7 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
                 2,
                 2,
                 2,
-                true,
-                FAKER_DATE_FACTORY.internet().url().toLowerCase()
+                true
         );
         Briefing expectedBriefing = new Briefing(AUTH_USER.getId(),
                 FAKER_DATE_FACTORY.lorem().sentence(10),
@@ -89,7 +88,6 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
         verify(briefingRepository, times(1)).findTopByUserIdOrderByCreatedAtDesc(AUTH_USER.getId());
         verify(quizRepository, times(1)).findByBriefing(expectedBriefing);
         assertThat(preparedAlarmContents.quizVoiceUrl()).hasSize(expectedQuizzes.size());
-        assertThat(preparedAlarmContents.wakeUpCallFilePath()).isEqualTo(expectedAlarm.getWakeUpCallPath());
         assertThat(preparedAlarmContents.repeatFrequency()).isEqualTo(expectedAlarm.getRepeatFrequency());
         assertThat(preparedAlarmContents.repeatInterval()).isEqualTo(expectedAlarm.getRepeatInterval());
         assertThat(preparedAlarmContents.wakeUpTime()).isEqualTo(expectedAlarm.getWakeUpTime());
@@ -114,7 +112,7 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
         //when
         sut.create(responseDto);
         //then
-        verify(alarmContentServiceMapper, times(0)).toTotalAlarmContent(responseDto);
+        verify(alarmContentMapper, times(0)).toTotalAlarmContent(responseDto);
         verify(briefingRepository, times(0)).save(any());
     }
 
@@ -135,13 +133,13 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
         ReflectionTestUtils.setField(briefing, "id", briefingId);
         given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER.getId())).willReturn(
                 Optional.of(Alarm.initialize(AUTH_USER.getId())));
-        given(alarmContentServiceMapper.toTotalAlarmContent(responseDto)).willReturn(briefing);
+        given(alarmContentMapper.toTotalAlarmContent(responseDto)).willReturn(briefing);
         given(briefingRepository.save(briefing)).willReturn(briefing);
 
         //when
         sut.create(responseDto);
         //then
-        verify(alarmContentServiceMapper, times(1)).toTotalAlarmContent(responseDto);
+        verify(alarmContentMapper, times(1)).toTotalAlarmContent(responseDto);
         verify(briefingRepository, times(1)).save(briefing);
     }
 

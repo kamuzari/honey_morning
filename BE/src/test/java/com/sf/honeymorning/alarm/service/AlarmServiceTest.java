@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 
 import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.controller.dto.response.AlarmResponse;
@@ -20,6 +21,7 @@ import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.exception.AlarmBusinessException;
+import com.sf.honeymorning.alarm.service.mapper.AlarmMapper;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import com.sf.honeymorning.context.MockTestServiceEnvironment;
 
@@ -29,11 +31,14 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 	AlarmService systemUnderTest;
 
 	@Mock
-	private AlarmRepository alarmRepository;
+	AlarmRepository alarmRepository;
+
+	@Spy
+	AlarmMapper alarmMapper;
 
 	@Test
 	@DisplayName("알람 설정 일부문을 변경한다")
-	void testSetAlarm() {
+	void testUpdateAlarm() {
 		//given
 		long alarmId = 1L;
 		AlarmSetRequest requestDto = new AlarmSetRequest(
@@ -51,8 +56,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 			FAKER_DATE_FACTORY.number().numberBetween(1, 127),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
-			true,
-			FAKER_DATE_FACTORY.file().fileName()
+			true
 		);
 
 		given(alarmRepository.findByUserId(AUTH_USER.getId())).willReturn(Optional.of(previousAlarm));
@@ -70,7 +74,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 
 	@Test
 	@DisplayName("사용자의 알람 데이터가 없으면 비즈니스 예외가 발생한다")
-	void failSetAlarm() {
+	void failUpdateAlarm() {
 		//given
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			1L,
@@ -97,8 +101,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 			FAKER_DATE_FACTORY.number().numberBetween(1, 127),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
 			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
-			true,
-			FAKER_DATE_FACTORY.file().fileName()
+			true
 		);
 
 		given(alarmRepository.findByUserId(AUTH_USER.getId())).willReturn(Optional.of(expectedMyAlarm));
@@ -121,8 +124,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 			everyDay,
 			1,
 			1,
-			true,
-			"");
+			true);
 		given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER.getId())).willReturn(Optional.of(alarm));
 
 		//when
@@ -143,8 +145,7 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 			everyDay,
 			1,
 			1,
-			true,
-			"");
+			true);
 		given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER.getId())).willReturn(Optional.of(alarm));
 
 		//when

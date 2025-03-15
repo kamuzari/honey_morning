@@ -4,7 +4,6 @@ import java.time.LocalTime;
 import java.util.List;
 
 public record PreparedAlarmContentResponse(
-	String wakeUpCallFilePath,
 	Integer repeatInterval,
 	Integer repeatFrequency,
 	LocalTime wakeUpTime,

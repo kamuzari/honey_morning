@@ -1,25 +1,25 @@
 package com.sf.honeymorning.alarm.domain.entity;
 
+import static com.sf.honeymorning.alarm.common.AlarmConstraint.SLEEP_MODE_INTERVAL_CONDITION;
+
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.StringJoiner;
 
 import com.sf.honeymorning.common.entity.basic.BaseEntity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.ToString;
 
+@ToString
 @Getter
 @Table(name = "alarms")
 @Entity
 public class Alarm extends BaseEntity {
-
-	public static final int SLEEP_MODE_INTERVAL_CONDITION = 5;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,31 +35,9 @@ public class Alarm extends BaseEntity {
 
 	private Integer repeatInterval;
 
-	@Column(name = "wake_up")
-	private String wakeUpCallPath;
-
 	private boolean isActive;
 
 	protected Alarm() {
-	}
-
-	public Alarm(
-		Long id,
-		Long userId,
-		LocalTime wakeUpTime,
-		Integer dayOfTheWeeks,
-		Integer repeatFrequency,
-		Integer repeatInterval,
-		boolean isActive,
-		String wakeUpCallPath) {
-		this.id = id;
-		this.userId = userId;
-		this.wakeUpTime = wakeUpTime;
-		this.dayOfTheWeeks = dayOfTheWeeks;
-		this.repeatFrequency = repeatFrequency;
-		this.repeatInterval = repeatInterval;
-		this.isActive = isActive;
-		this.wakeUpCallPath = wakeUpCallPath;
 	}
 
 	public Alarm(Long userId,
@@ -67,15 +45,13 @@ public class Alarm extends BaseEntity {
 		Integer dayOfTheWeeks,
 		Integer repeatFrequency,
 		Integer repeatInterval,
-		boolean isActive,
-		String wakeUpCallPath) {
+		boolean isActive) {
 		this.userId = userId;
 		this.wakeUpTime = wakeUpTime;
 		this.dayOfTheWeeks = dayOfTheWeeks;
 		this.repeatFrequency = repeatFrequency;
 		this.repeatInterval = repeatInterval;
 		this.isActive = isActive;
-		this.wakeUpCallPath = wakeUpCallPath;
 	}
 
 	public static Alarm initialize(Long userId) {
@@ -85,48 +61,38 @@ public class Alarm extends BaseEntity {
 			0,
 			0,
 			0,
-			false,
-			""
+			false
 		);
 	}
 
-	public void set(LocalTime alarmTime, Integer weekDays, Integer repeatFrequency, Integer repeatInterval,
+	public void update(LocalTime alarmTime,
+		Integer dayOfTheWeeks,
+		Integer repeatFrequency,
+		Integer repeatInterval,
 		boolean isActive) {
 		this.wakeUpTime = alarmTime;
-		this.dayOfTheWeeks = weekDays;
+		this.dayOfTheWeeks = dayOfTheWeeks;
 		this.repeatFrequency = repeatFrequency;
 		this.repeatInterval = repeatInterval;
 		this.isActive = isActive;
 	}
 
-	public void addContent(String wakeUpCallPath) {
-		this.wakeUpCallPath = wakeUpCallPath;
-	}
-
 	public boolean canSleepMode(LocalDateTime now) {
-		DayOfTheWeek toDayOfTheWeek = DayOfTheWeek.getDayOfWeek(
+		DayOfTheWeek todayOfTheWeek = DayOfTheWeek.getDayOfWeek(
 			now.plusHours(SLEEP_MODE_INTERVAL_CONDITION)
-				.toLocalDate().getDayOfWeek().name());
+				.toLocalDate()
+				.getDayOfWeek()
+				.name()
+		);
 
-		boolean is5HoursBeforeTheAlarmStarts = this.wakeUpTime
-			.minusHours(SLEEP_MODE_INTERVAL_CONDITION)
-			.isAfter(now.toLocalTime().minusMinutes(1));
-		boolean isTodayTheAlarmStartDate = (this.dayOfTheWeeks & toDayOfTheWeek.getShiftedBit()) > 0;
+		boolean isMoreThan5Hours = getAlamReadyTime().isAfter(now.toLocalTime().minusMinutes(1));
+		boolean isActiveDayOfWeeks = (this.dayOfTheWeeks & todayOfTheWeek.getShiftedBit()) > 0;
 
-		return is5HoursBeforeTheAlarmStarts && isTodayTheAlarmStartDate;
+		return isActive && isMoreThan5Hours && isActiveDayOfWeeks;
 	}
 
-	@Override
-	public String toString() {
-		return new StringJoiner(", ", Alarm.class.getSimpleName() + "[", "]")
-			.add("id=" + id)
-			.add("userId=" + userId)
-			.add("wakeUpTime=" + wakeUpTime)
-			.add("dayOfTheWeeks=" + dayOfTheWeeks)
-			.add("repeatFrequency=" + repeatFrequency)
-			.add("repeatInterval=" + repeatInterval)
-			.add("wakeUpCallPath='" + wakeUpCallPath + "'")
-			.add("isActive=" + isActive)
-			.toString();
+	private LocalTime getAlamReadyTime() {
+		return this.wakeUpTime.minusHours(SLEEP_MODE_INTERVAL_CONDITION);
 	}
+
 }

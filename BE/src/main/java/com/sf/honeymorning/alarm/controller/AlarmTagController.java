@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sf.honeymorning.alarm.controller.dto.request.AddAlarmTagRequestDto;
 import com.sf.honeymorning.alarm.controller.dto.response.AlarmTagResponseDto;
 import com.sf.honeymorning.alarm.service.AlarmTagService;
 import com.sf.honeymorning.user.authentication.model.JwtAuthentication;
@@ -19,10 +20,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
-@Tag(name = "알람태그")
-@RequestMapping("/api/alarm-tags")
+@RequestMapping("/api/alarmtags")
 @RestController
 public class AlarmTagController {
 
@@ -43,14 +43,13 @@ public class AlarmTagController {
 
 	@Operation(summary = "알람 카테고리 추가")
 	@PostMapping
-	public void add(@AuthenticationPrincipal JwtAuthentication principal, @RequestBody String word
-	) {
-		alarmTagService.addAlarmCategory(principal.id(), word);
+	public void add(@AuthenticationPrincipal JwtAuthentication principal, @Valid @RequestBody AddAlarmTagRequestDto requestDto) {
+		alarmTagService.add(principal.id(), requestDto.word());
 	}
 
 	@Operation(summary = "알람 카테고리 삭제")
 	@DeleteMapping
-	public void remove(@AuthenticationPrincipal JwtAuthentication principal, @RequestBody String word) {
-		alarmTagService.deleteAlarmCategory(principal.id(), word);
+	public void remove(@AuthenticationPrincipal JwtAuthentication principal, @Valid @RequestBody AddAlarmTagRequestDto  requestDto) {
+		alarmTagService.remove(principal.id(), requestDto.word());
 	}
 }

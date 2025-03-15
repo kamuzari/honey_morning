@@ -14,7 +14,7 @@ class OutBoxAlarmEventRepositoryTest extends RepositoryMockTest {
 	OutBoxAlarmEventRepository outBoxAlarmEventRepository;
 
 	@BeforeEach
-	public void setUp() {
+	public void updateUp() {
 		outBoxAlarmEventRepository.saveAndFlush(OutBoxAlarmEvent.initialize(
 			1L,
 			"payload"

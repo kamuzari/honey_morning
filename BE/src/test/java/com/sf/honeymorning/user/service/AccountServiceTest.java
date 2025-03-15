@@ -57,7 +57,6 @@ class AccountServiceTest extends DefaultIntegrationTest implements RedisContext 
 		assertThat(alarm.getDayOfTheWeeks()).isEqualTo(expectedAlarm.getDayOfTheWeeks());
 		assertThat(alarm.getRepeatFrequency()).isEqualTo(expectedAlarm.getRepeatFrequency());
 		assertThat(alarm.getWakeUpTime()).isEqualTo(expectedAlarm.getWakeUpTime());
-		assertThat(alarm.getWakeUpCallPath()).isEqualTo(expectedAlarm.getWakeUpCallPath());
 	}
 
 	@DisplayName("이미 가입된 username이 있다면 회원등록에 실패한다")

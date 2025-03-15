@@ -75,7 +75,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 	TtsService ttsService;
 
 	@BeforeEach
-	void setUp() {
+	void updateUp() {
 		if(!amazonS3Client.doesBucketExistV2(bucketName)){
 			amazonS3Client.createBucket(new CreateBucketRequest(
 				bucketName, awsS3Properties.region()));
@@ -94,7 +94,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 		userRepository.save(user);
 		Alarm alarm = Alarm.initialize(user.getId());
-		alarm.set(LocalTime.now(), DayOfTheWeek.getToday(), 3, 3, true);
+		alarm.update(LocalTime.now(), DayOfTheWeek.getToday(), 3, 3, true);
 		alarmRepository.save(alarm);
 
 		AiResponseDto responseDto = new AiResponseDto(
@@ -142,7 +142,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 		userRepository.save(user);
 		Alarm alarm = Alarm.initialize(user.getId());
-		alarm.set(LocalTime.now(), DayOfTheWeek.getToday(), 3, 3, true);
+		alarm.update(LocalTime.now(), DayOfTheWeek.getToday(), 3, 3, true);
 		alarmRepository.save(alarm);
 
 		AiResponseDto responseDto = new AiResponseDto(
