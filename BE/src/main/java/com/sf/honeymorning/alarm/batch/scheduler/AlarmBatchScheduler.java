@@ -4,7 +4,6 @@ import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -13,11 +12,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.sf.honeymorning.alarm.batch.outbox.OutBoxAlarmEventRepository;
 import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
 import com.sf.honeymorning.common.exception.alarm.ReadyAlramBatchException;
 import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
-import com.sf.honeymorning.config.RabbitConfig;
 import com.sf.honeymorning.util.TimeUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,26 +23,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class AlarmBatchScheduler {
-	private static final String PUBLISH_QUEUE_NAME = RabbitConfig.AI_GENERATIVE_ALARM_CONTENTS_QUEUE_NAME;
-
-	private static final String CRON_PER_SECONDS = "0/1 * * * * *";
 	private static final String CRON_PER_MINUTE = "0 0/1 * * * *";
 
 	private final JobLauncher jobLauncher;
 	private final Job alarmJob;
-	private final RabbitTemplate rabbitTemplate;
-	private final OutBoxAlarmEventRepository outBoxAlarmEventRepository;
 
 	@Autowired
-	public AlarmBatchScheduler(JobLauncher jobLauncher,
-		Job alarmJob,
-		RabbitTemplate rabbitTemplate,
-		OutBoxAlarmEventRepository outBoxAlarmEventRepository) {
-
+	public AlarmBatchScheduler(JobLauncher jobLauncher, Job alarmJob) {
 		this.jobLauncher = jobLauncher;
 		this.alarmJob = alarmJob;
-		this.rabbitTemplate = rabbitTemplate;
-		this.outBoxAlarmEventRepository = outBoxAlarmEventRepository;
 	}
 
 	@Scheduled(cron = CRON_PER_MINUTE)
