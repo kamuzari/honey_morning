@@ -23,9 +23,9 @@ import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.exception.AlarmBusinessException;
 import com.sf.honeymorning.alarm.service.mapper.AlarmMapper;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
-import com.sf.honeymorning.context.MockTestServiceEnvironment;
+import com.sf.honeymorning.context.mock.MockServiceTest;
 
-class AlarmServiceTest extends MockTestServiceEnvironment {
+class AlarmServiceTest extends MockServiceTest {
 
 	@InjectMocks
 	AlarmService systemUnderTest;
@@ -44,18 +44,18 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			alarmId,
 			LocalTime.now(),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 127),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 127),
+			DATE_GENERATOR.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 10),
 			true
 		);
 
 		Alarm previousAlarm = new Alarm(
 			alarmId,
 			LocalTime.now(),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 127),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 127),
+			DATE_GENERATOR.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 10),
 			true
 		);
 
@@ -79,9 +79,9 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			1L,
 			LocalTime.now(),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 127),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 127),
+			DATE_GENERATOR.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 10),
 			true
 		);
 
@@ -98,9 +98,9 @@ class AlarmServiceTest extends MockTestServiceEnvironment {
 		Alarm expectedMyAlarm = new Alarm(
 			1L,
 			LocalTime.now(),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 127),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
-			FAKER_DATE_FACTORY.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 127),
+			DATE_GENERATOR.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 10),
 			true
 		);
 

@@ -7,7 +7,6 @@ import static org.mockito.BDDMockito.given;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,14 +14,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.sf.honeymorning.alarm.controller.dto.request.AddAlarmResultRequestDto;
+import com.sf.honeymorning.alarm.domain.entity.AlarmResult;
 import com.sf.honeymorning.alarm.domain.entity.UserAlarmResultStreak;
 import com.sf.honeymorning.alarm.domain.repository.AlarmResultRepository;
 import com.sf.honeymorning.alarm.domain.repository.UserAlarmResultStreakRepository;
-import com.sf.honeymorning.context.MockTestServiceEnvironment;
+import com.sf.honeymorning.context.mock.MockServiceTest;
 import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.repository.UserRepository;
 
-class AlarmResultServiceTest extends MockTestServiceEnvironment {
+class AlarmResultServiceTest extends MockServiceTest {
 	@InjectMocks
 	AlarmResultService sut;
 
@@ -42,7 +42,7 @@ class AlarmResultServiceTest extends MockTestServiceEnvironment {
 		int expectedMaxConsecutiveDays = 2;
 		var userAlarmResultStreak = new UserAlarmResultStreak(AUTH_USER.getId(), LocalDateTime.now().minusDays(1).plusMinutes(1), 1);
 		var addAlarmResultRequestDto = new AddAlarmResultRequestDto(1L, 2);
-		var user = new User(FAKER_DATE_FACTORY.name().username(), FAKER_DATE_FACTORY.internet().password(), "DeepSeek",
+		var user = new User(DATE_GENERATOR.name().username(), DATE_GENERATOR.internet().password(), "DeepSeek",
 			ROLE_USER);
 
 		given(userAlarmResultStreakRepository.save(userAlarmResultStreak)).willReturn(userAlarmResultStreak);
@@ -64,7 +64,7 @@ class AlarmResultServiceTest extends MockTestServiceEnvironment {
 		int expectedConsecutiveDays = 1;
 		var userAlarmResultStreak = new UserAlarmResultStreak(AUTH_USER.getId(), LocalDateTime.now().minusDays(2), 1);
 		var addAlarmResultRequestDto = new AddAlarmResultRequestDto(1L, 2);
-		var user = new User(FAKER_DATE_FACTORY.name().username(), FAKER_DATE_FACTORY.internet().password(), "DeepSeek",
+		var user = new User(DATE_GENERATOR.name().username(), DATE_GENERATOR.internet().password(), "DeepSeek",
 			ROLE_USER);
 
 		given(userAlarmResultStreakRepository.findByUserId(AUTH_USER.getId())).willReturn(
@@ -86,7 +86,7 @@ class AlarmResultServiceTest extends MockTestServiceEnvironment {
 		int expectedConsecutiveDays = 1;
 		var userAlarmResultStreak = new UserAlarmResultStreak(AUTH_USER.getId(), LocalDateTime.now().minusDays(2), 1);
 		var addAlarmResultRequestDto = new AddAlarmResultRequestDto(1L, 2);
-		var user = new User(FAKER_DATE_FACTORY.name().username(), FAKER_DATE_FACTORY.internet().password(), "DeepSeek",
+		var user = new User(DATE_GENERATOR.name().username(), DATE_GENERATOR.internet().password(), "DeepSeek",
 			ROLE_USER);
 
 		given(userAlarmResultStreakRepository.save(any())).willReturn(userAlarmResultStreak);
@@ -103,8 +103,8 @@ class AlarmResultServiceTest extends MockTestServiceEnvironment {
 	@DisplayName("최대 스트릭 일수를 가져온다")
 	void testGetMaximumStreak() {
 		//given
-		User user = new User(FAKER_DATE_FACTORY.name().username(),
-			FAKER_DATE_FACTORY.internet().password(),
+		User user = new User(DATE_GENERATOR.name().username(),
+			DATE_GENERATOR.internet().password(),
 			"DeepSeek",
 			ROLE_USER);
 		given(userRepository.findById(AUTH_USER.getId())).willReturn(Optional.of(user));

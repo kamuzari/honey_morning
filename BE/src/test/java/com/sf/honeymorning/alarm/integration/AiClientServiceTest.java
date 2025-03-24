@@ -30,7 +30,7 @@ import com.sf.honeymorning.alarm.service.dto.response.AiBriefingDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
-import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.broker.RabbitMqContext;
 import com.sf.honeymorning.brief.common.QuizConstraint;
 
@@ -85,7 +85,7 @@ class AiClientServiceTest extends DefaultIntegrationTest implements RabbitMqCont
 		//given
 		AiResponseDto expectResponseDto = new AiResponseDto(
 			1L,
-			new AiBriefingDto(FAKE_DATA_FACTORY.lorem().sentence(10), FAKE_DATA_FACTORY.lorem().sentence(40)),
+			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
@@ -113,7 +113,7 @@ class AiClientServiceTest extends DefaultIntegrationTest implements RabbitMqCont
 		// given
 		AiResponseDto responseDto = new AiResponseDto(
 			1L,
-			new AiBriefingDto(FAKE_DATA_FACTORY.lorem().sentence(10), FAKE_DATA_FACTORY.lorem().sentence(40)),
+			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
@@ -135,17 +135,17 @@ class AiClientServiceTest extends DefaultIntegrationTest implements RabbitMqCont
 
 	private List<AiTopicDto> createFakeAiTopicDtos(int size) {
 		return Stream.generate(() -> new AiTopicDto(
-				FAKE_DATA_FACTORY.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
-				FAKE_DATA_FACTORY.lorem().word(),
-				FAKE_DATA_FACTORY.number().randomDouble(2, 0, 100)))
+				DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
+				DATE_GENERATOR.lorem().word(),
+				DATE_GENERATOR.number().randomDouble(2, 0, 100)))
 			.limit(size).toList();
 	}
 
 	private List<AiQuizDto> createFakeQuizDtos(int size) {
 		return Stream.generate(() -> new AiQuizDto(
-				FAKE_DATA_FACTORY.lorem().sentence(2),
+				DATE_GENERATOR.lorem().sentence(2),
 				1,
-				Stream.generate(() -> FAKE_DATA_FACTORY.lorem().word())
+				Stream.generate(() -> DATE_GENERATOR.lorem().word())
 					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
 			))

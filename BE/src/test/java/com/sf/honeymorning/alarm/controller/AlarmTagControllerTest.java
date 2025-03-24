@@ -23,8 +23,7 @@ import com.sf.honeymorning.alarm.controller.dto.request.AddAlarmTagRequestDto;
 import com.sf.honeymorning.alarm.controller.dto.request.RemoveAlarmTagRequestDto;
 import com.sf.honeymorning.alarm.service.AlarmTagService;
 import com.sf.honeymorning.config.WebSecurityConfig;
-import com.sf.honeymorning.context.MockTestControllerEnvironment;
-import com.sf.honeymorning.security.WithJwtMockUser;
+import com.sf.honeymorning.context.mock.MockControllerTest;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
 import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
 import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
@@ -36,7 +35,7 @@ import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
 	LoginSuccessHandler.class,
 	LogoutSuccessHandler.class,
 	JwtProperty.class})
-class AlarmTagControllerTest extends MockTestControllerEnvironment {
+class AlarmTagControllerTest extends MockControllerTest {
 
 	final String URI_PREFIX = "/api/alarmtags";
 
@@ -59,7 +58,7 @@ class AlarmTagControllerTest extends MockTestControllerEnvironment {
 	@DisplayName("나의 알람 카테고리를 추가한다")
 	void testAdd() throws Exception {
 		//given
-		String tagWord = FAKER.lorem().word();
+		String tagWord = DATE_GENERATOR.lorem().word();
 		String body = objectMapper.writeValueAsString(new AddAlarmTagRequestDto(tagWord));
 		//when
 		mockMvc.perform(post(URI_PREFIX)
@@ -87,7 +86,7 @@ class AlarmTagControllerTest extends MockTestControllerEnvironment {
 	@DisplayName("나의 알람카테고리를 삭제한다")
 	void testRemove() throws Exception {
 		//given
-		String tagWord = FAKER.lorem().word();
+		String tagWord = DATE_GENERATOR.lorem().word();
 		String body = objectMapper.writeValueAsString(new RemoveAlarmTagRequestDto(tagWord));
 		//when
 		mockMvc.perform(delete(URI_PREFIX)

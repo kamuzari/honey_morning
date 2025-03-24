@@ -21,7 +21,7 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.sf.honeymorning.alarm.service.ContentStoreService;
 import com.sf.honeymorning.config.constant.AwsS3Properties;
-import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.storage.AwsS3Context;
 
 public class ContentsStoreServiceIntegrationTest extends DefaultIntegrationTest implements AwsS3Context {

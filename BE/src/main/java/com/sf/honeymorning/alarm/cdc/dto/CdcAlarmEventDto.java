@@ -1,4 +1,4 @@
-package com.sf.honeymorning.alarm.cdc;
+package com.sf.honeymorning.alarm.cdc.dto;
 
 import static com.sf.honeymorning.config.JsonConfig.*;
 

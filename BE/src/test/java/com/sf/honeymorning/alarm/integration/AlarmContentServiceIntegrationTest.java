@@ -37,7 +37,7 @@ import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.config.constant.AwsS3Properties;
-import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.infra.storage.AwsS3Context;
 import com.sf.honeymorning.brief.common.QuizConstraint;
@@ -86,9 +86,9 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 	@Test
 	void testCreateTotalContents() throws IOException {
 		//given
-		User user = new User(FAKE_DATA_FACTORY.name().username(),
-			FAKE_DATA_FACTORY.internet().password(10, 17),
-			FAKE_DATA_FACTORY.internet().domainName(),
+		User user = new User(DATE_GENERATOR.name().username(),
+			DATE_GENERATOR.internet().password(10, 17),
+			DATE_GENERATOR.internet().domainName(),
 			UserRole.ROLE_USER
 		);
 
@@ -99,7 +99,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 		AiResponseDto responseDto = new AiResponseDto(
 			user.getId(),
-			new AiBriefingDto(FAKE_DATA_FACTORY.lorem().sentence(10), FAKE_DATA_FACTORY.lorem().sentence(40)),
+			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
@@ -134,9 +134,9 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 	@Test
 	void testCreateTotalContents2()  {
 		//given
-		User user = new User(FAKE_DATA_FACTORY.name().username(),
-			FAKE_DATA_FACTORY.internet().password(10, 17),
-			FAKE_DATA_FACTORY.internet().domainName(),
+		User user = new User(DATE_GENERATOR.name().username(),
+			DATE_GENERATOR.internet().password(10, 17),
+			DATE_GENERATOR.internet().domainName(),
 			UserRole.ROLE_USER
 		);
 
@@ -147,7 +147,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 		AiResponseDto responseDto = new AiResponseDto(
 			user.getId(),
-			new AiBriefingDto(FAKE_DATA_FACTORY.lorem().sentence(10), FAKE_DATA_FACTORY.lorem().sentence(40)),
+			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
@@ -173,17 +173,17 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 	List<AiTopicDto> createFakeAiTopicDtos(int size) {
 		return Stream.generate(() -> new AiTopicDto(
-				FAKE_DATA_FACTORY.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
-				FAKE_DATA_FACTORY.lorem().word(),
-				FAKE_DATA_FACTORY.number().randomDouble(2, 0, 100)))
+				DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
+				DATE_GENERATOR.lorem().word(),
+				DATE_GENERATOR.number().randomDouble(2, 0, 100)))
 			.limit(size).toList();
 	}
 
 	List<AiQuizDto> createFakeQuizDtos(int size) {
 		return Stream.generate(() -> new AiQuizDto(
-				FAKE_DATA_FACTORY.lorem().sentence(2),
+				DATE_GENERATOR.lorem().sentence(2),
 				1,
-				Stream.generate(() -> FAKE_DATA_FACTORY.lorem().word())
+				Stream.generate(() -> DATE_GENERATOR.lorem().word())
 					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
 			))

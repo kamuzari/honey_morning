@@ -5,11 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sf.honeymorning.context.RepositoryMockTest;
+import com.sf.honeymorning.context.mock.MockRepositoryTest;
 import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.entity.UserRole;
 
-class UserRepositoryTest extends RepositoryMockTest {
+class UserRepositoryTest extends MockRepositoryTest {
 
 	@Autowired
 	UserRepository userRepository;

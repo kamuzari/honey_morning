@@ -27,11 +27,11 @@ import com.sf.honeymorning.common.entity.content.AccessAuthority;
 import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
 import com.sf.honeymorning.common.exception.model.BusinessException;
-import com.sf.honeymorning.context.MockTestServiceEnvironment;
+import com.sf.honeymorning.context.mock.MockServiceTest;
 import com.sf.honeymorning.brief.entity.Quiz;
 import com.sf.honeymorning.brief.repository.QuizRepository;
 
-public class BriefingServiceTest extends MockTestServiceEnvironment {
+public class BriefingServiceTest extends MockServiceTest {
 	@InjectMocks
 	BriefingService sut;
 
@@ -55,31 +55,31 @@ public class BriefingServiceTest extends MockTestServiceEnvironment {
 	void testGetDetailBriefing() {
 		//given
 		Briefing briefing = new Briefing(AUTH_USER.getId(),
-			FAKER_DATE_FACTORY.lorem().sentence(10),
-			FAKER_DATE_FACTORY.lorem().word(),
-			FAKER_DATE_FACTORY.internet().url());
+			DATE_GENERATOR.lorem().sentence(10),
+			DATE_GENERATOR.lorem().word(),
+			DATE_GENERATOR.internet().url());
 		briefing.addWakeUpBriefingContent(new Content(
-			FAKER_DATE_FACTORY.internet().domainName(),
-			(long)FAKER_DATE_FACTORY.number().numberBetween(1000, 100_000),
+			DATE_GENERATOR.internet().domainName(),
+			(long)DATE_GENERATOR.number().numberBetween(1000, 100_000),
 			FileType.BRIEFING,
-			FAKER_DATE_FACTORY.internet().url().toLowerCase(),
+			DATE_GENERATOR.internet().url().toLowerCase(),
 			AccessAuthority.PART_ALLOWED)
 		);
 		ReflectionTestUtils.setField(briefing, "id", 1L);
-		List<Quiz> quizzes = List.of(new Quiz(FAKER_DATE_FACTORY.lorem().sentence(),
-				FAKER_DATE_FACTORY.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE),
-				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().sentence()).limit(4).toList()),
-			new Quiz(FAKER_DATE_FACTORY.lorem().sentence(),
-				FAKER_DATE_FACTORY.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE),
-				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().sentence()).limit(4).toList())
+		List<Quiz> quizzes = List.of(new Quiz(DATE_GENERATOR.lorem().sentence(),
+				DATE_GENERATOR.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE),
+				Stream.generate(() -> DATE_GENERATOR.lorem().sentence()).limit(4).toList()),
+			new Quiz(DATE_GENERATOR.lorem().sentence(),
+				DATE_GENERATOR.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE),
+				Stream.generate(() -> DATE_GENERATOR.lorem().sentence()).limit(4).toList())
 		);
 
 		quizzes.forEach(quiz -> ReflectionTestUtils.setField(quiz, "briefing", briefing));
 
 		List<TopicModelWord> topicModelWords = Stream.generate(() -> new TopicModelWord(
-			FAKER_DATE_FACTORY.number().numberBetween(1, 5),
-			FAKER_DATE_FACTORY.lorem().word(),
-			FAKER_DATE_FACTORY.number().randomDouble(2, 0, 20)
+			DATE_GENERATOR.number().numberBetween(1, 5),
+			DATE_GENERATOR.lorem().word(),
+			DATE_GENERATOR.number().randomDouble(2, 0, 20)
 		)).limit(150).toList();
 
 		given(briefingRepository.findByUserIdAndId(AUTH_USER.getId(), briefing.getId()))
@@ -106,9 +106,9 @@ public class BriefingServiceTest extends MockTestServiceEnvironment {
 		//given
 		Long anotherUserId = 9L;
 		Briefing briefing = new Briefing(anotherUserId,
-			FAKER_DATE_FACTORY.lorem().sentence(10),
-			FAKER_DATE_FACTORY.lorem().word(),
-			FAKER_DATE_FACTORY.internet().url());
+			DATE_GENERATOR.lorem().sentence(10),
+			DATE_GENERATOR.lorem().word(),
+			DATE_GENERATOR.internet().url());
 		ReflectionTestUtils.setField(briefing, "id", 1L);
 		given(briefingRepository.findByUserIdAndId(AUTH_USER.getId(), briefing.getId()))
 			.willReturn(Optional.of(briefing));

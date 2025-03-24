@@ -22,7 +22,7 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.util.StreamUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.broker.KafkaContext;
 
 class AlarmEventCdcConsumerTest extends DefaultIntegrationTest implements KafkaContext {

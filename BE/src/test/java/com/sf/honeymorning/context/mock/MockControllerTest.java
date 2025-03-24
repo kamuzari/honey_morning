@@ -1,20 +1,22 @@
-package com.sf.honeymorning.context;
+package com.sf.honeymorning.context.mock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
-import com.sf.honeymorning.security.WithJwtMockUser;
+import com.sf.honeymorning.security.weaving.WithJwtMockUser;
 import com.sf.honeymorning.user.authentication.service.TokenService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WithJwtMockUser
-public class MockTestControllerEnvironment {
-    protected static final Faker FAKER = new Faker();
+public class MockControllerTest {
+    protected static final Faker DATE_GENERATOR = new Faker();
     protected static final String USERNAME = "kamusari";
     protected static final Long AUTH_ID = 1L;
 
-    @SpyBean
+    @Autowired
     protected MockMvc mockMvc;
 
     @SpyBean

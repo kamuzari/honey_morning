@@ -27,12 +27,12 @@ import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
-import com.sf.honeymorning.context.MockTestServiceEnvironment;
+import com.sf.honeymorning.context.mock.MockServiceTest;
 import com.sf.honeymorning.brief.common.QuizConstraint;
 import com.sf.honeymorning.brief.entity.Quiz;
 import com.sf.honeymorning.brief.repository.QuizRepository;
 
-class TtsServiceTest extends MockTestServiceEnvironment {
+class TtsServiceTest extends MockServiceTest {
 
 	@InjectMocks
 	TtsService ttsService;
@@ -61,10 +61,10 @@ class TtsServiceTest extends MockTestServiceEnvironment {
 		List<TopicModelWord> createdTopicModels = createTopicModelWords();
 		Briefing savedBriefing = new Briefing(
 			AUTH_USER.getId(),
-			FAKER_DATE_FACTORY.lorem().sentence(10),
-			FAKER_DATE_FACTORY.lorem().sentence(40),
-			FAKER_DATE_FACTORY.internet().domainName(),
-			List.of(new BriefingTag(FAKER_DATE_FACTORY.lorem().word())),
+			DATE_GENERATOR.lorem().sentence(10),
+			DATE_GENERATOR.lorem().sentence(40),
+			DATE_GENERATOR.internet().domainName(),
+			List.of(new BriefingTag(DATE_GENERATOR.lorem().word())),
 			createdQuizzes,
 			createdTopicModels
 		);
@@ -105,10 +105,10 @@ class TtsServiceTest extends MockTestServiceEnvironment {
 		List<TopicModelWord> createdTopicModels = createTopicModelWords();
 		Briefing savedBriefing = new Briefing(
 			AUTH_USER.getId(),
-			FAKER_DATE_FACTORY.lorem().sentence(10),
-			FAKER_DATE_FACTORY.lorem().sentence(40),
-			FAKER_DATE_FACTORY.internet().domainName(),
-			List.of(new BriefingTag(FAKER_DATE_FACTORY.lorem().word())),
+			DATE_GENERATOR.lorem().sentence(10),
+			DATE_GENERATOR.lorem().sentence(40),
+			DATE_GENERATOR.internet().domainName(),
+			List.of(new BriefingTag(DATE_GENERATOR.lorem().word())),
 			List.of(),
 			createdTopicModels
 		);
@@ -130,9 +130,9 @@ class TtsServiceTest extends MockTestServiceEnvironment {
 
 	List<Quiz> createQuizzes() {
 		return Stream.generate(() -> new Quiz(
-				FAKER_DATE_FACTORY.lorem().sentence(2),
+				DATE_GENERATOR.lorem().sentence(2),
 				1,
-				Stream.generate(() -> FAKER_DATE_FACTORY.lorem().word())
+				Stream.generate(() -> DATE_GENERATOR.lorem().word())
 					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
 			)).limit(2)
@@ -141,9 +141,9 @@ class TtsServiceTest extends MockTestServiceEnvironment {
 
 	List<TopicModelWord> createTopicModelWords() {
 		return Stream.generate(() -> new TopicModelWord(
-				FAKER_DATE_FACTORY.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
-				FAKER_DATE_FACTORY.lorem().word(),
-				FAKER_DATE_FACTORY.number().randomDouble(2, 0, 100)))
+				DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
+				DATE_GENERATOR.lorem().word(),
+				DATE_GENERATOR.number().randomDouble(2, 0, 100)))
 			.limit(150).toList();
 	}
 }

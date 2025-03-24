@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.sf.honeymorning.alarm.controller.dto.request.AddAlarmResultRequestDto;
 import com.sf.honeymorning.alarm.service.AlarmResultService;
 import com.sf.honeymorning.config.WebSecurityConfig;
-import com.sf.honeymorning.context.MockTestControllerEnvironment;
+import com.sf.honeymorning.context.mock.MockControllerTest;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
 import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
 import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
@@ -31,7 +31,7 @@ import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
 	LoginSuccessHandler.class,
 	LogoutSuccessHandler.class,
 	JwtProperty.class})
-class AlarmResultControllerTest extends MockTestControllerEnvironment {
+class AlarmResultControllerTest extends MockControllerTest {
 
 	final String URI_PREFIX = "/api/alarm-results";
 

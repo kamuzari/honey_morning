@@ -20,7 +20,7 @@ import com.sf.honeymorning.alarm.domain.entity.Tag;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.domain.repository.AlarmTagRepository;
 import com.sf.honeymorning.alarm.domain.repository.TagRepository;
-import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
 
 class AlarmTagServiceIntegrationTest extends DefaultIntegrationTest implements MySqlContext {

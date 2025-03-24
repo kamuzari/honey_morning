@@ -20,10 +20,10 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.sf.honeymorning.alarm.service.ContentStoreService;
 import com.sf.honeymorning.config.constant.AwsS3Properties;
-import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
+import com.sf.honeymorning.context.integration.EndPointIntegrationTest;
 import com.sf.honeymorning.context.infra.storage.AwsS3Context;
 
-public class ContentStoreEndpointIntegrationTest extends EndPointIntegrationEnvironment implements AwsS3Context {
+public class ContentStoreEndpointIntegrationTest extends EndPointIntegrationTest implements AwsS3Context {
 
 	public static final String KEY_PREFIX = "quiz";
 	static final String FILE_NAME = "sample-sound.mp3";

@@ -33,7 +33,7 @@ import com.sf.honeymorning.alarm.domain.entity.AlarmTag;
 import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.domain.repository.AlarmTagRepository;
-import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.alarm.domain.entity.Tag;
 import com.sf.honeymorning.alarm.domain.repository.TagRepository;

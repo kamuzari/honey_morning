@@ -3,7 +3,7 @@ package com.sf.honeymorning.brief.service;
 import com.sf.honeymorning.brief.entity.Briefing;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
-import com.sf.honeymorning.context.MockTestServiceEnvironment;
+import com.sf.honeymorning.context.mock.MockServiceTest;
 import com.sf.honeymorning.brief.common.QuizConstraint;
 import com.sf.honeymorning.brief.controller.dto.request.SelectionRequestDto;
 import com.sf.honeymorning.brief.entity.Quiz;
@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-class QuizServiceTest extends MockTestServiceEnvironment {
+class QuizServiceTest extends MockServiceTest {
     @InjectMocks
     QuizService sut;
 
@@ -46,14 +46,14 @@ class QuizServiceTest extends MockTestServiceEnvironment {
     void testAddSelections() {
         //given
         Briefing briefing = new Briefing(AUTH_USER.getId(),
-                FAKER_DATE_FACTORY.lorem().sentence(10),
-                FAKER_DATE_FACTORY.lorem().sentence(50),
+                DATE_GENERATOR.lorem().sentence(10),
+                DATE_GENERATOR.lorem().sentence(50),
                 ""
         );
         List<Quiz> quizzes = LongStream.rangeClosed(1, 2).mapToObj((quizId) -> {
-            Quiz quiz = new Quiz(FAKER_DATE_FACTORY.lorem().sentence(3),
+            Quiz quiz = new Quiz(DATE_GENERATOR.lorem().sentence(3),
                     1,
-                    Stream.generate(() -> FAKER_DATE_FACTORY.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList());
+                    Stream.generate(() -> DATE_GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList());
             ReflectionTestUtils.setField(quiz, "id", quizId);
             return quiz;
         }).toList();
@@ -84,14 +84,14 @@ class QuizServiceTest extends MockTestServiceEnvironment {
     void failInvalidQuizId() {
         //given
         Briefing briefing = new Briefing(AUTH_USER.getId(),
-                FAKER_DATE_FACTORY.lorem().sentence(10),
-                FAKER_DATE_FACTORY.lorem().sentence(50),
+                DATE_GENERATOR.lorem().sentence(10),
+                DATE_GENERATOR.lorem().sentence(50),
                 ""
         );
         List<Quiz> quizzes = LongStream.rangeClosed(3, 4).mapToObj((quizId) -> {
-            Quiz quiz = new Quiz(FAKER_DATE_FACTORY.lorem().sentence(3),
+            Quiz quiz = new Quiz(DATE_GENERATOR.lorem().sentence(3),
                     1,
-                    Stream.generate(() -> FAKER_DATE_FACTORY.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList());
+                    Stream.generate(() -> DATE_GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList());
             ReflectionTestUtils.setField(quiz, "id", quizId);
             return quiz;
         }).toList();
@@ -115,14 +115,14 @@ class QuizServiceTest extends MockTestServiceEnvironment {
     void failInvalidQuizzes(int invalidQuizSize) {
         //given
         Briefing briefing = new Briefing(AUTH_USER.getId(),
-                FAKER_DATE_FACTORY.lorem().sentence(10),
-                FAKER_DATE_FACTORY.lorem().sentence(50),
+                DATE_GENERATOR.lorem().sentence(10),
+                DATE_GENERATOR.lorem().sentence(50),
                 ""
         );
         List<Quiz> quizzes = Stream.generate(() -> new Quiz(
-                FAKER_DATE_FACTORY.lorem().sentence(3),
+                DATE_GENERATOR.lorem().sentence(3),
                 1,
-                Stream.generate(() -> FAKER_DATE_FACTORY.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList()
+                Stream.generate(() -> DATE_GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList()
         )).limit(invalidQuizSize).toList();
 
         given(briefingRepository.findByUserIdAndId(any(), any())).willReturn(Optional.of(briefing));
