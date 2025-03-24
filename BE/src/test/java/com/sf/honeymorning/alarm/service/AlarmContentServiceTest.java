@@ -12,10 +12,12 @@ import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.common.entity.content.AccessAuthority;
 import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
-import com.sf.honeymorning.context.MockTestServiceEnvironment;
+import com.sf.honeymorning.context.mock.MockServiceTest;
 import com.sf.honeymorning.brief.common.QuizConstraint;
 import com.sf.honeymorning.brief.entity.Quiz;
 import com.sf.honeymorning.brief.repository.QuizRepository;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -32,7 +34,7 @@ import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.*;
 
-class AlarmContentServiceTest extends MockTestServiceEnvironment {
+class AlarmContentServiceTest extends MockServiceTest {
 
     @InjectMocks
     AlarmContentService sut;
@@ -62,15 +64,15 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
                 true
         );
         Briefing expectedBriefing = new Briefing(AUTH_USER.getId(),
-                FAKER_DATE_FACTORY.lorem().sentence(10),
-                FAKER_DATE_FACTORY.lorem().sentence(20),
-                FAKER_DATE_FACTORY.internet().url().toLowerCase()
+                DATE_GENERATOR.lorem().sentence(10),
+                DATE_GENERATOR.lorem().sentence(20),
+                DATE_GENERATOR.internet().url().toLowerCase()
         );
         expectedBriefing.addWakeUpBriefingContent(new Content(
-                FAKER_DATE_FACTORY.internet().domainName(),
-                (long) FAKER_DATE_FACTORY.number().numberBetween(1000, 100_000),
+                DATE_GENERATOR.internet().domainName(),
+                (long) DATE_GENERATOR.number().numberBetween(1000, 100_000),
                 FileType.BRIEFING,
-                FAKER_DATE_FACTORY.internet().url().toLowerCase(),
+                DATE_GENERATOR.internet().url().toLowerCase(),
                 AccessAuthority.PART_ALLOWED)
         );
         List<Quiz> expectedQuizzes = createFakeQuiz(QuizConstraint.TOTAL_QUIZ_SIZE);
@@ -87,11 +89,11 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
         verify(alarmRepository, times(1)).findByUserIdAndIsActiveTrue(AUTH_USER.getId());
         verify(briefingRepository, times(1)).findTopByUserIdOrderByCreatedAtDesc(AUTH_USER.getId());
         verify(quizRepository, times(1)).findByBriefing(expectedBriefing);
-        assertThat(preparedAlarmContents.quizVoiceUrl()).hasSize(expectedQuizzes.size());
-        assertThat(preparedAlarmContents.repeatFrequency()).isEqualTo(expectedAlarm.getRepeatFrequency());
-        assertThat(preparedAlarmContents.repeatInterval()).isEqualTo(expectedAlarm.getRepeatInterval());
-        assertThat(preparedAlarmContents.wakeUpTime()).isEqualTo(expectedAlarm.getWakeUpTime());
-        assertThat(preparedAlarmContents.briefingVoiceUrl()).isEqualTo(
+        Assertions.assertThat(preparedAlarmContents.quizVoiceUrl()).hasSize(expectedQuizzes.size());
+        Assertions.assertThat(preparedAlarmContents.repeatFrequency()).isEqualTo(expectedAlarm.getRepeatFrequency());
+        Assertions.assertThat(preparedAlarmContents.repeatInterval()).isEqualTo(expectedAlarm.getRepeatInterval());
+        Assertions.assertThat(preparedAlarmContents.wakeUpTime()).isEqualTo(expectedAlarm.getWakeUpTime());
+        Assertions.assertThat(preparedAlarmContents.briefingVoiceUrl()).isEqualTo(
                 expectedBriefing.getWakeUpBriefingContent().getFileUrl());
     }
 
@@ -101,7 +103,7 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
         //given
         AiResponseDto responseDto = new AiResponseDto(
                 AUTH_USER.getId(),
-                new AiBriefingDto(FAKER_DATE_FACTORY.lorem().sentence(10), FAKER_DATE_FACTORY.lorem().sentence(40)),
+                new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
                 createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
                 createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
                 List.of("정치"),
@@ -122,7 +124,7 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
         //given
         AiResponseDto responseDto = new AiResponseDto(
                 AUTH_USER.getId(),
-                new AiBriefingDto(FAKER_DATE_FACTORY.lorem().sentence(10), FAKER_DATE_FACTORY.lorem().sentence(40)),
+                new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
                 createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
                 createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
                 List.of("정치"),
@@ -145,17 +147,17 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
 
     private List<AiTopicDto> createFakeAiTopicDtos(int size) {
         return Stream.generate(() -> new AiTopicDto(
-                        FAKER_DATE_FACTORY.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
-                        FAKER_DATE_FACTORY.lorem().word(),
-                        FAKER_DATE_FACTORY.number().randomDouble(2, 0, 100)))
+                        DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
+                        DATE_GENERATOR.lorem().word(),
+                        DATE_GENERATOR.number().randomDouble(2, 0, 100)))
                 .limit(size).toList();
     }
 
     private List<AiQuizDto> createFakeQuizDtos(int size) {
         return Stream.generate(() -> new AiQuizDto(
-                        FAKER_DATE_FACTORY.lorem().sentence(2),
+                        DATE_GENERATOR.lorem().sentence(2),
                         1,
-                        Stream.generate(() -> FAKER_DATE_FACTORY.lorem().word())
+                        Stream.generate(() -> DATE_GENERATOR.lorem().word())
                                 .limit(QuizConstraint.OPTION_SIZE)
                                 .toList()
                 ))
@@ -165,19 +167,19 @@ class AlarmContentServiceTest extends MockTestServiceEnvironment {
 
     private List<Quiz> createFakeQuiz(int size) {
         List<Quiz> quizzes = Stream.generate(() -> new Quiz(
-                        FAKER_DATE_FACTORY.lorem().sentence(2),
+                        DATE_GENERATOR.lorem().sentence(2),
                         1,
-                        Stream.generate(() -> FAKER_DATE_FACTORY.lorem().word())
+                        Stream.generate(() -> DATE_GENERATOR.lorem().word())
                                 .limit(QuizConstraint.OPTION_SIZE)
                                 .toList()
                 ))
                 .limit(size)
                 .map(quiz -> {
                     ReflectionTestUtils.setField(quiz, "wakeUpQuizContent", new Content(
-                            FAKER_DATE_FACTORY.file().fileName(),
-                            FAKER_DATE_FACTORY.number().randomNumber(),
+                            DATE_GENERATOR.file().fileName(),
+                            DATE_GENERATOR.number().randomNumber(),
                             FileType.QUIZ,
-                            String.join("/", FAKER_DATE_FACTORY.internet().domainName(), FAKER_DATE_FACTORY.file().fileName()),
+                            String.join("/", DATE_GENERATOR.internet().domainName(), DATE_GENERATOR.file().fileName()),
                             AccessAuthority.PRIVATE
                     ));
                     return quiz;

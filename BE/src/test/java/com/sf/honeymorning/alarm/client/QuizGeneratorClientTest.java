@@ -18,10 +18,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.sf.honeymorning.alarm.client.dto.QuizOption;
 import com.sf.honeymorning.alarm.client.dto.QuizResponseDto;
-import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
+import com.sf.honeymorning.context.integration.EndPointIntegrationTest;
 
 @AutoConfigureWireMock(port = 8089)
-class QuizGeneratorClientTest extends EndPointIntegrationEnvironment {
+class QuizGeneratorClientTest extends EndPointIntegrationTest {
 
 	static final int FIXED_QUIZ_SIZE = 2;
 
@@ -34,19 +34,19 @@ class QuizGeneratorClientTest extends EndPointIntegrationEnvironment {
 	static List<QuizResponseDto> getExpectedResponse() {
 		return List.of(
 			new QuizResponseDto(
-				FAKE_DATA_FACTORY.rockBand().name(),
-				List.of(new QuizOption(1, FAKE_DATA_FACTORY.internet().emailAddress()),
-					new QuizOption(2, FAKE_DATA_FACTORY.internet().emailAddress()),
-					new QuizOption(3, FAKE_DATA_FACTORY.internet().emailAddress()),
-					new QuizOption(4, FAKE_DATA_FACTORY.internet().emailAddress())),
+				DATE_GENERATOR.rockBand().name(),
+				List.of(new QuizOption(1, DATE_GENERATOR.internet().emailAddress()),
+					new QuizOption(2, DATE_GENERATOR.internet().emailAddress()),
+					new QuizOption(3, DATE_GENERATOR.internet().emailAddress()),
+					new QuizOption(4, DATE_GENERATOR.internet().emailAddress())),
 				1
 			),
 			new QuizResponseDto(
-				FAKE_DATA_FACTORY.rockBand().name(),
-				List.of(new QuizOption(1, FAKE_DATA_FACTORY.name().username()),
-					new QuizOption(2, FAKE_DATA_FACTORY.name().username()),
-					new QuizOption(3, FAKE_DATA_FACTORY.name().username()),
-					new QuizOption(4, FAKE_DATA_FACTORY.name().username())),
+				DATE_GENERATOR.rockBand().name(),
+				List.of(new QuizOption(1, DATE_GENERATOR.name().username()),
+					new QuizOption(2, DATE_GENERATOR.name().username()),
+					new QuizOption(3, DATE_GENERATOR.name().username()),
+					new QuizOption(4, DATE_GENERATOR.name().username())),
 				2
 			)
 		);

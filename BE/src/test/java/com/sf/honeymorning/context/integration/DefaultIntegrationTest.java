@@ -1,4 +1,4 @@
-package com.sf.honeymorning.context;
+package com.sf.honeymorning.context.integration;
 
 import org.springframework.boot.test.context.SpringBootTest;
 

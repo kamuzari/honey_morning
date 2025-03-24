@@ -8,6 +8,7 @@ import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sf.honeymorning.alarm.cdc.dto.CdcAlarmEventDto;
 import com.sf.honeymorning.config.RabbitConfig;
 
 @Component

@@ -27,7 +27,7 @@ import com.sf.honeymorning.alarm.domain.repository.AlarmResultRepository;
 import com.sf.honeymorning.alarm.domain.repository.UserAlarmResultStreakRepository;
 import com.sf.honeymorning.alarm.service.AlarmResultService;
 import com.sf.honeymorning.alarm.service.mapper.AlarmResultMapper;
-import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.RedisContext;
 
 class AlarmResultServiceIntegrationTest extends DefaultIntegrationTest implements RedisContext {
@@ -67,8 +67,8 @@ class AlarmResultServiceIntegrationTest extends DefaultIntegrationTest implement
 		Long userId = 1L;
 		List<AlarmResult> samples = Stream.generate(() -> new AlarmResult(
 			userId,
-			FAKE_DATA_FACTORY.number().randomNumber(),
-			FAKE_DATA_FACTORY.number().numberBetween(MATCH_COUNT_MINIMUM_VALUE, MATCH_COUNT_MAXIMUM_VALUE),
+			DATE_GENERATOR.number().randomNumber(),
+			DATE_GENERATOR.number().numberBetween(MATCH_COUNT_MINIMUM_VALUE, MATCH_COUNT_MAXIMUM_VALUE),
 			true
 		)).limit(20).toList();
 		List<AlarmResult> totalAlarmResults = alarmResultRepository.saveAll(samples)

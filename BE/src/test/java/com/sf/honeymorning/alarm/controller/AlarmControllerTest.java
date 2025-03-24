@@ -23,7 +23,7 @@ import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.service.AlarmContentService;
 import com.sf.honeymorning.alarm.service.AlarmService;
 import com.sf.honeymorning.config.WebSecurityConfig;
-import com.sf.honeymorning.context.MockTestControllerEnvironment;
+import com.sf.honeymorning.context.mock.MockControllerTest;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
 import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
 import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
@@ -35,7 +35,7 @@ import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
 	LoginSuccessHandler.class,
 	LogoutSuccessHandler.class,
 	JwtProperty.class})
-class AlarmControllerTest extends MockTestControllerEnvironment {
+class AlarmControllerTest extends MockControllerTest {
 
 	final String URI_PREFIX = "/api/alarms";
 
@@ -52,9 +52,9 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 		AlarmSetRequest alarmSetRequest = new AlarmSetRequest(
 			1L,
 			LocalTime.now(),
-			FAKER.number().numberBetween(1, 127),
-			FAKER.number().numberBetween(1, 10),
-			FAKER.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 127),
+			DATE_GENERATOR.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 10),
 			true
 		);
 		String body = objectMapper.writeValueAsString(alarmSetRequest);
@@ -110,8 +110,8 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 				1L,
 				LocalTime.now(),
 				invalidWeekDay,
-				FAKER.number().numberBetween(1, 10),
-				FAKER.number().numberBetween(1, 10),
+				DATE_GENERATOR.number().numberBetween(1, 10),
+				DATE_GENERATOR.number().numberBetween(1, 10),
 				true
 			);
 			String body = objectMapper.writeValueAsString(alarmSetRequest);
@@ -131,7 +131,7 @@ class AlarmControllerTest extends MockTestControllerEnvironment {
 				LocalTime.now(),
 				7,
 				invalidFrequency,
-				FAKER.number().numberBetween(1, 10),
+				DATE_GENERATOR.number().numberBetween(1, 10),
 				true
 			);
 			String body = objectMapper.writeValueAsString(alarmSetRequest);

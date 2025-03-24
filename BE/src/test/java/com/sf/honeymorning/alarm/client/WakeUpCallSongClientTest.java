@@ -15,10 +15,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.sf.honeymorning.alarm.client.dto.WakeUpCallSongResponse;
-import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
+import com.sf.honeymorning.context.integration.EndPointIntegrationTest;
 
 @AutoConfigureWireMock(port = 8089)
-public class WakeUpCallSongClientTest extends EndPointIntegrationEnvironment {
+public class WakeUpCallSongClientTest extends EndPointIntegrationTest {
 
 	@Autowired
 	ObjectMapper objectMapper;
@@ -29,7 +29,7 @@ public class WakeUpCallSongClientTest extends EndPointIntegrationEnvironment {
 	@Test
 	void testSend() throws JsonProcessingException {
 		/// given
-		var expectedSongUrl = FAKE_DATA_FACTORY.file().fileName();
+		var expectedSongUrl = DATE_GENERATOR.file().fileName();
 		WakeUpCallSongResponse expectedResponse = new WakeUpCallSongResponse(expectedSongUrl);
 		String briefingReadContent = "트럼프 당선이후 많은 비트 코인들이 역대 최고치를 찍으며 경제적 ... ";
 		String expectedBody = objectMapper.writeValueAsString(expectedResponse);

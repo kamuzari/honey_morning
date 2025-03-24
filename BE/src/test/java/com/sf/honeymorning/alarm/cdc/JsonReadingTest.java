@@ -14,6 +14,7 @@ import org.springframework.core.io.ResourceLoader;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sf.honeymorning.alarm.cdc.dto.CdcAlarmEventDto;
 
 @SpringBootTest
 public class JsonReadingTest {

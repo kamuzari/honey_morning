@@ -17,14 +17,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.sf.honeymorning.brief.controller.dto.request.SelectionRequestDto;
 import com.sf.honeymorning.brief.service.QuizService;
 import com.sf.honeymorning.config.WebSecurityConfig;
-import com.sf.honeymorning.context.MockTestControllerEnvironment;
+import com.sf.honeymorning.context.mock.MockControllerTest;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
 import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
 import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
@@ -36,7 +35,7 @@ import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
 	LoginSuccessHandler.class,
 	LogoutSuccessHandler.class,
 	JwtProperty.class})
-class QuizControllerTest extends MockTestControllerEnvironment {
+class QuizControllerTest extends MockControllerTest {
 	final String URI_PREFIX = "/api/quizzes";
 
 	@MockBean

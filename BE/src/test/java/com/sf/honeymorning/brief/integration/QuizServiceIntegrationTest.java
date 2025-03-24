@@ -6,7 +6,7 @@ import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.service.QuizService;
-import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.brief.entity.Quiz;
 import com.sf.honeymorning.brief.service.mapper.QuizMapper;
@@ -39,26 +39,26 @@ public class QuizServiceIntegrationTest extends DefaultIntegrationTest implement
         Long userId = 1L;
         List<Quiz> savedQuizzes = List.of(
                 new Quiz(
-                        FAKE_DATA_FACTORY.friends().quote(),
-                        FAKE_DATA_FACTORY.number().numberBetween(1, 4),
-                        Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList()
+                        DATE_GENERATOR.friends().quote(),
+                        DATE_GENERATOR.number().numberBetween(1, 4),
+                        Stream.generate(() -> DATE_GENERATOR.lorem().sentence()).limit(4).toList()
                 ),
                 new Quiz(
-                        FAKE_DATA_FACTORY.friends().quote(),
-                        FAKE_DATA_FACTORY.number().numberBetween(1, 4),
-                        Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList())
+                        DATE_GENERATOR.friends().quote(),
+                        DATE_GENERATOR.number().numberBetween(1, 4),
+                        Stream.generate(() -> DATE_GENERATOR.lorem().sentence()).limit(4).toList())
         );
         Briefing briefing = briefingRepository.save(new Briefing(
                 userId,
-                FAKE_DATA_FACTORY.lorem().sentence(3),
-                FAKE_DATA_FACTORY.lorem().sentence(3),
-                FAKE_DATA_FACTORY.internet().url(),
+                DATE_GENERATOR.lorem().sentence(3),
+                DATE_GENERATOR.lorem().sentence(3),
+                DATE_GENERATOR.internet().url(),
                 List.of(new BriefingTag("경제")),
                 savedQuizzes,
                 Stream.generate(() -> new TopicModelWord(
-                                FAKE_DATA_FACTORY.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
-                                FAKE_DATA_FACTORY.lorem().word(),
-                                FAKE_DATA_FACTORY.number().randomDouble(2, 0, 100)))
+                                DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
+                                DATE_GENERATOR.lorem().word(),
+                                DATE_GENERATOR.number().randomDouble(2, 0, 100)))
                         .limit(150).toList()
         ));
 

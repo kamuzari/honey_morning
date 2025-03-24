@@ -1,7 +1,7 @@
 package com.sf.honeymorning.brief.integration;
 
 import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -17,7 +17,7 @@ import com.sf.honeymorning.brief.entity.BriefingTag;
 import com.sf.honeymorning.brief.entity.TopicModelWord;
 import com.sf.honeymorning.brief.repository.BriefingRepository;
 import com.sf.honeymorning.brief.service.BriefingService;
-import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.brief.common.QuizConstraint;
 import com.sf.honeymorning.brief.entity.Quiz;
 

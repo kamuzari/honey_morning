@@ -7,9 +7,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sf.honeymorning.context.RepositoryMockTest;
+import com.sf.honeymorning.context.mock.MockRepositoryTest;
 
-class OutBoxAlarmEventRepositoryTest extends RepositoryMockTest {
+class OutBoxAlarmEventRepositoryTest extends MockRepositoryTest {
 	@Autowired
 	OutBoxAlarmEventRepository outBoxAlarmEventRepository;
 

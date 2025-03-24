@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.config.WebSecurityConfig;
-import com.sf.honeymorning.security.WithJwtMockUser;
+import com.sf.honeymorning.security.weaving.WithJwtMockUser;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
 import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
 import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;

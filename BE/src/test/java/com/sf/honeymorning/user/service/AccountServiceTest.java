@@ -11,7 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
-import com.sf.honeymorning.context.DefaultIntegrationTest;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.RedisContext;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
 import com.sf.honeymorning.user.authentication.service.TokenService;
@@ -132,7 +132,7 @@ class AccountServiceTest extends DefaultIntegrationTest implements RedisContext 
 			//when
 			//then
 			assertThatThrownBy(() -> sut.login(new LoginAuthRequestDto(invalidUsername,
-				FAKE_DATA_FACTORY.internet().password())))
+				DATE_GENERATOR.internet().password())))
 				.isInstanceOf(BadCredentialsException.class);
 		}
 
@@ -146,7 +146,7 @@ class AccountServiceTest extends DefaultIntegrationTest implements RedisContext 
 			//when
 			//then
 			assertThatThrownBy(() -> sut.login(new LoginAuthRequestDto(accountSignUpRequest.username(),
-				FAKE_DATA_FACTORY.internet().password())))
+				DATE_GENERATOR.internet().password())))
 				.isInstanceOf(BadCredentialsException.class);
 		}
 	}
@@ -170,8 +170,8 @@ class AccountServiceTest extends DefaultIntegrationTest implements RedisContext 
 
 	AccountSignUpRequest createFake() {
 		return new AccountSignUpRequest(
-			FAKE_DATA_FACTORY.name().username(),
-			FAKE_DATA_FACTORY.internet().password(8, 22),
-			FAKE_DATA_FACTORY.name().title());
+			DATE_GENERATOR.name().username(),
+			DATE_GENERATOR.internet().password(8, 22),
+			DATE_GENERATOR.name().title());
 	}
 }

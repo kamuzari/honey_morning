@@ -1,4 +1,4 @@
-package com.sf.honeymorning.context;
+package com.sf.honeymorning.context.mock;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,12 +10,12 @@ import com.sf.honeymorning.user.entity.User;
 import com.sf.honeymorning.user.entity.UserRole;
 
 @ExtendWith(MockitoExtension.class)
-public class MockTestServiceEnvironment {
-	protected static final Faker FAKER_DATE_FACTORY = new Faker();
+public class MockServiceTest {
+	protected static final Faker DATE_GENERATOR = new Faker();
 	protected static final User AUTH_USER = new User(
-		FAKER_DATE_FACTORY.internet().emailAddress(),
+		DATE_GENERATOR.internet().emailAddress(),
 		"",
-		FAKER_DATE_FACTORY.name().username(),
+		DATE_GENERATOR.name().username(),
 		UserRole.ROLE_USER
 	);
 

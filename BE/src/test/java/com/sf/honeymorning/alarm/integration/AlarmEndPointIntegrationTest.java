@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
-import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
+import com.sf.honeymorning.context.integration.EndPointIntegrationTest;
 import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
 import com.sf.honeymorning.user.authentication.service.TokenService;
 import com.sf.honeymorning.user.entity.User;
@@ -33,7 +33,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.Cookie.Builder;
 import io.restassured.http.Cookies;
 
-public class AlarmEndPointIntegrationTest extends EndPointIntegrationEnvironment {
+public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest {
 
 	@Value("${jwt.access-token.header}")
 	String accessTokenHeaderName;
@@ -73,9 +73,9 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationEnvironment
 
 		authenticationUser = userRepository.saveAndFlush(
 			new User(
-				FAKE_DATA_FACTORY.internet().emailAddress(),
+				DATE_GENERATOR.internet().emailAddress(),
 				"{encrypt password}",
-				FAKE_DATA_FACTORY.name().username(),
+				DATE_GENERATOR.name().username(),
 				UserRole.ROLE_USER
 			)
 		);
@@ -108,9 +108,9 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationEnvironment
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			authUserAlarm.getId(),
 			LocalTime.now().plusHours(7),
-			FAKE_DATA_FACTORY.number().numberBetween(1, 127),
-			FAKE_DATA_FACTORY.number().numberBetween(1, 10),
-			FAKE_DATA_FACTORY.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 127),
+			DATE_GENERATOR.number().numberBetween(1, 10),
+			DATE_GENERATOR.number().numberBetween(1, 10),
 			true
 		);
 		//when

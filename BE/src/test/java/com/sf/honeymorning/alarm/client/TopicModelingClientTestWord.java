@@ -20,10 +20,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.sf.honeymorning.alarm.client.dto.TopicModelDetailResponse;
 import com.sf.honeymorning.alarm.client.dto.TopicModelingResponse;
-import com.sf.honeymorning.context.EndPointIntegrationEnvironment;
+import com.sf.honeymorning.context.integration.EndPointIntegrationTest;
 
 @AutoConfigureWireMock(port = 8089)
-class TopicModelingClientTestWord extends EndPointIntegrationEnvironment {
+class TopicModelingClientTestWord extends EndPointIntegrationTest {
 
 	static final int FIXED_RESPONSE_SECTION_SIZE = 5;
 	static final int FIXED_RESPONSE_DETAIL_WORD_SIZE = 10;
@@ -64,8 +64,8 @@ class TopicModelingClientTestWord extends EndPointIntegrationEnvironment {
 
 	private List<TopicModelDetailResponse> getRandomTopicModelDetails() {
 		return Stream.generate(
-				() -> new TopicModelDetailResponse(FAKE_DATA_FACTORY.lorem().word(),
-					FAKE_DATA_FACTORY.number().randomDouble(100, 0, 100)))
+				() -> new TopicModelDetailResponse(DATE_GENERATOR.lorem().word(),
+					DATE_GENERATOR.number().randomDouble(100, 0, 100)))
 			.limit(FIXED_RESPONSE_DETAIL_WORD_SIZE)
 			.toList();
 	}

@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.sf.honeymorning.brief.service.BriefingService;
 import com.sf.honeymorning.config.WebSecurityConfig;
-import com.sf.honeymorning.context.MockTestControllerEnvironment;
+import com.sf.honeymorning.context.mock.MockControllerTest;
 import com.sf.honeymorning.user.authentication.constant.JwtProperty;
 import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
 import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
@@ -27,7 +27,7 @@ import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
 	LoginSuccessHandler.class,
 	LogoutSuccessHandler.class,
 	JwtProperty.class})
-class BriefingControllerTest extends MockTestControllerEnvironment {
+class BriefingControllerTest extends MockControllerTest {
 	final String URI_PREFIX = "/api/briefings";
 
 	@MockBean
