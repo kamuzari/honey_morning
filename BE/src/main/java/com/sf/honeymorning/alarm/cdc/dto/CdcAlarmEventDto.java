@@ -1,6 +1,6 @@
 package com.sf.honeymorning.alarm.cdc.dto;
 
-import static com.sf.honeymorning.config.JsonConfig.*;
+import static com.sf.honeymorning.config.JsonConfig.MicrosecondToLocalDateTimeDeserializer;
 
 import java.time.LocalDateTime;
 
@@ -39,8 +39,14 @@ public class CdcAlarmEventDto {
 	@JsonDeserialize(using = MicrosecondToLocalDateTimeDeserializer.class)
 	private LocalDateTime processedAt;
 
-	public CdcAlarmEventDto(Long alarmId, Long id, String eventStatus, String eventType, String payload,
-		LocalDateTime createdAt, LocalDateTime processedAt) {
+	public CdcAlarmEventDto(Long alarmId,
+		Long id,
+		String eventStatus,
+		String eventType,
+		String payload,
+		LocalDateTime createdAt,
+		LocalDateTime processedAt) {
+
 		this.alarmId = alarmId;
 		this.id = id;
 		this.eventStatus = eventStatus;

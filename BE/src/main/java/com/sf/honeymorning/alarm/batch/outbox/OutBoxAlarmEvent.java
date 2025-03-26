@@ -1,7 +1,6 @@
 package com.sf.honeymorning.alarm.batch.outbox;
 
 import java.time.LocalDateTime;
-import java.util.StringJoiner;
 
 import org.springframework.http.MediaType;
 
@@ -61,20 +60,12 @@ public class OutBoxAlarmEvent {
 		);
 	}
 
-	public void update(EventStatus eventStatus) {
+	public void updateStatus(EventStatus eventStatus) {
+		if (EventStatus.COMPLETED.equals(eventStatus)) {
+			this.processedAt = LocalDateTime.now();
+		}
+
 		this.eventStatus = eventStatus;
 	}
 
-	@Override
-	public String toString() {
-		return new StringJoiner(", ", OutBoxAlarmEvent.class.getSimpleName() + "[", "]")
-			.add("id=" + id)
-			.add("alarmId=" + alarmId)
-			.add("eventStatus=" + eventStatus)
-			.add("eventType='" + eventType + "'")
-			.add("payload='" + payload + "'")
-			.add("createAt=" + createAt)
-			.add("processedAt=" + processedAt)
-			.toString();
-	}
 }
