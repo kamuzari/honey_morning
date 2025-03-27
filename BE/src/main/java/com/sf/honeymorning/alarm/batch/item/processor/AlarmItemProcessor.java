@@ -1,4 +1,4 @@
-package com.sf.honeymorning.alarm.batch.item;
+package com.sf.honeymorning.alarm.batch.item.processor;
 
 import org.springframework.batch.item.ItemProcessor;
 
