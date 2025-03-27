@@ -26,12 +26,12 @@ public class AlarmBatchScheduler {
 	private static final String CRON_PER_MINUTE = "0 0/1 * * * *";
 
 	private final JobLauncher jobLauncher;
-	private final Job alarmJob;
+	private final Job alarmToAlarmEventCreateJob;
 
 	@Autowired
-	public AlarmBatchScheduler(JobLauncher jobLauncher, Job alarmJob) {
+	public AlarmBatchScheduler(JobLauncher jobLauncher, Job alarmToAlarmEventCreateJob) {
 		this.jobLauncher = jobLauncher;
-		this.alarmJob = alarmJob;
+		this.alarmToAlarmEventCreateJob = alarmToAlarmEventCreateJob;
 	}
 
 	@Scheduled(cron = CRON_PER_MINUTE)
@@ -42,7 +42,7 @@ public class AlarmBatchScheduler {
 			Integer today = DayOfTheWeek.getToday();
 			log.info("start batch job start time -> {}, end time -> {}, today -> {}", startTime, endTime, today);
 
-			jobLauncher.run(alarmJob, new JobParametersBuilder()
+			jobLauncher.run(alarmToAlarmEventCreateJob, new JobParametersBuilder()
 				.addLocalDate("startAt", LocalDate.now())
 				.addLong("today", (long)today)
 				.addLocalTime("startTime", startTime)
