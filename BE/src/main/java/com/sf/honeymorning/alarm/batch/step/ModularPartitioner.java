@@ -15,10 +15,10 @@ public class ModularPartitioner implements Partitioner {
 		return IntStream.range(0, gridSize)
 			.boxed()
 			.collect(Collectors.toMap(
-				partitionSize -> "partition - " + partitionSize,
-				partitionSize -> {
+				partitionId -> "partition - " + partitionId,
+				partitionId -> {
 					ExecutionContext context = new ExecutionContext();
-					context.putInt("partitionSize", partitionSize);
+					context.putInt("partition", partitionId);
 					context.putInt("modular", gridSize);
 					return context;
 				}
