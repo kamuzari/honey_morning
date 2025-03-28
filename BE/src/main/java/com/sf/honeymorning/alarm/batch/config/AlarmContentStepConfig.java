@@ -64,14 +64,14 @@ public class AlarmContentStepConfig {
 		@Value("#{jobParameters['endTime']}") LocalTime endTime,
 		@Value("#{jobParameters['today']}") Long today,
 		@Value("#{stepExecutionContext['modular']}") Integer modular,
-		@Value("#{stepExecutionContext['partitionSize']}") Integer partitionSize
+		@Value("#{stepExecutionContext['partition']}") Integer partition
 	) {
 
 		return new JdbcPagingItemReaderBuilder<ReadyAlarmDto>()
 			.name(ALARM_TO_ALARM_EVENT_CREATE_JOB + "_reader")
 			.dataSource(dataSource)
 			.queryProvider(READ_QUERY_GENERATOR.createQuery())
-			.parameterValues(READ_QUERY_GENERATOR.getParameters(startTime, endTime, today, modular, partitionSize))
+			.parameterValues(READ_QUERY_GENERATOR.getParameters(startTime, endTime, today, modular, partition))
 			.rowMapper(READ_QUERY_GENERATOR.getRowMapper())
 			.pageSize(chunkSize)
 			.saveState(false)

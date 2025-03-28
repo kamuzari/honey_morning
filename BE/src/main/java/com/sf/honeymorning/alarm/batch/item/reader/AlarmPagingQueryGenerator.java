@@ -33,14 +33,14 @@ public class AlarmPagingQueryGenerator {
 		LocalTime endTime,
 		Long today,
 		int modular,
-		int partitionSize) {
+		int partition) {
 
 		return Map.of(
 			"startTime", startTime,
 			"endTime", endTime,
 			"dayOfWeekMask", today,
-			"partitionSize", modular,
-			"modular", partitionSize
+			"partition", partition,
+			"modular", modular
 		);
 	}
 
@@ -60,7 +60,7 @@ public class AlarmPagingQueryGenerator {
 			WHERE is_active = true
 			AND (day_of_the_weeks & :dayOfWeekMask) != 0
 			AND wake_up_time BETWEEN :startTime AND :endTime
-			AND MOD(user_id, :partitionSize) = :modular
+			AND MOD(user_id, :modular) = :partition
 			"""),
 		GROUP("GROUP BY user_id"),
 		SORT("user_id");

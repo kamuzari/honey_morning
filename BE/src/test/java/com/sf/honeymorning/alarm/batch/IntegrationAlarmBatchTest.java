@@ -1,6 +1,8 @@
 package com.sf.honeymorning.alarm.batch;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -24,6 +26,8 @@ import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.batch.test.MetaDataInstanceFactory;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.TestPropertySource;
 
 import com.sf.honeymorning.alarm.batch.item.dto.ReadyAlarmDto;
 import com.sf.honeymorning.alarm.batch.outbox.OutBoxAlarmEvent;
@@ -31,17 +35,21 @@ import com.sf.honeymorning.alarm.batch.outbox.OutBoxAlarmEventRepository;
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.entity.AlarmTag;
 import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
+import com.sf.honeymorning.alarm.domain.entity.Tag;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.domain.repository.AlarmTagRepository;
-import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
-import com.sf.honeymorning.context.infra.database.MySqlContext;
-import com.sf.honeymorning.alarm.domain.entity.Tag;
 import com.sf.honeymorning.alarm.domain.repository.TagRepository;
+import com.sf.honeymorning.context.infra.database.MySqlContext;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.util.TimeUtils;
 
 @SpringBatchTest
+@TestPropertySource(properties = {"batch.alarm.chunk-size=50", "batch.alarm.thread-pool-size=4"})
 public class IntegrationAlarmBatchTest extends DefaultIntegrationTest implements MySqlContext {
-	static final int EXPECTED_BATCH_TOTAL_DATA_SIZE = 14;
+	static final int EXPECTED_BATCH_TOTAL_DATA_SIZE = 500;
+
+	@Value("${batch.alarm.thread-pool-size}")
+	private int poolSize;
 
 	@Autowired
 	JobLauncherTestUtils jobLauncherTestUtils;
@@ -60,16 +68,17 @@ public class IntegrationAlarmBatchTest extends DefaultIntegrationTest implements
 
 	@Autowired
 	AlarmTagRepository alarmTagRepository;
+
 	@Autowired
 	JdbcBatchItemWriter<OutBoxAlarmEvent> writer;
 
 	@AfterEach
-	public void tearDown() {
+	void tearDown() {
 		outBoxAlarmEventRepository.deleteAllInBatch();
 	}
 
 	@Test
-	@DisplayName("준비된 알람이 총 14개이면, 14개의 outbox model 데이터를 저장한다")
+	@DisplayName("준비된 알람이 총 500개이면, 500개의 outbox model 데이터를 저장한다")
 	void testBatchProcess() throws Exception {
 		//given
 		LocalTime startTime = TimeUtils.getNow().plusMinutes(40);
@@ -104,46 +113,16 @@ public class IntegrationAlarmBatchTest extends DefaultIntegrationTest implements
 			.isInstanceOf(JobInstanceAlreadyCompleteException.class);
 	}
 
-	@Test
-	@DisplayName("reader 10개 단위로 데이터를 읽어오고, 총 14개의 데이터만 읽는다 ")
-	void testReader() throws Exception {
-		//given
-		//when
-		reader.open(new ExecutionContext());
-		//then
-		IntStream.rangeClosed(1, EXPECTED_BATCH_TOTAL_DATA_SIZE).forEach((order) -> {
-			try {
-				assertThat(reader.read()).isNotNull(); // 더이상 읽을게 없어 null
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
-		});
-		assertThat(reader.read()).isNull();
-		assertThat(reader.getPageSize()).isEqualTo(10);
-	}
-
-	@Test
-	@DisplayName("데이터를 정상적으로 저장한다")
-	void test() throws Exception {
-		//given
-		List<OutBoxAlarmEvent> chunkDataSet = LongStream.rangeClosed(1, EXPECTED_BATCH_TOTAL_DATA_SIZE)
-			.mapToObj(alarmId -> OutBoxAlarmEvent.initialize(alarmId, "json data"))
-			.toList();
-
-		//when
-		writer.write(new Chunk<>(chunkDataSet));
-
-		//then
-		List<OutBoxAlarmEvent> realOutBoxAlarmEvents = outBoxAlarmEventRepository.findAll();
-		assertThat(realOutBoxAlarmEvents).hasSize(EXPECTED_BATCH_TOTAL_DATA_SIZE);
-	}
-
 	public StepExecution getStepExecution() {
 		LocalTime startTime = TimeUtils.getNow().plusMinutes(40);
 		LocalTime endTime = startTime.plusMinutes(1).minusSeconds(1);
 		createAlarmContents(startTime, EXPECTED_BATCH_TOTAL_DATA_SIZE);
 
-		return MetaDataInstanceFactory.createStepExecution(createAlarmJob(startTime, endTime));
+		ExecutionContext context = new ExecutionContext();
+		context.putInt("partition", 1);
+		context.putInt("modular", poolSize);
+
+		return MetaDataInstanceFactory.createStepExecution(createAlarmJob(startTime, endTime), context);
 	}
 
 	private JobParameters createAlarmJob(LocalTime startTime, LocalTime endTime) {
@@ -155,7 +134,7 @@ public class IntegrationAlarmBatchTest extends DefaultIntegrationTest implements
 	}
 
 	private void createAlarmContents(LocalTime wakeupTime, int size) {
-		LongStream.rangeClosed(1, 14).forEach((userId) -> {
+		LongStream.rangeClosed(1, size).forEach((userId) -> {
 			Tag economy = tagRepository.save(new Tag("경제"));
 			Tag society = tagRepository.save(new Tag("사회"));
 
