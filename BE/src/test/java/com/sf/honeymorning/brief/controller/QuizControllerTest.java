@@ -24,16 +24,16 @@ import com.sf.honeymorning.brief.controller.dto.request.SelectionRequestDto;
 import com.sf.honeymorning.brief.service.QuizService;
 import com.sf.honeymorning.config.WebSecurityConfig;
 import com.sf.honeymorning.context.mock.MockControllerTest;
-import com.sf.honeymorning.user.authentication.constant.JwtProperty;
-import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
-import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
-import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
+import com.sf.honeymorning.user.adapter.in.authentication.constant.JwtProperty;
+import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
+import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
+import com.sf.honeymorning.user.adapter.in.authentication.jwt.JwtProviderManager;
 
 @WebMvcTest({QuizController.class,
 	WebSecurityConfig.class,
 	JwtProviderManager.class,
-	LoginSuccessHandler.class,
-	LogoutSuccessHandler.class,
+	AuthenticateSuccessHandler.class,
+	AuthenticateDiscardHandler.class,
 	JwtProperty.class})
 class QuizControllerTest extends MockControllerTest {
 	final String URI_PREFIX = "/api/quizzes";

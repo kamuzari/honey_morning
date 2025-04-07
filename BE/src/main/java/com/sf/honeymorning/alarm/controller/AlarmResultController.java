@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sf.honeymorning.alarm.controller.dto.request.AddAlarmResultRequestDto;
 import com.sf.honeymorning.alarm.controller.dto.response.AlarmResultResponseDto;
 import com.sf.honeymorning.alarm.service.AlarmResultService;
-import com.sf.honeymorning.user.authentication.model.JwtAuthentication;
+import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
 
 import jakarta.validation.Valid;
 

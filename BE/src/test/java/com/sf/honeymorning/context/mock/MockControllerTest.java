@@ -3,7 +3,7 @@ package com.sf.honeymorning.context.mock;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import com.sf.honeymorning.security.weaving.WithJwtMockUser;
-import com.sf.honeymorning.user.authentication.service.TokenService;
+import com.sf.honeymorning.user.adapter.in.authentication.service.TokenService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;

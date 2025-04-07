@@ -17,7 +17,7 @@ import com.sf.honeymorning.alarm.domain.repository.AlarmResultRepository;
 import com.sf.honeymorning.alarm.domain.repository.UserAlarmResultStreakRepository;
 import com.sf.honeymorning.alarm.service.mapper.AlarmResultMapper;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
-import com.sf.honeymorning.user.repository.UserRepository;
+import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
 
 @Transactional(readOnly = true)
 @Service

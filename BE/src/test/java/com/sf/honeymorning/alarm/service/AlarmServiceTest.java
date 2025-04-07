@@ -59,17 +59,17 @@ class AlarmServiceTest extends MockServiceTest {
 			true
 		);
 
-		given(alarmRepository.findByUserId(AUTH_USER.getId())).willReturn(Optional.of(previousAlarm));
+		given(alarmRepository.findByUserId(AUTH_USER_ENTITY.getId())).willReturn(Optional.of(previousAlarm));
 
 		//when
-		systemUnderTest.set(requestDto, AUTH_USER.getId());
+		systemUnderTest.set(requestDto, AUTH_USER_ENTITY.getId());
 
 		//then
 		assertThat(previousAlarm.getRepeatFrequency()).isEqualTo(requestDto.repeatFrequency());
 		assertThat(previousAlarm.getRepeatInterval()).isEqualTo(requestDto.repeatInterval());
 		assertThat(previousAlarm.isActive()).isEqualTo(requestDto.isActive());
 		assertThat(previousAlarm.getDayOfTheWeeks()).isEqualTo(requestDto.weekdays());
-		verify(alarmRepository, times(1)).findByUserId(AUTH_USER.getId());
+		verify(alarmRepository, times(1)).findByUserId(AUTH_USER_ENTITY.getId());
 	}
 
 	@Test
@@ -87,7 +87,7 @@ class AlarmServiceTest extends MockServiceTest {
 
 		//when
 		//then
-		assertThatThrownBy(() -> systemUnderTest.set(requestDto, AUTH_USER.getId()))
+		assertThatThrownBy(() -> systemUnderTest.set(requestDto, AUTH_USER_ENTITY.getId()))
 			.isInstanceOf(NotFoundResourceException.class);
 	}
 
@@ -104,9 +104,9 @@ class AlarmServiceTest extends MockServiceTest {
 			true
 		);
 
-		given(alarmRepository.findByUserId(AUTH_USER.getId())).willReturn(Optional.of(expectedMyAlarm));
+		given(alarmRepository.findByUserId(AUTH_USER_ENTITY.getId())).willReturn(Optional.of(expectedMyAlarm));
 		//when
-		AlarmResponse myAlarm = systemUnderTest.getMyAlarmWithMyTags(AUTH_USER.getId());
+		AlarmResponse myAlarm = systemUnderTest.getMyAlarmWithMyTags(AUTH_USER_ENTITY.getId());
 
 		//then
 		assertThat(myAlarm).isNotNull();
@@ -119,18 +119,18 @@ class AlarmServiceTest extends MockServiceTest {
 		LocalDateTime startAt = LocalDateTime.now();
 		Integer everyDay = Arrays.stream(DayOfTheWeek.values()).map(DayOfTheWeek::getShiftedBit)
 			.reduce(Integer::sum).orElseThrow();
-		Alarm alarm = new Alarm(AUTH_USER.getId(),
+		Alarm alarm = new Alarm(AUTH_USER_ENTITY.getId(),
 			startAt.toLocalTime().plusHours(5),
 			everyDay,
 			1,
 			1,
 			true);
-		given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER.getId())).willReturn(Optional.of(alarm));
+		given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER_ENTITY.getId())).willReturn(Optional.of(alarm));
 
 		//when
-		systemUnderTest.verifySleepMode(AUTH_USER.getId(), startAt);
+		systemUnderTest.verifySleepMode(AUTH_USER_ENTITY.getId(), startAt);
 		//then
-		verify(alarmRepository, times(1)).findByUserIdAndIsActiveTrue(AUTH_USER.getId());
+		verify(alarmRepository, times(1)).findByUserIdAndIsActiveTrue(AUTH_USER_ENTITY.getId());
 	}
 
 	@Test
@@ -140,17 +140,17 @@ class AlarmServiceTest extends MockServiceTest {
 		LocalDateTime startAt = LocalDateTime.now();
 		Integer everyDay = Arrays.stream(DayOfTheWeek.values()).map(DayOfTheWeek::getShiftedBit)
 			.reduce(Integer::sum).orElseThrow();
-		Alarm alarm = new Alarm(AUTH_USER.getId(),
+		Alarm alarm = new Alarm(AUTH_USER_ENTITY.getId(),
 			startAt.toLocalTime().plusHours(4).plusMinutes(59),
 			everyDay,
 			1,
 			1,
 			true);
-		given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER.getId())).willReturn(Optional.of(alarm));
+		given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER_ENTITY.getId())).willReturn(Optional.of(alarm));
 
 		//when
 		//then
-		Assertions.assertThatThrownBy(() -> systemUnderTest.verifySleepMode(AUTH_USER.getId(), startAt))
+		Assertions.assertThatThrownBy(() -> systemUnderTest.verifySleepMode(AUTH_USER_ENTITY.getId(), startAt))
 			.isInstanceOf(AlarmBusinessException.class);
 	}
 

@@ -45,7 +45,7 @@ class QuizServiceTest extends MockServiceTest {
     @Test
     void testAddSelections() {
         //given
-        Briefing briefing = new Briefing(AUTH_USER.getId(),
+        Briefing briefing = new Briefing(AUTH_USER_ENTITY.getId(),
                 DATE_GENERATOR.lorem().sentence(10),
                 DATE_GENERATOR.lorem().sentence(50),
                 ""
@@ -66,7 +66,7 @@ class QuizServiceTest extends MockServiceTest {
         var requestDto = new SelectionRequestDto(1L, List.of(firstSelection, secondSelection));
 
         //when
-        sut.addSelections(AUTH_USER.getId(), requestDto);
+        sut.addSelections(AUTH_USER_ENTITY.getId(), requestDto);
 
         //then
         Quiz quizResult1 = quizzes.stream().filter(quiz -> quiz.getId().equals(firstSelection.quizId()))
@@ -83,7 +83,7 @@ class QuizServiceTest extends MockServiceTest {
     @Test
     void failInvalidQuizId() {
         //given
-        Briefing briefing = new Briefing(AUTH_USER.getId(),
+        Briefing briefing = new Briefing(AUTH_USER_ENTITY.getId(),
                 DATE_GENERATOR.lorem().sentence(10),
                 DATE_GENERATOR.lorem().sentence(50),
                 ""
@@ -105,7 +105,7 @@ class QuizServiceTest extends MockServiceTest {
 
         //when
         //then
-        assertThatThrownBy(() -> sut.addSelections(AUTH_USER.getId(), requestDto))
+        assertThatThrownBy(() -> sut.addSelections(AUTH_USER_ENTITY.getId(), requestDto))
                 .isInstanceOf(BusinessException.class);
     }
 
@@ -114,7 +114,7 @@ class QuizServiceTest extends MockServiceTest {
     @ValueSource(ints = {1, 3, 4})
     void failInvalidQuizzes(int invalidQuizSize) {
         //given
-        Briefing briefing = new Briefing(AUTH_USER.getId(),
+        Briefing briefing = new Briefing(AUTH_USER_ENTITY.getId(),
                 DATE_GENERATOR.lorem().sentence(10),
                 DATE_GENERATOR.lorem().sentence(50),
                 ""
@@ -134,7 +134,7 @@ class QuizServiceTest extends MockServiceTest {
 
         //when
         //then
-        assertThatThrownBy(() -> sut.addSelections(AUTH_USER.getId(), requestDto))
+        assertThatThrownBy(() -> sut.addSelections(AUTH_USER_ENTITY.getId(), requestDto))
                 .isInstanceOf(BusinessException.class);
     }
 

@@ -56,14 +56,14 @@ class AlarmContentServiceTest extends MockServiceTest {
     void testGetPreparedAlarmContents() {
         //given
         Alarm expectedAlarm = new Alarm(
-                AUTH_USER.getId(),
+                AUTH_USER_ENTITY.getId(),
                 LocalTime.now().withSecond(0),
                 2,
                 2,
                 2,
                 true
         );
-        Briefing expectedBriefing = new Briefing(AUTH_USER.getId(),
+        Briefing expectedBriefing = new Briefing(AUTH_USER_ENTITY.getId(),
                 DATE_GENERATOR.lorem().sentence(10),
                 DATE_GENERATOR.lorem().sentence(20),
                 DATE_GENERATOR.internet().url().toLowerCase()
@@ -77,17 +77,17 @@ class AlarmContentServiceTest extends MockServiceTest {
         );
         List<Quiz> expectedQuizzes = createFakeQuiz(QuizConstraint.TOTAL_QUIZ_SIZE);
 
-        given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER.getId())).willReturn(Optional.of(expectedAlarm));
-        given(briefingRepository.findTopByUserIdOrderByCreatedAtDesc(AUTH_USER.getId())).willReturn(
+        given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER_ENTITY.getId())).willReturn(Optional.of(expectedAlarm));
+        given(briefingRepository.findTopByUserIdOrderByCreatedAtDesc(AUTH_USER_ENTITY.getId())).willReturn(
                 Optional.of(expectedBriefing));
         given(quizRepository.findByBriefing(expectedBriefing)).willReturn(expectedQuizzes);
 
         //when
-        var preparedAlarmContents = sut.getPreparedAlarmContents(AUTH_USER.getId());
+        var preparedAlarmContents = sut.getPreparedAlarmContents(AUTH_USER_ENTITY.getId());
 
         //then
-        verify(alarmRepository, times(1)).findByUserIdAndIsActiveTrue(AUTH_USER.getId());
-        verify(briefingRepository, times(1)).findTopByUserIdOrderByCreatedAtDesc(AUTH_USER.getId());
+        verify(alarmRepository, times(1)).findByUserIdAndIsActiveTrue(AUTH_USER_ENTITY.getId());
+        verify(briefingRepository, times(1)).findTopByUserIdOrderByCreatedAtDesc(AUTH_USER_ENTITY.getId());
         verify(quizRepository, times(1)).findByBriefing(expectedBriefing);
         Assertions.assertThat(preparedAlarmContents.quizVoiceUrl()).hasSize(expectedQuizzes.size());
         Assertions.assertThat(preparedAlarmContents.repeatFrequency()).isEqualTo(expectedAlarm.getRepeatFrequency());
@@ -102,14 +102,14 @@ class AlarmContentServiceTest extends MockServiceTest {
     void testCreateNotCallEvent() {
         //given
         AiResponseDto responseDto = new AiResponseDto(
-                AUTH_USER.getId(),
+                AUTH_USER_ENTITY.getId(),
                 new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
                 createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
                 createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
                 List.of("정치"),
                 "https://cdn.ycloud.com/03jidmmk39d"
         );
-        given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER.getId())).willReturn(Optional.empty());
+        given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER_ENTITY.getId())).willReturn(Optional.empty());
 
         //when
         sut.create(responseDto);
@@ -123,18 +123,18 @@ class AlarmContentServiceTest extends MockServiceTest {
     void testCreate() {
         //given
         AiResponseDto responseDto = new AiResponseDto(
-                AUTH_USER.getId(),
+                AUTH_USER_ENTITY.getId(),
                 new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
                 createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
                 createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
                 List.of("정치"),
                 "https://cdn.ycloud.com/03jidmmk39d"
         );
-        Briefing briefing = new Briefing(AUTH_USER.getId(), "test", "test", "test");
+        Briefing briefing = new Briefing(AUTH_USER_ENTITY.getId(), "test", "test", "test");
         long briefingId = 1L;
         ReflectionTestUtils.setField(briefing, "id", briefingId);
-        given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER.getId())).willReturn(
-                Optional.of(Alarm.initialize(AUTH_USER.getId())));
+        given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER_ENTITY.getId())).willReturn(
+                Optional.of(Alarm.initialize(AUTH_USER_ENTITY.getId())));
         given(alarmContentMapper.toTotalAlarmContent(responseDto)).willReturn(briefing);
         given(briefingRepository.save(briefing)).willReturn(briefing);
 

@@ -3,7 +3,7 @@ package com.sf.honeymorning.brief.controller;
 import com.sf.honeymorning.brief.controller.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.brief.controller.dto.request.SelectionRequestDto;
 import com.sf.honeymorning.brief.service.QuizService;
-import com.sf.honeymorning.user.authentication.model.JwtAuthentication;
+import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

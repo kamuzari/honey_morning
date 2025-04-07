@@ -54,7 +54,7 @@ public class BriefingServiceTest extends MockServiceTest {
 	@Test
 	void testGetDetailBriefing() {
 		//given
-		Briefing briefing = new Briefing(AUTH_USER.getId(),
+		Briefing briefing = new Briefing(AUTH_USER_ENTITY.getId(),
 			DATE_GENERATOR.lorem().sentence(10),
 			DATE_GENERATOR.lorem().word(),
 			DATE_GENERATOR.internet().url());
@@ -82,13 +82,13 @@ public class BriefingServiceTest extends MockServiceTest {
 			DATE_GENERATOR.number().randomDouble(2, 0, 20)
 		)).limit(150).toList();
 
-		given(briefingRepository.findByUserIdAndId(AUTH_USER.getId(), briefing.getId()))
+		given(briefingRepository.findByUserIdAndId(AUTH_USER_ENTITY.getId(), briefing.getId()))
 			.willReturn(Optional.of(briefing));
 		given(quizRepository.findByBriefing(briefing)).willReturn(quizzes);
 		given(topicModelWordRepository.findByBriefing(briefing)).willReturn(topicModelWords);
 
 		//when
-		BriefingDetailResponseDto briefDetailResponseDto = sut.getBrief(AUTH_USER.getId(), briefing.getId());
+		BriefingDetailResponseDto briefDetailResponseDto = sut.getBrief(AUTH_USER_ENTITY.getId(), briefing.getId());
 
 		//then
 		assertThat(briefDetailResponseDto).isNotNull();
@@ -110,12 +110,12 @@ public class BriefingServiceTest extends MockServiceTest {
 			DATE_GENERATOR.lorem().word(),
 			DATE_GENERATOR.internet().url());
 		ReflectionTestUtils.setField(briefing, "id", 1L);
-		given(briefingRepository.findByUserIdAndId(AUTH_USER.getId(), briefing.getId()))
+		given(briefingRepository.findByUserIdAndId(AUTH_USER_ENTITY.getId(), briefing.getId()))
 			.willReturn(Optional.of(briefing));
 
 		//when
 		//then
-		assertThatThrownBy(() -> sut.getBrief(AUTH_USER.getId(), briefing.getId()))
+		assertThatThrownBy(() -> sut.getBrief(AUTH_USER_ENTITY.getId(), briefing.getId()))
 			.isInstanceOf(BusinessException.class);
 		verify(briefingRepository, times(1)).findByUserIdAndId(any(), any());
 	}
