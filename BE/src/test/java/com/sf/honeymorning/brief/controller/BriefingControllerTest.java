@@ -16,16 +16,16 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.sf.honeymorning.brief.service.BriefingService;
 import com.sf.honeymorning.config.WebSecurityConfig;
 import com.sf.honeymorning.context.mock.MockControllerTest;
-import com.sf.honeymorning.user.authentication.constant.JwtProperty;
-import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
-import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
-import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
+import com.sf.honeymorning.user.adapter.in.authentication.constant.JwtProperty;
+import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
+import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
+import com.sf.honeymorning.user.adapter.in.authentication.jwt.JwtProviderManager;
 
 @WebMvcTest({BriefingController.class,
 	WebSecurityConfig.class,
 	JwtProviderManager.class,
-	LoginSuccessHandler.class,
-	LogoutSuccessHandler.class,
+	AuthenticateSuccessHandler.class,
+	AuthenticateDiscardHandler.class,
 	JwtProperty.class})
 class BriefingControllerTest extends MockControllerTest {
 	final String URI_PREFIX = "/api/briefings";

@@ -22,12 +22,12 @@ import com.sf.honeymorning.alarm.controller.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
 import com.sf.honeymorning.context.integration.EndPointIntegrationTest;
-import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
-import com.sf.honeymorning.user.authentication.service.TokenService;
-import com.sf.honeymorning.user.entity.User;
-import com.sf.honeymorning.user.entity.UserRole;
-import com.sf.honeymorning.user.repository.UserRepository;
-import com.sf.honeymorning.user.service.AccountService;
+import com.sf.honeymorning.user.adapter.in.authentication.jwt.JwtProviderManager;
+import com.sf.honeymorning.user.adapter.in.authentication.service.TokenService;
+import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
+import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
+import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
+import com.sf.honeymorning.user.application.AccountService;
 
 import io.restassured.RestAssured;
 import io.restassured.http.Cookie.Builder;
@@ -61,7 +61,7 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest {
 	@LocalServerPort
 	private int port;
 
-	User authenticationUser;
+	UserEntity authenticationUserEntity;
 	Alarm authUserAlarm;
 	String accessToken;
 	String refreshToken;
@@ -71,8 +71,8 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest {
 	public void setup() {
 		RestAssured.port = port;
 
-		authenticationUser = userRepository.saveAndFlush(
-			new User(
+		authenticationUserEntity = userRepository.saveAndFlush(
+			new UserEntity(
 				DATE_GENERATOR.internet().emailAddress(),
 				"{encrypt password}",
 				DATE_GENERATOR.name().username(),
@@ -80,13 +80,13 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest {
 			)
 		);
 		JwtProviderManager.CustomClaim claim = JwtProviderManager.CustomClaim.builder()
-			.userId(authenticationUser.getId())
-			.roles(new String[] {authenticationUser.getRole().name()})
+			.userId(authenticationUserEntity.getId())
+			.roles(new String[] {authenticationUserEntity.getRole().name()})
 			.build();
 
 		accessToken = jwtProviderManager.generateAccessToken(claim);
-		refreshToken = jwtProviderManager.generateRefreshToken(authenticationUser.getId());
-		authUserAlarm = alarmRepository.saveAndFlush(Alarm.initialize(authenticationUser.getId()));
+		refreshToken = jwtProviderManager.generateRefreshToken(authenticationUserEntity.getId());
+		authUserAlarm = alarmRepository.saveAndFlush(Alarm.initialize(authenticationUserEntity.getId()));
 		authenticationTokens = new Cookies(new Builder(accessTokenHeaderName, accessToken)
 			.setPath("/")
 			.setSameSite("lax")

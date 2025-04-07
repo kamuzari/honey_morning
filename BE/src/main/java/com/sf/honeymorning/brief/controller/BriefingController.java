@@ -10,10 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sf.honeymorning.brief.controller.dto.response.BriefHistoryResponseDto;
 import com.sf.honeymorning.brief.controller.dto.response.BriefingDetailResponseDto;
 import com.sf.honeymorning.brief.service.BriefingService;
-import com.sf.honeymorning.user.authentication.model.JwtAuthentication;
+import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
 
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RequestMapping("/api/briefings")
 @RestController

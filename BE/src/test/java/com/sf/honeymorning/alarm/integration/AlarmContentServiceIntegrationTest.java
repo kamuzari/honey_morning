@@ -42,9 +42,9 @@ import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.infra.storage.AwsS3Context;
 import com.sf.honeymorning.brief.common.QuizConstraint;
 import com.sf.honeymorning.brief.entity.Quiz;
-import com.sf.honeymorning.user.entity.User;
-import com.sf.honeymorning.user.entity.UserRole;
-import com.sf.honeymorning.user.repository.UserRepository;
+import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
+import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
+import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
 
 @AutoConfigureWireMock(port = 8089)
 class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implements MySqlContext, AwsS3Context {
@@ -86,19 +86,19 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 	@Test
 	void testCreateTotalContents() throws IOException {
 		//given
-		User user = new User(DATE_GENERATOR.name().username(),
+		UserEntity userEntity = new UserEntity(DATE_GENERATOR.name().username(),
 			DATE_GENERATOR.internet().password(10, 17),
 			DATE_GENERATOR.internet().domainName(),
 			UserRole.ROLE_USER
 		);
 
-		userRepository.save(user);
-		Alarm alarm = Alarm.initialize(user.getId());
+		userRepository.save(userEntity);
+		Alarm alarm = Alarm.initialize(userEntity.getId());
 		alarm.update(LocalTime.now(), DayOfTheWeek.getToday(), 3, 3, true);
 		alarmRepository.save(alarm);
 
 		AiResponseDto responseDto = new AiResponseDto(
-			user.getId(),
+			userEntity.getId(),
 			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
@@ -119,7 +119,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		sut.create(responseDto);
 
 		//then
-		Briefing briefing = briefingRepository.findByIdWithQuizzes(user.getId()).orElseThrow();
+		Briefing briefing = briefingRepository.findByIdWithQuizzes(userEntity.getId()).orElseThrow();
 
 		assertThat(briefing).isNotNull();
 		assertThat(briefing.getBriefingTags()).isNotNull();
@@ -134,19 +134,19 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 	@Test
 	void testCreateTotalContents2()  {
 		//given
-		User user = new User(DATE_GENERATOR.name().username(),
+		UserEntity userEntity = new UserEntity(DATE_GENERATOR.name().username(),
 			DATE_GENERATOR.internet().password(10, 17),
 			DATE_GENERATOR.internet().domainName(),
 			UserRole.ROLE_USER
 		);
 
-		userRepository.save(user);
-		Alarm alarm = Alarm.initialize(user.getId());
+		userRepository.save(userEntity);
+		Alarm alarm = Alarm.initialize(userEntity.getId());
 		alarm.update(LocalTime.now(), DayOfTheWeek.getToday(), 3, 3, true);
 		alarmRepository.save(alarm);
 
 		AiResponseDto responseDto = new AiResponseDto(
-			user.getId(),
+			userEntity.getId(),
 			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
@@ -160,7 +160,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		sut.create(responseDto);
 
 		//then
-		Briefing briefing = briefingRepository.findByIdWithQuizzes(user.getId()).orElseThrow();
+		Briefing briefing = briefingRepository.findByIdWithQuizzes(userEntity.getId()).orElseThrow();
 
 		assertThat(briefing).isNotNull();
 		assertThat(briefing.getBriefingTags()).isNotNull();

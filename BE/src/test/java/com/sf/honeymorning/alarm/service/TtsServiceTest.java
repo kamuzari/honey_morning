@@ -60,7 +60,7 @@ class TtsServiceTest extends MockServiceTest {
 		List<Quiz> createdQuizzes = createQuizzes();
 		List<TopicModelWord> createdTopicModels = createTopicModelWords();
 		Briefing savedBriefing = new Briefing(
-			AUTH_USER.getId(),
+			AUTH_USER_ENTITY.getId(),
 			DATE_GENERATOR.lorem().sentence(10),
 			DATE_GENERATOR.lorem().sentence(40),
 			DATE_GENERATOR.internet().domainName(),
@@ -104,7 +104,7 @@ class TtsServiceTest extends MockServiceTest {
 		//given
 		List<TopicModelWord> createdTopicModels = createTopicModelWords();
 		Briefing savedBriefing = new Briefing(
-			AUTH_USER.getId(),
+			AUTH_USER_ENTITY.getId(),
 			DATE_GENERATOR.lorem().sentence(10),
 			DATE_GENERATOR.lorem().sentence(40),
 			DATE_GENERATOR.internet().domainName(),
