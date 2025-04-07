@@ -13,17 +13,17 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.config.WebSecurityConfig;
-import com.sf.honeymorning.user.authentication.constant.JwtProperty;
-import com.sf.honeymorning.user.authentication.handler.LoginSuccessHandler;
-import com.sf.honeymorning.user.authentication.handler.LogoutSuccessHandler;
-import com.sf.honeymorning.user.authentication.jwt.JwtProviderManager;
-import com.sf.honeymorning.user.authentication.service.TokenService;
+import com.sf.honeymorning.user.adapter.in.authentication.constant.JwtProperty;
+import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
+import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
+import com.sf.honeymorning.user.adapter.in.authentication.jwt.JwtProviderManager;
+import com.sf.honeymorning.user.adapter.in.authentication.service.TokenService;
 
 @WebMvcTest({
 	WebSecurityConfig.class,
 	JwtProviderManager.class,
-	LoginSuccessHandler.class,
-	LogoutSuccessHandler.class,
+	AuthenticateSuccessHandler.class,
+	AuthenticateDiscardHandler.class,
 	JwtProperty.class
 })
 public class CorsTest {
@@ -34,6 +34,7 @@ public class CorsTest {
 
 	@SpyBean
 	ObjectMapper objectMapper;
+
 
 	@MockBean
 	TokenService tokenService;

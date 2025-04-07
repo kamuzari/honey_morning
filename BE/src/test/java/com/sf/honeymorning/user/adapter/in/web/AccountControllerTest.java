@@ -1,0 +1,151 @@
+package com.sf.honeymorning.user.adapter.in.web;
+
+import static com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sf.honeymorning.config.WebSecurityConfig;
+import com.sf.honeymorning.security.weaving.WithJwtMockUser;
+import com.sf.honeymorning.user.adapter.in.authentication.constant.JwtProperty;
+import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
+import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
+import com.sf.honeymorning.user.adapter.in.authentication.jwt.JwtProviderManager;
+import com.sf.honeymorning.user.adapter.in.authentication.service.TokenService;
+import com.sf.honeymorning.user.adapter.in.web.dto.request.LoginAuthRequestDto;
+import com.sf.honeymorning.user.adapter.in.web.dto.response.LoginAuthResponseDto;
+import com.sf.honeymorning.user.adapter.in.web.dto.response.LogoutAuthResponseDto;
+import com.sf.honeymorning.user.adapter.in.web.dto.response.TokenResponseDto;
+import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
+import com.sf.honeymorning.user.application.AccountService;
+
+@WebMvcTest({AccountController.class,
+	WebSecurityConfig.class,
+	JwtProviderManager.class,
+	AuthenticateSuccessHandler.class,
+	AuthenticateDiscardHandler.class,
+	JwtProperty.class})
+public class AccountControllerTest {
+
+	static final String URI_PREFIX = "/api/accounts";
+
+	@Autowired
+	protected MockMvc mockMvc;
+
+	@Autowired
+	protected ObjectMapper objectMapper;
+
+	@MockBean
+	protected TokenService tokenService;
+
+	@Autowired
+	JwtProperty jwtProperty;
+
+	@Autowired
+	AuthenticateSuccessHandler authenticateSuccessHandler;
+
+	@Autowired
+	AuthenticateDiscardHandler authenticateDiscardHandler;
+
+	@MockBean
+	AccountService accountService;
+
+	@Test
+	@DisplayName("로그인에 성공하면 인증된 사용자임을 식별하기 위한 토큰 2개를 발급받는다")
+	void testLogin() throws Exception {
+		//given
+		UserEntity existingUserEntity = new UserEntity("whyWhale", "wls3123!", "gentle", ROLE_USER);
+		var requestDto = new LoginAuthRequestDto(existingUserEntity.getUsername(), existingUserEntity.getPassword());
+
+		var accessTokenResponse = new TokenResponseDto("access-token", "access-token", 1000);
+		var refreshTokenResponse = new TokenResponseDto("refresh-token", "refresh-token", 60000);
+		var loginResponse = new LoginAuthResponseDto(accessTokenResponse, refreshTokenResponse);
+
+		given(accountService.login(requestDto)).willReturn(loginResponse);
+
+		//when
+		ResultActions perform = mockMvc.perform(
+			post(URI_PREFIX + "/login")
+				.content(objectMapper.writeValueAsString(requestDto))
+				.contentType(APPLICATION_JSON)
+		);
+
+		//then
+		verify(accountService, times(1)).login(requestDto);
+		perform.andExpect(status().isOk())
+			.andExpect(cookie().exists(loginResponse.accessToken().header()))
+			.andExpect(
+				cookie().maxAge(loginResponse.accessToken().header(),
+					(int)accessTokenResponse.expirySeconds()))
+			.andExpect(cookie().exists(loginResponse.refreshToken().header()))
+			.andExpect(
+				cookie().maxAge(loginResponse.refreshToken().header(),
+					(int)refreshTokenResponse.expirySeconds())).andReturn();
+	}
+
+	@Test
+	@WithJwtMockUser
+	@DisplayName("토큰 두개를 인증된 사용자가 로그아웃 한다.")
+	void testLogout() throws Exception {
+		//given
+		var logoutResponse = new LogoutAuthResponseDto(
+			jwtProperty.accessToken().header(),
+			jwtProperty.refreshToken().header());
+
+		given(accountService.logout(any())).willReturn(logoutResponse);
+		//when
+		ResultActions perform = mockMvc.perform(
+			delete(URI_PREFIX + "/logout")
+		);
+		//then
+		perform.andExpect(status().isOk())
+			.andExpect(cookie().exists(jwtProperty.accessToken().header()))
+			.andExpect(cookie().maxAge(jwtProperty.accessToken().header(), 0))
+			.andExpect(cookie().exists(jwtProperty.refreshToken().header()))
+			.andExpect(cookie().maxAge(jwtProperty.refreshToken().header(), 0));
+		verify(accountService, times(1)).logout(any());
+	}
+
+	@DisplayName("아이디 또는 비밀번호가 유효하지 않다면 실패한다.")
+	@ParameterizedTest(name = "{index}: username: {0} | encodingPassword: {1}")
+	@CsvSource(value = {
+		"'',paswword",
+		"'username',''",
+		"'username','      '",
+		"'       ','encodingPassword'"})
+	void failNotProperArguments(String username, String password) throws Exception {
+		//given
+		LoginAuthRequestDto loginRequest = new LoginAuthRequestDto(username, password);
+		String requestBody = objectMapper.writeValueAsString(loginRequest);
+		//when
+		ResultActions perform = mockMvc.perform(
+			post(URI_PREFIX + "/login")
+				.content(requestBody)
+				.contentType(APPLICATION_JSON));
+		//then
+		perform.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@DisplayName("인증되지 않는 사용자가 로그아웃을 하면 실패한다.")
+	void failLogoutWithNotAuthenticationUser() throws Exception {
+		//given
+		//when
+		ResultActions perform = mockMvc.perform(delete(URI_PREFIX + "/logout"));
+		//then
+		perform.andExpect(status().isUnauthorized());
+	}
+}

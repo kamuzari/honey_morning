@@ -1,0 +1,12 @@
+package com.sf.honeymorning.user.adapter.in.web.dto.response;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+public record LoginAuthResponseDto(
+	@JsonIgnore
+	TokenResponseDto accessToken,
+
+	@JsonIgnore
+	TokenResponseDto refreshToken
+) {
+}
