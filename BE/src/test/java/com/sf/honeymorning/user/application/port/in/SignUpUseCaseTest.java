@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import com.sf.honeymorning.alarm.domain.entity.Alarm;
 import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
@@ -35,7 +34,7 @@ class SignUpUseCaseTest extends DefaultIntegrationTest implements MySqlContext {
 		var accountSignUpRequest = createFake();
 
 		//when
-		sut.process(accountSignUpRequest);
+		sut.register(accountSignUpRequest);
 
 		UserEntity signUpedUserEntity = userRepository.findByUsername(accountSignUpRequest.username()).orElseThrow();
 		Alarm alarm = alarmRepository.findByUserId(signUpedUserEntity.getId()).orElseThrow();
@@ -54,11 +53,11 @@ class SignUpUseCaseTest extends DefaultIntegrationTest implements MySqlContext {
 	void failSignUpDuplicateUsername() {
 		//given
 		var accountSignUpRequest = createFake();
-		sut.process(accountSignUpRequest);
+		sut.register(accountSignUpRequest);
 
 		//when
 		//then
-		assertThatThrownBy(() -> sut.process(accountSignUpRequest))
+		assertThatThrownBy(() -> sut.register(accountSignUpRequest))
 			.isInstanceOf(BusinessException.class);
 	}
 
@@ -70,9 +69,11 @@ class SignUpUseCaseTest extends DefaultIntegrationTest implements MySqlContext {
 		void testUsableFalse() {
 			//given
 			var accountSignUpRequest = createFake();
-			sut.process(accountSignUpRequest);
+			sut.register(accountSignUpRequest);
+
 			//when
 			boolean usable = sut.isUsable(accountSignUpRequest.username());
+
 			//then
 			assertThat(usable).isFalse();
 		}
@@ -82,8 +83,10 @@ class SignUpUseCaseTest extends DefaultIntegrationTest implements MySqlContext {
 		void testUsableTrue() {
 			//given
 			var accountSignUpRequest = createFake();
+
 			//when
 			boolean usable = sut.isUsable(accountSignUpRequest.username());
+
 			//then
 			assertThat(usable).isTrue();
 		}

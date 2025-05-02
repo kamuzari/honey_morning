@@ -12,27 +12,28 @@ import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
 import com.sf.honeymorning.user.adapter.out.persistence.mapper.AccountMappers;
 import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
+import com.sf.honeymorning.user.application.domain.AuthenticateAccount;
 import com.sf.honeymorning.user.application.port.out.LoadAccountPort;
 import com.sf.honeymorning.user.application.port.out.ViolateAccountPort;
 import com.sf.honeymorning.user.application.port.out.WriteAccountPort;
-import com.sf.honeymorning.user.application.domain.AuthenticateAccount;
 
 @Transactional(readOnly = true)
 @Component
 class PersistenceAdapter implements LoadAccountPort, ViolateAccountPort, WriteAccountPort {
 	private final UserRepository userRepository;
 	private final AlarmRepository alarmRepository;
-
 	private final AccountMappers accountMapper;
 
-	public PersistenceAdapter(AccountMappers accountMapper, UserRepository userRepository,
+	public PersistenceAdapter(
+		AccountMappers accountMapper,
+		UserRepository userRepository,
 		AlarmRepository alarmRepository) {
+
 		this.accountMapper = accountMapper;
 		this.userRepository = userRepository;
 		this.alarmRepository = alarmRepository;
 	}
 
-	@Override
 	public AuthenticateAccount getAccount(String username) {
 		UserEntity user = userRepository.findByUsername(username)
 			.orElseThrow(() -> new BadCredentialsException("authentication error"));
@@ -40,19 +41,17 @@ class PersistenceAdapter implements LoadAccountPort, ViolateAccountPort, WriteAc
 		return accountMapper.toAccount(user);
 	}
 
-	@Override
 	public void duplicate(String username) {
 		if (userRepository.existsByUsername(username)) {
 			throw new BusinessException("중복된 이메일로 회원가입을 할 수 없습니다.", ErrorProtocol.POLICY_VIOLATION);
 		}
 	}
 
-	@Override
 	public boolean isExist(String username) {
 		return userRepository.existsByUsername(username);
 	}
 
-	@Override
+	@Transactional
 	public void create(String username, String encryptedPassword, String nickName) {
 		UserEntity savedUser = userRepository.save(new UserEntity(
 			username,
