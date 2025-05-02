@@ -1,6 +1,6 @@
 package com.sf.honeymorning.user.adapter.in.web.handler;
 
-import static org.springframework.http.HttpHeaders.*;
+import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;

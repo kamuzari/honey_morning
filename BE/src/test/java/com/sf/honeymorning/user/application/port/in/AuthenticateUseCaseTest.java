@@ -2,7 +2,6 @@ package com.sf.honeymorning.user.application.port.in;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -41,7 +40,7 @@ class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisCon
 	void testLogin() {
 		//given
 		var accountSignUpRequest = createFake();
-		signUpUseCase.process(accountSignUpRequest);
+		signUpUseCase.register(accountSignUpRequest);
 
 		//when
 		LoginAuthResponseDto loginResponse = sut.login(new LoginAuthRequestDto(accountSignUpRequest.username(),
@@ -78,7 +77,7 @@ class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisCon
 		void failNotMatchPassword() {
 			//given
 			var accountSignUpRequest = createFake();
-			signUpUseCase.process(accountSignUpRequest);
+			signUpUseCase.register(accountSignUpRequest);
 
 			//when
 			//then
@@ -93,7 +92,7 @@ class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisCon
 	void testLogout() {
 		//given
 		var accountSignUpRequest = createFake();
-		signUpUseCase.process(accountSignUpRequest);
+		signUpUseCase.register(accountSignUpRequest);
 		sut.login(new LoginAuthRequestDto(accountSignUpRequest.username(), accountSignUpRequest.rawPassword()));
 		UserEntity removalRefreshTokenUserEntity = userRepository.findByUsername(accountSignUpRequest.username()).orElseThrow();
 

@@ -57,8 +57,8 @@ public class WebSecurityConfig {
 			.requestMatchers(HttpMethod.GET, this.getIgnoringUrl(HttpMethod.GET))
 			.requestMatchers(HttpMethod.POST, this.getIgnoringUrl(HttpMethod.POST))
 			.requestMatchers(HttpMethod.PATCH, this.getIgnoringUrl(HttpMethod.PATCH))
-			.requestMatchers(HttpMethod.DELETE, this.getIgnoringUrl(HttpMethod.PUT))
-			.requestMatchers(HttpMethod.PUT, this.getIgnoringUrl(HttpMethod.DELETE))
+			.requestMatchers(HttpMethod.DELETE, this.getIgnoringUrl(HttpMethod.DELETE))
+			.requestMatchers(HttpMethod.PUT, this.getIgnoringUrl(HttpMethod.PUT))
 			.requestMatchers(PathRequest.toStaticResources().atCommonLocations());
 	}
 

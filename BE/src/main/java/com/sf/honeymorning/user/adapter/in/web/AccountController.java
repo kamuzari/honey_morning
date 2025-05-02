@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
 import com.sf.honeymorning.user.adapter.in.web.dto.request.AccountSignUpRequest;
 import com.sf.honeymorning.user.adapter.in.web.dto.request.LoginAuthRequestDto;
 import com.sf.honeymorning.user.adapter.in.web.dto.response.LogoutAuthResponseDto;
+import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
+import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
 import com.sf.honeymorning.user.application.port.in.AuthenticateUseCase;
 import com.sf.honeymorning.user.application.port.in.SignUpUseCase;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
-import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -49,7 +49,7 @@ public class AccountController {
 		@RequestBody
 		AccountSignUpRequest accountSignUpRequest) {
 
-		signUpUseCase.process(accountSignUpRequest);
+		signUpUseCase.register(accountSignUpRequest);
 	}
 
 	@GetMapping("/check")

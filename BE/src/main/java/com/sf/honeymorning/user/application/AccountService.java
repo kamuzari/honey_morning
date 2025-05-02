@@ -52,7 +52,7 @@ public class AccountService implements SignUpUseCase, AuthenticateUseCase {
 	}
 
 	@Transactional
-	public void process(AccountSignUpRequest requestDto) {
+	public void register(AccountSignUpRequest requestDto) {
 		violateAccountPort.duplicate(requestDto.username());
 		writeAccountPort.create(requestDto.username(),
 			passwordEncoder.encode(requestDto.rawPassword()),
@@ -62,14 +62,17 @@ public class AccountService implements SignUpUseCase, AuthenticateUseCase {
 	public LoginAuthResponseDto login(LoginAuthRequestDto loginDto) {
 		var authenticateAccount = loadAccountPort.getAccount(loginDto.username());
 
-		boolean isMatchCredential = passwordEncoder.matches(loginDto.password(),
-			authenticateAccount.encryptedPassword());
+		boolean isMatchCredential = passwordEncoder.matches(
+			loginDto.password(),
+			authenticateAccount.encryptedPassword()
+		);
 		if (!isMatchCredential) {
 			throw new BadCredentialsException("authentication error");
 		}
 
 		var accessToken = tokenGeneratePort.generateAccessToken(authenticateAccount.id(), authenticateAccount.role());
 		var refreshToken = tokenGeneratePort.generateRefreshToken(authenticateAccount.id());
+
 		return accountServiceMapper.toLoginResponse(accessToken, refreshToken, jwtProperty);
 	}
 
