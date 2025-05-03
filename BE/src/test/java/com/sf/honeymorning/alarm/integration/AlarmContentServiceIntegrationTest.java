@@ -34,14 +34,14 @@ import com.sf.honeymorning.alarm.service.dto.response.AiBriefingDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
-import com.sf.honeymorning.brief.entity.Briefing;
-import com.sf.honeymorning.brief.repository.BriefingRepository;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
+import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.config.constant.AwsS3Properties;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.infra.storage.AwsS3Context;
 import com.sf.honeymorning.brief.common.QuizConstraint;
-import com.sf.honeymorning.brief.entity.Quiz;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
 import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
@@ -119,15 +119,15 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		sut.create(responseDto);
 
 		//then
-		Briefing briefing = briefingRepository.findByIdWithQuizzes(userEntity.getId()).orElseThrow();
+		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(userEntity.getId()).orElseThrow();
 
-		assertThat(briefing).isNotNull();
-		assertThat(briefing.getBriefingTags()).isNotNull();
-		assertThat(briefing.getSummaryText()).isEqualTo(responseDto.aiBriefings().voiceContent());
-		assertThat(briefing.getText()).isEqualTo(responseDto.aiBriefings().readContent());
-		assertThat(briefing.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
-		assertThat(briefing.getWakeUpBriefingContent()).isNotNull();
-		assertThat(briefing.getQuizzes().stream().map(Quiz::getWakeUpQuizContent).toList()).hasSize(2);
+		assertThat(briefingEntity).isNotNull();
+		assertThat(briefingEntity.getBriefingTagEntities()).isNotNull();
+		assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().voiceContent());
+		assertThat(briefingEntity.getText()).isEqualTo(responseDto.aiBriefings().readContent());
+		assertThat(briefingEntity.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
+		assertThat(briefingEntity.getWakeUpBriefingContent()).isNotNull();
+		assertThat(briefingEntity.getQuizEntities().stream().map(QuizEntity::getWakeUpQuizContent).toList()).hasSize(2);
 	}
 
 	@DisplayName("이벤트를 발행하고 리스너에서 예외가 나도 일부 데이터는 저장된다")
@@ -160,15 +160,15 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		sut.create(responseDto);
 
 		//then
-		Briefing briefing = briefingRepository.findByIdWithQuizzes(userEntity.getId()).orElseThrow();
+		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(userEntity.getId()).orElseThrow();
 
-		assertThat(briefing).isNotNull();
-		assertThat(briefing.getBriefingTags()).isNotNull();
-		assertThat(briefing.getSummaryText()).isEqualTo(responseDto.aiBriefings().voiceContent());
-		assertThat(briefing.getText()).isEqualTo(responseDto.aiBriefings().readContent());
-		assertThat(briefing.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
-		assertThat(briefing.getWakeUpBriefingContent()).isNull();
-		briefing.getQuizzes().forEach(quiz -> assertThat(quiz.getWakeUpQuizContent()).isNull());
+		assertThat(briefingEntity).isNotNull();
+		assertThat(briefingEntity.getBriefingTagEntities()).isNotNull();
+		assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().voiceContent());
+		assertThat(briefingEntity.getText()).isEqualTo(responseDto.aiBriefings().readContent());
+		assertThat(briefingEntity.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
+		assertThat(briefingEntity.getWakeUpBriefingContent()).isNull();
+		briefingEntity.getQuizEntities().forEach(quiz -> assertThat(quiz.getWakeUpQuizContent()).isNull());
 	}
 
 	List<AiTopicDto> createFakeAiTopicDtos(int size) {

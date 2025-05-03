@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sf.honeymorning.alarm.service.client.TtsClientService;
-import com.sf.honeymorning.brief.entity.Briefing;
-import com.sf.honeymorning.brief.repository.BriefingRepository;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
+import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.common.entity.content.AccessAuthority;
 import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
@@ -40,28 +40,28 @@ public class TtsService {
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void create(Long briefingId) {
-		Briefing briefing = briefingRepository.findByIdWithQuizzes(briefingId).orElseThrow(() -> new BusinessException(
+		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(briefingId).orElseThrow(() -> new BusinessException(
 			MessageFormat.format("브리핑 데이터가 반드시 존재해야 합니다. briefingId : {0}", briefingId),
 			ErrorProtocol.BUSINESS_VIOLATION
 		));
-		addBriefingContent(briefing);
-		addQuizContents(briefing);
+		addBriefingContent(briefingEntity);
+		addQuizContents(briefingEntity);
 	}
 
-	private void addBriefingContent(Briefing briefing) {
-		Content content = createContent(briefing.getSummaryText(), FileType.BRIEFING);
-		briefing.addWakeUpBriefingContent(content);
+	private void addBriefingContent(BriefingEntity briefingEntity) {
+		Content content = createContent(briefingEntity.getSummaryText(), FileType.BRIEFING);
+		briefingEntity.addWakeUpBriefingContent(content);
 	}
 
-	private void addQuizContents(Briefing briefing) {
-		if (briefing.isEmptyQuizzes()) {
+	private void addQuizContents(BriefingEntity briefingEntity) {
+		if (briefingEntity.isEmptyQuizzes()) {
 			throw new BusinessException(
-				MessageFormat.format("브리핑 데이터가 반드시 존재해야 합니다. briefing : {0}", briefing),
+				MessageFormat.format("브리핑 데이터가 반드시 존재해야 합니다. briefing : {0}", briefingEntity),
 				ErrorProtocol.BUSINESS_VIOLATION
 			);
 		}
 
-		briefing.getQuizzes().forEach(quiz -> {
+		briefingEntity.getQuizEntities().forEach(quiz -> {
 				Content content = createContent(quiz.getProblem(), FileType.QUIZ);
 				quiz.addQuizContent(content);
 			});
