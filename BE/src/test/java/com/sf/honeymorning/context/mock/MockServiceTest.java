@@ -1,6 +1,5 @@
 package com.sf.honeymorning.context.mock;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -19,8 +18,7 @@ public class MockServiceTest {
 		UserRole.ROLE_USER
 	);
 
-	@BeforeEach
-	public void setUp() {
+	static {
 		ReflectionTestUtils.setField(AUTH_USER_ENTITY, "id", 1L);
 	}
 }

@@ -1,0 +1,28 @@
+package com.sf.honeymorning.brief.adapter.out.persistence.repository;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
+
+public interface BriefingRepository extends JpaRepository<BriefingEntity, Long> {
+	Page<BriefingEntity> findByUserId(Long userId, Pageable pageable);
+
+	Optional<BriefingEntity> findByUserIdAndId(Long userId, Long id);
+
+	@Query("SELECT b FROM BriefingEntity b WHERE b.userId= :user AND b.createdAt >= :startOfDay AND b.createdAt < :endOfDay")
+	Optional<BriefingEntity> findByUserAndCreatedAtToday(@Param("user") Long userId,
+		@Param("startOfDay") LocalDateTime startOfDay,
+		@Param("endOfDay") LocalDateTime endOfDay);
+
+	Optional<BriefingEntity> findTopByUserIdOrderByCreatedAtDesc(Long userId);
+
+	@Query("SELECT b FROM BriefingEntity b join fetch b.quizEntities WHERE b.id= :briefingId")
+	Optional<BriefingEntity> findByIdWithQuizzes(@Param("briefingId") Long briefingId);
+}

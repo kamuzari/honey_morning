@@ -7,15 +7,15 @@ import com.sf.honeymorning.alarm.service.dto.response.AiQuizDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.alarm.service.dto.response.AiTopicDto;
 import com.sf.honeymorning.alarm.service.mapper.AlarmContentMapper;
-import com.sf.honeymorning.brief.entity.Briefing;
-import com.sf.honeymorning.brief.repository.BriefingRepository;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
+import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.common.entity.content.AccessAuthority;
 import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
 import com.sf.honeymorning.context.mock.MockServiceTest;
 import com.sf.honeymorning.brief.common.QuizConstraint;
-import com.sf.honeymorning.brief.entity.Quiz;
-import com.sf.honeymorning.brief.repository.QuizRepository;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
+import com.sf.honeymorning.brief.adapter.out.persistence.repository.QuizRepository;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -63,24 +63,24 @@ class AlarmContentServiceTest extends MockServiceTest {
                 2,
                 true
         );
-        Briefing expectedBriefing = new Briefing(AUTH_USER_ENTITY.getId(),
+        BriefingEntity expectedBriefingEntity = new BriefingEntity(AUTH_USER_ENTITY.getId(),
                 DATE_GENERATOR.lorem().sentence(10),
                 DATE_GENERATOR.lorem().sentence(20),
                 DATE_GENERATOR.internet().url().toLowerCase()
         );
-        expectedBriefing.addWakeUpBriefingContent(new Content(
+        expectedBriefingEntity.addWakeUpBriefingContent(new Content(
                 DATE_GENERATOR.internet().domainName(),
                 (long) DATE_GENERATOR.number().numberBetween(1000, 100_000),
                 FileType.BRIEFING,
                 DATE_GENERATOR.internet().url().toLowerCase(),
                 AccessAuthority.PART_ALLOWED)
         );
-        List<Quiz> expectedQuizzes = createFakeQuiz(QuizConstraint.TOTAL_QUIZ_SIZE);
+        List<QuizEntity> expectedQuizzes = createFakeQuiz(QuizConstraint.TOTAL_QUIZ_SIZE);
 
         given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER_ENTITY.getId())).willReturn(Optional.of(expectedAlarm));
         given(briefingRepository.findTopByUserIdOrderByCreatedAtDesc(AUTH_USER_ENTITY.getId())).willReturn(
-                Optional.of(expectedBriefing));
-        given(quizRepository.findByBriefing(expectedBriefing)).willReturn(expectedQuizzes);
+                Optional.of(expectedBriefingEntity));
+        given(quizRepository.findByBriefingEntity(expectedBriefingEntity)).willReturn(expectedQuizzes);
 
         //when
         var preparedAlarmContents = sut.getPreparedAlarmContents(AUTH_USER_ENTITY.getId());
@@ -88,13 +88,13 @@ class AlarmContentServiceTest extends MockServiceTest {
         //then
         verify(alarmRepository, times(1)).findByUserIdAndIsActiveTrue(AUTH_USER_ENTITY.getId());
         verify(briefingRepository, times(1)).findTopByUserIdOrderByCreatedAtDesc(AUTH_USER_ENTITY.getId());
-        verify(quizRepository, times(1)).findByBriefing(expectedBriefing);
+        verify(quizRepository, times(1)).findByBriefingEntity(expectedBriefingEntity);
         Assertions.assertThat(preparedAlarmContents.quizVoiceUrl()).hasSize(expectedQuizzes.size());
         Assertions.assertThat(preparedAlarmContents.repeatFrequency()).isEqualTo(expectedAlarm.getRepeatFrequency());
         Assertions.assertThat(preparedAlarmContents.repeatInterval()).isEqualTo(expectedAlarm.getRepeatInterval());
         Assertions.assertThat(preparedAlarmContents.wakeUpTime()).isEqualTo(expectedAlarm.getWakeUpTime());
         Assertions.assertThat(preparedAlarmContents.briefingVoiceUrl()).isEqualTo(
-                expectedBriefing.getWakeUpBriefingContent().getFileUrl());
+                expectedBriefingEntity.getWakeUpBriefingContent().getFileUrl());
     }
 
     @DisplayName("사용자가 알람이 울리기전 설정에서 알람을 비활성화 한다면, 알람 콘텐츠는 저장되지 않으며, 이벤트를 호출하지 않는다")
@@ -130,19 +130,19 @@ class AlarmContentServiceTest extends MockServiceTest {
                 List.of("정치"),
                 "https://cdn.ycloud.com/03jidmmk39d"
         );
-        Briefing briefing = new Briefing(AUTH_USER_ENTITY.getId(), "test", "test", "test");
+        BriefingEntity briefingEntity = new BriefingEntity(AUTH_USER_ENTITY.getId(), "test", "test", "test");
         long briefingId = 1L;
-        ReflectionTestUtils.setField(briefing, "id", briefingId);
+        ReflectionTestUtils.setField(briefingEntity, "id", briefingId);
         given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER_ENTITY.getId())).willReturn(
                 Optional.of(Alarm.initialize(AUTH_USER_ENTITY.getId())));
-        given(alarmContentMapper.toTotalAlarmContent(responseDto)).willReturn(briefing);
-        given(briefingRepository.save(briefing)).willReturn(briefing);
+        given(alarmContentMapper.toTotalAlarmContent(responseDto)).willReturn(briefingEntity);
+        given(briefingRepository.save(briefingEntity)).willReturn(briefingEntity);
 
         //when
         sut.create(responseDto);
         //then
         verify(alarmContentMapper, times(1)).toTotalAlarmContent(responseDto);
-        verify(briefingRepository, times(1)).save(briefing);
+        verify(briefingRepository, times(1)).save(briefingEntity);
     }
 
     private List<AiTopicDto> createFakeAiTopicDtos(int size) {
@@ -165,8 +165,8 @@ class AlarmContentServiceTest extends MockServiceTest {
                 .toList();
     }
 
-    private List<Quiz> createFakeQuiz(int size) {
-        List<Quiz> quizzes = Stream.generate(() -> new Quiz(
+    private List<QuizEntity> createFakeQuiz(int size) {
+        List<QuizEntity> quizEntities = Stream.generate(() -> new QuizEntity(
                         DATE_GENERATOR.lorem().sentence(2),
                         1,
                         Stream.generate(() -> DATE_GENERATOR.lorem().word())
@@ -185,6 +185,6 @@ class AlarmContentServiceTest extends MockServiceTest {
                     return quiz;
                 })
                 .toList();
-        return quizzes;
+        return quizEntities;
     }
 }

@@ -22,15 +22,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.sf.honeymorning.alarm.service.client.TtsClientService;
-import com.sf.honeymorning.brief.entity.Briefing;
-import com.sf.honeymorning.brief.entity.BriefingTag;
-import com.sf.honeymorning.brief.entity.TopicModelWord;
-import com.sf.honeymorning.brief.repository.BriefingRepository;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
+import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.context.mock.MockServiceTest;
 import com.sf.honeymorning.brief.common.QuizConstraint;
-import com.sf.honeymorning.brief.entity.Quiz;
-import com.sf.honeymorning.brief.repository.QuizRepository;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
+import com.sf.honeymorning.brief.adapter.out.persistence.repository.QuizRepository;
 
 class TtsServiceTest extends MockServiceTest {
 
@@ -57,14 +57,14 @@ class TtsServiceTest extends MockServiceTest {
 	@Test
 	void testCreateTts() throws IOException {
 		//given
-		List<Quiz> createdQuizzes = createQuizzes();
+		List<QuizEntity> createdQuizzes = createQuizzes();
 		List<TopicModelWord> createdTopicModels = createTopicModelWords();
-		Briefing savedBriefing = new Briefing(
+		BriefingEntity savedBriefingEntity = new BriefingEntity(
 			AUTH_USER_ENTITY.getId(),
 			DATE_GENERATOR.lorem().sentence(10),
 			DATE_GENERATOR.lorem().sentence(40),
 			DATE_GENERATOR.internet().domainName(),
-			List.of(new BriefingTag(DATE_GENERATOR.lorem().word())),
+			List.of(new BriefingTagEntity(DATE_GENERATOR.lorem().word())),
 			createdQuizzes,
 			createdTopicModels
 		);
@@ -76,7 +76,7 @@ class TtsServiceTest extends MockServiceTest {
 
 		var expectExteriorResponse = new ResponseEntity<>(resource, headers, HttpStatus.CREATED);
 
-		given(briefingRepository.findByIdWithQuizzes(anyLong())).willReturn(Optional.of(savedBriefing));
+		given(briefingRepository.findByIdWithQuizzes(anyLong())).willReturn(Optional.of(savedBriefingEntity));
 		given(ttsClientService.create(anyString())).willReturn(expectExteriorResponse);
 		doNothing().when(contentStoreService).upload(anyString(), any(), anyLong(), anyString());
 
@@ -84,8 +84,8 @@ class TtsServiceTest extends MockServiceTest {
 		ttsService.create(1L);
 
 		//then
-		assertThat(savedBriefing.getWakeUpBriefingContent()).isNotNull();
-		assertThat(savedBriefing.getQuizzes().stream().map(Quiz::getWakeUpQuizContent).toList()).isNotNull();
+		assertThat(savedBriefingEntity.getWakeUpBriefingContent()).isNotNull();
+		assertThat(savedBriefingEntity.getQuizEntities().stream().map(QuizEntity::getWakeUpQuizContent).toList()).isNotNull();
 	}
 
 	@DisplayName("브리핑 데이터가 존재하지 않으면 비즈니스예외가 발생한다")
@@ -103,12 +103,12 @@ class TtsServiceTest extends MockServiceTest {
 	void failNotExistQuizzes() throws IOException {
 		//given
 		List<TopicModelWord> createdTopicModels = createTopicModelWords();
-		Briefing savedBriefing = new Briefing(
+		BriefingEntity savedBriefingEntity = new BriefingEntity(
 			AUTH_USER_ENTITY.getId(),
 			DATE_GENERATOR.lorem().sentence(10),
 			DATE_GENERATOR.lorem().sentence(40),
 			DATE_GENERATOR.internet().domainName(),
-			List.of(new BriefingTag(DATE_GENERATOR.lorem().word())),
+			List.of(new BriefingTagEntity(DATE_GENERATOR.lorem().word())),
 			List.of(),
 			createdTopicModels
 		);
@@ -119,7 +119,7 @@ class TtsServiceTest extends MockServiceTest {
 		headers.set(CONTENT_TYPE, "audio/mpeg");
 		var expectExteriorResponse = new ResponseEntity<>(resource, headers, HttpStatus.CREATED);
 
-		given(briefingRepository.findByIdWithQuizzes(anyLong())).willReturn(Optional.of(savedBriefing));
+		given(briefingRepository.findByIdWithQuizzes(anyLong())).willReturn(Optional.of(savedBriefingEntity));
 		given(ttsClientService.create(anyString())).willReturn(expectExteriorResponse);
 		doNothing().when(contentStoreService).upload(anyString(), any(), anyLong(), anyString());
 		//when
@@ -128,8 +128,8 @@ class TtsServiceTest extends MockServiceTest {
 			.isInstanceOf(BusinessException.class);
 	}
 
-	List<Quiz> createQuizzes() {
-		return Stream.generate(() -> new Quiz(
+	List<QuizEntity> createQuizzes() {
+		return Stream.generate(() -> new QuizEntity(
 				DATE_GENERATOR.lorem().sentence(2),
 				1,
 				Stream.generate(() -> DATE_GENERATOR.lorem().word())
