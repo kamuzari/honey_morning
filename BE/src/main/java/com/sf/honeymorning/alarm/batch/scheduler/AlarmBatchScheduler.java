@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
+import com.sf.honeymorning.alarm.adapter.out.persistence.entity.DayOfTheWeek;
 import com.sf.honeymorning.common.exception.alarm.ReadyAlramBatchException;
 import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
 import com.sf.honeymorning.util.TimeUtils;

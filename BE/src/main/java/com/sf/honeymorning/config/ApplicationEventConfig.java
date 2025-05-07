@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.sf.honeymorning.common.event.service.EventsProducer;
+import com.sf.honeymorning.common.event.producer.EventDispatcherHandler;
 
 @Configuration
 public class ApplicationEventConfig {
@@ -17,6 +17,6 @@ public class ApplicationEventConfig {
 
 	@Bean
 	public InitializingBean initializeEvents() {
-		return () -> EventsProducer.setPublisher(applicationContext);
+		return () -> EventDispatcherHandler.setPublisher(applicationContext);
 	}
 }
