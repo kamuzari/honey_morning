@@ -18,7 +18,7 @@ import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@EnableFeignClients(basePackages = "com.sf.honeymorning.alarm.client")
+@EnableFeignClients(basePackages = "com.sf.honeymorning.*")
 @Configuration
 public class FeignConfig {
 

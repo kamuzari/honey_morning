@@ -5,7 +5,7 @@ import org.springframework.batch.item.ItemProcessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.alarm.batch.item.dto.ReadyAlarmDto;
 import com.sf.honeymorning.alarm.batch.outbox.OutBoxAlarmEvent;
-import com.sf.honeymorning.alarm.service.dto.request.ToAIRequestDto;
+import com.sf.honeymorning.alarm.batch.item.dto.ToAIRequestDto;
 
 public class AlarmItemProcessor implements ItemProcessor<ReadyAlarmDto, OutBoxAlarmEvent> {
 

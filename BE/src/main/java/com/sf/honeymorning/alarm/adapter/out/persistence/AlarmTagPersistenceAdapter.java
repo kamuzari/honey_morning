@@ -1,0 +1,92 @@
+package com.sf.honeymorning.alarm.adapter.out.persistence;
+
+import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.BUSINESS_VIOLATION;
+import static java.text.MessageFormat.format;
+
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import com.sf.honeymorning.alarm.adapter.in.web.dto.response.AlarmTagResponseDto;
+import com.sf.honeymorning.alarm.adapter.in.web.port.out.AlarmTagQueryPort;
+import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
+import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmTagEntity;
+import com.sf.honeymorning.alarm.adapter.out.persistence.entity.TagEntity;
+import com.sf.honeymorning.alarm.adapter.out.persistence.mapper.AlarmTagPersistenceMapper;
+import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
+import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmTagRepository;
+import com.sf.honeymorning.alarm.adapter.out.persistence.repository.TagRepository;
+import com.sf.honeymorning.alarm.application.port.out.CommandAlarmTagPort;
+import com.sf.honeymorning.alarm.application.port.out.ValidationAlarmTagPort;
+import com.sf.honeymorning.common.exception.model.BusinessException;
+import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
+
+@Component
+public class AlarmTagPersistenceAdapter implements AlarmTagQueryPort, ValidationAlarmTagPort, CommandAlarmTagPort {
+	private final AlarmRepository alarmRepository;
+	private final TagRepository tagRepository;
+	private final AlarmTagRepository alarmTagRepository;
+	private final AlarmTagPersistenceMapper alarmTagPersistenceMapper;
+
+	public AlarmTagPersistenceAdapter(
+		AlarmRepository alarmRepository,
+		AlarmTagRepository alarmTagRepository,
+		AlarmTagPersistenceMapper alarmTagPersistenceMapper,
+		TagRepository tagRepository) {
+
+		this.alarmRepository = alarmRepository;
+		this.alarmTagPersistenceMapper = alarmTagPersistenceMapper;
+		this.alarmTagRepository = alarmTagRepository;
+		this.tagRepository = tagRepository;
+	}
+
+	public List<AlarmTagResponseDto> getMyAlarmTags(Long userId) {
+		AlarmEntity alarmEntity = getAlarmEntity(userId);
+
+		return alarmTagRepository.findByAlarmWithTag(alarmEntity)
+			.stream().map(alarmTagPersistenceMapper::toAlarmTagResponseDto)
+			.toList();
+	}
+
+	public void validate(Long userId, String word) {
+		TagEntity tagEntity = getTagEntity(word);
+		AlarmEntity myAlarmEntity = getAlarmEntity(userId);
+		validate(myAlarmEntity, tagEntity);
+	}
+
+	public void remove(Long userId, String word) {
+		TagEntity tagEntity = getTagEntity(word);
+		AlarmEntity alarmEntity = getAlarmEntity(userId);
+
+		alarmTagRepository.deleteByAlarmEntityAndTagEntity(alarmEntity, tagEntity);
+	}
+
+	public void add(Long userId, String word) {
+		TagEntity tagEntity = getTagEntity(word);
+		AlarmEntity alarmEntity = getAlarmEntity(userId);
+		validate(alarmEntity, tagEntity);
+
+		alarmTagRepository.save(new AlarmTagEntity(alarmEntity, tagEntity));
+	}
+
+	private AlarmEntity getAlarmEntity(Long userId) {
+		return alarmRepository.findByUserId(userId)
+			.orElseThrow(() -> new NotFoundResourceException(
+				format("알람이 반드시 존재했어야합니다. userId -> {0}", userId)
+				, BUSINESS_VIOLATION));
+	}
+
+	private TagEntity getTagEntity(String word) {
+		return tagRepository.findByWord(word).orElseThrow(() -> new NotFoundResourceException(
+			format("존재하지 않는 태그입니다. word -> {0}", word)
+			, BUSINESS_VIOLATION));
+	}
+
+	private void validate(AlarmEntity myAlarmEntity, TagEntity tagEntity) {
+		boolean isAlreadyExist = alarmTagRepository.existsByAlarmEntityAndTagEntity(myAlarmEntity, tagEntity);
+
+		if (isAlreadyExist) {
+			throw new BusinessException("이미 등록된 관심사 입니다", BUSINESS_VIOLATION);
+		}
+	}
+}
