@@ -95,6 +95,13 @@ public class BriefingEntity extends BaseEntity {
 		this.wakeUpBriefingContent = wakeUpBriefingContent;
 	}
 
+	public void addQuizContent(Long quizId, Content quizContent) {
+		this.quizEntities.stream()
+			.filter(quizEntity -> quizEntity.getId().equals(quizId))
+			.findAny().orElseThrow(() -> new IllegalArgumentException("퀴즈 데이터가 존재하지 않습니다."))
+			.addContent(quizContent);
+	}
+
 	public boolean isEmptyQuizzes() {
 		return this.getQuizEntities() == null || this.getQuizEntities().isEmpty();
 	}
