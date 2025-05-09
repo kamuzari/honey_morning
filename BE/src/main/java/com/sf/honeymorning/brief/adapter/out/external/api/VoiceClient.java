@@ -1,4 +1,4 @@
-package com.sf.honeymorning.alarm.client;
+package com.sf.honeymorning.brief.adapter.out.external.api;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.io.Resource;
@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import com.sf.honeymorning.alarm.client.dto.VoiceCreateRequestDto;
+import com.sf.honeymorning.brief.adapter.out.external.dto.request.VoiceCreateRequestDto;
 
-@FeignClient(name = "elevenLabsClient",
-	url = "${voice.client.base-url}")
+@FeignClient(name = "elevenLabsClient", url = "${voice.client.base-url}")
 public interface VoiceClient {
 	@PostMapping(value = "/text-to-speech/{voiceId}",
 		consumes = MediaType.APPLICATION_JSON_VALUE,

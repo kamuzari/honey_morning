@@ -1,6 +1,8 @@
 package com.sf.honeymorning.common.exception;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.NOT_IMPLEMENTED;
 
 import java.time.LocalTime;
 import java.util.Map;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.fasterxml.jackson.core.JacksonException;
 import com.sf.honeymorning.common.exception.alarm.ReadyAlramBatchException;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
@@ -112,6 +115,13 @@ public class GlobalExceptionHandler {
 			.detail(errorProtocol.getInternalMessage())
 			.property(MESSAGE_PROPERTY_KEY, errorProtocol.getClientMessage())
 			.property("code", errorProtocol.getCustomCode())
+			.build();
+	}
+
+	@ExceptionHandler(JacksonException.class)
+	public ErrorResponse handleJacksonException(JacksonException exception) {
+		return ErrorResponse.builder(exception, INTERNAL_SERVER_ERROR, "JSON 처리 중 오류가 발생했습니다.")
+			.detail(" json 오류가 발생되었습니다. 관리자에게 문의하세요.")
 			.build();
 	}
 

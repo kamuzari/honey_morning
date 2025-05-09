@@ -1,20 +1,21 @@
-package com.sf.honeymorning.alarm.service.client;
+package com.sf.honeymorning.brief.adapter.out.external;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-import com.sf.honeymorning.alarm.client.VoiceClient;
-import com.sf.honeymorning.alarm.client.dto.VoiceCreateRequestDto;
+import com.sf.honeymorning.brief.adapter.out.external.api.VoiceClient;
+import com.sf.honeymorning.brief.adapter.out.external.dto.request.VoiceCreateRequestDto;
+import com.sf.honeymorning.brief.application.port.out.CommandTtsPort;
 import com.sf.honeymorning.config.constant.VoiceClientProperties;
 
-@Service
-public class TtsClientService {
+@Component
+public class TtsClientAdapter implements CommandTtsPort {
 
 	private final VoiceClient voiceClient;
 	private final VoiceClientProperties voiceClientProperties;
 
-	public TtsClientService(VoiceClient voiceClient, VoiceClientProperties voiceClientProperties) {
+	public TtsClientAdapter(VoiceClient voiceClient, VoiceClientProperties voiceClientProperties) {
 		this.voiceClient = voiceClient;
 		this.voiceClientProperties = voiceClientProperties;
 	}

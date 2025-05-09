@@ -82,7 +82,7 @@ public class QuizEntity extends BaseEntity {
 		this.option4 = options.get(3);
 	}
 
-	public void addQuizContent(Content wakeUpQuizContent) {
+	void addContent(Content wakeUpQuizContent) {
 		this.wakeUpQuizContent = wakeUpQuizContent;
 	}
 

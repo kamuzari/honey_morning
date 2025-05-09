@@ -1,15 +1,15 @@
-package com.sf.honeymorning.common.event.service;
+package com.sf.honeymorning.common.event.producer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 
-public class EventsProducer {
-	private static final Logger logger = LoggerFactory.getLogger(EventsProducer.class);
+public class EventDispatcherHandler {
+	private static final Logger logger = LoggerFactory.getLogger(EventDispatcherHandler.class);
 	private static ApplicationEventPublisher publisher;
 
 	public static void setPublisher(ApplicationEventPublisher publisher) {
-		EventsProducer.publisher = publisher;
+		EventDispatcherHandler.publisher = publisher;
 	}
 
 	public static void raise(Object event) {

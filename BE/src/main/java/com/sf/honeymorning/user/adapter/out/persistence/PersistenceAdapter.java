@@ -4,8 +4,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sf.honeymorning.alarm.domain.entity.Alarm;
-import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
+import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
+import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
@@ -59,6 +59,6 @@ class PersistenceAdapter implements LoadAccountPort, ViolateAccountPort, WriteAc
 			nickName,
 			UserRole.ROLE_USER
 		));
-		alarmRepository.save(Alarm.initialize(savedUser.getId()));
+		alarmRepository.save(AlarmEntity.initialize(savedUser.getId()));
 	}
 }

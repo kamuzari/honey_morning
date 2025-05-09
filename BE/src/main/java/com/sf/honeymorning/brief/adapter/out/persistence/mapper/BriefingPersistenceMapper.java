@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import com.sf.honeymorning.alarm.application.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.brief.adapter.in.web.dto.response.BriefHistoryResponseDto;
 import com.sf.honeymorning.brief.adapter.in.web.dto.response.BriefingDetailResponseDto;
 import com.sf.honeymorning.brief.adapter.in.web.dto.response.briefs.MyBriefing;
@@ -13,8 +14,8 @@ import com.sf.honeymorning.brief.adapter.in.web.dto.response.detail.QuizResponse
 import com.sf.honeymorning.brief.adapter.in.web.dto.response.detail.TopicModelWordResponse;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
 
 @Component
 public class BriefingPersistenceMapper {
@@ -32,7 +33,8 @@ public class BriefingPersistenceMapper {
 					.count())).toList(), briefingPage.getTotalPages());
 	}
 
-	public BriefingDetailResponseDto toBriefingDetailResponseDto(BriefingEntity briefingEntity, List<BriefingTagEntity> briefCategories,
+	public BriefingDetailResponseDto toBriefingDetailResponseDto(BriefingEntity briefingEntity,
+		List<BriefingTagEntity> briefCategories,
 		List<QuizEntity> quizEntities, List<TopicModelWord> topicModelWords) {
 		return new BriefingDetailResponseDto(
 			briefingEntity.getId(),
@@ -56,5 +58,24 @@ public class BriefingPersistenceMapper {
 					quiz.getAnswer()
 				)).toList(),
 			briefingEntity.getCreatedAt());
+	}
+
+	public BriefingEntity toTotalAlarmContent(AiResponseDto response) {
+		return new BriefingEntity(
+			response.userId(),
+			response.aiBriefings().voiceContent(),
+			response.aiBriefings().readContent(),
+			response.AiWakeUpCallPath(),
+			response.requestTags().stream().map(BriefingTagEntity::new).toList(),
+			response.aiQuizzes().stream().map(aiQuizDto ->
+				new QuizEntity(aiQuizDto.problem(),
+					aiQuizDto.answer(),
+					aiQuizDto.selections()
+				)).toList(),
+			response.aiTopics().stream().map(aiTopicDto -> new TopicModelWord(
+				aiTopicDto.sectionId(),
+				aiTopicDto.word(),
+				aiTopicDto.weight())).toList()
+		);
 	}
 }

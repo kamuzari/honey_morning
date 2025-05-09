@@ -44,6 +44,16 @@ public class UserEntity extends BaseEntity {
 		this.role = role;
 	}
 
+	public UserEntity(Long id, String username, String password, String nickName, Integer maximumStreak,
+		UserRole role) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.nickName = nickName;
+		this.maximumStreak = maximumStreak;
+		this.role = role;
+	}
+
 	public Long getId() {
 		return id;
 	}

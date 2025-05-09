@@ -1,4 +1,4 @@
-package com.sf.honeymorning.alarm.client.dto;
+package com.sf.honeymorning.brief.adapter.out.external.dto.request;
 
 import com.sf.honeymorning.config.constant.VoiceClientProperties;
 
