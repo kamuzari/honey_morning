@@ -2,11 +2,9 @@ package com.sf.honeymorning.alarm.batch;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import org.junit.jupiter.api.AfterEach;
@@ -18,7 +16,6 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
-import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
@@ -29,16 +26,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.TestPropertySource;
 
+import com.sf.honeymorning.alarm.adapter.out.persistence.entity.TagEntity;
 import com.sf.honeymorning.alarm.batch.item.dto.ReadyAlarmDto;
 import com.sf.honeymorning.alarm.batch.outbox.OutBoxAlarmEvent;
 import com.sf.honeymorning.alarm.batch.outbox.OutBoxAlarmEventRepository;
-import com.sf.honeymorning.alarm.domain.entity.Alarm;
-import com.sf.honeymorning.alarm.domain.entity.AlarmTag;
-import com.sf.honeymorning.alarm.domain.entity.DayOfTheWeek;
-import com.sf.honeymorning.alarm.domain.entity.Tag;
-import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
-import com.sf.honeymorning.alarm.domain.repository.AlarmTagRepository;
-import com.sf.honeymorning.alarm.domain.repository.TagRepository;
+import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
+import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmTagEntity;
+import com.sf.honeymorning.alarm.adapter.out.persistence.entity.DayOfTheWeek;
+import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
+import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmTagRepository;
+import com.sf.honeymorning.alarm.adapter.out.persistence.repository.TagRepository;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.util.TimeUtils;
@@ -135,15 +132,15 @@ public class IntegrationAlarmBatchTest extends DefaultIntegrationTest implements
 
 	private void createAlarmContents(LocalTime wakeupTime, int size) {
 		LongStream.rangeClosed(1, size).forEach((userId) -> {
-			Tag economy = tagRepository.save(new Tag("경제"));
-			Tag society = tagRepository.save(new Tag("사회"));
+			TagEntity economy = tagRepository.save(new TagEntity("경제"));
+			TagEntity society = tagRepository.save(new TagEntity("사회"));
 
-			Alarm alarm = alarmRepository.save(Alarm.initialize(userId));
-			alarm.update(wakeupTime, DayOfTheWeek.getToday(), 1, 1, true);
-			alarmRepository.save(alarm);
+			AlarmEntity alarmEntity = alarmRepository.save(AlarmEntity.initialize(userId));
+			alarmEntity.update(wakeupTime, DayOfTheWeek.getToday(), 1, 1, true);
+			alarmRepository.save(alarmEntity);
 
-			alarmTagRepository.save(new AlarmTag(alarm, society));
-			alarmTagRepository.save(new AlarmTag(alarm, economy));
+			alarmTagRepository.save(new AlarmTagEntity(alarmEntity, society));
+			alarmTagRepository.save(new AlarmTagEntity(alarmEntity, economy));
 		});
 	}
 
