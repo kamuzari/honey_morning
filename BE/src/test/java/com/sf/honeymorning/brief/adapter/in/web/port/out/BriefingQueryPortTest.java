@@ -35,9 +35,9 @@ import com.sf.honeymorning.common.entity.content.AccessAuthority;
 import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
 import com.sf.honeymorning.common.exception.model.BusinessException;
-import com.sf.honeymorning.context.mock.MockServiceTest;
+import com.sf.honeymorning.context.mock.MockTest;
 
-public class BriefingQueryPortTest extends MockServiceTest {
+public class BriefingQueryPortTest extends MockTest {
 	BriefingQueryPort sut;
 
 	@InjectMocks
