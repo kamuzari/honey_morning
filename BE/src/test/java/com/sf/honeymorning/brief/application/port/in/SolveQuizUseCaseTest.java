@@ -17,21 +17,19 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sf.honeymorning.brief.adapter.in.web.dto.request.SelectionRequestDto;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.mapper.QuizPersistenceMapper;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.QuizRepository;
 import com.sf.honeymorning.brief.application.service.QuizService;
 import com.sf.honeymorning.brief.common.QuizConstraint;
 import com.sf.honeymorning.common.exception.model.BusinessException;
-import com.sf.honeymorning.context.mock.MockServiceTest;
+import com.sf.honeymorning.context.mock.MockTest;
 
-class SolveQuizUseCaseTest extends MockServiceTest {
+class SolveQuizUseCaseTest extends MockTest {
 	SolveQuizUseCase sut;
 
 	@InjectMocks

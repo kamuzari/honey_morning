@@ -1,0 +1,162 @@
+package com.sf.honeymorning.brief.adapter.in.consumer;
+
+import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
+import static com.sf.honeymorning.config.RabbitConfig.*;
+import static java.util.concurrent.TimeUnit.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.*;
+import static org.testcontainers.shaded.org.awaitility.Awaitility.*;
+
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.stream.Stream;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.transaction.IllegalTransactionStateException;
+
+import com.rabbitmq.client.Channel;
+import com.sf.honeymorning.brief.application.service.AlarmContentService;
+import com.sf.honeymorning.alarm.application.service.dto.response.AiBriefingDto;
+import com.sf.honeymorning.alarm.application.service.dto.response.AiQuizDto;
+import com.sf.honeymorning.alarm.application.service.dto.response.AiResponseDto;
+import com.sf.honeymorning.alarm.application.service.dto.response.AiTopicDto;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
+import com.sf.honeymorning.context.infra.broker.RabbitMqContext;
+import com.sf.honeymorning.brief.common.QuizConstraint;
+
+class AiClientConsumerTest extends DefaultIntegrationTest implements RabbitMqContext {
+
+	@Autowired
+	RabbitTemplate rabbitTemplate;
+
+	@SpyBean
+	AiClientConsumer aiClientConsumer;
+
+	@Autowired
+	ConnectionFactory connectionFactory;
+
+	@SpyBean
+	AlarmContentService alarmContentService;
+
+	@Test
+	@DisplayName("존재하지 않는 Queue로 메시지를 보내면 반환된다")
+	void testDeliverMessageFail() throws InterruptedException {
+		// given
+		String routingKey = "non.existent.queue";
+		String messageContent = "test";
+		String noRouteMessage = "NO_ROUTE";
+
+		RabbitTemplate subRabbitTemplate = createRabbitTemplate();
+		CountDownLatch latch = new CountDownLatch(1);
+		StringBuilder responseMessage = new StringBuilder();
+
+		subRabbitTemplate.setReturnsCallback(returnedMessage -> {
+			responseMessage.append("Message: ").append(new String(returnedMessage.getMessage().getBody()))
+				.append(", Reply Text: ").append(returnedMessage.getReplyText())
+				.append(", Exchange: ").append(returnedMessage.getExchange())
+				.append(", Routing Key: ").append(returnedMessage.getRoutingKey());
+			latch.countDown();
+		});
+
+		// when
+		subRabbitTemplate.convertAndSend("", routingKey, messageContent);
+		boolean awaitResult = latch.await(1, SECONDS);
+
+		// then
+		assertThat(awaitResult).isTrue();
+		assertThat(responseMessage.toString()).contains(noRouteMessage);
+		assertThat(responseMessage.toString()).contains(routingKey);
+		assertThat(responseMessage.toString()).contains(messageContent);
+	}
+
+	@Test
+	@DisplayName("AI 서버에서 만들어진 알람 컨텐츠 결과를 소비한다")
+	void testConsume() {
+		//given
+		AiResponseDto expectResponseDto = new AiResponseDto(
+			1L,
+			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
+			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
+			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
+			List.of("정치"),
+			"https://cdn.ycloud.com/03jidmmk39d"
+		);
+
+		doNothing().when(alarmContentService).create(expectResponseDto);
+		rabbitTemplate.convertAndSend("", AI_GENERATED_ALARM_CONTENTS_RESPONSE_QUEUE_NAME,
+			expectResponseDto);
+
+		//when
+		//then
+		await().atMost(5, SECONDS)
+			.untilAsserted(() -> {
+				ArgumentCaptor<Channel> channelCaptor = ArgumentCaptor.forClass(Channel.class);
+				ArgumentCaptor<Long> tagCaptor = ArgumentCaptor.forClass(Long.class);
+				verify(aiClientConsumer, times(1)).createAlarmContents(eq(expectResponseDto), channelCaptor.capture(),
+					tagCaptor.capture());
+			});
+	}
+
+	@Test
+	@DisplayName("alarmContentService.create()에서 예외 발생 시 basicNack 이 호출되어 지정한 dlq로 메시지가 이동한다")
+	void failConsumeAiResponseProcess() throws Exception {
+		// given
+		AiResponseDto responseDto = new AiResponseDto(
+			1L,
+			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
+			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
+			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
+			List.of("정치"),
+			"https://cdn.ycloud.com/03jidmmk39d"
+		);
+
+		doThrow(new IllegalTransactionStateException("트랜잭션 예외")).when(alarmContentService).create(responseDto);
+
+		// when
+		rabbitTemplate.convertAndSend("", AiClientConsumer.SUBSCRIBE_QUEUE_NAME, responseDto);
+
+		// then
+		Message expectedMessageOnDeadLetterQueue = rabbitTemplate.receive("ai.generated.alarm_contents_response.dlq",
+			5000);
+		Message failedMessage = rabbitTemplate.receive(AiClientConsumer.SUBSCRIBE_QUEUE_NAME, 5000);
+		Assertions.assertThat(expectedMessageOnDeadLetterQueue).isNotNull();
+		Assertions.assertThat(failedMessage).isNull();
+	}
+
+	private List<AiTopicDto> createFakeAiTopicDtos(int size) {
+		return Stream.generate(() -> new AiTopicDto(
+				DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
+				DATE_GENERATOR.lorem().word(),
+				DATE_GENERATOR.number().randomDouble(2, 0, 100)))
+			.limit(size).toList();
+	}
+
+	private List<AiQuizDto> createFakeQuizDtos(int size) {
+		return Stream.generate(() -> new AiQuizDto(
+				DATE_GENERATOR.lorem().sentence(2),
+				1,
+				Stream.generate(() -> DATE_GENERATOR.lorem().word())
+					.limit(QuizConstraint.OPTION_SIZE)
+					.toList()
+			))
+			.limit(size)
+			.toList();
+	}
+
+	private RabbitTemplate createRabbitTemplate() {
+		RabbitTemplate subRabbitTemplate = new RabbitTemplate(connectionFactory);
+		subRabbitTemplate.setMandatory(true);
+
+		return subRabbitTemplate;
+	}
+
+}

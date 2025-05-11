@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sf.honeymorning.alarm.domain.entity.Alarm;
-import com.sf.honeymorning.alarm.domain.repository.AlarmRepository;
+import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
+import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
@@ -37,15 +37,15 @@ class SignUpUseCaseTest extends DefaultIntegrationTest implements MySqlContext {
 		sut.register(accountSignUpRequest);
 
 		UserEntity signUpedUserEntity = userRepository.findByUsername(accountSignUpRequest.username()).orElseThrow();
-		Alarm alarm = alarmRepository.findByUserId(signUpedUserEntity.getId()).orElseThrow();
-		Alarm expectedAlarm = Alarm.initialize(signUpedUserEntity.getId());
+		AlarmEntity alarmEntity = alarmRepository.findByUserId(signUpedUserEntity.getId()).orElseThrow();
+		AlarmEntity expectedAlarmEntity = AlarmEntity.initialize(signUpedUserEntity.getId());
 
 		//then
-		assertThat(alarm).isNotNull();
-		assertThat(alarm.getUserId()).isEqualTo(expectedAlarm.getUserId());
-		assertThat(alarm.getDayOfTheWeeks()).isEqualTo(expectedAlarm.getDayOfTheWeeks());
-		assertThat(alarm.getRepeatFrequency()).isEqualTo(expectedAlarm.getRepeatFrequency());
-		assertThat(alarm.getWakeUpTime()).isEqualTo(expectedAlarm.getWakeUpTime());
+		assertThat(alarmEntity).isNotNull();
+		assertThat(alarmEntity.getUserId()).isEqualTo(expectedAlarmEntity.getUserId());
+		assertThat(alarmEntity.getDayOfTheWeeks()).isEqualTo(expectedAlarmEntity.getDayOfTheWeeks());
+		assertThat(alarmEntity.getRepeatFrequency()).isEqualTo(expectedAlarmEntity.getRepeatFrequency());
+		assertThat(alarmEntity.getWakeUpTime()).isEqualTo(expectedAlarmEntity.getWakeUpTime());
 	}
 
 	@DisplayName("이미 가입된 username이 있다면 회원등록에 실패한다")
