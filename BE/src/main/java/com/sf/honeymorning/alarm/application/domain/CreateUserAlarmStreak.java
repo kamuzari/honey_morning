@@ -3,21 +3,19 @@ package com.sf.honeymorning.alarm.application.domain;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-import org.springframework.data.annotation.Id;
-
 import com.sf.honeymorning.alarm.adapter.out.persistence.entity.UserAlarmResultStreakEntity;
 
 import lombok.Getter;
 
 @Getter
-public class UserAlarmStreak {
+public class CreateUserAlarmStreak {
 	private Long userId;
 
 	private LocalDateTime latestAt;
 
 	private int consecutiveDays;
 
-	public UserAlarmStreak(Long userId, LocalDateTime latestAt, int consecutiveDays) {
+	public CreateUserAlarmStreak(Long userId, LocalDateTime latestAt, int consecutiveDays) {
 		this.userId = userId;
 		this.latestAt = latestAt;
 		this.consecutiveDays = consecutiveDays;

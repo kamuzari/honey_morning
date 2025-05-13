@@ -26,24 +26,33 @@ public class AlarmResultController {
 	private final AlarmResultQueryPort alarmResultQueryPort;
 	private final AlarmResultCommandUseCase alarmResultCommandUseCase;
 
-	public AlarmResultController(AlarmResultQueryPort alarmResultQueryPort,
-		AlarmResultCommandUseCase alarmResultCommandUseCase) {
+	public AlarmResultController(
+		AlarmResultQueryPort alarmResultQueryPort,
+		AlarmResultCommandUseCase alarmResultCommandUseCase
+	) {
 		this.alarmResultQueryPort = alarmResultQueryPort;
 		this.alarmResultCommandUseCase = alarmResultCommandUseCase;
 	}
 
 	@GetMapping
 	public List<AlarmResultResponseDto> getAlarmResults(
-		@AuthenticationPrincipal JwtAuthentication principal,
-		@RequestParam(required = false, value = "lastId", defaultValue = "0") Long lastId) {
+		@AuthenticationPrincipal
+		JwtAuthentication principal,
+
+		@RequestParam(required = false, value = "lastId", defaultValue = "0")
+		Long lastId) {
 
 		return alarmResultQueryPort.getMyAlarmResults(principal.id(), lastId);
 	}
 
 	@PostMapping
 	public void add(
-		@AuthenticationPrincipal JwtAuthentication principal,
-		@Valid @RequestBody AddAlarmResultRequestDto alarmResultResponseDto) {
+		@AuthenticationPrincipal
+		JwtAuthentication principal,
+
+		@Valid
+		@RequestBody
+		AddAlarmResultRequestDto alarmResultResponseDto) {
 
 		alarmResultCommandUseCase.add(principal.id(), alarmResultResponseDto);
 	}

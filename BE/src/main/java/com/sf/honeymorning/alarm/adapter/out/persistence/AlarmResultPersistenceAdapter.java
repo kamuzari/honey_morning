@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.sf.honeymorning.alarm.adapter.in.web.dto.response.AlarmResultResponseDto;
 import com.sf.honeymorning.alarm.adapter.in.web.port.out.AlarmResultQueryPort;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmResultRepository;
-import com.sf.honeymorning.alarm.application.service.mapper.AlarmResultMapper;
+import com.sf.honeymorning.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
 
@@ -18,21 +18,21 @@ import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepositor
 public class AlarmResultPersistenceAdapter implements AlarmResultQueryPort {
 	private final AlarmResultRepository alarmResultRepository;
 	private final UserRepository userRepository;
-	private final AlarmResultMapper alarmResultMapper;
+	private final AlarmResultPersistenceMapper alarmResultPersistenceMapper;
 
 	public AlarmResultPersistenceAdapter(
 		AlarmResultRepository alarmResultRepository,
 		UserRepository userRepository,
-		AlarmResultMapper alarmResultMapper) {
+		AlarmResultPersistenceMapper alarmResultPersistenceMapper) {
 
 		this.alarmResultRepository = alarmResultRepository;
 		this.userRepository = userRepository;
-		this.alarmResultMapper = alarmResultMapper;
+		this.alarmResultPersistenceMapper = alarmResultPersistenceMapper;
 	}
 
 	public List<AlarmResultResponseDto> getMyAlarmResults(Long userId, Long lastId) {
 		return alarmResultRepository.findNextPage(userId, lastId).stream()
-			.map(alarmResultMapper::toAlarmResultResponseDto)
+			.map(alarmResultPersistenceMapper::toAlarmResultResponseDto)
 			.toList();
 	}
 

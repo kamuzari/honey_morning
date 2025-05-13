@@ -10,8 +10,9 @@ import com.sf.honeymorning.alarm.adapter.out.persistence.entity.UserAlarmResultS
 import com.sf.honeymorning.alarm.adapter.out.persistence.mapper.AlarmStreakPersistenceMapper;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmResultRepository;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
-import com.sf.honeymorning.alarm.application.domain.User;
-import com.sf.honeymorning.alarm.application.domain.UserAlarmStreak;
+import com.sf.honeymorning.alarm.application.domain.AddAlarmResult;
+import com.sf.honeymorning.alarm.application.domain.CreateUserAlarmStreak;
+import com.sf.honeymorning.alarm.application.domain.UpdateStreakUser;
 import com.sf.honeymorning.alarm.application.port.out.CommandAlarmResultPort;
 import com.sf.honeymorning.alarm.application.port.out.LoadAlarmResultPort;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
@@ -37,40 +38,40 @@ public class AlarmStreakPersistenceAdapter implements CommandAlarmResultPort, Lo
 		this.alarmStreakPersistenceMapper = alarmStreakPersistenceMapper;
 	}
 
-	public void addTodayAlarmResults(Long userId, Long briefingId, Integer matchCount) {
-		alarmResultRepository.save(new AlarmResultEntity(
-			userId,
-			briefingId,
-			matchCount,
-			true
-		));
+	@Override
+	public void addTodayAlarmResults(AddAlarmResult addAlarmResult) {
+		alarmResultRepository.save(
+			new AlarmResultEntity(
+				addAlarmResult.userId(),
+				addAlarmResult.briefingId(),
+				addAlarmResult.matchCount(),
+				true
+			)
+		);
 	}
 
 	@Override
-	public int reflect(UserAlarmStreak userAlarmStreak) {
+	public int reflect(CreateUserAlarmStreak createUserAlarmStreak) {
 		return userAlarmResultStreakRepository.save(
 			new UserAlarmResultStreakEntity(
-				userAlarmStreak.getUserId(),
-				userAlarmStreak.getLatestAt(),
-				userAlarmStreak.getConsecutiveDays()
+				createUserAlarmStreak.getUserId(),
+				createUserAlarmStreak.getLatestAt(),
+				createUserAlarmStreak.getConsecutiveDays()
 			)
 		).getConsecutiveDays();
 	}
 
 	@Override
-	public void reflect(User user) {
-		UserEntity userEntity = new UserEntity(
-			user.getId(),
-			user.getUsername(),
-			user.getPassword(),
-			user.getNickName(),
-			user.getMaximumStreak(),
-			user.getRole()
-		);
-		userRepository.save(userEntity);
+	public void reflect(UpdateStreakUser updateStreakUser) {
+		UserEntity userEntity = userRepository.findById(updateStreakUser.getId())
+			.orElseThrow(() -> new NotFoundResourceException(
+				format("존재하지 않는 사용자입니다. userId -> {0}", updateStreakUser.getId())
+				, POLICY_VIOLATION));
+
+		userEntity.updateMaximumStreak(updateStreakUser.getMaximumStreak());
 	}
 
-	public User getUser(Long userId) {
+	public UpdateStreakUser getUser(Long userId) {
 		UserEntity userEntity = userRepository.findById(userId)
 			.orElseThrow(() -> new NotFoundResourceException(
 				format("존재하지 않는 사용자입니다. userId -> {0}", userId)
@@ -79,8 +80,7 @@ public class AlarmStreakPersistenceAdapter implements CommandAlarmResultPort, Lo
 		return alarmStreakPersistenceMapper.toDomain(userEntity);
 	}
 
-
-	public UserAlarmStreak getUserAlarmResultStreak(Long userId) {
+	public CreateUserAlarmStreak getUserAlarmResultStreak(Long userId) {
 		var userAlarmResultStreakEntity = userAlarmResultStreakRepository.findByUserId(userId)
 			.orElseGet(() -> UserAlarmResultStreakEntity.initialize(userId));
 

@@ -1,13 +1,14 @@
 package com.sf.honeymorning.alarm.application.port.out;
 
-import com.sf.honeymorning.alarm.application.domain.User;
-import com.sf.honeymorning.alarm.application.domain.UserAlarmStreak;
+import com.sf.honeymorning.alarm.application.domain.AddAlarmResult;
+import com.sf.honeymorning.alarm.application.domain.UpdateStreakUser;
+import com.sf.honeymorning.alarm.application.domain.CreateUserAlarmStreak;
 
 public interface CommandAlarmResultPort {
 
-	int reflect(UserAlarmStreak userAlarmStreak);
+	int reflect(CreateUserAlarmStreak createUserAlarmStreak);
 
-	void reflect(User userAlarmStreak);
+	void reflect(UpdateStreakUser updateStreakUserAlarmStreak);
 
-	void addTodayAlarmResults(Long userId, Long briefingId, Integer matchCount);
+	void addTodayAlarmResults(AddAlarmResult addAlarmResult);
 }

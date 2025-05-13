@@ -10,11 +10,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
 @Getter
-@Table(name = "alarm_results")
+@Table(
+	name = "alarm_results",
+	indexes = {
+		@Index(name = "idx_user_id", columnList = "userId"),
+		@Index(name = "idx_briefing_id", columnList = "briefingId"),
+	}
+)
 @Entity
 public class AlarmResultEntity extends BaseEntity {
 
@@ -37,7 +44,12 @@ public class AlarmResultEntity extends BaseEntity {
 	protected AlarmResultEntity() {
 	}
 
-	public AlarmResultEntity(Long userId, Long briefingId, Integer count, boolean isAttended) {
+	public AlarmResultEntity(
+		Long userId,
+		Long briefingId,
+		Integer count,
+		boolean isAttended) {
+
 		if (count < MATCH_COUNT_MINIMUM_VALUE || count > MATCH_COUNT_MAXIMUM_VALUE) {
 			throw new IllegalArgumentException("맞은 개수는 반드시 [0=2] 사이여야 합니다");
 		}

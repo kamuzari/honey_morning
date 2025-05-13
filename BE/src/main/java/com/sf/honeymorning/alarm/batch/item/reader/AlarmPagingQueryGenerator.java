@@ -54,7 +54,7 @@ public class AlarmPagingQueryGenerator {
 		FROM("""
 			FROM alarms a
 			JOIN alarm_tags at ON a.id = at.alarm_id
-			JOIN tags t ON at.tag_id = t.tag_id
+			JOIN tags t ON at.tag_id = t.id
 			"""),
 		WHERE("""
 			WHERE is_active = true

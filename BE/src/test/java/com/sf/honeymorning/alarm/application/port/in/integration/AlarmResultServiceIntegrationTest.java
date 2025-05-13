@@ -20,7 +20,7 @@ import com.sf.honeymorning.alarm.adapter.out.persistence.entity.UserAlarmResultS
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmResultRepository;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
 import com.sf.honeymorning.alarm.application.service.AlarmResultService;
-import com.sf.honeymorning.alarm.application.service.mapper.AlarmResultMapper;
+import com.sf.honeymorning.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.context.infra.database.RedisContext;
 
@@ -29,7 +29,7 @@ class AlarmResultServiceIntegrationTest extends DefaultIntegrationTest implement
 	AlarmResultService sut;
 
 	@Autowired
-	AlarmResultMapper alarmResultMapper;
+	AlarmResultPersistenceMapper alarmResultPersistenceMapper;
 
 	@Autowired
 	AlarmResultRepository alarmResultRepository;

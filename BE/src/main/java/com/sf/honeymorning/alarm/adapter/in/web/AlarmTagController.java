@@ -27,8 +27,8 @@ public class AlarmTagController {
 
 	public AlarmTagController(
 		AlarmTagQueryPort alarmTagQueryPort,
-		AlarmTagCommandUseCase alarmTagCommandUseCase
-	) {
+		AlarmTagCommandUseCase alarmTagCommandUseCase) {
+
 		this.alarmTagQueryPort = alarmTagQueryPort;
 		this.alarmTagCommandUseCase = alarmTagCommandUseCase;
 	}
@@ -36,20 +36,20 @@ public class AlarmTagController {
 	@GetMapping
 	public List<AlarmTagResponseDto> getMyTags(
 		@AuthenticationPrincipal
-		JwtAuthentication principal
-	) {
+		JwtAuthentication principal) {
+
 		return alarmTagQueryPort.getMyAlarmTags(principal.id());
 	}
 
-	@Operation(summary = "알람 카테고리 추가")
 	@PostMapping
 	public void add(
 		@AuthenticationPrincipal
 		JwtAuthentication principal,
 
-		@Valid @RequestBody
-		AddAlarmTagRequestDto requestDto
-	) {
+		@Valid
+		@RequestBody
+		AddAlarmTagRequestDto requestDto) {
+
 		alarmTagCommandUseCase.add(principal.id(), requestDto.word());
 	}
 
@@ -58,7 +58,8 @@ public class AlarmTagController {
 		@AuthenticationPrincipal
 		JwtAuthentication principal,
 
-		@Valid @RequestBody
+		@Valid
+		@RequestBody
 		AddAlarmTagRequestDto requestDto
 	) {
 		alarmTagCommandUseCase.remove(principal.id(), requestDto.word());

@@ -40,25 +40,6 @@ public class AlarmPersistenceAdapterMapper {
 		);
 	}
 
-	public BriefingEntity toTotalAlarmContent(AiResponseDto response) {
-		return new BriefingEntity(
-			response.userId(),
-			response.aiBriefings().voiceContent(),
-			response.aiBriefings().readContent(),
-			response.AiWakeUpCallPath(),
-			response.requestTags().stream().map(BriefingTagEntity::new).toList(),
-			response.aiQuizzes().stream().map(aiQuizDto ->
-				new QuizEntity(aiQuizDto.problem(),
-					aiQuizDto.answer(),
-					aiQuizDto.selections()
-				)).toList(),
-			response.aiTopics().stream().map(aiTopicDto -> new TopicModelWord(
-				aiTopicDto.sectionId(),
-				aiTopicDto.word(),
-				aiTopicDto.weight())).toList()
-		);
-	}
-
 	public VerifySleepModeAlarm toSleepModeDomain(AlarmEntity alarmEntity) {
 		return new VerifySleepModeAlarm(
 			alarmEntity.getWakeUpTime(),

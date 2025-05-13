@@ -1,6 +1,5 @@
 package com.sf.honeymorning.alarm.adapter.out.persistence.entity;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
@@ -28,22 +27,8 @@ public class UserAlarmResultStreakEntity {
 		this.consecutiveDays = consecutiveDays;
 	}
 
+	// todo: 이게 과연 .. 도메인에 있어야 맞는거 아닌가..?
 	public static UserAlarmResultStreakEntity initialize(Long userId) {
 		return new UserAlarmResultStreakEntity(userId, LocalDateTime.now(), 0);
-	}
-
-	public void countConsecutiveDays(LocalDateTime now) {
-		if (isWithin24Hours(now)) {
-			this.consecutiveDays++;
-			this.latestAt = now;
-			return;
-		}
-
-		this.latestAt = now;
-		this.consecutiveDays = 1;
-	}
-
-	private boolean isWithin24Hours(LocalDateTime now) {
-		return Duration.between(latestAt, now).toHours() < 24;
 	}
 }
