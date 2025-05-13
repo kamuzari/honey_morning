@@ -17,7 +17,7 @@ import com.sf.honeymorning.alarm.adapter.in.web.dto.response.AlarmResultResponse
 import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmResultEntity;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmResultRepository;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
-import com.sf.honeymorning.alarm.application.service.mapper.AlarmResultMapper;
+import com.sf.honeymorning.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
 import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
@@ -27,7 +27,7 @@ class AlarmResultQueryPortTest extends DefaultIntegrationTest {
 	AlarmResultQueryPort sut;
 
 	@Autowired
-	AlarmResultMapper alarmResultMapper;
+	AlarmResultPersistenceMapper alarmResultPersistenceMapper;
 
 	@Autowired
 	AlarmResultRepository alarmResultRepository;

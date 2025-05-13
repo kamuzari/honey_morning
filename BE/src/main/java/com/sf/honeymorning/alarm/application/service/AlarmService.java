@@ -24,8 +24,8 @@ public class AlarmService implements AlarmCommandUseCase, ValidateAlarmUseCase {
 
 	public AlarmService(
 		LoadAlarmPort loadAlarmPort,
-		CommandAlarmPort commandAlarmPort
-	) {
+		CommandAlarmPort commandAlarmPort) {
+
 		this.loadAlarmPort = loadAlarmPort;
 		this.commandAlarmPort = commandAlarmPort;
 	}

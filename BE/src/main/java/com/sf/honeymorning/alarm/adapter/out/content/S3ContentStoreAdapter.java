@@ -31,15 +31,23 @@ public class S3ContentStoreAdapter implements ContentStorePort {
 		this.progressListener = progressListener;
 	}
 
-	public void upload(String fullPath, Resource resource, Long contentLength, String contentType) {
+	public void upload(
+		String fullPath,
+		Resource resource,
+		Long contentLength,
+		String contentType) {
+
 		ObjectMetadata metadata = createMeta(contentLength, contentType);
 
 		try {
 			amazonS3.putObject(
-				new PutObjectRequest(bucketName,
+				new PutObjectRequest(
+					bucketName,
 					fullPath,
 					resource.getInputStream(),
-					metadata).withRequesterPays(true)
+					metadata
+				)
+					.withRequesterPays(true)
 					.withGeneralProgressListener(progressListener)
 			);
 		} catch (IOException e) {

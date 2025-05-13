@@ -33,8 +33,8 @@ public class AlarmController {
 	public AlarmController(
 		AlarmQueryPort alarmQueryPort,
 		AlarmCommandUseCase alarmCommandUseCase,
-		ValidateAlarmUseCase validateAlarmUseCase
-	) {
+		ValidateAlarmUseCase validateAlarmUseCase) {
+
 		this.alarmQueryPort = alarmQueryPort;
 		this.alarmCommandUseCase = alarmCommandUseCase;
 		this.validateAlarmUseCase = validateAlarmUseCase;
@@ -46,24 +46,24 @@ public class AlarmController {
 		JwtAuthentication principal,
 
 		@Valid @RequestBody
-		AlarmSetRequest alarmRequestDto
-	) {
+		AlarmSetRequest alarmRequestDto) {
+
 		alarmCommandUseCase.update(alarmRequestDto, principal.id());
 	}
 
 	@GetMapping
 	public AlarmResponse readMine(
 		@AuthenticationPrincipal
-		JwtAuthentication principal
-	) {
+		JwtAuthentication principal) {
+
 		return alarmQueryPort.getMyAlarmWithMyTags(principal.id());
 	}
 
 	@GetMapping("/prepared")
 	public PreparedAlarmContentResponse getPreparedAlarmContents(
 		@AuthenticationPrincipal
-		JwtAuthentication principal
-	) {
+		JwtAuthentication principal) {
+
 		return alarmQueryPort.getPreparedAlarmContents(principal.id());
 	}
 
@@ -73,8 +73,8 @@ public class AlarmController {
 		JwtAuthentication principal,
 
 		@RequestParam("startAt")
-		LocalDateTime startAt
-	) {
+		LocalDateTime startAt) {
+
 		validateAlarmUseCase.verifySleepMode(principal.id(), startAt);
 	}
 }

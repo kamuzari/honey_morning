@@ -11,6 +11,4 @@ public interface AlarmRepository extends JpaRepository<AlarmEntity, Long> {
 	Optional<AlarmEntity> findByUserId(Long userId);
 
 	Optional<AlarmEntity> findByUserIdAndIsActiveTrue(Long userId);
-
-	boolean existsByUserId(@Param("user_id") Long userId);
 }

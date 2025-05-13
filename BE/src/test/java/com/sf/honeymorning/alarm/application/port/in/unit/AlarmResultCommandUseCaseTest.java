@@ -10,14 +10,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 
 import com.sf.honeymorning.alarm.adapter.in.web.dto.request.AddAlarmResultRequestDto;
-import com.sf.honeymorning.alarm.application.domain.User;
-import com.sf.honeymorning.alarm.application.domain.UserAlarmStreak;
+import com.sf.honeymorning.alarm.application.domain.CreateUserAlarmStreak;
+import com.sf.honeymorning.alarm.application.domain.UpdateStreakUser;
 import com.sf.honeymorning.alarm.application.port.in.AlarmResultCommandUseCase;
 import com.sf.honeymorning.alarm.application.port.out.CommandAlarmResultPort;
 import com.sf.honeymorning.alarm.application.port.out.LoadAlarmResultPort;
 import com.sf.honeymorning.alarm.application.service.AlarmResultService;
+import com.sf.honeymorning.alarm.application.service.mapper.AlarmResultMapper;
 import com.sf.honeymorning.context.mock.MockTest;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
 
@@ -34,6 +36,9 @@ class AlarmResultCommandUseCaseTest extends MockTest {
 	@Mock
 	CommandAlarmResultPort commandAlarmResultPort;
 
+	@Spy
+	AlarmResultMapper alarmResultMapper;
+
 	@BeforeEach
 	void setUp() {
 		this.sut = alarmResultService;
@@ -48,25 +53,22 @@ class AlarmResultCommandUseCaseTest extends MockTest {
 			2
 		);
 		int initialConsecutiveDay = 0;
-		UserAlarmStreak expectedUserAlarmStreak = new UserAlarmStreak(
+		CreateUserAlarmStreak expectedCreateUserAlarmStreak = new CreateUserAlarmStreak(
 			AUTH_USER_ENTITY.getId(),
 			LocalDateTime.now(),
 			initialConsecutiveDay);
 		given(loadAlarmResultPort.getUserAlarmResultStreak(AUTH_USER_ENTITY.getId())).willReturn(
-			expectedUserAlarmStreak
+			expectedCreateUserAlarmStreak
 		);
-		given(loadAlarmResultPort.getUser(AUTH_USER_ENTITY.getId())).willReturn(new User(
-			AUTH_USER_ENTITY.getId(),
-			AUTH_USER_ENTITY.getUsername(),
-			AUTH_USER_ENTITY.getPassword(),
-			AUTH_USER_ENTITY.getNickName(),
-			initialConsecutiveDay,
-			UserRole.ROLE_USER
-		));
+		given(loadAlarmResultPort.getUser(AUTH_USER_ENTITY.getId())).willReturn(
+			new UpdateStreakUser(
+				AUTH_USER_ENTITY.getId(),
+				initialConsecutiveDay
+			));
 		//when
 		sut.add(AUTH_USER_ENTITY.getId(), requestDto);
 		//then
-		assertThat(expectedUserAlarmStreak.getConsecutiveDays()).isEqualTo(initialConsecutiveDay + 1);
+		assertThat(expectedCreateUserAlarmStreak.getConsecutiveDays()).isEqualTo(initialConsecutiveDay + 1);
 	}
 
 	@Test
@@ -78,25 +80,21 @@ class AlarmResultCommandUseCaseTest extends MockTest {
 			2
 		);
 		int consecutiveDay = 3;
-		UserAlarmStreak expectedUserAlarmStreak = new UserAlarmStreak(
+		CreateUserAlarmStreak expectedCreateUserAlarmStreak = new CreateUserAlarmStreak(
 			AUTH_USER_ENTITY.getId(),
 			LocalDateTime.now().minusDays(2),
 			consecutiveDay);
 		given(loadAlarmResultPort.getUserAlarmResultStreak(AUTH_USER_ENTITY.getId())).willReturn(
-			expectedUserAlarmStreak
+			expectedCreateUserAlarmStreak
 		);
-		given(loadAlarmResultPort.getUser(AUTH_USER_ENTITY.getId())).willReturn(new User(
+		given(loadAlarmResultPort.getUser(AUTH_USER_ENTITY.getId())).willReturn(new UpdateStreakUser(
 			AUTH_USER_ENTITY.getId(),
-			AUTH_USER_ENTITY.getUsername(),
-			AUTH_USER_ENTITY.getPassword(),
-			AUTH_USER_ENTITY.getNickName(),
-			consecutiveDay,
-			UserRole.ROLE_USER
+			consecutiveDay
 		));
 		//when
 		sut.add(AUTH_USER_ENTITY.getId(), requestDto);
 		//then
-		assertThat(expectedUserAlarmStreak.getConsecutiveDays()).isEqualTo(1);
+		assertThat(expectedCreateUserAlarmStreak.getConsecutiveDays()).isEqualTo(1);
 	}
 
 	@Test
@@ -108,30 +106,26 @@ class AlarmResultCommandUseCaseTest extends MockTest {
 			2
 		);
 		int consecutiveDay = 3;
-		UserAlarmStreak expectedUserAlarmStreak = new UserAlarmStreak(
+		CreateUserAlarmStreak expectedCreateUserAlarmStreak = new CreateUserAlarmStreak(
 			AUTH_USER_ENTITY.getId(),
 			LocalDateTime.now(),
 			consecutiveDay);
-		User user = new User(
+		UpdateStreakUser updateStreakUser = new UpdateStreakUser(
 			AUTH_USER_ENTITY.getId(),
-			AUTH_USER_ENTITY.getUsername(),
-			AUTH_USER_ENTITY.getPassword(),
-			AUTH_USER_ENTITY.getNickName(),
-			consecutiveDay,
-			UserRole.ROLE_USER
+			consecutiveDay
 		);
 
 		given(loadAlarmResultPort.getUserAlarmResultStreak(AUTH_USER_ENTITY.getId())).willReturn(
-			expectedUserAlarmStreak
+			expectedCreateUserAlarmStreak
 		);
 		int updatedConsecutiveDay = consecutiveDay + 1;
-		given(commandAlarmResultPort.reflect(expectedUserAlarmStreak)).willReturn(updatedConsecutiveDay);
-		given(loadAlarmResultPort.getUser(AUTH_USER_ENTITY.getId())).willReturn(user);
+		given(commandAlarmResultPort.reflect(expectedCreateUserAlarmStreak)).willReturn(updatedConsecutiveDay);
+		given(loadAlarmResultPort.getUser(AUTH_USER_ENTITY.getId())).willReturn(updateStreakUser);
 		//when
 		sut.add(AUTH_USER_ENTITY.getId(), requestDto);
 		//then
-		assertThat(expectedUserAlarmStreak.getConsecutiveDays()).isEqualTo(consecutiveDay+1);
-		assertThat(user.getMaximumStreak()).isEqualTo(updatedConsecutiveDay);
+		assertThat(expectedCreateUserAlarmStreak.getConsecutiveDays()).isEqualTo(consecutiveDay + 1);
+		assertThat(updateStreakUser.getMaximumStreak()).isEqualTo(updatedConsecutiveDay);
 	}
 
 }

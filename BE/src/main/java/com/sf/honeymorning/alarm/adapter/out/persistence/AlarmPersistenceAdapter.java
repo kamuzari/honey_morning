@@ -32,11 +32,14 @@ public class AlarmPersistenceAdapter implements AlarmQueryPort, LoadAlarmPort, C
 	private final BriefingRepository briefingRepository;
 	private final AlarmRepository alarmRepository;
 	private final QuizRepository quizRepository;
-
 	private final AlarmPersistenceAdapterMapper alarmPersistenceAdapterMapper;
 
-	public AlarmPersistenceAdapter(BriefingRepository briefingRepository, AlarmRepository alarmRepository,
-		QuizRepository quizRepository, AlarmPersistenceAdapterMapper alarmPersistenceAdapterMapper) {
+	public AlarmPersistenceAdapter(
+		BriefingRepository briefingRepository,
+		AlarmRepository alarmRepository,
+		QuizRepository quizRepository,
+		AlarmPersistenceAdapterMapper alarmPersistenceAdapterMapper) {
+
 		this.briefingRepository = briefingRepository;
 		this.alarmRepository = alarmRepository;
 		this.quizRepository = quizRepository;

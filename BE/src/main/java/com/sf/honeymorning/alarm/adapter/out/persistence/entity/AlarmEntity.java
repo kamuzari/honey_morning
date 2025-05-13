@@ -1,8 +1,5 @@
 package com.sf.honeymorning.alarm.adapter.out.persistence.entity;
 
-import static com.sf.honeymorning.alarm.common.AlarmConstraint.SLEEP_MODE_INTERVAL_CONDITION;
-
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import com.sf.honeymorning.common.entity.basic.BaseEntity;
@@ -41,24 +38,6 @@ public class AlarmEntity extends BaseEntity {
 	}
 
 	public AlarmEntity(
-		Long id,
-		Long userId,
-		LocalTime wakeUpTime,
-		Integer dayOfTheWeeks,
-		Integer repeatFrequency,
-		Integer repeatInterval,
-		boolean isActive
-	) {
-		this.id = id;
-		this.userId = userId;
-		this.wakeUpTime = wakeUpTime;
-		this.dayOfTheWeeks = dayOfTheWeeks;
-		this.repeatFrequency = repeatFrequency;
-		this.repeatInterval = repeatInterval;
-		this.isActive = isActive;
-	}
-
-	public AlarmEntity(
 		Long userId,
 		LocalTime wakeUpTime,
 		Integer dayOfTheWeeks,
@@ -84,11 +63,13 @@ public class AlarmEntity extends BaseEntity {
 		);
 	}
 
-	public void update(LocalTime alarmTime,
+	public void update(
+		LocalTime alarmTime,
 		Integer dayOfTheWeeks,
 		Integer repeatFrequency,
 		Integer repeatInterval,
 		boolean isActive) {
+
 		this.wakeUpTime = alarmTime;
 		this.dayOfTheWeeks = dayOfTheWeeks;
 		this.repeatFrequency = repeatFrequency;
