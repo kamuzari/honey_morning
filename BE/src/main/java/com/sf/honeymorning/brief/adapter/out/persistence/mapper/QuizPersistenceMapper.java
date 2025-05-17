@@ -2,6 +2,8 @@ package com.sf.honeymorning.brief.adapter.out.persistence.mapper;
 
 import com.sf.honeymorning.brief.adapter.in.web.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
+import com.sf.honeymorning.brief.application.domain.EmptySelectionQuiz;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,4 +20,10 @@ public class QuizPersistenceMapper {
         );
     }
 
+    public EmptySelectionQuiz toEmptySelectionQuiz(QuizEntity quizEntity) {
+        return new EmptySelectionQuiz(
+            quizEntity.getId(),
+            quizEntity.getSelection()
+        );
+    }
 }

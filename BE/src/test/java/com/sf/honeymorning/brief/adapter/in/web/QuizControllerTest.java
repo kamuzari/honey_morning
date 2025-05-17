@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import com.sf.honeymorning.brief.adapter.in.web.dto.request.SelectionRequestDto;
 import com.sf.honeymorning.brief.adapter.in.web.port.out.QuizQueryPort;
-import com.sf.honeymorning.brief.application.port.in.SolveQuizUseCase;
+import com.sf.honeymorning.brief.application.port.in.QuizCommandUseCase;
 import com.sf.honeymorning.config.WebSecurityConfig;
 import com.sf.honeymorning.context.mock.MockControllerTest;
 import com.sf.honeymorning.user.adapter.in.authentication.constant.JwtProperty;
@@ -40,7 +40,7 @@ class QuizControllerTest extends MockControllerTest {
 	final String URI_PREFIX = "/api/quizzes";
 
 	@MockBean
-	SolveQuizUseCase solveQuizUseCase;
+	QuizCommandUseCase quizCommandUseCase;
 
 	@MockBean
 	QuizQueryPort quizQueryPort;
@@ -79,7 +79,7 @@ class QuizControllerTest extends MockControllerTest {
 
 		//then
 		perform.andExpect(status().isOk());
-		verify(solveQuizUseCase, times(1)).solve(AUTH_ID, requestDto);
+		verify(quizCommandUseCase, times(1)).solve(AUTH_ID, requestDto);
 	}
 
 	@DisplayName("사용자가 선택한 답안을 제출할때,")

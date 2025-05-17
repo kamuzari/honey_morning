@@ -12,8 +12,6 @@ import com.sf.honeymorning.brief.adapter.in.web.dto.response.BriefingDetailRespo
 import com.sf.honeymorning.brief.adapter.in.web.port.out.BriefingQueryPort;
 import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
 
-import io.swagger.v3.oas.annotations.Parameter;
-
 @RequestMapping("/api/briefings")
 @RestController
 public class BriefingController {
@@ -26,17 +24,23 @@ public class BriefingController {
 
 	@GetMapping("/{brief_id}")
 	public BriefingDetailResponseDto getBriefingDetail(
-		@AuthenticationPrincipal JwtAuthentication principal,
-		@Parameter(description = "조회할 브리핑의 ID", example = "12345")
-		@PathVariable(name = "brief_id") Long briefId) {
+		@AuthenticationPrincipal
+		JwtAuthentication principal,
+
+		@PathVariable(name = "brief_id")
+		Long briefId) {
 
 		return briefingQueryPort.getMyBriefing(principal.id(), briefId);
 	}
 
 	@GetMapping
 	public BriefHistoryResponseDto getBriefings(
-		@AuthenticationPrincipal JwtAuthentication principal,
-		@RequestParam(value = "page", defaultValue = "1") Integer page) {
+		@AuthenticationPrincipal
+		JwtAuthentication principal,
+
+		@RequestParam(value = "page", defaultValue = "1")
+		Integer page) {
+
 		return briefingQueryPort.getMyBriefings(principal.id(), page);
 	}
 }

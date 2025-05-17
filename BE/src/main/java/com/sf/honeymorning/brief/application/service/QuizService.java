@@ -1,63 +1,54 @@
 package com.sf.honeymorning.brief.application.service;
 
-import static com.sf.honeymorning.brief.common.QuizConstraint.TOTAL_QUIZ_SIZE;
-import static com.sf.honeymorning.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
-import static java.text.MessageFormat.format;
-
-import java.text.MessageFormat;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sf.honeymorning.brief.adapter.in.web.dto.request.SelectionRequestDto;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
-import com.sf.honeymorning.brief.adapter.out.persistence.repository.QuizRepository;
-import com.sf.honeymorning.brief.application.port.in.SolveQuizUseCase;
-import com.sf.honeymorning.common.exception.model.BusinessException;
-import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
-import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
+import com.sf.honeymorning.brief.application.port.in.QuizCommandUseCase;
+import com.sf.honeymorning.brief.application.port.out.CommandQuizPort;
+import com.sf.honeymorning.brief.application.port.out.LoadQuizPort;
+import com.sf.honeymorning.brief.application.service.mapper.QuizServiceMapper;
 
 @Transactional(readOnly = true)
 @Service
-public class QuizService implements SolveQuizUseCase {
-
-	private final QuizRepository quizRepository;
-	private final BriefingRepository briefingRepository;
+public class QuizService implements QuizCommandUseCase {
+	private final CommandQuizPort commandQuizPort;
+	private final LoadQuizPort loadQuizPort;
+	private final QuizServiceMapper quizServiceMapper;
 
 	public QuizService(
-		QuizRepository quizRepository,
-		BriefingRepository briefingRepository) {
+		CommandQuizPort commandQuizPort,
+		LoadQuizPort loadQuizPort,
+		QuizServiceMapper quizServiceMapper) {
 
-		this.quizRepository = quizRepository;
-		this.briefingRepository = briefingRepository;
+		this.commandQuizPort = commandQuizPort;
+		this.loadQuizPort = loadQuizPort;
+		this.quizServiceMapper = quizServiceMapper;
 	}
 
 	@Transactional
 	public void solve(Long userId, SelectionRequestDto selectionRequestDto) {
-		BriefingEntity briefingEntity = briefingRepository.findByUserIdAndId(userId, selectionRequestDto.briefingId())
-			.orElseThrow(() -> new NotFoundResourceException(
-				format("존재하지 않는 사용자입니다. userId -> {0}, briefingId -> {1}", userId, selectionRequestDto.briefingId()),
-				POLICY_VIOLATION));
-		List<QuizEntity> quizEntities = quizRepository.findByBriefingEntity(briefingEntity);
+		List<Long> quizIds = selectionRequestDto.selectionQuizDtos()
+			.stream()
+			.map(SelectionRequestDto.SelectionQuizDto::quizId)
+			.toList();
 
-		if (quizEntities.size() != TOTAL_QUIZ_SIZE) {
-			throw new BusinessException(
-				MessageFormat.format("한개의 브리핑에는 2개의 퀴즈가 존재해야 합니다. briefing : {0}", briefingEntity),
-				ErrorProtocol.BUSINESS_VIOLATION
-			);
-		}
+		var emptySelectionQuizzes = loadQuizPort.getQuizzes(userId, selectionRequestDto.briefingId(), quizIds);
 
-		selectionRequestDto.selectionQuizDtos()
-			.forEach(
-				selectionQuizDto -> quizEntities.stream().filter(quiz -> quiz.getId().equals(selectionQuizDto.quizId()))
-					.findAny().orElseThrow(() -> new BusinessException(
-						MessageFormat.format("클라이언트에서 잘못된 quizId를 전달하였습니다. quizId : {0}", selectionQuizDto.quizId()),
-						ErrorProtocol.BUSINESS_VIOLATION
-					)).addSelection(selectionQuizDto.selection()));
+		selectionRequestDto.selectionQuizDtos().forEach(
+			selectionQuizDto ->
+				emptySelectionQuizzes.stream()
+					.filter(emptySelectionQuiz -> emptySelectionQuiz.getQuizId().equals(selectionQuizDto.quizId()))
+					.findFirst()
+					.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 퀴즈입니다."))
+					.solve(selectionQuizDto.selection())
+
+		);
+		commandQuizPort.reflect(emptySelectionQuizzes);
 	}
+
 }
 
 

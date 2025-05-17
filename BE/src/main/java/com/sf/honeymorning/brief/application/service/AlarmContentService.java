@@ -17,8 +17,8 @@ public class AlarmContentService implements AlarmContentCommandUseCase {
 
 	public AlarmContentService(
 		ValidBriefingContentPort validBriefingContentPort,
-		CommandBriefingPort commandBriefingPort
-	) {
+		CommandBriefingPort commandBriefingPort) {
+
 		this.validBriefingContentPort = validBriefingContentPort;
 		this.commandBriefingPort = commandBriefingPort;
 	}
@@ -27,6 +27,7 @@ public class AlarmContentService implements AlarmContentCommandUseCase {
 	public void create(AiResponseDto aiResponseDto) {
 		validBriefingContentPort.verifyStillAliveAlarm(aiResponseDto.userId());
 		Long briefingId = commandBriefingPort.create(aiResponseDto);
+
 		EventDispatcherHandler.raise(briefingId);
 	}
 }

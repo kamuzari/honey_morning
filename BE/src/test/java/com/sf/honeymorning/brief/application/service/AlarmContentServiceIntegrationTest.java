@@ -70,7 +70,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 	BriefingRepository briefingRepository;
 
 	@SpyBean
-	TtsGenerateService ttsGenerateService;
+	TextToSpeechGenerateService ttsGenerateService;
 
 	@BeforeEach
 	void updateUp() {

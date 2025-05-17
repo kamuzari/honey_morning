@@ -1,7 +1,7 @@
 package com.sf.honeymorning.brief.adapter.out.persistence.entity;
 
-import static com.sf.honeymorning.brief.common.QuizConstraint.MAXIMUM_VALUE;
-import static com.sf.honeymorning.brief.common.QuizConstraint.MINIMUM_VALUE;
+import static com.sf.honeymorning.brief.common.QuizConstraint.ANSWER_MAXIMUM_VALUE;
+import static com.sf.honeymorning.brief.common.QuizConstraint.ANSWER_MINIMUM_VALUE;
 import static com.sf.honeymorning.brief.common.QuizConstraint.OPTION_SIZE;
 
 import java.util.List;
@@ -59,14 +59,16 @@ public class QuizEntity extends BaseEntity {
 	protected QuizEntity() {
 	}
 
-	public QuizEntity(String problem,
+	public QuizEntity(
+		String problem,
 		int answer,
 		List<String> options) {
+
 		if (problem == null || problem.isBlank()) {
 			throw new IllegalArgumentException("문제는 null 이거나 공백으로만 이루어질 수 없습니다");
 		}
 
-		if (answer < MINIMUM_VALUE || answer > MAXIMUM_VALUE) {
+		if (answer < ANSWER_MINIMUM_VALUE || answer > ANSWER_MAXIMUM_VALUE) {
 			throw new IllegalArgumentException("답안은 [1-4] 이내여야 합니다.");
 		}
 
@@ -87,7 +89,7 @@ public class QuizEntity extends BaseEntity {
 	}
 
 	public void addSelection(Integer selection) {
-		if (selection < MINIMUM_VALUE || selection > MAXIMUM_VALUE) {
+		if (selection < ANSWER_MINIMUM_VALUE || selection > ANSWER_MAXIMUM_VALUE) {
 			throw new IllegalArgumentException("선택사항은 [1-4] 번까지만 유효합니다.");
 		}
 

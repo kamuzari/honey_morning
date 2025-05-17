@@ -16,11 +16,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 
 import com.sf.honeymorning.brief.adapter.out.persistence.BriefingPersistenceAdapter;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
+import com.sf.honeymorning.brief.adapter.out.persistence.mapper.BriefingPersistenceMapper;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import com.sf.honeymorning.context.mock.MockTest;
@@ -34,6 +36,9 @@ class LoadBriefingPortTest extends MockTest {
 
 	@Mock
 	BriefingRepository briefingRepository;
+
+	@Spy
+	BriefingPersistenceMapper briefingPersistenceMapper;
 
 	@BeforeEach
 	void setUp() {
