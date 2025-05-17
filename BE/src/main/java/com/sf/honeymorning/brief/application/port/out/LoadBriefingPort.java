@@ -1,8 +1,8 @@
 package com.sf.honeymorning.brief.application.port.out;
 
-import com.sf.honeymorning.brief.application.domain.TtsBriefing;
+import com.sf.honeymorning.brief.application.domain.TextToSpeechContent;
 
 public interface LoadBriefingPort {
-	TtsBriefing getTtsBriefingWithQuizzes(Long id);
+	TextToSpeechContent getTtsBriefingWithQuizzes(Long id);
 
 }

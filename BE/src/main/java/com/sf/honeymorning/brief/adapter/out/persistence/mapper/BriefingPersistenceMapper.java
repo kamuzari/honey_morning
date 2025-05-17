@@ -16,47 +16,61 @@ import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
+import com.sf.honeymorning.brief.application.domain.TextToSpeechContent;
 
 @Component
 public class BriefingPersistenceMapper {
 
-	public BriefHistoryResponseDto toBriefHistoryResponseDto(List<BriefingEntity> briefingEntities,
-		Map<Long, List<BriefingTagEntity>> briefCategoryByBrief, Map<Long, List<QuizEntity>> quizzesByBrief,
+	public BriefHistoryResponseDto toBriefHistoryResponseDto(
+		List<BriefingEntity> briefingEntities,
+		Map<Long, List<BriefingTagEntity>> briefCategoryByBrief,
+		Map<Long, List<QuizEntity>> quizzesByBrief,
 		Page<BriefingEntity> briefingPage) {
+
 		return new BriefHistoryResponseDto(briefingEntities.stream()
-			.map(brief -> new MyBriefing(brief.getId(), brief.getCreatedAt(),
-				briefCategoryByBrief.get(brief.getId()).stream().map(BriefingTagEntity::getWord)
-					.toList(),
-				brief.getSummaryText(),
-				quizzesByBrief.get(brief.getId()).stream()
-					.filter(quiz -> quiz.getAnswer().equals(quiz.getSelection()))
-					.count())).toList(), briefingPage.getTotalPages());
+			.map(brief ->
+				new MyBriefing(
+					brief.getId(),
+					brief.getCreatedAt(),
+					briefCategoryByBrief.get(brief.getId()).stream()
+						.map(BriefingTagEntity::getWord)
+						.toList(),
+					brief.getSummaryText(),
+					quizzesByBrief.get(brief.getId()).stream()
+						.filter(quiz -> quiz.getAnswer().equals(quiz.getSelection()))
+						.count())).toList(), briefingPage.getTotalPages());
 	}
 
-	public BriefingDetailResponseDto toBriefingDetailResponseDto(BriefingEntity briefingEntity,
+	public BriefingDetailResponseDto toBriefingDetailResponseDto(
+		BriefingEntity briefingEntity,
 		List<BriefingTagEntity> briefCategories,
-		List<QuizEntity> quizEntities, List<TopicModelWord> topicModelWords) {
+		List<QuizEntity> quizEntities,
+		List<TopicModelWord> topicModelWords) {
+
 		return new BriefingDetailResponseDto(
 			briefingEntity.getId(),
 			briefingEntity.getSummaryText(),
 			briefingEntity.getText(),
 			briefingEntity.getWakeUpBriefingContent().getFileUrl(),
 			topicModelWords.stream()
-				.map(topicModelWord -> new TopicModelWordResponse(topicModelWord.getSectionId(),
-					topicModelWord.getWord(),
-					topicModelWord.getWeight())
+				.map(topicModelWord ->
+					new TopicModelWordResponse(
+						topicModelWord.getSectionId(),
+						topicModelWord.getWord(),
+						topicModelWord.getWeight())
 				).toList(),
 			briefCategories.stream().map(BriefingTagEntity::getWord).toList(),
 			quizEntities.stream()
-				.map(quiz -> new QuizResponseDto(
-					quiz.getProblem(),
-					quiz.getOption1(),
-					quiz.getOption2(),
-					quiz.getOption3(),
-					quiz.getOption4(),
-					quiz.getSelection(),
-					quiz.getAnswer()
-				)).toList(),
+				.map(quiz ->
+					new QuizResponseDto(
+						quiz.getProblem(),
+						quiz.getOption1(),
+						quiz.getOption2(),
+						quiz.getOption3(),
+						quiz.getOption4(),
+						quiz.getSelection(),
+						quiz.getAnswer()
+					)).toList(),
 			briefingEntity.getCreatedAt());
 	}
 
@@ -76,6 +90,16 @@ public class BriefingPersistenceMapper {
 				aiTopicDto.sectionId(),
 				aiTopicDto.word(),
 				aiTopicDto.weight())).toList()
+		);
+	}
+
+	public TextToSpeechContent toTextToSpeechContent(BriefingEntity briefingEntity) {
+		return new TextToSpeechContent(
+			briefingEntity.getId(), briefingEntity.getSummaryText(),
+			briefingEntity.getQuizEntities().stream()
+				.map(
+					quizEntity -> new TextToSpeechContent.textToSpeechQuiz(quizEntity.getId(), quizEntity.getProblem()))
+				.toList()
 		);
 	}
 }

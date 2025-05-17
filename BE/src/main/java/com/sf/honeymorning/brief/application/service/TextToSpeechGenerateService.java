@@ -13,61 +13,61 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sf.honeymorning.brief.application.domain.TtsBriefing;
-import com.sf.honeymorning.brief.application.port.in.TtsCommandUseCase;
+import com.sf.honeymorning.brief.application.domain.TextToSpeechContent;
+import com.sf.honeymorning.brief.application.port.in.TextToSpeechCommandUseCase;
 import com.sf.honeymorning.brief.application.port.out.CommandBriefingPort;
-import com.sf.honeymorning.brief.application.port.out.CommandTtsPort;
-import com.sf.honeymorning.brief.application.port.out.ContentStorePort;
+import com.sf.honeymorning.brief.application.port.out.CommandTextToSpeechPort;
+import com.sf.honeymorning.brief.application.port.out.CommandContentStorePort;
 import com.sf.honeymorning.brief.application.port.out.LoadBriefingPort;
 import com.sf.honeymorning.common.entity.content.AccessAuthority;
 import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
 
 @Service
-public class TtsGenerateService implements TtsCommandUseCase {
+public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase {
 
-	private final ContentStorePort s3ContentStorePort;
-	private final CommandTtsPort commandTtsPort;
+	private final CommandContentStorePort s3CommandContentStorePort;
+	private final CommandTextToSpeechPort commandTextToSpeechPort;
 	private final LoadBriefingPort loadBriefingPort;
 	private final CommandBriefingPort commandBriefingPort;
 
 	@Value("${aws.s3.domain-name}")
 	private String contentDomainName;
 
-	public TtsGenerateService(
-		ContentStorePort s3ContentStoreAdapter,
-		CommandTtsPort commandTtsPort,
+	public TextToSpeechGenerateService(
+		CommandContentStorePort s3ContentStoreAdapter,
+		CommandTextToSpeechPort commandTextToSpeechPort,
 		LoadBriefingPort loadBriefingPort,
 		CommandBriefingPort commandBriefingPort) {
 
-		this.s3ContentStorePort = s3ContentStoreAdapter;
-		this.commandTtsPort = commandTtsPort;
+		this.s3CommandContentStorePort = s3ContentStoreAdapter;
+		this.commandTextToSpeechPort = commandTextToSpeechPort;
 		this.loadBriefingPort = loadBriefingPort;
 		this.commandBriefingPort = commandBriefingPort;
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void create(Long briefingId) {
-		TtsBriefing ttsBriefing = loadBriefingPort.getTtsBriefingWithQuizzes(briefingId);
-		addBriefingContent(ttsBriefing);
-		addQuizContents(ttsBriefing);
-		commandBriefingPort.reflect(ttsBriefing);
+		TextToSpeechContent textToSpeechContent = loadBriefingPort.getTtsBriefingWithQuizzes(briefingId);
+		addBriefingContent(textToSpeechContent);
+		addQuizContents(textToSpeechContent);
+		commandBriefingPort.reflect(textToSpeechContent);
 	}
 
-	private void addBriefingContent(TtsBriefing ttsBriefing) {
-		Content content = createContent(ttsBriefing.getSummaryText(), FileType.BRIEFING);
-		ttsBriefing.addContent(content);
+	private void addBriefingContent(TextToSpeechContent textToSpeechContent) {
+		Content content = createContent(textToSpeechContent.getSummaryText(), FileType.BRIEFING);
+		textToSpeechContent.addContent(content);
 	}
 
-	private void addQuizContents(TtsBriefing ttsBriefing) {
-		ttsBriefing.getTtsQuizzes().forEach(quiz -> {
+	private void addQuizContents(TextToSpeechContent textToSpeechContent) {
+		textToSpeechContent.getTtsQuizzes().forEach(quiz -> {
 			Content content = createContent(quiz.getQuestionText(), FileType.QUIZ);
 			quiz.addContent(content);
 		});
 	}
 
 	private Content createContent(String text, FileType type) {
-		ResponseEntity<Resource> briefingTtsResponse = commandTtsPort.create(text);
+		ResponseEntity<Resource> briefingTtsResponse = commandTextToSpeechPort.create(text);
 		long contentLength = Long.parseLong(getContentLength(briefingTtsResponse));
 		String contentType = getContentType(briefingTtsResponse);
 
@@ -75,7 +75,7 @@ public class TtsGenerateService implements TtsCommandUseCase {
 		String filePath = type.getPath(fileName);
 		String accessUrl = String.join("/", contentDomainName, filePath);
 
-		s3ContentStorePort.upload(filePath,
+		s3CommandContentStorePort.upload(filePath,
 			Objects.requireNonNull(briefingTtsResponse.getBody()),
 			contentLength,
 			contentType);

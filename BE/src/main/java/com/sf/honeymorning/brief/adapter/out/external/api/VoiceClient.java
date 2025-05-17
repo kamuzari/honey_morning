@@ -17,11 +17,16 @@ public interface VoiceClient {
 		consumes = MediaType.APPLICATION_JSON_VALUE,
 		produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	ResponseEntity<Resource> createTts(
-		@PathVariable("voiceId") String voiceId,
-		@RequestHeader("xi-api-key") String apiKey,
-		@RequestHeader("optimize_streaming_latency") int latency,
-		@RequestHeader("output_format") String outputFormat,
-		@RequestBody VoiceCreateRequestDto body
+		@PathVariable("voiceId")
+		String voiceId,
+		@RequestHeader("xi-api-key")
+		String apiKey,
+		@RequestHeader("optimize_streaming_latency")
+		int latency,
+		@RequestHeader("output_format")
+		String outputFormat,
+		@RequestBody
+		VoiceCreateRequestDto body
 	);
 
 }

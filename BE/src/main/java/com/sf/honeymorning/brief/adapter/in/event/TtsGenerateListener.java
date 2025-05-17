@@ -6,8 +6,8 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.validation.annotation.Validated;
 
-import com.sf.honeymorning.brief.application.port.in.TtsCommandUseCase;
-import com.sf.honeymorning.brief.application.service.TtsGenerateService;
+import com.sf.honeymorning.brief.application.port.in.TextToSpeechCommandUseCase;
+import com.sf.honeymorning.brief.application.service.TextToSpeechGenerateService;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -16,16 +16,16 @@ import jakarta.validation.constraints.Positive;
 @Validated
 @Component
 public class TtsGenerateListener {
-	private final TtsCommandUseCase ttsCommandUseCase;
+	private final TextToSpeechCommandUseCase textToSpeechCommandUseCase;
 
-	public TtsGenerateListener(TtsGenerateService ttsCommandUseCase) {
-		this.ttsCommandUseCase = ttsCommandUseCase;
+	public TtsGenerateListener(TextToSpeechGenerateService ttsCommandUseCase) {
+		this.textToSpeechCommandUseCase = ttsCommandUseCase;
 	}
 
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	@EventListener(Long.class)
 	public void generate(@Valid @NotNull @Positive Long briefingId) {
-		ttsCommandUseCase.create(briefingId);
+		textToSpeechCommandUseCase.create(briefingId);
 	}
 
 }

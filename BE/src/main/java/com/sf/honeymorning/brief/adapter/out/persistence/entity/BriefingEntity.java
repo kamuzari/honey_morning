@@ -13,13 +13,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
 @Getter
-@Table(name = "briefings")
+@Table(
+	name = "briefings",
+	indexes = {
+		@Index(name = "briefing_user_id_idx", columnList = "userId")
+	}
+)
 @Entity
 public class BriefingEntity extends BaseEntity {
 
@@ -76,8 +82,8 @@ public class BriefingEntity extends BaseEntity {
 		String wakeUpCallPath,
 		List<BriefingTagEntity> briefingTagEntities,
 		List<QuizEntity> quizEntities,
-		List<TopicModelWord> topicModelWords
-	) {
+		List<TopicModelWord> topicModelWords) {
+
 		this.userId = userId;
 		this.summaryText = summaryText;
 		this.text = text;

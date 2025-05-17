@@ -24,20 +24,20 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.sf.honeymorning.brief.application.domain.TtsBriefing;
+import com.sf.honeymorning.brief.application.domain.TextToSpeechContent;
 import com.sf.honeymorning.brief.application.port.out.CommandBriefingPort;
-import com.sf.honeymorning.brief.application.port.out.CommandTtsPort;
-import com.sf.honeymorning.brief.application.port.out.ContentStorePort;
+import com.sf.honeymorning.brief.application.port.out.CommandTextToSpeechPort;
+import com.sf.honeymorning.brief.application.port.out.CommandContentStorePort;
 import com.sf.honeymorning.brief.application.port.out.LoadBriefingPort;
-import com.sf.honeymorning.brief.application.service.TtsGenerateService;
+import com.sf.honeymorning.brief.application.service.TextToSpeechGenerateService;
 import com.sf.honeymorning.brief.common.QuizConstraint;
 import com.sf.honeymorning.context.mock.MockTest;
 
-class TtsCommandUseCaseTest extends MockTest {
-	TtsCommandUseCase sut;
+class TextToSpeechCommandUseCaseTest extends MockTest {
+	TextToSpeechCommandUseCase sut;
 
 	@InjectMocks
-	TtsGenerateService sutImpl;
+	TextToSpeechGenerateService sutImpl;
 
 	@Mock
 	LoadBriefingPort loadBriefingPort;
@@ -46,10 +46,10 @@ class TtsCommandUseCaseTest extends MockTest {
 	CommandBriefingPort commandBriefingPort;
 
 	@Mock
-	CommandTtsPort commandTtsPort;
+	CommandTextToSpeechPort commandTextToSpeechPort;
 
 	@Mock
-	ContentStorePort contentStorePort;
+	CommandContentStorePort commandContentStorePort;
 
 	static final String FILE_NAME = "sample-sound.mp3";
 	static final String FILE_LOCATION = "./sample/" + FILE_NAME;
@@ -74,10 +74,10 @@ class TtsCommandUseCaseTest extends MockTest {
 	@Test
 	void testCreateTts() throws IOException {
 		//given
-		TtsBriefing loadedTtsBriefing = new TtsBriefing(
+		TextToSpeechContent loadedTextToSpeechContent = new TextToSpeechContent(
 			1L,
 			DATE_GENERATOR.lorem().sentence(20),
-			Stream.generate(() -> new TtsBriefing.TtsQuiz(
+			Stream.generate(() -> new TextToSpeechContent.textToSpeechQuiz(
 					DATE_GENERATOR.number().randomNumber(),
 					DATE_GENERATOR.lorem().sentence(5)
 				)).limit(QuizConstraint.TOTAL_QUIZ_SIZE)
@@ -86,17 +86,18 @@ class TtsCommandUseCaseTest extends MockTest {
 
 		var expectedTtsFileResponse = getResource();
 
-		given(loadBriefingPort.getTtsBriefingWithQuizzes(loadedTtsBriefing.getId())).willReturn(loadedTtsBriefing);
-		given(commandTtsPort.create(anyString())).willReturn(expectedTtsFileResponse);
-		doNothing().when(contentStorePort).upload(anyString(), any(), anyLong(), anyString());
+		given(loadBriefingPort.getTtsBriefingWithQuizzes(loadedTextToSpeechContent.getBriefingId())).willReturn(
+			loadedTextToSpeechContent);
+		given(commandTextToSpeechPort.create(anyString())).willReturn(expectedTtsFileResponse);
+		doNothing().when(commandContentStorePort).upload(anyString(), any(), anyLong(), anyString());
 
 		//when
-		sut.create(loadedTtsBriefing.getId());
+		sut.create(loadedTextToSpeechContent.getBriefingId());
 
 		//then
-		assertThat(loadedTtsBriefing.getContent()).isNotNull();
-		loadedTtsBriefing.getTtsQuizzes().forEach(ttsQuiz ->
-			assertThat(ttsQuiz.getContent()).isNotNull()
+		assertThat(loadedTextToSpeechContent.getContent()).isNotNull();
+		loadedTextToSpeechContent.getTtsQuizzes().forEach(textToSpeechQuiz ->
+			assertThat(textToSpeechQuiz.getContent()).isNotNull()
 		);
 	}
 

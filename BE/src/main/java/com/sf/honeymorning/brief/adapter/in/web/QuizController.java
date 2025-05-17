@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sf.honeymorning.brief.adapter.in.web.dto.request.SelectionRequestDto;
 import com.sf.honeymorning.brief.adapter.in.web.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.brief.adapter.in.web.port.out.QuizQueryPort;
-import com.sf.honeymorning.brief.application.port.in.SolveQuizUseCase;
+import com.sf.honeymorning.brief.application.port.in.QuizCommandUseCase;
 import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
 
 import jakarta.validation.Valid;
@@ -22,28 +22,36 @@ import jakarta.validation.Valid;
 @RestController
 public class QuizController {
 	private final QuizQueryPort quizQueryPort;
-	private final SolveQuizUseCase solveQuizUseCase;
+	private final QuizCommandUseCase quizCommandUseCase;
 
-	public QuizController(QuizQueryPort quizQueryPort, SolveQuizUseCase solveQuizUseCase) {
+	public QuizController(
+		QuizQueryPort quizQueryPort,
+		QuizCommandUseCase quizCommandUseCase) {
+
 		this.quizQueryPort = quizQueryPort;
-		this.solveQuizUseCase = solveQuizUseCase;
+		this.quizCommandUseCase = quizCommandUseCase;
 	}
 
 	@GetMapping("/{briefId}")
-	public List<QuizResponseDto> getQuizzes(@AuthenticationPrincipal
+	public List<QuizResponseDto> getQuizzes(
+		@AuthenticationPrincipal
 		JwtAuthentication principal,
+
 		@PathVariable Long briefId) {
 
 		return quizQueryPort.getQuizzes(principal.id(), briefId);
 	}
 
 	@PatchMapping
-	public void solve(@AuthenticationPrincipal
+	public void solve(
+		@AuthenticationPrincipal
 		JwtAuthentication principal,
+
 		@Valid
 		@RequestBody
 		SelectionRequestDto selectionRequestDto) {
-		solveQuizUseCase.solve(principal.id(), selectionRequestDto);
+
+		quizCommandUseCase.solve(principal.id(), selectionRequestDto);
 	}
 }
 

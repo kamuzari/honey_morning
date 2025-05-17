@@ -1,7 +1,7 @@
 package com.sf.honeymorning.brief.adapter.out.persistence.entity;
 
-import static com.sf.honeymorning.brief.common.QuizConstraint.MAXIMUM_VALUE;
-import static com.sf.honeymorning.brief.common.QuizConstraint.MINIMUM_VALUE;
+import static com.sf.honeymorning.brief.common.QuizConstraint.ANSWER_MAXIMUM_VALUE;
+import static com.sf.honeymorning.brief.common.QuizConstraint.ANSWER_MINIMUM_VALUE;
 import static com.sf.honeymorning.brief.common.QuizConstraint.OPTION_SIZE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,7 +17,6 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.github.javafaker.Faker;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
 
 class QuizEntityTest {
 	static final Faker DATE_GENERATOR = new Faker();
@@ -27,7 +26,7 @@ class QuizEntityTest {
 	void testCreateQuiz() {
 		//given
 		String problem = DATE_GENERATOR.lorem().sentence(4);
-		int answer = DATE_GENERATOR.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE);
+		int answer = DATE_GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE);
 		List<String> options = Stream.generate(() -> DATE_GENERATOR.lorem().word()).limit(OPTION_SIZE).toList();
 
 		//when
@@ -53,7 +52,7 @@ class QuizEntityTest {
 		@NullAndEmptySource
 		void invalidProblem(String problem) {
 			//given
-			int answer = DATE_GENERATOR.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE);
+			int answer = DATE_GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE);
 			List<String> options = Stream.generate(() -> DATE_GENERATOR.lorem().word()).limit(4).toList();
 
 			//when
@@ -82,7 +81,7 @@ class QuizEntityTest {
 		void invalidOptionSize(int optionSize) {
 			//given
 			String problem = DATE_GENERATOR.lorem().sentence(4);
-			int answer = DATE_GENERATOR.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE);
+			int answer = DATE_GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE);
 			List<String> options = Stream.generate(() -> DATE_GENERATOR.lorem().word()).limit(optionSize).toList();
 
 			//when
@@ -98,7 +97,7 @@ class QuizEntityTest {
 	void failAddSelection(int invalidSelection) {
 		//given
 		String problem = DATE_GENERATOR.lorem().sentence(4);
-		int answer = DATE_GENERATOR.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE);
+		int answer = DATE_GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE);
 		List<String> options = Stream.generate(() -> DATE_GENERATOR.lorem().word()).limit(4).toList();
 		//when
 		QuizEntity quizEntity = createQuiz(problem, answer, options);

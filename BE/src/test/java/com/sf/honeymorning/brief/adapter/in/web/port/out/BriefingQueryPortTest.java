@@ -1,7 +1,7 @@
 package com.sf.honeymorning.brief.adapter.in.web.port.out;
 
-import static com.sf.honeymorning.brief.common.QuizConstraint.MAXIMUM_VALUE;
-import static com.sf.honeymorning.brief.common.QuizConstraint.MINIMUM_VALUE;
+import static com.sf.honeymorning.brief.common.QuizConstraint.ANSWER_MAXIMUM_VALUE;
+import static com.sf.honeymorning.brief.common.QuizConstraint.ANSWER_MINIMUM_VALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,6 +35,7 @@ import com.sf.honeymorning.common.entity.content.AccessAuthority;
 import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
 import com.sf.honeymorning.common.exception.model.BusinessException;
+import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import com.sf.honeymorning.context.mock.MockTest;
 
 public class BriefingQueryPortTest extends MockTest {
@@ -81,10 +82,10 @@ public class BriefingQueryPortTest extends MockTest {
 		);
 		ReflectionTestUtils.setField(briefingEntity, "id", 1L);
 		List<QuizEntity> quizEntities = List.of(new QuizEntity(DATE_GENERATOR.lorem().sentence(),
-				DATE_GENERATOR.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE),
+				DATE_GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE),
 				Stream.generate(() -> DATE_GENERATOR.lorem().sentence()).limit(4).toList()),
 			new QuizEntity(DATE_GENERATOR.lorem().sentence(),
-				DATE_GENERATOR.number().numberBetween(MINIMUM_VALUE, MAXIMUM_VALUE),
+				DATE_GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE),
 				Stream.generate(() -> DATE_GENERATOR.lorem().sentence()).limit(4).toList())
 		);
 
@@ -131,7 +132,7 @@ public class BriefingQueryPortTest extends MockTest {
 		//when
 		//then
 		assertThatThrownBy(() -> sut.getMyBriefing(AUTH_USER_ENTITY.getId(), briefingEntity.getId()))
-			.isInstanceOf(BusinessException.class);
+			.isInstanceOf(NotFoundResourceException.class);
 		verify(briefingRepository, times(1)).findByUserIdAndId(any(), any());
 	}
 }

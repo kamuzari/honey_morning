@@ -2,34 +2,35 @@ package com.sf.honeymorning.brief.application.domain;
 
 import java.util.List;
 
+import com.sf.honeymorning.brief.common.QuizConstraint;
 import com.sf.honeymorning.common.entity.content.Content;
 
-public class TtsBriefing {
-	private final Long id;
+public class TextToSpeechContent {
+	private final Long briefingId;
 	private final String summaryText;
-	private final List<TtsQuiz> ttsQuizzes;
+	private final List<textToSpeechQuiz> textToSpeechQuizzes;
 	private Content content = null;
 
-	public TtsBriefing(
-		Long id,
+	public TextToSpeechContent(
+		Long briefingId,
 		String summaryText,
-		List<TtsQuiz> ttsQuizzes) {
-		validateTtsQuizzes(ttsQuizzes);
-		this.id = id;
+		List<textToSpeechQuiz> textToSpeechQuizzes) {
+		validateTtsQuizzes(textToSpeechQuizzes);
+		this.briefingId = briefingId;
 		this.summaryText = summaryText;
-		this.ttsQuizzes = ttsQuizzes;
+		this.textToSpeechQuizzes = textToSpeechQuizzes;
 	}
 
-	public Long getId() {
-		return id;
+	public Long getBriefingId() {
+		return briefingId;
 	}
 
 	public String getSummaryText() {
 		return summaryText;
 	}
 
-	public List<TtsQuiz> getTtsQuizzes() {
-		return ttsQuizzes;
+	public List<textToSpeechQuiz> getTtsQuizzes() {
+		return textToSpeechQuizzes;
 	}
 
 	public void addContent(Content content) {
@@ -40,12 +41,12 @@ public class TtsBriefing {
 		return this.content;
 	}
 
-	public static class TtsQuiz {
+	public static class textToSpeechQuiz {
 		private final Long id;
 		private final String questionText;
 		private Content content = null;
 
-		public TtsQuiz(
+		public textToSpeechQuiz(
 			Long id,
 			String questionText
 		) {
@@ -72,9 +73,9 @@ public class TtsBriefing {
 		}
 	}
 
-	private void validateTtsQuizzes(List<TtsQuiz> ttsQuizzes) {
-		if (ttsQuizzes == null || ttsQuizzes.size() != 2) {
-			throw new IllegalArgumentException("ttsQuizzes는 정확히 2개의 퀴즈를 포함해야 합니다.");
+	private void validateTtsQuizzes(List<textToSpeechQuiz> textToSpeechQuizzes) {
+		if (textToSpeechQuizzes == null || textToSpeechQuizzes.size() != QuizConstraint.TOTAL_QUIZ_SIZE) {
+			throw new IllegalArgumentException("정확히 2개의 퀴즈를 포함해야 합니다.");
 		}
 	}
 }

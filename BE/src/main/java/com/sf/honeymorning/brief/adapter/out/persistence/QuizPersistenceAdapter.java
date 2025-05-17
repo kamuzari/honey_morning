@@ -11,13 +11,16 @@ import com.sf.honeymorning.brief.adapter.in.web.dto.response.detail.QuizResponse
 import com.sf.honeymorning.brief.adapter.in.web.port.out.QuizQueryPort;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
+import com.sf.honeymorning.brief.adapter.out.persistence.mapper.QuizPersistenceMapper;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.QuizRepository;
-import com.sf.honeymorning.brief.adapter.out.persistence.mapper.QuizPersistenceMapper;
+import com.sf.honeymorning.brief.application.domain.EmptySelectionQuiz;
+import com.sf.honeymorning.brief.application.port.out.CommandQuizPort;
+import com.sf.honeymorning.brief.application.port.out.LoadQuizPort;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 
 @Component
-public class QuizPersistenceAdapter implements QuizQueryPort {
+public class QuizPersistenceAdapter implements QuizQueryPort, CommandQuizPort, LoadQuizPort {
 	private final QuizRepository quizRepository;
 	private final BriefingRepository briefingRepository;
 	private final QuizPersistenceMapper quizPersistenceMapper;
@@ -40,5 +43,33 @@ public class QuizPersistenceAdapter implements QuizQueryPort {
 		List<QuizEntity> quizEntityList = quizRepository.findByBriefingEntity(briefingEntity);
 
 		return quizEntityList.stream().map(quizPersistenceMapper::toQuizResponseDto).toList();
+	}
+
+	@Override
+	public void reflect(List<EmptySelectionQuiz> filledSelectionQuizzes) {
+		var quizIds = filledSelectionQuizzes.stream().map(EmptySelectionQuiz::getQuizId).toList();
+		List<QuizEntity> quizEntities = quizRepository.findAllById(quizIds).stream().toList();
+
+		filledSelectionQuizzes.forEach(
+			domain ->
+				quizEntities.stream()
+					.filter(quiz -> quiz.getId().equals(domain.getQuizId()))
+					.findFirst()
+					.orElseThrow(() -> new NotFoundResourceException(
+						format("존재하지 않는 퀴즈입니다. quizId -> {0}", domain.getQuizId()), POLICY_VIOLATION)
+					).addSelection(domain.getSelection())
+		);
+	}
+
+	@Override
+	public List<EmptySelectionQuiz> getQuizzes(Long userId, Long briefingId, List<Long> quizIds) {
+		BriefingEntity briefingEntity = briefingRepository.findByUserIdAndId(userId, briefingId)
+			.orElseThrow(() -> new NotFoundResourceException(
+				format("존재하지 않는 사용자입니다. userId -> {0}, briefingId -> {1}", userId, briefingId), POLICY_VIOLATION)
+			);
+		return quizRepository.findByBriefingEntity(briefingEntity)
+			.stream()
+			.map(quizPersistenceMapper::toEmptySelectionQuiz)
+			.toList();
 	}
 }

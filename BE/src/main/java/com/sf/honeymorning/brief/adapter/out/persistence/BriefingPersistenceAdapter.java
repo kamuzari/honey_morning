@@ -26,16 +26,12 @@ import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepo
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingTagRepository;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.QuizRepository;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.TopicModelWordRepository;
-import com.sf.honeymorning.brief.application.domain.TtsBriefing;
+import com.sf.honeymorning.brief.application.domain.TextToSpeechContent;
 import com.sf.honeymorning.brief.application.port.out.CommandBriefingPort;
 import com.sf.honeymorning.brief.application.port.out.LoadBriefingPort;
 import com.sf.honeymorning.brief.application.port.out.ValidBriefingContentPort;
-import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
-
-import jakarta.validation.Valid;
-
 
 @Validated
 @Component
@@ -96,7 +92,7 @@ public class BriefingPersistenceAdapter implements
 
 		boolean canAccess = briefingEntity.getUserId().equals(userId);
 		if (!canAccess) {
-			throw new BusinessException("잘못된 접근입니다.", ErrorProtocol.BUSINESS_VIOLATION);
+			throw new NotFoundResourceException("잘못된 접근입니다.", POLICY_VIOLATION);
 		}
 
 		List<BriefingTagEntity> briefCategories = briefingTagRepository.findByBriefingEntity(briefingEntity);
@@ -128,38 +124,28 @@ public class BriefingPersistenceAdapter implements
 		return briefingRepository.save(totalAlarmContent).getId();
 	}
 
-
 	@Override
-	public void reflect(TtsBriefing ttsBriefing) {
-		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(ttsBriefing.getId())
+	public void reflect(TextToSpeechContent textToSpeechContent) {
+		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(textToSpeechContent.getBriefingId())
 			.orElseThrow(() -> new NotFoundResourceException(
-				MessageFormat.format("브리핑 데이터가 반드시 존재해야 합니다. briefingId : {0}", ttsBriefing.getId()),
+				MessageFormat.format("브리핑 데이터가 반드시 존재해야 합니다. briefingId : {0}", textToSpeechContent.getBriefingId()),
 				ErrorProtocol.BUSINESS_VIOLATION
 			));
 
-		briefingEntity.addWakeUpBriefingContent(ttsBriefing.getContent());
-		ttsBriefing.getTtsQuizzes().forEach(quiz ->
+		briefingEntity.addWakeUpBriefingContent(textToSpeechContent.getContent());
+		textToSpeechContent.getTtsQuizzes().forEach(quiz ->
 			briefingEntity.addQuizContent(quiz.getId(), quiz.getContent())
 		);
 	}
 
 	@Override
-	public TtsBriefing getTtsBriefingWithQuizzes(Long id) {
+	public TextToSpeechContent getTtsBriefingWithQuizzes(Long id) {
 		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(id)
 			.orElseThrow(() -> new NotFoundResourceException(
 				MessageFormat.format("브리핑 데이터가 반드시 존재해야 합니다. briefingId : {0}", id),
 				ErrorProtocol.BUSINESS_VIOLATION
 			));
 
-		return toDomain(briefingEntity);
-	}
-
-	 TtsBriefing toDomain(BriefingEntity briefingEntity) {
-		return new TtsBriefing(
-			briefingEntity.getId(), briefingEntity.getSummaryText(),
-			briefingEntity.getQuizEntities().stream()
-				.map(quizEntity -> new TtsBriefing.TtsQuiz(quizEntity.getId(), quizEntity.getProblem()))
-				.toList()
-		);
+		return briefingPersistenceMapper.toTextToSpeechContent(briefingEntity);
 	}
 }

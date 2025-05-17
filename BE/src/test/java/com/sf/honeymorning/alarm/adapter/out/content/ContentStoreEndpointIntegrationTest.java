@@ -30,7 +30,7 @@ public class ContentStoreEndpointIntegrationTest extends EndPointIntegrationTest
 	static final ResourceLoader LOADER = new DefaultResourceLoader();
 
 	@Autowired
-	S3ContentStoreAdapter s3ContentStoreAdapter;
+	S3CommandContentStoreAdapter s3ContentStoreAdapter;
 
 	@Autowired
 	AmazonS3 amazonS3Client;

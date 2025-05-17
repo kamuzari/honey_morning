@@ -10,18 +10,18 @@ import com.amazonaws.event.ProgressListener;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.sf.honeymorning.brief.application.port.out.ContentStorePort;
+import com.sf.honeymorning.brief.application.port.out.CommandContentStorePort;
 import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.constant.ErrorProtocol;
 
 @Service
-public class S3ContentStoreAdapter implements ContentStorePort {
+public class S3CommandContentStoreAdapter implements CommandContentStorePort {
 
 	private final String bucketName;
 	private final AmazonS3 amazonS3;
 	private final ProgressListener progressListener;
 
-	public S3ContentStoreAdapter(
+	public S3CommandContentStoreAdapter(
 		AmazonS3 amazonS3,
 		@Value("${aws.s3.bucket-name.tts}") String bucketName,
 		ProgressListener progressListener
