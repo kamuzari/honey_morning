@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sf.honeymorning.user.adapter.in.authentication.constant.JwtProperty;
+import com.sf.honeymorning.common.security.authentication.constant.JwtProperty;
 import com.sf.honeymorning.user.adapter.in.web.dto.request.AccountSignUpRequest;
 import com.sf.honeymorning.user.adapter.in.web.dto.request.LoginAuthRequestDto;
 import com.sf.honeymorning.user.adapter.in.web.dto.response.LoginAuthResponseDto;

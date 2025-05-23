@@ -1,4 +1,4 @@
-package com.sf.honeymorning.user.adapter.in.authentication.model;
+package com.sf.honeymorning.common.security.core;
 
 import java.util.Collection;
 

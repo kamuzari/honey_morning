@@ -11,8 +11,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 
 import com.sf.honeymorning.context.infra.database.RedisContext;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
-import com.sf.honeymorning.user.adapter.in.authentication.constant.JwtProperty;
-import com.sf.honeymorning.user.adapter.in.authentication.service.TokenService;
+import com.sf.honeymorning.common.security.authentication.constant.JwtProperty;
+import com.sf.honeymorning.common.security.authentication.service.TokenService;
 import com.sf.honeymorning.user.adapter.in.web.dto.request.AccountSignUpRequest;
 import com.sf.honeymorning.user.adapter.in.web.dto.request.LoginAuthRequestDto;
 import com.sf.honeymorning.user.adapter.in.web.dto.response.LoginAuthResponseDto;

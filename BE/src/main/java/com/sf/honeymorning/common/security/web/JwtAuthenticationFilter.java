@@ -1,4 +1,4 @@
-package com.sf.honeymorning.user.adapter.in.authentication.jwt;
+package com.sf.honeymorning.common.security.web;
 
 import static org.springframework.http.HttpHeaders.SET_COOKIE;
 
@@ -13,14 +13,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.sf.honeymorning.user.adapter.in.authentication.constant.CookieProperty;
-import com.sf.honeymorning.user.adapter.in.authentication.constant.JwtProperty;
-import com.sf.honeymorning.user.adapter.in.authentication.exception.TokenNotFoundException;
-import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
-import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthenticationToken;
+import com.sf.honeymorning.common.security.authentication.constant.CookieProperty;
+import com.sf.honeymorning.common.security.authentication.constant.JwtProperty;
+import com.sf.honeymorning.common.security.authentication.exception.TokenNotFoundException;
+import com.sf.honeymorning.common.security.authentication.JwtProviderManager;
+import com.sf.honeymorning.common.security.core.JwtClaim;
+import com.sf.honeymorning.common.security.core.JwtAuthentication;
+import com.sf.honeymorning.common.security.core.JwtAuthenticationToken;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.FilterChain;
@@ -30,6 +33,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+	
 	private final JwtProviderManager jwtProviderManager;
 	private final JwtProperty jwtProperty;
 	private final CookieProperty cookieProperty;
@@ -61,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private void attemptAuthenticate(String accessToken, HttpServletRequest request, HttpServletResponse response) {
 		try {
-			JwtProviderManager.CustomClaim verifiedClaim = jwtProviderManager.verify(accessToken);
+			JwtClaim verifiedClaim = jwtProviderManager.verify(accessToken);
 			JwtAuthenticationToken authenticationToken = createAuthenticationToken(verifiedClaim, request, accessToken);
 			SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
@@ -81,9 +85,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		try {
 			String refreshToken = jwtProviderManager.extractRefreshToken(request);
 			jwtProviderManager.verifyRefreshToken(accessToken, refreshToken);
-			JwtProviderManager.CustomClaim claim = jwtProviderManager.decode(accessToken);
+			JwtClaim claim = new JwtClaim(JWT.decode(accessToken));
 			String reIssuedToken = jwtProviderManager.generateAccessToken(claim);
-			JwtProviderManager.CustomClaim verifiedClaim = jwtProviderManager.verify(reIssuedToken);
+			JwtClaim verifiedClaim = jwtProviderManager.verify(reIssuedToken);
 			var authenticationToken = createAuthenticationToken(verifiedClaim, request, reIssuedToken);
 
 			ResponseCookie cookie = ResponseCookie.from(jwtProperty.accessToken().header(), reIssuedToken)
@@ -103,17 +107,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private JwtAuthenticationToken createAuthenticationToken(
-		JwtProviderManager.CustomClaim claims,
+		JwtClaim claims,
 		HttpServletRequest request,
 		String accessToken
 	) {
 		List<GrantedAuthority> authorities = jwtProviderManager.getAuthorities(claims);
 
-		if (claims.userId == null || authorities.isEmpty()) {
+		if (claims.getUserId() == null || authorities.isEmpty()) {
 			throw new JWTDecodeException("Decode Error");
 		}
 
-		JwtAuthentication authentication = new JwtAuthentication(claims.userId, accessToken);
+		JwtAuthentication authentication = new JwtAuthentication(claims.getUserId(), accessToken);
 		JwtAuthenticationToken authenticationToken = JwtAuthenticationToken.create(authentication, authorities);
 		authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

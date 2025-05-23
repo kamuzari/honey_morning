@@ -1,4 +1,4 @@
-package com.sf.honeymorning.user.adapter.in.authentication.exception;
+package com.sf.honeymorning.common.security.authentication.exception;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

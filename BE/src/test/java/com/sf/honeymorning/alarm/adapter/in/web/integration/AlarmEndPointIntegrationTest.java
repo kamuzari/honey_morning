@@ -10,9 +10,8 @@ import java.time.format.DateTimeFormatter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
@@ -21,42 +20,36 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.alarm.adapter.in.web.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
+import com.sf.honeymorning.context.infra.database.RedisContext;
 import com.sf.honeymorning.context.integration.EndPointIntegrationTest;
-import com.sf.honeymorning.user.adapter.in.authentication.jwt.JwtProviderManager;
-import com.sf.honeymorning.user.adapter.in.authentication.service.TokenService;
+import com.sf.honeymorning.common.security.core.JwtClaim;
+import com.sf.honeymorning.common.security.authentication.JwtProviderManager;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
 import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
-import com.sf.honeymorning.user.application.AccountService;
 
 import io.restassured.RestAssured;
 import io.restassured.http.Cookie.Builder;
 import io.restassured.http.Cookies;
 
-public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest {
+public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest implements RedisContext {
 
 	@Value("${jwt.access-token.header}")
 	String accessTokenHeaderName;
 	@Value("${jwt.refresh-token.header}")
 	String refreshTokenHeaderName;
 
-	@SpyBean
+	@Autowired
 	UserRepository userRepository;
 
-	@SpyBean
-	AccountService accountService;
-
-	@SpyBean
+	@Autowired
 	AlarmRepository alarmRepository;
 
-	@SpyBean
+	@Autowired
 	JwtProviderManager jwtProviderManager;
 
-	@SpyBean
+	@Autowired
 	ObjectMapper objectMapper;
-
-	@MockBean
-	TokenService tokenService;
 
 	@LocalServerPort
 	private int port;
@@ -79,7 +72,7 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest {
 				UserRole.ROLE_USER
 			)
 		);
-		JwtProviderManager.CustomClaim claim = JwtProviderManager.CustomClaim.builder()
+		JwtClaim claim = JwtClaim.builder()
 			.userId(authenticationUserEntity.getId())
 			.roles(new String[] {authenticationUserEntity.getRole().name()})
 			.build();

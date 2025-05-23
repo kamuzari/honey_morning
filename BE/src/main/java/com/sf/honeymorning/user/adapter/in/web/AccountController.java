@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
+import com.sf.honeymorning.common.security.core.JwtAuthentication;
 import com.sf.honeymorning.user.adapter.in.web.dto.request.AccountSignUpRequest;
 import com.sf.honeymorning.user.adapter.in.web.dto.request.LoginAuthRequestDto;
 import com.sf.honeymorning.user.adapter.in.web.dto.response.LogoutAuthResponseDto;

@@ -1,4 +1,4 @@
-package com.sf.honeymorning.security.weaving;
+package com.sf.honeymorning.common.security.annotation;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,8 +9,8 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
-import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
-import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthenticationToken;
+import com.sf.honeymorning.common.security.core.JwtAuthentication;
+import com.sf.honeymorning.common.security.core.JwtAuthenticationToken;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
 
 public class MockUserCustomFactory implements WithSecurityContextFactory<WithJwtMockUser> {

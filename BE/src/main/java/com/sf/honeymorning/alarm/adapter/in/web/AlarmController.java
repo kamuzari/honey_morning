@@ -17,7 +17,7 @@ import com.sf.honeymorning.alarm.adapter.in.web.dto.response.PreparedAlarmConten
 import com.sf.honeymorning.alarm.adapter.in.web.port.out.AlarmQueryPort;
 import com.sf.honeymorning.alarm.application.port.in.AlarmCommandUseCase;
 import com.sf.honeymorning.alarm.application.port.in.ValidateAlarmUseCase;
-import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
+import com.sf.honeymorning.common.security.core.JwtAuthentication;
 
 import jakarta.validation.Valid;
 

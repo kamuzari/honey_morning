@@ -1,4 +1,4 @@
-package com.sf.honeymorning.user.adapter.in.authentication.constant;
+package com.sf.honeymorning.config.constant;
 
 import java.util.Map;
 

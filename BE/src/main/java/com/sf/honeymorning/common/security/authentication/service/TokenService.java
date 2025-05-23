@@ -1,4 +1,4 @@
-package com.sf.honeymorning.user.adapter.in.authentication.service;
+package com.sf.honeymorning.common.security.authentication.service;
 
 import java.time.Duration;
 
