@@ -7,7 +7,7 @@ import com.sf.honeymorning.alarm.application.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.brief.application.port.in.AlarmContentCommandUseCase;
 import com.sf.honeymorning.brief.application.port.out.CommandBriefingPort;
 import com.sf.honeymorning.brief.application.port.out.ValidBriefingContentPort;
-import com.sf.honeymorning.common.event.producer.EventDispatcherHandler;
+import com.sf.honeymorning.common.event.EventDispatcherHandler;
 
 @Transactional(readOnly = true)
 @Service

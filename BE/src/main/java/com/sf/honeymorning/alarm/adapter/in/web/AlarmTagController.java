@@ -14,9 +14,8 @@ import com.sf.honeymorning.alarm.adapter.in.web.dto.request.AddAlarmTagRequestDt
 import com.sf.honeymorning.alarm.adapter.in.web.dto.response.AlarmTagResponseDto;
 import com.sf.honeymorning.alarm.adapter.in.web.port.out.AlarmTagQueryPort;
 import com.sf.honeymorning.alarm.application.port.in.AlarmTagCommandUseCase;
-import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
+import com.sf.honeymorning.common.security.core.JwtAuthentication;
 
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RequestMapping("/api/alarmtags")

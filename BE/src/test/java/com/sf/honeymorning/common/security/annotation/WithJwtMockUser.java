@@ -1,4 +1,4 @@
-package com.sf.honeymorning.security.weaving;
+package com.sf.honeymorning.common.security.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

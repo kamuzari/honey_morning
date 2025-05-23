@@ -6,7 +6,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import com.sf.honeymorning.user.adapter.in.authentication.constant.CookieProperty;
+import com.sf.honeymorning.common.security.authentication.constant.CookieProperty;
 import com.sf.honeymorning.user.adapter.in.web.dto.response.LogoutAuthResponseDto;
 
 import jakarta.servlet.http.HttpServletResponse;

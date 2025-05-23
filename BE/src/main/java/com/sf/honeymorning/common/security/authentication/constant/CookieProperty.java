@@ -1,4 +1,4 @@
-package com.sf.honeymorning.user.adapter.in.authentication.constant;
+package com.sf.honeymorning.common.security.authentication.constant;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
@@ -9,6 +9,7 @@ public record CookieProperty(
 	Boolean secure,
 	Cookie.SameSite sameSite,
 	String domain) {
+
 	@ConstructorBinding
 	public CookieProperty {
 	}

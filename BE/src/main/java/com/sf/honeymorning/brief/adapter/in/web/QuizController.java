@@ -14,7 +14,7 @@ import com.sf.honeymorning.brief.adapter.in.web.dto.request.SelectionRequestDto;
 import com.sf.honeymorning.brief.adapter.in.web.dto.response.detail.QuizResponseDto;
 import com.sf.honeymorning.brief.adapter.in.web.port.out.QuizQueryPort;
 import com.sf.honeymorning.brief.application.port.in.QuizCommandUseCase;
-import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
+import com.sf.honeymorning.common.security.core.JwtAuthentication;
 
 import jakarta.validation.Valid;
 

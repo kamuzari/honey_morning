@@ -4,7 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
-import com.sf.honeymorning.user.adapter.in.authentication.constant.CookieProperty;
+import com.sf.honeymorning.common.security.authentication.constant.CookieProperty;
 import com.sf.honeymorning.user.adapter.in.web.dto.response.LoginAuthResponseDto;
 import com.sf.honeymorning.user.adapter.in.web.dto.response.TokenResponseDto;
 

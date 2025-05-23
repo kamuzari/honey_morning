@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sf.honeymorning.brief.adapter.in.web.dto.response.BriefHistoryResponseDto;
 import com.sf.honeymorning.brief.adapter.in.web.dto.response.BriefingDetailResponseDto;
 import com.sf.honeymorning.brief.adapter.in.web.port.out.BriefingQueryPort;
-import com.sf.honeymorning.user.adapter.in.authentication.model.JwtAuthentication;
+import com.sf.honeymorning.common.security.core.JwtAuthentication;
 
 @RequestMapping("/api/briefings")
 @RestController
