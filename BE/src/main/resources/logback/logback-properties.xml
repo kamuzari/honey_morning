@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <property name="LOG_PATH" value="${LOG_PATH:-logs}"/>
+    <property name="LOG_FILE_NAME" value="${LOG_FILE_NAME:-application}"/>
+    <property name="LOG_MAX_HISTORY" value="${LOG_MAX_HISTORY:-30}"/>
+    <property name="LOG_MAX_FILE_SIZE" value="${LOG_MAX_FILE_SIZE:-100MB}"/>
+
+    <!--  색상 변환 규칙 등록 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){blue} %clr([%15.15thread]){magenta} %clr(%-5level){highlight} %clr([%X{requestId:-}]){cyan} %clr([%X{userId:-}]){yellow} %clr(%logger{36}){green} %clr(-){faint} %msg%n%wEx"/>
+
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{requestId:-}] [%X{userId:-}] %logger{36} - %msg%n"/>
+
+    <property name="ERROR_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level [%X{requestId:-}] [%X{userId:-}] %logger{36} - %msg%n%ex"/>
+
+    <!-- 성능 모니터링용 패턴 (메소드 실행 시간 등) -->
+    <property name="PERFORMANCE_LOG_PATTERN"
+              value="%clr(%d{HH:mm:ss.SSS}){faint} %clr([PERF]){bold,yellow} %clr([%X{requestId:-}]){cyan} %clr(%logger{20}){green} %clr(-){faint} %msg%n"/>
+
+    <property name="JSON_LOG_PATTERN"
+              value='{"timestamp":"%d{ISO8601}","level":"%level","thread":"%thread","logger":"%logger","message":"%msg","requestId":"%X{requestId:-}","userId":"%X{userId:-}","sessionId":"%X{sessionId:-}","clientIp":"%X{clientIp:-}"}%n'/>
+</included>
