@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <springProfile name="local, dev">
+        <property name="ROOT_LOG_LEVEL" value="DEBUG" />
+        <property name="APP_LOG_LEVEL" value="DEBUG" />
+        <property name="ENABLE_ASYNC" value="true" />
+        <property name="CONSOLE_ENABLED" value="true" />
+        <property name="FILE_ENABLED" value="true" />
+    </springProfile>
+
+    <springProfile name="prod">
+        <property name="ROOT_LOG_LEVEL" value="WARN" />
+        <property name="APP_LOG_LEVEL" value="INFO" />
+        <property name="ENABLE_ASYNC" value="true" />
+        <property name="CONSOLE_ENABLED" value="false" />
+        <property name="FILE_ENABLED" value="true" />
+    </springProfile>
+</included>
