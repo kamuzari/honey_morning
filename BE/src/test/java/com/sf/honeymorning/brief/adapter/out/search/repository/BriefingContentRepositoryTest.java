@@ -20,7 +20,8 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import com.github.javafaker.Faker;
-import com.sf.honeymorning.brief.adapter.out.search.BriefingContentIndex;
+import com.sf.honeymorning.brief.adapter.out.search.BriefingContentRepository;
+import com.sf.honeymorning.brief.adapter.out.search.index.BriefingContentDocument;
 import com.sf.honeymorning.brief.common.QuizConstraint;
 
 @DataElasticsearchTest
@@ -63,7 +64,7 @@ class BriefingContentRepositoryTest {
 		createDemoDatas(10);
 
 		// when
-		Page<BriefingContentIndex> result = briefingContentRepository.searchByUserIdAndAll(1L, "테스트 데이터", PageRequest.of(0, 10));
+		Page<BriefingContentDocument> result = briefingContentRepository.searchByUserIdAndAll(1L, "테스트 데이터", PageRequest.of(0, 10));
 
 		// then
 		assertThat(result.getContent().size()).isEqualTo(1);
@@ -79,7 +80,7 @@ class BriefingContentRepositoryTest {
 		createDemoDatas(size,1L);
 
 		// when
-		Page<BriefingContentIndex> result = briefingContentRepository.searchByUserIdAndAll(1L, "테스트 데이터", PageRequest.of(0, pageMaxSize));
+		Page<BriefingContentDocument> result = briefingContentRepository.searchByUserIdAndAll(1L, "테스트 데이터", PageRequest.of(0, pageMaxSize));
 
 		// then
 		assertThat(result.getContent().size()).isEqualTo(pageMaxSize);
@@ -90,7 +91,8 @@ class BriefingContentRepositoryTest {
 		briefingContentRepository.saveAll(
 			LongStream.rangeClosed(1, size)
 				.mapToObj(userId ->
-					new BriefingContentIndex(
+					new BriefingContentDocument(
+						DATA_GENERATOR.number().randomNumber(),
 						fixedUserId,
 						"요약 테스트 데이터" + userId,
 						"장문 테스트 데이터" + userId,
@@ -104,7 +106,8 @@ class BriefingContentRepositoryTest {
 		briefingContentRepository.saveAll(
 			LongStream.rangeClosed(1, size)
 				.mapToObj(userId ->
-					new BriefingContentIndex(
+					new BriefingContentDocument(
+						DATA_GENERATOR.number().randomNumber(),
 						userId,
 						"요약 테스트 데이터" + userId,
 						"장문 테스트 데이터" + userId,
@@ -114,16 +117,18 @@ class BriefingContentRepositoryTest {
 				).toList());
 	}
 
-	List<BriefingContentIndex.QuizIndex> createQuizIndex() {
+	List<BriefingContentDocument.QuizDocument> createQuizIndex() {
 		return Stream.generate(() -> DATA_GENERATOR.lorem().word())
-			.map(word -> new BriefingContentIndex.QuizIndex(
-					DATA_GENERATOR.lorem().sentence(1),
+			.map(word -> {
+				return new BriefingContentDocument.QuizDocument(
+						DATA_GENERATOR.number().randomNumber(),
+							DATA_GENERATOR.lorem().sentence(1),
 					List.of(DATA_GENERATOR.lorem().word(),
-						DATA_GENERATOR.lorem().word(),
-						DATA_GENERATOR.lorem().word(),
-						DATA_GENERATOR.lorem().word()),
-					DATA_GENERATOR.lorem().word()
-				)
+							DATA_GENERATOR.lorem().word(),
+							DATA_GENERATOR.lorem().word(),
+							DATA_GENERATOR.lorem().word())
+						);
+				}
 			)
 			.limit(QuizConstraint.TOTAL_QUIZ_SIZE)
 			.toList();

@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sf.honeymorning.alarm.application.service.dto.response.AiResponseDto;
+import com.sf.honeymorning.brief.adapter.in.event.dto.BriefingSearchCommandDto;
+import com.sf.honeymorning.brief.adapter.in.event.dto.BriefingTtsCommandDto;
 import com.sf.honeymorning.brief.application.port.in.AlarmContentCommandUseCase;
 import com.sf.honeymorning.brief.application.port.out.CommandBriefingPort;
 import com.sf.honeymorning.brief.application.port.out.ValidBriefingContentPort;
@@ -28,6 +30,7 @@ public class AlarmContentService implements AlarmContentCommandUseCase {
 		validBriefingContentPort.verifyStillAliveAlarm(aiResponseDto.userId());
 		Long briefingId = commandBriefingPort.create(aiResponseDto);
 
-		EventDispatcherHandler.raise(briefingId);
+		EventDispatcherHandler.raise(new BriefingTtsCommandDto(briefingId));
+		EventDispatcherHandler.raise(new BriefingSearchCommandDto(briefingId));
 	}
 }

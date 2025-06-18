@@ -16,7 +16,7 @@ import com.sf.honeymorning.brief.adapter.in.web.dto.response.detail.QuizResponse
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWordEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.mapper.QuizPersistenceMapper;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
@@ -55,7 +55,7 @@ public class QuizQueryPortIntegrationTest extends DefaultIntegrationTest impleme
 			DATE_GENERATOR.internet().url(),
 			List.of(new BriefingTagEntity("경제")),
 			savedQuizzes,
-			Stream.generate(() -> new TopicModelWord(
+			Stream.generate(() -> new TopicModelWordEntity(
 					DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
 					DATE_GENERATOR.lorem().word(),
 					DATE_GENERATOR.number().randomDouble(2, 0, 100)))

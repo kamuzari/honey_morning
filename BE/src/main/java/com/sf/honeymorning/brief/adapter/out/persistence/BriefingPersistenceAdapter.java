@@ -20,7 +20,7 @@ import com.sf.honeymorning.brief.adapter.in.web.port.out.BriefingQueryPort;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWordEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.mapper.BriefingPersistenceMapper;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingTagRepository;
@@ -97,13 +97,13 @@ public class BriefingPersistenceAdapter implements
 
 		List<BriefingTagEntity> briefCategories = briefingTagRepository.findByBriefingEntity(briefingEntity);
 		List<QuizEntity> quizEntities = quizRepository.findByBriefingEntity(briefingEntity);
-		List<TopicModelWord> topicModelWords = topicModelWordRepository.findByBriefingEntity(briefingEntity);
+		List<TopicModelWordEntity> topicModelWordEntities = topicModelWordRepository.findByBriefingEntity(briefingEntity);
 
 		return briefingPersistenceMapper.toBriefingDetailResponseDto(
 			briefingEntity,
 			briefCategories,
 			quizEntities,
-			topicModelWords
+			topicModelWordEntities
 		);
 	}
 

@@ -9,11 +9,8 @@ import com.sf.honeymorning.alarm.adapter.in.web.dto.response.PreparedAlarmConten
 import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
 import com.sf.honeymorning.alarm.application.domain.UpdateAlarm;
 import com.sf.honeymorning.alarm.application.domain.VerifySleepModeAlarm;
-import com.sf.honeymorning.alarm.application.service.dto.response.AiResponseDto;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
 
 @Component
 public class AlarmPersistenceAdapterMapper {

@@ -11,10 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.github.javafaker.Faker;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
 import com.sf.honeymorning.common.entity.content.AccessAuthority;
 import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
@@ -43,7 +39,7 @@ class BriefingEntityTest {
 		assertThat(briefingEntity.getWakeUpBriefingContent()).isNull();
 		assertThat(briefingEntity.getQuizEntities()).isNull();
 		assertThat(briefingEntity.getBriefingTagEntities()).isNull();
-		assertThat(briefingEntity.getTopicModelWords()).isNull();
+		assertThat(briefingEntity.getTopicModelWordEntities()).isNull();
 	}
 
 	@Test
@@ -52,7 +48,7 @@ class BriefingEntityTest {
 		//given
 		long userId = 1L;
 		List<QuizEntity> createdQuizzes = createQuizzes();
-		List<TopicModelWord> createdTopicModels = createTopicModelWords();
+		List<TopicModelWordEntity> createdTopicModels = createTopicModelWords();
 		List<BriefingTagEntity> briefingTagEntities = List.of(new BriefingTagEntity(DATE_GENERATOR.lorem().word()));
 		//when
 		BriefingEntity briefingEntity = new BriefingEntity(
@@ -68,7 +64,7 @@ class BriefingEntityTest {
 		//then
 		assertThat(createdQuizzes).extracting(QuizEntity::getBriefingEntity).containsOnly(briefingEntity);
 		assertThat(briefingTagEntities).extracting(BriefingTagEntity::getBriefingEntity).containsOnly(briefingEntity);
-		assertThat(createdTopicModels).extracting(TopicModelWord::getBriefingEntity).containsOnly(briefingEntity);
+		assertThat(createdTopicModels).extracting(TopicModelWordEntity::getBriefingEntity).containsOnly(briefingEntity);
 	}
 
 	@Test
@@ -122,7 +118,7 @@ class BriefingEntityTest {
 	void testFalseIsEmptyQuizzes(){
 		long userId = 1L;
 		List<QuizEntity> createdQuizzes = createQuizzes();
-		List<TopicModelWord> createdTopicModels = createTopicModelWords();
+		List<TopicModelWordEntity> createdTopicModels = createTopicModelWords();
 		List<BriefingTagEntity> briefingTagEntities = List.of(new BriefingTagEntity(DATE_GENERATOR.lorem().word()));
 		BriefingEntity briefingEntity = new BriefingEntity(
 			userId,
@@ -151,8 +147,8 @@ class BriefingEntityTest {
 			.toList();
 	}
 
-	List<TopicModelWord> createTopicModelWords() {
-		return Stream.generate(() -> new TopicModelWord(
+	List<TopicModelWordEntity> createTopicModelWords() {
+		return Stream.generate(() -> new TopicModelWordEntity(
 				DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
 				DATE_GENERATOR.lorem().word(),
 				DATE_GENERATOR.number().randomDouble(2, 0, 100)))

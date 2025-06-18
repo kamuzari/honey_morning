@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class TopicModelWord extends BaseEntity {
+public class TopicModelWordEntity extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "topic_model_id")
@@ -33,7 +33,7 @@ public class TopicModelWord extends BaseEntity {
 
 	private Double weight;
 
-	public TopicModelWord(int sectionId, String word, Double weight) {
+	public TopicModelWordEntity(int sectionId, String word, Double weight) {
 		this.sectionId = sectionId;
 		this.word = word;
 		this.weight = weight;

@@ -15,7 +15,7 @@ import com.sf.honeymorning.brief.adapter.in.web.dto.response.detail.TopicModelWo
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWordEntity;
 import com.sf.honeymorning.brief.application.domain.TextToSpeechContent;
 
 @Component
@@ -45,14 +45,14 @@ public class BriefingPersistenceMapper {
 		BriefingEntity briefingEntity,
 		List<BriefingTagEntity> briefCategories,
 		List<QuizEntity> quizEntities,
-		List<TopicModelWord> topicModelWords) {
+		List<TopicModelWordEntity> topicModelWordEntities) {
 
 		return new BriefingDetailResponseDto(
 			briefingEntity.getId(),
 			briefingEntity.getSummaryText(),
 			briefingEntity.getText(),
 			briefingEntity.getWakeUpBriefingContent().getFileUrl(),
-			topicModelWords.stream()
+			topicModelWordEntities.stream()
 				.map(topicModelWord ->
 					new TopicModelWordResponse(
 						topicModelWord.getSectionId(),
@@ -86,7 +86,7 @@ public class BriefingPersistenceMapper {
 					aiQuizDto.answer(),
 					aiQuizDto.selections()
 				)).toList(),
-			response.aiTopics().stream().map(aiTopicDto -> new TopicModelWord(
+			response.aiTopics().stream().map(aiTopicDto -> new TopicModelWordEntity(
 				aiTopicDto.sectionId(),
 				aiTopicDto.word(),
 				aiTopicDto.weight())).toList()

@@ -20,10 +20,10 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.sf.honeymorning.brief.adapter.out.external.api.VoiceClient;
 import com.sf.honeymorning.brief.adapter.out.external.dto.request.VoiceCreateRequestDto;
 import com.sf.honeymorning.config.constant.VoiceClientProperties;
+import com.sf.honeymorning.context.integration.EndPointIntegrationTest;
 
 @AutoConfigureWireMock(port = 8089)
-@SpringBootTest
-public class VoiceClientTest {
+public class VoiceClientTest extends EndPointIntegrationTest {
 	static final String SAMPLE_TEXT = """
 		현지시간 17일 비트코인이 10만 8천 달러 선을 처음 돌파했습니다.
 		미 가상화폐 거래소 코인베이스에 따르면 미 동부 시간 17일 오전 11시 33분(서부 시간 오전 8시 33분) 비트코인 1개당 가격은 24시간 전보다 0.22% 내린 10만 6천734달러(1억 5천339만 원)에 거래됐습니다.

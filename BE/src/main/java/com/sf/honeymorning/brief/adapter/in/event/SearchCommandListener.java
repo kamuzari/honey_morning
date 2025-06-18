@@ -9,27 +9,26 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.validation.annotation.Validated;
 
-import com.sf.honeymorning.brief.adapter.in.event.dto.BriefingTtsCommandDto;
-import com.sf.honeymorning.brief.application.port.in.TextToSpeechCommandUseCase;
-import com.sf.honeymorning.brief.application.service.TextToSpeechGenerateService;
+import com.sf.honeymorning.brief.adapter.in.event.dto.BriefingSearchCommandDto;
+import com.sf.honeymorning.brief.application.port.in.SearchCommandUseCase;
 
 import jakarta.validation.Valid;
 
 @Validated
 @Component
-public class TtsGenerateListener {
-	private final TextToSpeechCommandUseCase textToSpeechCommandUseCase;
+public class SearchCommandListener {
+	private final SearchCommandUseCase searchCommandUseCase;
 
-	public TtsGenerateListener(TextToSpeechGenerateService ttsCommandUseCase) {
-		this.textToSpeechCommandUseCase = ttsCommandUseCase;
+	public SearchCommandListener(SearchCommandUseCase searchCommandUseCase) {
+		this.searchCommandUseCase = searchCommandUseCase;
 	}
 
 	@Async("eventTaskExecutor")
 	@Retryable(maxAttempts = 3, backoff = @Backoff(delay = 1000))
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-	@EventListener(Long.class)
-	public void generate(@Valid BriefingTtsCommandDto briefingTtsCommandDto) {
-		textToSpeechCommandUseCase.create(briefingTtsCommandDto.briefingId());
+	@EventListener(BriefingSearchCommandDto.class)
+	public void register(@Valid BriefingSearchCommandDto briefingSearchCommandDto) {
+		searchCommandUseCase.register(briefingSearchCommandDto);
 	}
 
 }

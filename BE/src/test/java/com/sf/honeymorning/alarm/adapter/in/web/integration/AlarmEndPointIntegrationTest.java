@@ -36,6 +36,7 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest implem
 
 	@Value("${jwt.access-token.header}")
 	String accessTokenHeaderName;
+
 	@Value("${jwt.refresh-token.header}")
 	String refreshTokenHeaderName;
 
@@ -52,7 +53,7 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest implem
 	ObjectMapper objectMapper;
 
 	@LocalServerPort
-	private int port;
+	int port;
 
 	UserEntity authenticationUserEntity;
 	AlarmEntity authUserAlarmEntity;
@@ -61,7 +62,7 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest implem
 	Cookies authenticationTokens;
 
 	@BeforeEach
-	public void setup() {
+	void setup() {
 		RestAssured.port = port;
 
 		authenticationUserEntity = userRepository.saveAndFlush(

@@ -60,7 +60,7 @@ public class BriefingEntity extends BaseEntity {
 		cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 		orphanRemoval = true)
 	@JoinColumn(name = "briefing_id")
-	private List<TopicModelWord> topicModelWords;
+	private List<TopicModelWordEntity> topicModelWordEntities;
 
 	@Embedded
 	@AttributeOverride(name = "fileUrl", column = @Column(name = "access_url"))
@@ -82,7 +82,7 @@ public class BriefingEntity extends BaseEntity {
 		String wakeUpCallPath,
 		List<BriefingTagEntity> briefingTagEntities,
 		List<QuizEntity> quizEntities,
-		List<TopicModelWord> topicModelWords) {
+		List<TopicModelWordEntity> topicModelWordEntities) {
 
 		this.userId = userId;
 		this.summaryText = summaryText;
@@ -90,11 +90,11 @@ public class BriefingEntity extends BaseEntity {
 		this.wakeUpCallPath = wakeUpCallPath;
 		this.briefingTagEntities = briefingTagEntities;
 		this.quizEntities = quizEntities;
-		this.topicModelWords = topicModelWords;
+		this.topicModelWordEntities = topicModelWordEntities;
 
 		quizEntities.forEach(quiz -> quiz.addBriefing(this));
 		briefingTagEntities.forEach(briefingTag -> briefingTag.addBriefing(this));
-		topicModelWords.forEach(topicModelWord -> topicModelWord.addBriefing(this));
+		topicModelWordEntities.forEach(topicModelWord -> topicModelWord.addBriefing(this));
 	}
 
 	public void addWakeUpBriefingContent(Content wakeUpBriefingContent) {

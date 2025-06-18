@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.javafaker.Faker;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWordEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
@@ -77,7 +77,7 @@ class BriefingQueryPortIntegrationTest extends DefaultIntegrationTest {
 					FAKE_DATA_FACTORY.number().numberBetween(1, 4),
 					Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList())
 			),
-			Stream.generate(() -> new TopicModelWord(
+			Stream.generate(() -> new TopicModelWordEntity(
 					FAKE_DATA_FACTORY.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
 					FAKE_DATA_FACTORY.lorem().word(),
 					FAKE_DATA_FACTORY.number().randomDouble(2, 0, 100)))

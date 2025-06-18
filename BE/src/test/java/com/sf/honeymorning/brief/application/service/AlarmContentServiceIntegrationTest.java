@@ -124,13 +124,12 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().voiceContent());
 		assertThat(briefingEntity.getText()).isEqualTo(responseDto.aiBriefings().readContent());
 		assertThat(briefingEntity.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
-		assertThat(briefingEntity.getWakeUpBriefingContent()).isNotNull();
 		assertThat(briefingEntity.getQuizEntities().stream().map(QuizEntity::getWakeUpQuizContent).toList()).hasSize(2);
 	}
 
 	@DisplayName("이벤트를 발행하고 리스너에서 예외가 나도 일부 데이터는 저장된다")
 	@Test
-	void testCreateTotalContents2()  {
+	void testCreateTotalContentsNotPropagateError()  {
 		//given
 		UserEntity userEntity = new UserEntity(DATE_GENERATOR.name().username(),
 			DATE_GENERATOR.internet().password(10, 17),

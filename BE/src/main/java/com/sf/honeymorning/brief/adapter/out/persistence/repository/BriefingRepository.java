@@ -25,4 +25,10 @@ public interface BriefingRepository extends JpaRepository<BriefingEntity, Long> 
 
 	@Query("SELECT b FROM BriefingEntity b join fetch b.quizEntities WHERE b.id= :briefingId")
 	Optional<BriefingEntity> findByIdWithQuizzes(@Param("briefingId") Long briefingId);
+
+	@Query("SELECT b FROM BriefingEntity b "
+		+ "join fetch b.quizEntities q "
+		+ "join fetch b.briefingTagEntities t "
+		+ "WHERE b.id= :briefingId")
+	Optional<BriefingEntity> findByIdWithQuizzesAndTopicModel(Long briefingId);
 }

@@ -25,7 +25,7 @@ import com.sf.honeymorning.brief.adapter.in.web.dto.response.BriefingDetailRespo
 import com.sf.honeymorning.brief.adapter.out.persistence.BriefingPersistenceAdapter;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWord;
+import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWordEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.mapper.BriefingPersistenceMapper;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingTagRepository;
@@ -34,7 +34,6 @@ import com.sf.honeymorning.brief.adapter.out.persistence.repository.TopicModelWo
 import com.sf.honeymorning.common.entity.content.AccessAuthority;
 import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
-import com.sf.honeymorning.common.exception.model.BusinessException;
 import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
 import com.sf.honeymorning.context.mock.MockTest;
 
@@ -91,7 +90,7 @@ public class BriefingQueryPortTest extends MockTest {
 
 		quizEntities.forEach(quiz -> ReflectionTestUtils.setField(quiz, "briefingEntity", briefingEntity));
 
-		List<TopicModelWord> topicModelWords = Stream.generate(() -> new TopicModelWord(
+		List<TopicModelWordEntity> topicModelWordEntities = Stream.generate(() -> new TopicModelWordEntity(
 			DATE_GENERATOR.number().numberBetween(1, 5),
 			DATE_GENERATOR.lorem().word(),
 			DATE_GENERATOR.number().randomDouble(2, 0, 20)
@@ -100,7 +99,7 @@ public class BriefingQueryPortTest extends MockTest {
 		given(briefingRepository.findByUserIdAndId(AUTH_USER_ENTITY.getId(), briefingEntity.getId()))
 			.willReturn(Optional.of(briefingEntity));
 		given(quizRepository.findByBriefingEntity(briefingEntity)).willReturn(quizEntities);
-		given(topicModelWordRepository.findByBriefingEntity(briefingEntity)).willReturn(topicModelWords);
+		given(topicModelWordRepository.findByBriefingEntity(briefingEntity)).willReturn(topicModelWordEntities);
 
 		//when
 		BriefingDetailResponseDto briefDetailResponseDto = sut.getMyBriefing(AUTH_USER_ENTITY.getId(),

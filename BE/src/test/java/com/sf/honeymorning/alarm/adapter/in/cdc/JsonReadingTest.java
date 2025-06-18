@@ -15,9 +15,11 @@ import org.springframework.core.io.ResourceLoader;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.alarm.adapter.in.cdc.dto.CdcAlarmEventDto;
+import com.sf.honeymorning.context.integration.CommonIntegrationContext;
+import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 
 @SpringBootTest
-public class JsonReadingTest {
+public class JsonReadingTest extends DefaultIntegrationTest {
 
 	private static final String JSON_SAMPLE_FILE_LOCATION = "./sample/cdc-consume.json";
 	public static final String REQUIREMENT_DATA_FORMAT = "payload";
