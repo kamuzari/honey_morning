@@ -56,6 +56,14 @@ spring:
     password: ENC(2oBor7W8ilV6FGD+BI7rdw==)
     publisher-returns: true
 
+  elasticsearch:
+    uris: ENC(K8zCDMLMddI9SWe1Kas8b4CUrh/eqG3Nc5QhnlKkptc=)
+    username: ENC(1O9wcUwv8S8ufBPaxDekbfEC6/IPjniR)
+    password: ENV(C7WXlz9nfxy+Gg6+EwIQxM/rNCp2exfF)
+    connection-timeout: 3s
+    socket-timeout: 5s
+    socket-keep-alive: true
+
 jwt:
   issuer: ENC(PazcZ21ocRNS74Kr3cHrkhdSjvfSCMzq)
   access-token:
