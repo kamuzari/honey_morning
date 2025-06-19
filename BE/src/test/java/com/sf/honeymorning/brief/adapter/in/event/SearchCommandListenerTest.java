@@ -13,23 +13,25 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
-import com.sf.honeymorning.brief.adapter.in.event.dto.BriefingTtsCommandDto;
+import com.sf.honeymorning.brief.adapter.in.event.dto.BriefingSearchCommandDto;
 import com.sf.honeymorning.common.config.AsyncTestConfig;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 
 import jakarta.validation.ValidationException;
 
 @Import(AsyncTestConfig.class)
-class TtsGenerateListenerTest extends DefaultIntegrationTest {
+class SearchCommandListenerTest extends DefaultIntegrationTest {
 
 	@Autowired
-	TtsGenerateListener sut;
+	SearchCommandListener sut;
+
 
 	@BeforeEach
 	void setUp() {
 		AsyncTestConfig.capturedError.set(null);
 		AsyncTestConfig.errorLatch = new CountDownLatch(1);
 	}
+
 
 	@DisplayName("브리핑 아이디가 null이거나, 음수이면 validation 예외가 발생한다")
 	@ParameterizedTest(name = "problem : {0}")
@@ -38,7 +40,7 @@ class TtsGenerateListenerTest extends DefaultIntegrationTest {
 	void testGenerate(Long invalidBriefingId) throws InterruptedException {
 		//given
 		//when
-		sut.generate(new BriefingTtsCommandDto(invalidBriefingId));
+		sut.register(new BriefingSearchCommandDto(invalidBriefingId));
 
 		// then
 		boolean isError = AsyncTestConfig.errorLatch.await(3, TimeUnit.SECONDS);
