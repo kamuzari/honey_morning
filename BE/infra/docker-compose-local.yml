@@ -2,159 +2,61 @@ version: "3.8"
 
 services:
   mysql:
-    image: mysql:8.0
-    platform: linux/arm64
-    restart: unless-stopped
-    mem_limit: "1g"
-    cpus: "1.5"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: honeymorning
-      MYSQL_USER: honeymorning
-      MYSQL_PASSWORD: honeymorning
-    volumes:
-      - ./mysql-data:/var/lib/mysql
-      - ./configuration/local/my.cnf:/etc/mysql/conf.d/my.cnf
-    ports:
-      - "3306:3306"
+    extends:
+      file: local/mysql/mysql.yml
+      service: mysql
 
   redis:
-    image: redis:6.2
-    restart: unless-stopped
-    mem_limit: "1g"
-    cpus: "1.5"
-    environment:
-      TZ: Asia/Seoul
-    volumes:
-      - ./configuration/local/redis.conf:/usr/local/etc/redis/redis.conf
-    command: [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    ports:
-      - "6379:6379"
+    extends:
+      file: local/redis/redis.yml
+      service: redis
 
   rabbitmq:
-    image: rabbitmq:management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-      - "15692:15692"
-    mem_limit: "1g"
-    cpus: "1.5"
-    environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin
-      RABBITMQ_PROMETHEUS_EXPORTER: true
+    extends:
+      file: local/rabbitmq/rabbitmq.yml
+      service: rabbitmq
 
   localstack:
-    image: localstack/localstack
-    ports:
-      - "4566:4566"
-    environment:
-      - SERVICES=s3
-      - DEBUG=1
-      - AWS_DEFAULT_REGION=us-northeast-1
-      - DATA_DIR=/var/lib/localstack/data
-    volumes:
-      - ./localstack-data:/var/lib/localstack
-      - ./configuration/local/bootstrap.sh:/etc/localstack/init/ready.d/bootstrap.sh
+    extends:
+      file: local/localstack/localstack.yml
+      service: localstack
 
   prometheus:
-    image: prom/prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./configuration/local/prometheus.yml:/etc/prometheus/prometheus.yml
+    extends:
+      file: local/monitoring/monitoring.yml
+      service: prometheus
 
   grafana:
-    image: grafana/grafana
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+    extends:
+      file: local/monitoring/monitoring.yml
+      service: grafana
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.3.1
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-    ports:
-      - "2181:2181"
+    extends:
+      file: ./local/cdc/cdc.yml
+      service: zookeeper
 
   kafka:
-    image: confluentinc/cp-kafka:7.3.1
-    ports:
-      - "9092:9092"
-    mem_limit: "1g"
-    cpus: "1.5"
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:29092, EXTERNAL://localhost:9092"
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2          
-    depends_on:
-      - zookeeper
+    extends:
+      file: ./local/cdc/cdc.yml
+      service: kafka
 
   kafka-connect:
-    image: debezium/connect:2.0.1.Final
-    ports:
-      - "8083:8083"
-    mem_limit: "1g"
-    cpus: "1.5"
-    environment:
-      BOOTSTRAP_SERVERS: "kafka:29092"
-      GROUP_ID: 1
-      CONFIG_STORAGE_TOPIC: my_connect_configs
-      OFFSET_STORAGE_TOPIC: my_connect_offsets
-      STATUS_STORAGE_TOPIC: my_connect_statuses
-      KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
-      VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
-      VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
-      PLUGIN_PATH: /kafka/connect
-      CONNECT_PRODUCER_ENABLE_IDEMPOTENCE: "true"
-      CONNECT_CONSUMER_ISOLATION_LEVEL: "read_committed"
-
-    depends_on:
-      - kafka
-      - mysql
+    extends:
+      file: ./local/cdc/cdc.yml
+      service: kafka-connect
 
   kafka-ui:
-    image: provectuslabs/kafka-ui:latest
-    ports:
-      - "9091:8080"
-    environment:
-      KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: kafka:29092
-    depends_on:
-      - kafka-connect
-      - kafka
+    extends:
+      file: ./local/cdc/cdc.yml
+      service: kafka-ui
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - xpack.security.http.ssl.enabled=false
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
-      - TZ=Asia/Seoul
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    command: >
-      bash -c "
-        elasticsearch-plugin install --batch analysis-nori &&
-        /usr/local/bin/docker-entrypoint.sh
-      "
+    extends:
+      file: ./local/search/search.yml
+      service: elasticsearch
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.13.4
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - TZ=Asia/Seoul
-    ports:
-      - "5601:5601"
+    extends:
+      file: ./local/search/search.yml
+      service: kibana

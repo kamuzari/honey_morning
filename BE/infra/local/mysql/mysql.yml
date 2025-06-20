@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    platform: linux/arm64
+    restart: unless-stopped
+    mem_limit: "1g"
+    cpus: "1.5"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: honeymorning
+      MYSQL_USER: honeymorning
+      MYSQL_PASSWORD: honeymorning
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - "3306:3306"

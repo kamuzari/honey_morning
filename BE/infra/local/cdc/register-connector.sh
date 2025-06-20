@@ -2,14 +2,14 @@
 
 echo "커넥터 확인"
 sleep 2
-# 커넥터 삭제
+
 curl -X DELETE http://localhost:8083/connectors/mysql-outbox-connector
 
 echo "\n\n\n"
 
 echo "커넥터 등록"
 sleep 2
-# 커넥터 등록
+
 curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d '{
   "name": "mysql-outbox-connector",
   "config": {
@@ -33,7 +33,6 @@ curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json
     "transforms.ExtractField.field": "after",
     "value.converter.schemas.enable": "true",
     "snapshot.mode": "initial",
-
     "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
     "schema.history.internal.kafka.topic": "schema-changes.honeymorning"
   }
