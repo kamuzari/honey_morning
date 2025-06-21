@@ -10,7 +10,10 @@ import io.micrometer.core.instrument.MeterRegistry;
 @Configuration
 public class MetricConfig {
 	@Bean
-	MeterRegistryCustomizer<MeterRegistry> configurer(@Value("${spring.application.name}") String applicationName) {
-		return (registry) -> registry.config().commonTags("application", applicationName);
+	MeterRegistryCustomizer<MeterRegistry> configurer(
+		@Value("${spring.application.name}") String applicationName) {
+
+		return (registry) -> registry.config()
+			.commonTags("application", applicationName);
 	}
 }

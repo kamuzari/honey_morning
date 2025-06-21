@@ -7,10 +7,10 @@ import com.sf.honeymorning.config.constant.VoiceClientProperties;
 
 @Configuration
 @EnableConfigurationProperties({VoiceClientProperties.class})
-public class VoiceClientConfig {
+public class ExternalApiConfig {
 	private final VoiceClientProperties voiceClientProperties;
 
-	public VoiceClientConfig(VoiceClientProperties voiceClientProperties) {
+	public ExternalApiConfig(VoiceClientProperties voiceClientProperties) {
 		this.voiceClientProperties = voiceClientProperties;
 	}
 }

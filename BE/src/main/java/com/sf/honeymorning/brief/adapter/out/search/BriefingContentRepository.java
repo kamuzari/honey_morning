@@ -25,7 +25,7 @@ public interface BriefingContentRepository extends ElasticsearchRepository<Brief
 		      },
 		      {
 		        "nested": {
-		          "path": "quizzes", 
+		          "path": "quizzes",
 		          "query": {
 		            "multi_match": {
 		              "query": "?1",

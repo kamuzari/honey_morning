@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <included>
     <springProfile name="local, dev">
-        <property name="ROOT_LOG_LEVEL" value="TRACE" />
+        <property name="ROOT_LOG_LEVEL" value="DEBUG" />
         <property name="APP_LOG_LEVEL" value="DEBUG" />
         <property name="ENABLE_ASYNC" value="true" />
         <property name="CONSOLE_ENABLED" value="true" />

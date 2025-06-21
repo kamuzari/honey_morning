@@ -20,6 +20,7 @@ import io.swagger.v3.oas.models.servers.Server;
 public class SwaggerConfig {
 
 	private final JwtProperty jwtProperty;
+
 	@Value("${spring.application.name}")
 	String applicationName;
 
@@ -33,8 +34,7 @@ public class SwaggerConfig {
 			.info(createLicense())
 			.servers(createAvailableServers())
 			.addSecurityItem(createItem())
-			.components(createComponents()
-			);
+			.components(createComponents());
 	}
 
 	private Info createLicense() {
