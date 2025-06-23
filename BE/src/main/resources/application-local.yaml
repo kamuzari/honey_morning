@@ -32,6 +32,13 @@ spring:
     url: ENC(xZDkAzthzyGE1C72KPqfJOuxhc3ayV4fQGZ5md/pzjIPv+QquUXpKEtB/7CVnaqkcxJf4XU/dTpDd3y6k5ntzbRuUN6SxC5Khjzl5MHLUpaWMV05G7qE4tzpLZ9C4GIlXDLPiIHQvif8u8N4H7L9hb6dKHPl08bS)
     username: ENC(4bVSlObkLOxikway4Ip0czodcbatpmA4)
     password: ENC(dP/YyZ2a7IEf5ybHgc357/iIDu8jAe1H)
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 15
+      max-lifetime: 25200000
+      idle-timeout: 1800000
+      connection-timeout: 3000
+      validation-timeout: 5000
 
   jpa:
     database: mysql
@@ -103,9 +110,10 @@ security:
         - ENC(Jj5DshZnYbCcus185YtARn0yNrwecuFkLjfD1K6UgrI=)
         - ENC(0y1hnS8NwQvpq14+aB5Lpw==)
         - ENC(hkWrBlWf8qbdK0T0+jBcCDDOvCQ/H661)
+        - ENC(Ovn+mEKiZzgTxqbqh4isznjgPc3LqD1g)
       POST:
         - ENC(cX06x50vqq0M7qcxpQKaU64V8LvxkUDS1+L6lUl8PMQ=)
-        - /api/accounts/login
+        - ENC(GhZrFGuMsRcWuhBLuYGiU6xXsF2wzLgBIN+uRCMeYCI=)
       PATCH:
         - ENC(iv1dk6YjfwUZCP4o2mbeAi+RpQwpTAs5)
       PUT:
@@ -171,10 +179,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus, health
+        include: "*"
   endpoint:
     prometheus:
       enabled: true
   metrics:
-    enable:
-      all: true
+    enabled: true
+
