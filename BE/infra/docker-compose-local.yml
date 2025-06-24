@@ -6,6 +6,11 @@ services:
       file: local/mysql/mysql.yml
       service: mysql
 
+  event-db:
+    extends:
+      file: local/mysql/mysql.yml
+      service: event-db
+
   redis:
     extends:
       file: local/redis/redis.yml
