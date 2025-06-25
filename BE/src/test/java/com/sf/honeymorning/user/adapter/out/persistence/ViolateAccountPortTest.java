@@ -11,7 +11,7 @@ import com.sf.honeymorning.context.mock.MockPersistenceTest;
 import com.sf.honeymorning.user.adapter.out.persistence.mapper.AccountMappers;
 import com.sf.honeymorning.user.application.port.out.ViolateAccountPort;
 
-@Import({PersistenceAdapter.class, AccountMappers.class})
+@Import({UserPersistenceAdapter.class, AccountMappers.class})
 class ViolateAccountPortTest extends MockPersistenceTest {
 
 	@Autowired

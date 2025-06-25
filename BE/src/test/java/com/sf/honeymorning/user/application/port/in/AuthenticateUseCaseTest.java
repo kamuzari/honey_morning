@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 
+import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.infra.database.RedisContext;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.common.security.authentication.constant.JwtProperty;
@@ -19,7 +20,7 @@ import com.sf.honeymorning.user.adapter.in.web.dto.response.LoginAuthResponseDto
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
 import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
 
-class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisContext {
+class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisContext, MySqlContext {
 	@Autowired
 	AuthenticateUseCase sut;
 

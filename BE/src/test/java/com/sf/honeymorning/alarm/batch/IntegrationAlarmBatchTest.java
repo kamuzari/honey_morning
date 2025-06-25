@@ -26,16 +26,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.TestPropertySource;
 
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.TagEntity;
-import com.sf.honeymorning.alarm.batch.item.dto.ReadyAlarmDto;
-import com.sf.honeymorning.alarm.batch.outbox.OutBoxAlarmEvent;
-import com.sf.honeymorning.alarm.batch.outbox.OutBoxAlarmEventRepository;
 import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
 import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmTagEntity;
 import com.sf.honeymorning.alarm.adapter.out.persistence.entity.DayOfTheWeek;
+import com.sf.honeymorning.alarm.adapter.out.persistence.entity.TagEntity;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmTagRepository;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.TagRepository;
+import com.sf.honeymorning.alarm.batch.item.dto.ReadyAlarmDto;
+import com.sf.honeymorning.alarm.batch.outbox.OutBoxAlarmEvent;
+import com.sf.honeymorning.alarm.batch.outbox.OutBoxAlarmEventRepository;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 import com.sf.honeymorning.util.TimeUtils;
@@ -143,5 +143,4 @@ public class IntegrationAlarmBatchTest extends DefaultIntegrationTest implements
 			alarmTagRepository.save(new AlarmTagEntity(alarmEntity, economy));
 		});
 	}
-
 }

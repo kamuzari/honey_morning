@@ -9,14 +9,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.jdbc.Sql;
 
-import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.mock.MockPersistenceTest;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
 import com.sf.honeymorning.user.adapter.out.persistence.mapper.AccountMappers;
 import com.sf.honeymorning.user.application.domain.AuthenticateAccount;
 import com.sf.honeymorning.user.application.port.out.LoadAccountPort;
 
-@Import({PersistenceAdapter.class, AccountMappers.class})
+@Import({UserPersistenceAdapter.class, AccountMappers.class})
 class LoadAccountPortTest extends MockPersistenceTest {
 
 	@Autowired

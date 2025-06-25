@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sf.honeymorning.alarm.adapter.in.web.dto.request.AlarmSetRequest;
 import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
+import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.infra.database.RedisContext;
 import com.sf.honeymorning.context.integration.EndPointIntegrationTest;
 import com.sf.honeymorning.common.security.core.JwtClaim;
@@ -32,7 +33,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.Cookie.Builder;
 import io.restassured.http.Cookies;
 
-public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest implements RedisContext {
+public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest implements RedisContext, MySqlContext {
 
 	@Value("${jwt.access-token.header}")
 	String accessTokenHeaderName;

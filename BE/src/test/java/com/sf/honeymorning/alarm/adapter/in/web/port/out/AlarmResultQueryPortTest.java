@@ -12,17 +12,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 
 import com.sf.honeymorning.alarm.adapter.in.web.dto.response.AlarmResultResponseDto;
+import com.sf.honeymorning.alarm.adapter.out.persistence.AlarmResultPersistenceAdapter;
 import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmResultEntity;
+import com.sf.honeymorning.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmResultRepository;
 import com.sf.honeymorning.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
-import com.sf.honeymorning.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
-import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
+import com.sf.honeymorning.context.mock.MockPersistenceTest;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
 import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
 
-class AlarmResultQueryPortTest extends DefaultIntegrationTest {
+@Import({AlarmResultPersistenceAdapter.class, AlarmResultPersistenceMapper.class})
+class AlarmResultQueryPortTest extends MockPersistenceTest {
 	@Autowired
 	AlarmResultQueryPort sut;
 
@@ -46,8 +49,8 @@ class AlarmResultQueryPortTest extends DefaultIntegrationTest {
 		Long userId = 1L;
 		List<AlarmResultEntity> samples = Stream.generate(() -> new AlarmResultEntity(
 			userId,
-			DATE_GENERATOR.number().randomNumber(),
-			DATE_GENERATOR.number().numberBetween(MATCH_COUNT_MINIMUM_VALUE, MATCH_COUNT_MAXIMUM_VALUE),
+			DATA_GENERATOR.number().randomNumber(),
+			DATA_GENERATOR.number().numberBetween(MATCH_COUNT_MINIMUM_VALUE, MATCH_COUNT_MAXIMUM_VALUE),
 			true
 		)).limit(20).toList();
 		List<AlarmResultEntity> totalAlarmResultEntities = alarmResultRepository.saveAll(samples)
@@ -74,8 +77,8 @@ class AlarmResultQueryPortTest extends DefaultIntegrationTest {
 	@DisplayName("최대 스트릭 일수를 가져온다")
 	void testGetMaximumStreak() {
 		//given
-		UserEntity userEntity = new UserEntity(DATE_GENERATOR.name().username(),
-			DATE_GENERATOR.internet().password(),
+		UserEntity userEntity = new UserEntity(DATA_GENERATOR.name().username(),
+			DATA_GENERATOR.internet().password(),
 			"DeepSeek",
 			ROLE_USER);
 		userRepository.save(userEntity);

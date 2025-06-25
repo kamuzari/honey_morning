@@ -26,9 +26,15 @@ spring:
       timeout: 10s
 
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL
-    username: sa
-    password:
+    primary:
+      url: jdbc:h2:mem:honeymorning;MODE=MySQL
+      username: sa
+      password:
+
+    event:
+      url: jdbc:h2:mem:honeymorning-event;MODE=MySQL
+      username: sa
+      password:
 
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect

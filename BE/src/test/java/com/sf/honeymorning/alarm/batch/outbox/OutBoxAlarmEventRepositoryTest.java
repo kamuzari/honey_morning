@@ -1,6 +1,6 @@
 package com.sf.honeymorning.alarm.batch.outbox;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,8 +14,8 @@ class OutBoxAlarmEventRepositoryTest extends MockPersistenceTest {
 	OutBoxAlarmEventRepository outBoxAlarmEventRepository;
 
 	@BeforeEach
-	public void updateUp() {
-		outBoxAlarmEventRepository.saveAndFlush(OutBoxAlarmEvent.initialize(
+	void updateUp() {
+		outBoxAlarmEventRepository.save(OutBoxAlarmEvent.initialize(
 			1L,
 			"payload"
 		));
@@ -31,7 +31,7 @@ class OutBoxAlarmEventRepositoryTest extends MockPersistenceTest {
 
 		//then
 		assertThat(outBoxAlarmEvent).isNotNull();
-		assertThat(outBoxAlarmEvent.getCreateAt()).isNotNull();
+		assertThat(outBoxAlarmEvent.getCreatedAt()).isNotNull();
 		assertThat(outBoxAlarmEvent.getEventStatus()).isEqualTo(EventStatus.PENDING);
 		assertThat(outBoxAlarmEvent.getProcessedAt()).isNull();
 
