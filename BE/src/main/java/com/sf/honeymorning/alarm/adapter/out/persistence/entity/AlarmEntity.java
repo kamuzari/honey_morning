@@ -4,17 +4,22 @@ import java.time.LocalTime;
 
 import com.sf.honeymorning.common.entity.basic.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.ToString;
 
 @ToString
 @Getter
-@Table(name = "alarms")
+@Table(name = "alarms",
+	indexes = {
+		@Index(name = "alarm_user_id_idx", columnList = "user_id")
+	})
 @Entity
 public class AlarmEntity extends BaseEntity {
 
@@ -22,16 +27,22 @@ public class AlarmEntity extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(name = "user_id", nullable = false)
 	private Long userId;
 
+	@Column(name = "wake_up_time", nullable = false)
 	private LocalTime wakeUpTime;
 
+	@Column(name = "day_of_the_weeks", nullable = false)
 	private Integer dayOfTheWeeks;
 
+	@Column(name = "repeat_frequency", nullable = false)
 	private Integer repeatFrequency;
 
+	@Column(name = "repeat_interval", nullable = false)
 	private Integer repeatInterval;
 
+	@Column(name = "is_active", nullable = false)
 	private boolean isActive;
 
 	protected AlarmEntity() {

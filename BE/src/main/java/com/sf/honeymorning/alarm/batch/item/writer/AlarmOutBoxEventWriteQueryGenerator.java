@@ -21,17 +21,17 @@ public class AlarmOutBoxEventWriteQueryGenerator {
 			params.addValue("eventStatus", item.getEventStatus().name());
 			params.addValue("eventType", item.getEventType());
 			params.addValue("payload", item.getPayload());
-			params.addValue("createAt", item.getCreateAt());
+			params.addValue("createdAt", item.getCreatedAt());
 			return params;
 		};
 	}
 
 	enum AlarmWriteQuery {
 		INSERT_INTO("""
-			INSERT INTO outbox_alarm_event (alarm_id, event_status, event_type, payload, create_at)
+			INSERT INTO outbox_alarm_event (alarm_id, event_status, event_type, payload, created_at)
 			"""),
 		VALUES("""
-			VALUES (:alarmId, :eventStatus, :eventType, :payload, :createAt)
+			VALUES (:alarmId, :eventStatus, :eventType, :payload, :createdAt)
 			""");
 
 		final String query;

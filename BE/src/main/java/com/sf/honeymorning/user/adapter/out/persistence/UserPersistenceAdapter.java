@@ -19,12 +19,12 @@ import com.sf.honeymorning.user.application.port.out.WriteAccountPort;
 
 @Transactional(readOnly = true)
 @Component
-class PersistenceAdapter implements LoadAccountPort, ViolateAccountPort, WriteAccountPort {
+class UserPersistenceAdapter implements LoadAccountPort, ViolateAccountPort, WriteAccountPort {
 	private final UserRepository userRepository;
 	private final AlarmRepository alarmRepository;
 	private final AccountMappers accountMapper;
 
-	public PersistenceAdapter(
+	public UserPersistenceAdapter(
 		AccountMappers accountMapper,
 		UserRepository userRepository,
 		AlarmRepository alarmRepository) {

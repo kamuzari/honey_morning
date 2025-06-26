@@ -18,17 +18,20 @@ import jakarta.validation.Valid;
 @Component
 public class SearchCommandListener {
 	private final SearchCommandUseCase searchCommandUseCase;
-
 	public SearchCommandListener(SearchCommandUseCase searchCommandUseCase) {
 		this.searchCommandUseCase = searchCommandUseCase;
 	}
 
 	@Async("eventTaskExecutor")
-	@Retryable(maxAttempts = 3, backoff = @Backoff(delay = 1000))
+	@Retryable(maxAttempts = 2, backoff = @Backoff(delay = 1000))
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	@EventListener(BriefingSearchCommandDto.class)
 	public void register(@Valid BriefingSearchCommandDto briefingSearchCommandDto) {
-		searchCommandUseCase.register(briefingSearchCommandDto);
+		try {
+			searchCommandUseCase.register(briefingSearchCommandDto);
+		} catch (Exception e) {
+			// todo: 검색데이터 반영 실패 복구
+		}
 	}
 
 }

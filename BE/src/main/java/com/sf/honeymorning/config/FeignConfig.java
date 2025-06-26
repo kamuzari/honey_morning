@@ -22,12 +22,11 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 public class FeignConfig {
 
-	private static final int RETRY_BASIC_PERIOD = 1000;
+	private static final int RETRY_BASIC_PERIOD = 2000;
 	private static final int MAX_RETRY_PERIOD = 3000;
 	private static final int RETRY_MAX_ATTEMPTS = 3;
-
-	private static final int REQUEST_CONNECT_TIMEOUT_MILLIS = 5000;
-	private static final int REQUEST_READ_TIMEOUT_MILLIS = 10000;
+	private static final int REQUEST_CONNECT_TIMEOUT_MILLIS = 2000;
+	private static final int REQUEST_READ_TIMEOUT_MILLIS = 2000;
 	private static final TimeUnit DEFAULT_TIME_UNIT = TimeUnit.MILLISECONDS;
 
 	@Bean
@@ -35,7 +34,7 @@ public class FeignConfig {
 		return new Retryer.Default(RETRY_BASIC_PERIOD, MAX_RETRY_PERIOD, RETRY_MAX_ATTEMPTS) {
 			@Override
 			public void continueOrPropagate(RetryableException e) {
-				log.info("Feign Retry Attempt execute .. : {}", e.getMessage());
+				log.info("Feign Retry Attempt execute .. : {}", e.getMessage(), e);
 				super.continueOrPropagate(e);
 			}
 		};

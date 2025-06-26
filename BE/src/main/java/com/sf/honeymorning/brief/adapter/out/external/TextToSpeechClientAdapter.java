@@ -2,6 +2,8 @@ package com.sf.honeymorning.brief.adapter.out.external;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 import com.sf.honeymorning.brief.adapter.out.external.api.VoiceClient;
@@ -23,6 +25,7 @@ public class TextToSpeechClientAdapter implements CommandTextToSpeechPort {
 		this.voiceClientProperties = voiceClientProperties;
 	}
 
+	@Retryable(maxAttempts = 2, backoff = @Backoff(delay = 1000))
 	public ResponseEntity<Resource> create(String text) {
 		return voiceClient.createTts(
 			voiceClientProperties.path().voiceId(),

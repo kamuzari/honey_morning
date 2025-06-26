@@ -14,6 +14,11 @@ public class AsyncTestConfig implements AsyncConfigurer {
 	public static AtomicReference<Throwable> capturedError = new AtomicReference<>();
 	public static CountDownLatch errorLatch = new CountDownLatch(1);
 
+	public static void initialize() {
+		capturedError.set(null);
+		errorLatch = new CountDownLatch(1);
+	}
+
 	@Override
 	public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
 		return (throwable, method, obj) -> {

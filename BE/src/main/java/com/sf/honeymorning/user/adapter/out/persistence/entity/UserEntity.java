@@ -29,6 +29,7 @@ public class UserEntity extends BaseEntity {
 
 	private String password;
 
+	@Column(name = "nick_name", unique = true, nullable = false)
 	private String nickName;
 
 	private Integer maximumStreak;

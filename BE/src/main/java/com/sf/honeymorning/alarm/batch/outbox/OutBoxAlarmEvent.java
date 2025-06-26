@@ -2,9 +2,17 @@ package com.sf.honeymorning.alarm.batch.outbox;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.http.MediaType;
 
+import com.sf.honeymorning.common.entity.basic.BaseEntity;
+
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -24,30 +32,34 @@ public class OutBoxAlarmEvent {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(name = "alarm_id", nullable = false)
 	private Long alarmId;
 
+	@Column(name = "event_status", nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private EventStatus eventStatus;
 
+	@Column(name = "event_type", nullable = false)
 	private String eventType;
 
 	private String payload;
 
-	private LocalDateTime createAt;
+	@Column(name = "created_at", nullable = false)
+	private LocalDateTime createdAt;
 
+	@Column(name = "processed_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime processedAt;
 
 	protected OutBoxAlarmEvent(Long alarmId,
 		EventStatus eventStatus,
 		String eventType,
-		String payload,
-		LocalDateTime createAt) {
+		String payload) {
 
 		this.alarmId = alarmId;
 		this.eventStatus = eventStatus;
 		this.eventType = eventType;
 		this.payload = payload;
-		this.createAt = createAt;
+		this.createdAt = LocalDateTime.now();
 	}
 
 	public static OutBoxAlarmEvent initialize(Long alarmId, String payload) {
@@ -55,9 +67,8 @@ public class OutBoxAlarmEvent {
 			alarmId,
 			EventStatus.PENDING,
 			MediaType.APPLICATION_JSON_VALUE.toLowerCase(),
-			payload,
-			LocalDateTime.now()
-		);
+			payload
+			);
 	}
 
 	public void updateStatus(EventStatus eventStatus) {

@@ -23,7 +23,7 @@ import lombok.Getter;
 @Table(
 	name = "briefings",
 	indexes = {
-		@Index(name = "briefing_user_id_idx", columnList = "userId")
+		@Index(name = "briefing_user_id_idx", columnList = "user_id")
 	}
 )
 @Entity
@@ -33,15 +33,16 @@ public class BriefingEntity extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Column(name = "user_id", nullable = false)
 	private Long userId;
 
-	@Column(nullable = false, columnDefinition = "TEXT")
+	@Column(name = "summary_text", nullable = false, columnDefinition = "TEXT")
 	private String summaryText;
 
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String text;
 
-	@Column(length = 1000)
+	@Column(name="wake_up_call_path",length = 1000)
 	private String wakeUpCallPath;
 
 	@OneToMany(

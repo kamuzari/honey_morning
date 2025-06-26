@@ -2,78 +2,101 @@
 <included>
     <logger name="com.sf.honeymorning" level="${APP_LOG_LEVEL}" additivity="false">
         <springProfile name="!prod">
-            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="CONSOLE"/>
         </springProfile>
-        <appender-ref ref="ASYNC_FILE" />
-        <appender-ref ref="ASYNC_ERROR_FILE" />
+        <appender-ref ref="ASYNC_FILE"/>
+        <appender-ref ref="ASYNC_ERROR_FILE"/>
     </logger>
 
     <logger name="org.springframework.jdbc" level="DEBUG" additivity="false">
         <springProfile name="!prod">
-            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="CONSOLE"/>
         </springProfile>
-        <appender-ref ref="ASYNC_FILE" />
+        <appender-ref ref="ASYNC_FILE"/>
     </logger>
+
+    <logger name="org.springframework.orm" level="DEBUG" additivity="false">
+        <springProfile name="!prod">
+            <appender-ref ref="CONSOLE"/>
+        </springProfile>
+        <appender-ref ref="ASYNC_FILE"/>
+    </logger>
+
 
     <logger name="org.springframework" level="INFO" additivity="false">
         <springProfile name="!prod">
-            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="CONSOLE"/>
         </springProfile>
-        <appender-ref ref="ASYNC_FILE" />
+        <appender-ref ref="ASYNC_FILE"/>
     </logger>
 
     <logger name="org.springframework.data.elasticsearch" level="TRACE" additivity="false">
         <springProfile name="!prod">
-            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="CONSOLE"/>
         </springProfile>
-        <appender-ref ref="ASYNC_FILE" />
+        <appender-ref ref="ASYNC_FILE"/>
     </logger>
 
     <logger name="org.elasticsearch" level="TRACE" additivity="false">
         <springProfile name="!prod">
-            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="CONSOLE"/>
         </springProfile>
-        <appender-ref ref="ASYNC_FILE" />
+        <appender-ref ref="ASYNC_FILE"/>
     </logger>
 
-    <logger name="tracer" level="TRACE" additivity="false">
-        <springProfile name="!prod">
-            <appender-ref ref="CONSOLE" />
-        </springProfile>
-        <appender-ref ref="ASYNC_FILE" />
-    </logger>
 
     <logger name="org.elasticsearch.client.RestClient" level="TRACE" additivity="false">
         <springProfile name="!prod">
-            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="CONSOLE"/>
         </springProfile>
-        <appender-ref ref="ASYNC_FILE" />
+        <appender-ref ref="ASYNC_FILE"/>
     </logger>
 
     <logger name="org.elasticsearch.client.RestClientSniffer" level="TRACE" additivity="false">
         <springProfile name="!prod">
-            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="CONSOLE"/>
         </springProfile>
-        <appender-ref ref="ASYNC_FILE" />
+        <appender-ref ref="ASYNC_FILE"/>
     </logger>
 
 
-    <logger name="org.apache" level="WARN" />
-    <logger name="com.zaxxer.hikari" level="WARN" />
-    <logger name="org.hibernate" level="WARN" />
+    <logger name="org.springframework.jdbc.datasource" level="DEBUG" additivity="false">
+        <springProfile name="!prod">
+            <appender-ref ref="CONSOLE"/>
+        </springProfile>
+        <appender-ref ref="ASYNC_FILE"/>
+    </logger>
 
-    <springProfile name="local,dev">
-        <logger name="org.springframework.web" level="DEBUG" additivity="false">
-            <appender-ref ref="CONSOLE" />
-            <appender-ref ref="ASYNC_FILE" />
-        </logger>
-    </springProfile>
+    <logger name="org.springframework.transaction" level="DEBUG" additivity="false">
+        <springProfile name="!prod">
+            <appender-ref ref="CONSOLE"/>
+        </springProfile>
+        <appender-ref ref="ASYNC_FILE"/>
+    </logger>
+
+    <logger name="com.zaxxer.hikari" level="DEBUG" additivity="false">
+        <springProfile name="!prod">
+            <appender-ref ref="CONSOLE"/>
+        </springProfile>
+        <appender-ref ref="ASYNC_FILE"/>
+    </logger>
+
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.hibernate" level="WARN"/>
+
+    <logger name="org.springframework.web" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ASYNC_FILE"/>
+    </logger>
+
 
     <root level="${ROOT_LOG_LEVEL}">
         <springProfile name="!prod">
-            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="CONSOLE"/>
         </springProfile>
-        <appender-ref ref="ASYNC_FILE" />
-        <appender-ref ref="ASYNC_ERROR_FILE" />
+        <springProfile name="prod">
+            <appender-ref ref="ASYNC_FILE"/>
+            <appender-ref ref="ASYNC_ERROR_FILE"/>
+        </springProfile>
     </root>
 </included>

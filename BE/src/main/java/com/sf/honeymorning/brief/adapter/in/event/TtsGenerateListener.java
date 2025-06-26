@@ -1,8 +1,8 @@
 package com.sf.honeymorning.brief.adapter.in.event;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -18,6 +18,8 @@ import jakarta.validation.Valid;
 @Validated
 @Component
 public class TtsGenerateListener {
+	private static final Logger log = LoggerFactory.getLogger(TtsGenerateListener.class);
+
 	private final TextToSpeechCommandUseCase textToSpeechCommandUseCase;
 
 	public TtsGenerateListener(TextToSpeechGenerateService ttsCommandUseCase) {
@@ -25,11 +27,15 @@ public class TtsGenerateListener {
 	}
 
 	@Async("eventTaskExecutor")
-	@Retryable(maxAttempts = 3, backoff = @Backoff(delay = 1000))
 	@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
 	@EventListener(Long.class)
 	public void generate(@Valid BriefingTtsCommandDto briefingTtsCommandDto) {
-		textToSpeechCommandUseCase.create(briefingTtsCommandDto.briefingId());
+		try {
+			textToSpeechCommandUseCase.create(briefingTtsCommandDto.briefingId());
+		} catch (Exception e) {
+			log.warn("fail tts create fallback : {}", e.getMessage(), e);
+			textToSpeechCommandUseCase.fallbackCompensationEvent(briefingTtsCommandDto.briefingId());
+		}
 	}
 
 }

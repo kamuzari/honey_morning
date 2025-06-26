@@ -27,6 +27,7 @@ public class TopicModelWordEntity extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private BriefingEntity briefingEntity;
 
+	@Column(name = "section_id")
 	private int sectionId;
 
 	private String word;
