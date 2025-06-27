@@ -1,12 +1,12 @@
 package com.sf.honeymorning.brief.application.domain;
 
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.event.EventStatus;
+import com.sf.honeymorning.common.entity.basic.EventStatus;
 
 import lombok.Getter;
 
 @Getter
 public class RetryingFailTts {
-	public static final long EMPTY = 0L;
+	private static final long EMPTY = 0L;
 
 	private Long failTtsEventId;
 	private Long failBriefingId;

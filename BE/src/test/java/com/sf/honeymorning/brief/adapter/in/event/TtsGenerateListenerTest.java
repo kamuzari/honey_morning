@@ -80,8 +80,8 @@ class TtsGenerateListenerTest extends DefaultIntegrationTest {
 
 		// then
 		boolean isError = AsyncTestConfig.errorLatch.await(2, TimeUnit.SECONDS);
-		assertThat(isError).isFalse();
-		FailTtsEventEntity failTtsEventEntity = failTtsEventEntityRepository.findByBriefingId(briefing.getId()).orElseThrow();
+		assertThat(isError).isTrue();
+		var failTtsEventEntity = failTtsEventEntityRepository.findByBriefingId(briefing.getId()).orElseThrow();
 		assertThat(failTtsEventEntity.getBriefingId()).isEqualTo(briefing.getId());
 	}
 }

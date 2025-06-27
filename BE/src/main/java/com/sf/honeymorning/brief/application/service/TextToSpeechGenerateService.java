@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sf.honeymorning.brief.application.domain.TextToSpeechContent;
+import com.sf.honeymorning.brief.application.port.in.FallBackTtsCommandUseCase;
 import com.sf.honeymorning.brief.application.port.in.TextToSpeechCommandUseCase;
 import com.sf.honeymorning.brief.application.port.out.CommandBriefingPort;
 import com.sf.honeymorning.brief.application.port.out.CommandContentStorePort;
@@ -25,7 +26,7 @@ import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
 
 @Service
-public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase {
+public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase, FallBackTtsCommandUseCase {
 
 	private final CommandContentStorePort s3CommandContentStorePort;
 	private final CommandTextToSpeechPort commandTextToSpeechPort;
@@ -59,7 +60,7 @@ public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase {
 	}
 
 	@Transactional(transactionManager = "eventTransactionManager", propagation = Propagation.REQUIRES_NEW)
-	public void fallbackCompensationEvent(Long briefingId) {
+	public void write(Long briefingId) {
 		commandFailTtsEventPort.save(briefingId);
 	}
 

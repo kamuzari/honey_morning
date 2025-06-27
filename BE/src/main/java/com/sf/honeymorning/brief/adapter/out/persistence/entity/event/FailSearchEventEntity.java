@@ -10,12 +10,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-@Table(name = "fail_tts_events")
+@Table(name = "fail_search_events")
 @Entity
-public class FailTtsEventEntity extends BaseEventEntity {
+public class FailSearchEventEntity extends BaseEventEntity {
 
-	public FailTtsEventEntity(Long briefingId) {
+	public FailSearchEventEntity(Long briefingId) {
 		this.briefingId = briefingId;
 		this.eventStatus = EventStatus.FAILED;
 	}
+
 }

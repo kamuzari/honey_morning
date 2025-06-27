@@ -27,8 +27,8 @@ public class FailTtsEventPersistenceAdapter implements CommandFailTtsEventPort, 
 	}
 
 	public void reflect(RetryingFailTts failTts) {
-		FailTtsEventEntity failTtsEventId = getFailTtsEventId(failTts.getFailTtsEventId());
-		failTtsEventId.complete(failTts.getEventStatus());
+		FailTtsEventEntity failTtsEvent = getFailTtsEventId(failTts.getFailTtsEventId());
+		failTtsEvent.complete(failTts.getEventStatus());
 	}
 
 	public RetryingFailTts loadTopOnSkipLock() {

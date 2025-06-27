@@ -27,7 +27,7 @@ import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWordEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.event.EventStatus;
+import com.sf.honeymorning.common.entity.basic.EventStatus;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.event.FailTtsEventEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.event.FailTtsEventEntityRepository;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
@@ -37,7 +37,7 @@ import com.sf.honeymorning.context.infra.storage.AwsS3Context;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 
 @AutoConfigureWireMock(port = 8089)
-class TtsFailFallbackUseCaseTest extends DefaultIntegrationTest implements MySqlContext, AwsS3Context {
+class TtsFailCompensateUseCaseTest extends DefaultIntegrationTest implements MySqlContext, AwsS3Context {
 
 	@Autowired
 	FailTtsEventEntityRepository failTtsEventEntityRepository;
@@ -55,7 +55,7 @@ class TtsFailFallbackUseCaseTest extends DefaultIntegrationTest implements MySql
 	AwsS3Properties awsS3Properties;
 
 	@Autowired
-	TtsFailFallbackUseCase sut;
+	TtsFailCompensateUseCase sut;
 
 	@BeforeEach
 	void updateUp() throws IOException {

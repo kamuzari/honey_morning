@@ -1,6 +1,6 @@
 package com.sf.honeymorning.brief.application.port.out;
 
 
-public interface CommandBriefingSearchPort {
+public interface CommandBriefingDocumentPort {
 	void reflect(Long briefingId);
 }

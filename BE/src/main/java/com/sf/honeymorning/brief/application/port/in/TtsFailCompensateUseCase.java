@@ -1,5 +1,5 @@
 package com.sf.honeymorning.brief.application.port.in;
 
-public interface TtsFailFallbackUseCase {
+public interface TtsFailCompensateUseCase {
 	void retryTts();
 }

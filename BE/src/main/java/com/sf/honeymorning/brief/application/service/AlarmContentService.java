@@ -9,7 +9,7 @@ import com.sf.honeymorning.brief.adapter.in.event.dto.BriefingTtsCommandDto;
 import com.sf.honeymorning.brief.application.port.in.AlarmContentCommandUseCase;
 import com.sf.honeymorning.brief.application.port.out.CommandBriefingPort;
 import com.sf.honeymorning.brief.application.port.out.ValidBriefingContentPort;
-import com.sf.honeymorning.common.event.EventDispatcherHandler;
+import com.sf.honeymorning.common.event.handler.EventDispatcherHandler;
 
 @Transactional(readOnly = true)
 @Service
