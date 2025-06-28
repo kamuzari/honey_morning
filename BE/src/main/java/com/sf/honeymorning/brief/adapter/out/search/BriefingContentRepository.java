@@ -1,5 +1,7 @@
 package com.sf.honeymorning.brief.adapter.out.search;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.annotations.Query;
@@ -40,4 +42,6 @@ public interface BriefingContentRepository extends ElasticsearchRepository<Brief
 		}
 		""")
 	Page<BriefingContentDocument> searchByUserIdAndAll(Long userId, String keyword, Pageable pageable);
+
+	Optional<BriefingContentDocument> findBriefingContentDocumentByBriefingId(Long id);
 }

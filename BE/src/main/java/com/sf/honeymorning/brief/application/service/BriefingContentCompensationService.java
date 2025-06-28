@@ -18,10 +18,12 @@ public class BriefingContentCompensationService implements TtsFailCompensateUseC
 	private final SearchDocumentCompensationPort searchDocumentCompensationPort;
 	private final BriefingSearchService briefingSearchService;
 
-
-	public BriefingContentCompensationService(TtsCompensationPort ttsCompensationPort,
+	public BriefingContentCompensationService(
+		TtsCompensationPort ttsCompensationPort,
 		TextToSpeechGenerateService textToSpeechGenerateService,
-		SearchDocumentCompensationPort searchDocumentCompensationPort, BriefingSearchService briefingSearchService) {
+		SearchDocumentCompensationPort searchDocumentCompensationPort,
+		BriefingSearchService briefingSearchService) {
+
 		this.ttsCompensationPort = ttsCompensationPort;
 		this.textToSpeechGenerateService = textToSpeechGenerateService;
 		this.searchDocumentCompensationPort = searchDocumentCompensationPort;
@@ -49,6 +51,6 @@ public class BriefingContentCompensationService implements TtsFailCompensateUseC
 
 		briefingSearchService.register(retryingFailSearchDocument.getBriefingId());
 		retryingFailSearchDocument.complete();
-
+		searchDocumentCompensationPort.reflect(retryingFailSearchDocument);
 	}
 }

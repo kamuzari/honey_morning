@@ -2,12 +2,14 @@ package com.sf.honeymorning.brief.adapter.in.scheduler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.sf.honeymorning.brief.application.port.in.SearchDocumentFailCompensateUseCase;
 import com.sf.honeymorning.brief.application.port.in.TtsFailCompensateUseCase;
 
+@Profile({"local", "prod"})
 @Component
 public class CompensationBriefingContentScheduler {
 	private static final Logger log = LoggerFactory.getLogger(CompensationBriefingContentScheduler.class);

@@ -16,11 +16,6 @@ public interface BriefingRepository extends JpaRepository<BriefingEntity, Long> 
 
 	Optional<BriefingEntity> findByUserIdAndId(Long userId, Long id);
 
-	@Query("SELECT b FROM BriefingEntity b WHERE b.userId= :user AND b.createdAt >= :startOfDay AND b.createdAt < :endOfDay")
-	Optional<BriefingEntity> findByUserAndCreatedAtToday(@Param("user") Long userId,
-		@Param("startOfDay") LocalDateTime startOfDay,
-		@Param("endOfDay") LocalDateTime endOfDay);
-
 	Optional<BriefingEntity> findTopByUserIdOrderByCreatedAtDesc(Long userId);
 
 	@Query("SELECT b FROM BriefingEntity b join fetch b.quizEntities WHERE b.id= :briefingId")
@@ -30,5 +25,5 @@ public interface BriefingRepository extends JpaRepository<BriefingEntity, Long> 
 		+ "join fetch b.quizEntities q "
 		+ "join fetch b.briefingTagEntities t "
 		+ "WHERE b.id= :briefingId")
-	Optional<BriefingEntity> findByIdWithQuizzesAndTopicModel(Long briefingId);
+	Optional<BriefingEntity> findByIdWithQuizzesAndTopicModel(@Param("briefingId") Long briefingId);
 }

@@ -2,6 +2,7 @@ package com.sf.honeymorning.brief.adapter.out.persistence.mapper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -80,16 +81,16 @@ public class BriefingPersistenceMapper {
 			response.aiBriefings().voiceContent(),
 			response.aiBriefings().readContent(),
 			response.AiWakeUpCallPath(),
-			response.requestTags().stream().map(BriefingTagEntity::new).toList(),
+			response.requestTags().stream().map(BriefingTagEntity::new).collect(Collectors.toSet()),
 			response.aiQuizzes().stream().map(aiQuizDto ->
 				new QuizEntity(aiQuizDto.problem(),
 					aiQuizDto.answer(),
 					aiQuizDto.selections()
-				)).toList(),
+				)).collect(Collectors.toSet()),
 			response.aiTopics().stream().map(aiTopicDto -> new TopicModelWordEntity(
 				aiTopicDto.sectionId(),
 				aiTopicDto.word(),
-				aiTopicDto.weight())).toList()
+				aiTopicDto.weight())).collect(Collectors.toSet())
 		);
 	}
 

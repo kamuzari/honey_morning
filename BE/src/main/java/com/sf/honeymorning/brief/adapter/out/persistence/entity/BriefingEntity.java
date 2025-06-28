@@ -1,6 +1,6 @@
 package com.sf.honeymorning.brief.adapter.out.persistence.entity;
 
-import java.util.List;
+import java.util.Set;
 
 import com.sf.honeymorning.common.entity.basic.BaseEntity;
 import com.sf.honeymorning.common.entity.content.Content;
@@ -49,19 +49,19 @@ public class BriefingEntity extends BaseEntity {
 		cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 		orphanRemoval = true)
 	@JoinColumn(name = "briefing_id")
-	private List<BriefingTagEntity> briefingTagEntities;
+	private Set<BriefingTagEntity> briefingTagEntities;
 
 	@OneToMany(
 		cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 		orphanRemoval = true)
 	@JoinColumn(name = "briefing_id")
-	private List<QuizEntity> quizEntities;
+	private Set<QuizEntity> quizEntities;
 
 	@OneToMany(
 		cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 		orphanRemoval = true)
 	@JoinColumn(name = "briefing_id")
-	private List<TopicModelWordEntity> topicModelWordEntities;
+	private Set<TopicModelWordEntity> topicModelWordEntities;
 
 	@Embedded
 	@AttributeOverride(name = "fileUrl", column = @Column(name = "access_url"))
@@ -81,9 +81,9 @@ public class BriefingEntity extends BaseEntity {
 		String summaryText,
 		String text,
 		String wakeUpCallPath,
-		List<BriefingTagEntity> briefingTagEntities,
-		List<QuizEntity> quizEntities,
-		List<TopicModelWordEntity> topicModelWordEntities) {
+		Set<BriefingTagEntity> briefingTagEntities,
+		Set<QuizEntity> quizEntities,
+		Set<TopicModelWordEntity> topicModelWordEntities) {
 
 		this.userId = userId;
 		this.summaryText = summaryText;
