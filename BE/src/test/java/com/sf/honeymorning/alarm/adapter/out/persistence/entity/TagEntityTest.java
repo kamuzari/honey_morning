@@ -7,17 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class TagEntityTest {
-    static final Faker DATE_GENERATOR = new Faker();
 
     @DisplayName("태그 객체를 생성한다")
     @Test
     void testCreateTag() {
         //given
-        String word = DATE_GENERATOR.lorem().word();
+        String word = GENERATOR.lorem().word();
 
         //when
         TagEntity tagEntity = new TagEntity(word);

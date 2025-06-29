@@ -1,5 +1,6 @@
 package com.sf.honeymorning.brief.application.port.in;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -76,10 +77,10 @@ class TextToSpeechCommandUseCaseTest extends MockTest {
 		//given
 		TextToSpeechContent loadedTextToSpeechContent = new TextToSpeechContent(
 			1L,
-			DATE_GENERATOR.lorem().sentence(20),
+			GENERATOR.lorem().sentence(20),
 			Stream.generate(() -> new TextToSpeechContent.textToSpeechQuiz(
-					DATE_GENERATOR.number().randomNumber(),
-					DATE_GENERATOR.lorem().sentence(5)
+					GENERATOR.number().randomNumber(),
+					GENERATOR.lorem().sentence(5)
 				)).limit(QuizConstraint.TOTAL_QUIZ_SIZE)
 				.toList()
 		);

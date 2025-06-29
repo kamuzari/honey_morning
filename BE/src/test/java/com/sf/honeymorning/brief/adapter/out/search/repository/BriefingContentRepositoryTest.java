@@ -1,5 +1,6 @@
 package com.sf.honeymorning.brief.adapter.out.search.repository;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -27,7 +28,6 @@ import com.sf.honeymorning.brief.common.QuizConstraint;
 @DataElasticsearchTest
 @Testcontainers
 class BriefingContentRepositoryTest {
-	static final Faker DATA_GENERATOR = new Faker();
 
 	@Container
 	static ElasticsearchContainer elasticsearchContainer = new ElasticsearchContainer(
@@ -92,11 +92,11 @@ class BriefingContentRepositoryTest {
 			LongStream.rangeClosed(1, size)
 				.mapToObj(userId ->
 					new BriefingContentDocument(
-						DATA_GENERATOR.number().randomNumber(),
+						GENERATOR.number().randomNumber(),
 						fixedUserId,
 						"요약 테스트 데이터" + userId,
 						"장문 테스트 데이터" + userId,
-						DATA_GENERATOR.lorem().words(),
+						GENERATOR.lorem().words(),
 						createQuizIndex()
 					)
 				).toList());
@@ -107,26 +107,26 @@ class BriefingContentRepositoryTest {
 			LongStream.rangeClosed(1, size)
 				.mapToObj(userId ->
 					new BriefingContentDocument(
-						DATA_GENERATOR.number().randomNumber(),
+						GENERATOR.number().randomNumber(),
 						userId,
 						"요약 테스트 데이터" + userId,
 						"장문 테스트 데이터" + userId,
-						DATA_GENERATOR.lorem().words(),
+						GENERATOR.lorem().words(),
 						createQuizIndex()
 					)
 				).toList());
 	}
 
 	List<BriefingContentDocument.QuizDocument> createQuizIndex() {
-		return Stream.generate(() -> DATA_GENERATOR.lorem().word())
+		return Stream.generate(() -> GENERATOR.lorem().word())
 			.map(word -> {
 				return new BriefingContentDocument.QuizDocument(
-						DATA_GENERATOR.number().randomNumber(),
-							DATA_GENERATOR.lorem().sentence(1),
-					List.of(DATA_GENERATOR.lorem().word(),
-							DATA_GENERATOR.lorem().word(),
-							DATA_GENERATOR.lorem().word(),
-							DATA_GENERATOR.lorem().word())
+						GENERATOR.number().randomNumber(),
+							GENERATOR.lorem().sentence(1),
+					List.of(GENERATOR.lorem().word(),
+							GENERATOR.lorem().word(),
+							GENERATOR.lorem().word(),
+							GENERATOR.lorem().word())
 						);
 				}
 			)

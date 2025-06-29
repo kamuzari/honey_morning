@@ -1,5 +1,6 @@
 package com.sf.honeymorning.brief.adapter.in.event;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.doThrow;
@@ -68,10 +69,10 @@ class TtsGenerateListenerTest extends DefaultIntegrationTest {
 	void failGenerate() throws InterruptedException {
 		//given
 		BriefingEntity briefing = briefingRepository.save(new BriefingEntity(
-			DATE_GENERATOR.number().randomNumber(),
-			DATE_GENERATOR.lorem().sentence(),
-			DATE_GENERATOR.lorem().sentences(10).stream().collect(Collectors.joining()),
-			DATE_GENERATOR.file().fileName()
+			GENERATOR.number().randomNumber(),
+			GENERATOR.lorem().sentence(),
+			GENERATOR.lorem().sentences(10).stream().collect(Collectors.joining()),
+			GENERATOR.file().fileName()
 		));
 		doThrow(new RuntimeException("알수 없는 예외")).when(textToSpeechCommandUseCase).create(any());
 

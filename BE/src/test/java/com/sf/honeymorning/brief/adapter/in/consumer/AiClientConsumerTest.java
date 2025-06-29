@@ -1,6 +1,7 @@
 package com.sf.honeymorning.brief.adapter.in.consumer;
 
 import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static com.sf.honeymorning.config.RabbitConfig.*;
 import static java.util.concurrent.TimeUnit.*;
 import static org.assertj.core.api.Assertions.*;
@@ -84,7 +85,7 @@ class AiClientConsumerTest extends DefaultIntegrationTest implements RabbitMqCon
 		//given
 		AiResponseDto expectResponseDto = new AiResponseDto(
 			1L,
-			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
+			new AiBriefingDto(GENERATOR.lorem().sentence(10), GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
@@ -112,7 +113,7 @@ class AiClientConsumerTest extends DefaultIntegrationTest implements RabbitMqCon
 		// given
 		AiResponseDto responseDto = new AiResponseDto(
 			1L,
-			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
+			new AiBriefingDto(GENERATOR.lorem().sentence(10), GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
@@ -134,17 +135,17 @@ class AiClientConsumerTest extends DefaultIntegrationTest implements RabbitMqCon
 
 	private List<AiTopicDto> createFakeAiTopicDtos(int size) {
 		return Stream.generate(() -> new AiTopicDto(
-				DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
-				DATE_GENERATOR.lorem().word(),
-				DATE_GENERATOR.number().randomDouble(2, 0, 100)))
+				GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
+				GENERATOR.lorem().word(),
+				GENERATOR.number().randomDouble(2, 0, 100)))
 			.limit(size).toList();
 	}
 
 	private List<AiQuizDto> createFakeQuizDtos(int size) {
 		return Stream.generate(() -> new AiQuizDto(
-				DATE_GENERATOR.lorem().sentence(2),
+				GENERATOR.lorem().sentence(2),
 				1,
-				Stream.generate(() -> DATE_GENERATOR.lorem().word())
+				Stream.generate(() -> GENERATOR.lorem().word())
 					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
 			))

@@ -2,6 +2,7 @@ package com.sf.honeymorning.brief.adapter.in.web.port.out;
 
 import static com.sf.honeymorning.brief.common.QuizConstraint.ANSWER_MAXIMUM_VALUE;
 import static com.sf.honeymorning.brief.common.QuizConstraint.ANSWER_MINIMUM_VALUE;
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -69,31 +70,31 @@ public class BriefingQueryPortTest extends MockTest {
 		//given
 		BriefingEntity briefingEntity = new BriefingEntity(
 			AUTH_USER_ENTITY.getId(),
-			DATE_GENERATOR.lorem().sentence(10),
-			DATE_GENERATOR.lorem().word(),
-			DATE_GENERATOR.internet().url());
+			GENERATOR.lorem().sentence(10),
+			GENERATOR.lorem().word(),
+			GENERATOR.internet().url());
 		briefingEntity.addWakeUpBriefingContent(new Content(
-			DATE_GENERATOR.internet().domainName(),
-			(long)DATE_GENERATOR.number().numberBetween(1000, 100_000),
+			GENERATOR.internet().domainName(),
+			(long)GENERATOR.number().numberBetween(1000, 100_000),
 			FileType.BRIEFING,
-			DATE_GENERATOR.internet().url().toLowerCase(),
+			GENERATOR.internet().url().toLowerCase(),
 			AccessAuthority.PART_ALLOWED)
 		);
 		ReflectionTestUtils.setField(briefingEntity, "id", 1L);
-		List<QuizEntity> quizEntities = List.of(new QuizEntity(DATE_GENERATOR.lorem().sentence(),
-				DATE_GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE),
-				Stream.generate(() -> DATE_GENERATOR.lorem().sentence()).limit(4).toList()),
-			new QuizEntity(DATE_GENERATOR.lorem().sentence(),
-				DATE_GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE),
-				Stream.generate(() -> DATE_GENERATOR.lorem().sentence()).limit(4).toList())
+		List<QuizEntity> quizEntities = List.of(new QuizEntity(GENERATOR.lorem().sentence(),
+				GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE),
+				Stream.generate(() -> GENERATOR.lorem().sentence()).limit(4).toList()),
+			new QuizEntity(GENERATOR.lorem().sentence(),
+				GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE),
+				Stream.generate(() -> GENERATOR.lorem().sentence()).limit(4).toList())
 		);
 
 		quizEntities.forEach(quiz -> ReflectionTestUtils.setField(quiz, "briefingEntity", briefingEntity));
 
 		List<TopicModelWordEntity> topicModelWordEntities = Stream.generate(() -> new TopicModelWordEntity(
-			DATE_GENERATOR.number().numberBetween(1, 5),
-			DATE_GENERATOR.lorem().word(),
-			DATE_GENERATOR.number().randomDouble(2, 0, 20)
+			GENERATOR.number().numberBetween(1, 5),
+			GENERATOR.lorem().word(),
+			GENERATOR.number().randomDouble(2, 0, 20)
 		)).limit(150).toList();
 
 		given(briefingRepository.findByUserIdAndId(AUTH_USER_ENTITY.getId(), briefingEntity.getId()))
@@ -121,9 +122,9 @@ public class BriefingQueryPortTest extends MockTest {
 		//given
 		Long anotherUserId = 9L;
 		BriefingEntity briefingEntity = new BriefingEntity(anotherUserId,
-			DATE_GENERATOR.lorem().sentence(10),
-			DATE_GENERATOR.lorem().word(),
-			DATE_GENERATOR.internet().url());
+			GENERATOR.lorem().sentence(10),
+			GENERATOR.lorem().word(),
+			GENERATOR.internet().url());
 		ReflectionTestUtils.setField(briefingEntity, "id", 1L);
 		given(briefingRepository.findByUserIdAndId(AUTH_USER_ENTITY.getId(), briefingEntity.getId()))
 			.willReturn(Optional.of(briefingEntity));

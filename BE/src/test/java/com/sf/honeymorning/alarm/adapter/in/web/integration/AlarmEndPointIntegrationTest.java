@@ -1,5 +1,6 @@
 package com.sf.honeymorning.alarm.adapter.in.web.integration;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static io.restassured.RestAssured.*;
 import static io.restassured.http.ContentType.*;
 import static org.hamcrest.Matchers.*;
@@ -68,9 +69,9 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest implem
 
 		authenticationUserEntity = userRepository.saveAndFlush(
 			new UserEntity(
-				DATE_GENERATOR.internet().emailAddress(),
+				GENERATOR.internet().emailAddress(),
 				"{encrypt password}",
-				DATE_GENERATOR.name().username(),
+				GENERATOR.name().username(),
 				UserRole.ROLE_USER
 			)
 		);
@@ -103,9 +104,9 @@ public class AlarmEndPointIntegrationTest extends EndPointIntegrationTest implem
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			authUserAlarmEntity.getId(),
 			LocalTime.now().plusHours(7),
-			DATE_GENERATOR.number().numberBetween(1, 127),
-			DATE_GENERATOR.number().numberBetween(1, 10),
-			DATE_GENERATOR.number().numberBetween(1, 10),
+			GENERATOR.number().numberBetween(1, 127),
+			GENERATOR.number().numberBetween(1, 10),
+			GENERATOR.number().numberBetween(1, 10),
 			true
 		);
 		//when

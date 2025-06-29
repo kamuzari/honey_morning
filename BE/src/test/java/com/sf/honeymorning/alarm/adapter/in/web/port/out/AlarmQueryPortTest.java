@@ -1,5 +1,6 @@
 package com.sf.honeymorning.alarm.adapter.in.web.port.out;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -68,15 +69,15 @@ class AlarmQueryPortTest extends MockTest {
 			true
 		);
 		BriefingEntity expectedBriefingEntity = new BriefingEntity(AUTH_USER_ENTITY.getId(),
-			DATE_GENERATOR.lorem().sentence(10),
-			DATE_GENERATOR.lorem().sentence(20),
-			DATE_GENERATOR.internet().url().toLowerCase()
+			GENERATOR.lorem().sentence(10),
+			GENERATOR.lorem().sentence(20),
+			GENERATOR.internet().url().toLowerCase()
 		);
 		expectedBriefingEntity.addWakeUpBriefingContent(new Content(
-			DATE_GENERATOR.internet().domainName(),
-			(long)DATE_GENERATOR.number().numberBetween(1000, 100_000),
+			GENERATOR.internet().domainName(),
+			(long)GENERATOR.number().numberBetween(1000, 100_000),
 			FileType.BRIEFING,
-			DATE_GENERATOR.internet().url().toLowerCase(),
+			GENERATOR.internet().url().toLowerCase(),
 			AccessAuthority.PART_ALLOWED)
 		);
 		List<QuizEntity> expectedQuizzes = createFakeQuiz(QuizConstraint.TOTAL_QUIZ_SIZE);
@@ -104,19 +105,19 @@ class AlarmQueryPortTest extends MockTest {
 
 	private List<QuizEntity> createFakeQuiz(int size) {
 		List<QuizEntity> quizEntities = Stream.generate(() -> new QuizEntity(
-				DATE_GENERATOR.lorem().sentence(2),
+				GENERATOR.lorem().sentence(2),
 				1,
-				Stream.generate(() -> DATE_GENERATOR.lorem().word())
+				Stream.generate(() -> GENERATOR.lorem().word())
 					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
 			))
 			.limit(size)
 			.map(quiz -> {
 				ReflectionTestUtils.setField(quiz, "wakeUpQuizContent", new Content(
-					DATE_GENERATOR.file().fileName(),
-					DATE_GENERATOR.number().randomNumber(),
+					GENERATOR.file().fileName(),
+					GENERATOR.number().randomNumber(),
 					FileType.QUIZ,
-					String.join("/", DATE_GENERATOR.internet().domainName(), DATE_GENERATOR.file().fileName()),
+					String.join("/", GENERATOR.internet().domainName(), GENERATOR.file().fileName()),
 					AccessAuthority.PRIVATE
 				));
 				return quiz;

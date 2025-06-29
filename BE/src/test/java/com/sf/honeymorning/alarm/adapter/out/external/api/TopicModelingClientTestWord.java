@@ -1,6 +1,7 @@
 package com.sf.honeymorning.alarm.adapter.out.external.api;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.apache.http.HttpHeaders.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.http.HttpStatus.*;
@@ -64,8 +65,8 @@ class TopicModelingClientTestWord extends EndPointIntegrationTest {
 
 	private List<TopicModelDetailResponse> getRandomTopicModelDetails() {
 		return Stream.generate(
-				() -> new TopicModelDetailResponse(DATE_GENERATOR.lorem().word(),
-					DATE_GENERATOR.number().randomDouble(100, 0, 100)))
+				() -> new TopicModelDetailResponse(GENERATOR.lorem().word(),
+					GENERATOR.number().randomDouble(100, 0, 100)))
 			.limit(FIXED_RESPONSE_DETAIL_WORD_SIZE)
 			.toList();
 	}

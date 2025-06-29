@@ -2,6 +2,7 @@ package com.sf.honeymorning.alarm.adapter.in.web.port.out;
 
 import static com.sf.honeymorning.alarm.common.AlarmResultConstraint.MATCH_COUNT_MAXIMUM_VALUE;
 import static com.sf.honeymorning.alarm.common.AlarmResultConstraint.MATCH_COUNT_MINIMUM_VALUE;
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole.ROLE_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,8 +50,8 @@ class AlarmResultQueryPortTest extends MockPersistenceTest {
 		Long userId = 1L;
 		List<AlarmResultEntity> samples = Stream.generate(() -> new AlarmResultEntity(
 			userId,
-			DATA_GENERATOR.number().randomNumber(),
-			DATA_GENERATOR.number().numberBetween(MATCH_COUNT_MINIMUM_VALUE, MATCH_COUNT_MAXIMUM_VALUE),
+			GENERATOR.number().randomNumber(),
+			GENERATOR.number().numberBetween(MATCH_COUNT_MINIMUM_VALUE, MATCH_COUNT_MAXIMUM_VALUE),
 			true
 		)).limit(20).toList();
 		List<AlarmResultEntity> totalAlarmResultEntities = alarmResultRepository.saveAll(samples)
@@ -77,8 +78,8 @@ class AlarmResultQueryPortTest extends MockPersistenceTest {
 	@DisplayName("최대 스트릭 일수를 가져온다")
 	void testGetMaximumStreak() {
 		//given
-		UserEntity userEntity = new UserEntity(DATA_GENERATOR.name().username(),
-			DATA_GENERATOR.internet().password(),
+		UserEntity userEntity = new UserEntity(GENERATOR.name().username(),
+			GENERATOR.internet().password(),
 			"DeepSeek",
 			ROLE_USER);
 		userRepository.save(userEntity);

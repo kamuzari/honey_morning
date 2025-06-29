@@ -2,6 +2,7 @@ package com.sf.honeymorning.brief.application.service;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -84,9 +85,9 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 	@Test
 	void testCreateTotalContents() throws IOException {
 		//given
-		UserEntity userEntity = new UserEntity(DATE_GENERATOR.name().username(),
-			DATE_GENERATOR.internet().password(10, 17),
-			DATE_GENERATOR.internet().domainName(),
+		UserEntity userEntity = new UserEntity(GENERATOR.name().username(),
+			GENERATOR.internet().password(10, 17),
+			GENERATOR.internet().domainName(),
 			UserRole.ROLE_USER
 		);
 
@@ -97,7 +98,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 		AiResponseDto responseDto = new AiResponseDto(
 			userEntity.getId(),
-			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
+			new AiBriefingDto(GENERATOR.lorem().sentence(10), GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
@@ -131,9 +132,9 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 	@Test
 	void testCreateTotalContentsNotPropagateError()  {
 		//given
-		UserEntity userEntity = new UserEntity(DATE_GENERATOR.name().username(),
-			DATE_GENERATOR.internet().password(10, 17),
-			DATE_GENERATOR.internet().domainName(),
+		UserEntity userEntity = new UserEntity(GENERATOR.name().username(),
+			GENERATOR.internet().password(10, 17),
+			GENERATOR.internet().domainName(),
 			UserRole.ROLE_USER
 		);
 
@@ -144,7 +145,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 		AiResponseDto responseDto = new AiResponseDto(
 			userEntity.getId(),
-			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
+			new AiBriefingDto(GENERATOR.lorem().sentence(10), GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
@@ -170,17 +171,17 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 	List<AiTopicDto> createFakeAiTopicDtos(int size) {
 		return Stream.generate(() -> new AiTopicDto(
-				DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
-				DATE_GENERATOR.lorem().word(),
-				DATE_GENERATOR.number().randomDouble(2, 0, 100)))
+				GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
+				GENERATOR.lorem().word(),
+				GENERATOR.number().randomDouble(2, 0, 100)))
 			.limit(size).toList();
 	}
 
 	List<AiQuizDto> createFakeQuizDtos(int size) {
 		return Stream.generate(() -> new AiQuizDto(
-				DATE_GENERATOR.lorem().sentence(2),
+				GENERATOR.lorem().sentence(2),
 				1,
-				Stream.generate(() -> DATE_GENERATOR.lorem().word())
+				Stream.generate(() -> GENERATOR.lorem().word())
 					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
 			))

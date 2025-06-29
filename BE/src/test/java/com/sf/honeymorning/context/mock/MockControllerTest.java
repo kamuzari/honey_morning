@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @WithJwtMockUser
 public class MockControllerTest {
-    protected static final Faker DATE_GENERATOR = new Faker();
     protected static final String USERNAME = "kamusari";
     protected static final Long AUTH_ID = 1L;
 

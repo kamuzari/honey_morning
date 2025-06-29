@@ -1,5 +1,6 @@
 package com.sf.honeymorning.brief.application.port.out;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -53,9 +54,9 @@ public class CommandQuizPortTest extends MockTest {
 		//given
 		List<QuizEntity> quizEntities = LongStream.rangeClosed(1, 2).mapToObj((quizId) -> {
 			QuizEntity quizEntity = new QuizEntity(
-				DATE_GENERATOR.lorem().sentence(3),
+				GENERATOR.lorem().sentence(3),
 				1,
-				Stream.generate(() -> DATE_GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList());
+				Stream.generate(() -> GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList());
 			ReflectionTestUtils.setField(quizEntity, "id", quizId);
 
 			return quizEntity;
@@ -92,9 +93,9 @@ public class CommandQuizPortTest extends MockTest {
 		//given
 		List<QuizEntity> quizEntities = LongStream.rangeClosed(1, 2).mapToObj((quizId) -> {
 			QuizEntity quizEntity = new QuizEntity(
-				DATE_GENERATOR.lorem().sentence(3),
+				GENERATOR.lorem().sentence(3),
 				1,
-				Stream.generate(() -> DATE_GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList());
+				Stream.generate(() -> GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList());
 			ReflectionTestUtils.setField(quizEntity, "id", quizId);
 
 			return quizEntity;

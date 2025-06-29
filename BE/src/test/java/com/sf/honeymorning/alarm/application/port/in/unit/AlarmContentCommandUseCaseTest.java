@@ -3,6 +3,7 @@ package com.sf.honeymorning.alarm.application.port.in.unit;
 import static com.sf.honeymorning.brief.common.TopicWordConstraint.SECTION_MAXIMUM_SIZE;
 import static com.sf.honeymorning.brief.common.TopicWordConstraint.SECTION_MINIMUM_SIZE;
 import static com.sf.honeymorning.brief.common.TopicWordConstraint.TOPIC_WORD_TOTAL_SIZE;
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.times;
@@ -84,17 +85,17 @@ class AlarmContentCommandUseCaseTest extends MockTest {
 
 	List<AiTopicDto> createFakeAiTopicDtos(int size) {
 		return Stream.generate(() -> new AiTopicDto(
-				DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
-				DATE_GENERATOR.lorem().word(),
-				DATE_GENERATOR.number().randomDouble(2, 0, 100)))
+				GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
+				GENERATOR.lorem().word(),
+				GENERATOR.number().randomDouble(2, 0, 100)))
 			.limit(size).toList();
 	}
 
 	List<AiQuizDto> createFakeQuizDtos(int size) {
 		return Stream.generate(() -> new AiQuizDto(
-				DATE_GENERATOR.lorem().sentence(2),
+				GENERATOR.lorem().sentence(2),
 				1,
-				Stream.generate(() -> DATE_GENERATOR.lorem().word())
+				Stream.generate(() -> GENERATOR.lorem().word())
 					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
 			))
@@ -105,7 +106,7 @@ class AlarmContentCommandUseCaseTest extends MockTest {
 	AiResponseDto createAiResponseDto() {
 		return new AiResponseDto(
 			AUTH_USER_ENTITY.getId(),
-			new AiBriefingDto(DATE_GENERATOR.lorem().sentence(10), DATE_GENERATOR.lorem().sentence(40)),
+			new AiBriefingDto(GENERATOR.lorem().sentence(10), GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),

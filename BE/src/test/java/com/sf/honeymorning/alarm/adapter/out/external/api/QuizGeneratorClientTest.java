@@ -1,6 +1,7 @@
 package com.sf.honeymorning.alarm.adapter.out.external.api;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.apache.http.HttpHeaders.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.http.HttpStatus.*;
@@ -34,19 +35,19 @@ class QuizGeneratorClientTest extends EndPointIntegrationTest {
 	static List<QuizResponseDto> getExpectedResponse() {
 		return List.of(
 			new QuizResponseDto(
-				DATE_GENERATOR.rockBand().name(),
-				List.of(new QuizOption(1, DATE_GENERATOR.internet().emailAddress()),
-					new QuizOption(2, DATE_GENERATOR.internet().emailAddress()),
-					new QuizOption(3, DATE_GENERATOR.internet().emailAddress()),
-					new QuizOption(4, DATE_GENERATOR.internet().emailAddress())),
+				GENERATOR.rockBand().name(),
+				List.of(new QuizOption(1, GENERATOR.internet().emailAddress()),
+					new QuizOption(2, GENERATOR.internet().emailAddress()),
+					new QuizOption(3, GENERATOR.internet().emailAddress()),
+					new QuizOption(4, GENERATOR.internet().emailAddress())),
 				1
 			),
 			new QuizResponseDto(
-				DATE_GENERATOR.rockBand().name(),
-				List.of(new QuizOption(1, DATE_GENERATOR.name().username()),
-					new QuizOption(2, DATE_GENERATOR.name().username()),
-					new QuizOption(3, DATE_GENERATOR.name().username()),
-					new QuizOption(4, DATE_GENERATOR.name().username())),
+				GENERATOR.rockBand().name(),
+				List.of(new QuizOption(1, GENERATOR.name().username()),
+					new QuizOption(2, GENERATOR.name().username()),
+					new QuizOption(3, GENERATOR.name().username()),
+					new QuizOption(4, GENERATOR.name().username())),
 				2
 			)
 		);

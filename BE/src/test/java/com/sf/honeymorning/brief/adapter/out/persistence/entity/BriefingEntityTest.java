@@ -1,23 +1,20 @@
 package com.sf.honeymorning.brief.adapter.out.persistence.entity;
 
-import static com.sf.honeymorning.brief.common.TopicWordConstraint.SECTION_MAXIMUM_SIZE;
-import static com.sf.honeymorning.brief.common.TopicWordConstraint.SECTION_MINIMUM_SIZE;
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-import java.util.stream.Stream;
+import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.github.javafaker.Faker;
+import com.sf.honeymorning.brief.utils.BriefingMockGenerator;
 import com.sf.honeymorning.common.entity.content.AccessAuthority;
 import com.sf.honeymorning.common.entity.content.Content;
 import com.sf.honeymorning.common.entity.content.FileType;
-import com.sf.honeymorning.brief.common.QuizConstraint;
 
 class BriefingEntityTest {
-	static final Faker DATE_GENERATOR = new Faker();
 
 	@Test
 	@DisplayName("브리핑만 단독적으로 객체를 생성한다")
@@ -27,9 +24,9 @@ class BriefingEntityTest {
 		//when
 		BriefingEntity briefingEntity = new BriefingEntity(
 			userId,
-			DATE_GENERATOR.lorem().sentence(10),
-			DATE_GENERATOR.lorem().sentence(40),
-			DATE_GENERATOR.internet().domainName()
+			GENERATOR.lorem().sentence(10),
+			GENERATOR.lorem().sentence(40),
+			GENERATOR.internet().domainName()
 		);
 
 		assertThat(briefingEntity.getUserId()).isEqualTo(userId);
@@ -47,15 +44,15 @@ class BriefingEntityTest {
 	void testCreateBriefingWithSubDomain() {
 		//given
 		long userId = 1L;
-		List<QuizEntity> createdQuizzes = createQuizzes();
-		List<TopicModelWordEntity> createdTopicModels = createTopicModelWords();
-		List<BriefingTagEntity> briefingTagEntities = List.of(new BriefingTagEntity(DATE_GENERATOR.lorem().word()));
+		Set<QuizEntity> createdQuizzes = BriefingMockGenerator.createQuizzes();
+		Set<TopicModelWordEntity> createdTopicModels = BriefingMockGenerator.createTopicModelWords();
+		Set<BriefingTagEntity> briefingTagEntities = Set.of(new BriefingTagEntity(GENERATOR.lorem().word()));
 		//when
 		BriefingEntity briefingEntity = new BriefingEntity(
 			userId,
-			DATE_GENERATOR.lorem().sentence(10),
-			DATE_GENERATOR.lorem().sentence(40),
-			DATE_GENERATOR.internet().domainName(),
+			GENERATOR.lorem().sentence(10),
+			GENERATOR.lorem().sentence(40),
+			GENERATOR.internet().domainName(),
 			briefingTagEntities,
 			createdQuizzes,
 			createdTopicModels
@@ -74,16 +71,16 @@ class BriefingEntityTest {
 		long userId = 1L;
 		BriefingEntity briefingEntity = new BriefingEntity(
 			userId,
-			DATE_GENERATOR.lorem().sentence(10),
-			DATE_GENERATOR.lorem().sentence(40),
-			DATE_GENERATOR.internet().domainName()
+			GENERATOR.lorem().sentence(10),
+			GENERATOR.lorem().sentence(40),
+			GENERATOR.internet().domainName()
 		);
 
 		Content addingContent = new Content(
-			DATE_GENERATOR.internet().domainName(),
-			(long)DATE_GENERATOR.number().numberBetween(1000, 100_000),
+			GENERATOR.internet().domainName(),
+			(long)GENERATOR.number().numberBetween(1000, 100_000),
 			FileType.BRIEFING,
-			DATE_GENERATOR.internet().url().toLowerCase(),
+			GENERATOR.internet().url().toLowerCase(),
 			AccessAuthority.PART_ALLOWED
 		);
 
@@ -101,9 +98,9 @@ class BriefingEntityTest {
 		long userId = 1L;
 		BriefingEntity briefingEntity = new BriefingEntity(
 			userId,
-			DATE_GENERATOR.lorem().sentence(10),
-			DATE_GENERATOR.lorem().sentence(40),
-			DATE_GENERATOR.internet().domainName()
+			GENERATOR.lorem().sentence(10),
+			GENERATOR.lorem().sentence(40),
+			GENERATOR.internet().domainName()
 		);
 
 
@@ -117,14 +114,14 @@ class BriefingEntityTest {
 	@DisplayName("브리핑 객체에 퀴즈 객체들이 존재지 않으면 false를 반환한다")
 	void testFalseIsEmptyQuizzes(){
 		long userId = 1L;
-		List<QuizEntity> createdQuizzes = createQuizzes();
-		List<TopicModelWordEntity> createdTopicModels = createTopicModelWords();
-		List<BriefingTagEntity> briefingTagEntities = List.of(new BriefingTagEntity(DATE_GENERATOR.lorem().word()));
+		Set<QuizEntity> createdQuizzes = BriefingMockGenerator.createQuizzes();
+		Set<TopicModelWordEntity> createdTopicModels = BriefingMockGenerator.createTopicModelWords();
+		Set<BriefingTagEntity> briefingTagEntities = Set.of(new BriefingTagEntity(GENERATOR.lorem().word()));
 		BriefingEntity briefingEntity = new BriefingEntity(
 			userId,
-			DATE_GENERATOR.lorem().sentence(10),
-			DATE_GENERATOR.lorem().sentence(40),
-			DATE_GENERATOR.internet().domainName(),
+			GENERATOR.lorem().sentence(10),
+			GENERATOR.lorem().sentence(40),
+			GENERATOR.internet().domainName(),
 			briefingTagEntities,
 			createdQuizzes,
 			createdTopicModels
@@ -135,24 +132,4 @@ class BriefingEntityTest {
 		//then
 		assertThat(isEmptyQuizzes).isFalse();
 	}
-
-	List<QuizEntity> createQuizzes() {
-		return Stream.generate(() -> new QuizEntity(
-				DATE_GENERATOR.lorem().sentence(2),
-				1,
-				Stream.generate(() -> DATE_GENERATOR.lorem().word())
-					.limit(QuizConstraint.OPTION_SIZE)
-					.toList()
-			)).limit(2)
-			.toList();
-	}
-
-	List<TopicModelWordEntity> createTopicModelWords() {
-		return Stream.generate(() -> new TopicModelWordEntity(
-				DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
-				DATE_GENERATOR.lorem().word(),
-				DATE_GENERATOR.number().randomDouble(2, 0, 100)))
-			.limit(150).toList();
-	}
-
 }

@@ -18,5 +18,4 @@ import com.sf.honeymorning.context.infra.database.MySqlContext;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 public class MockPersistenceTest implements MySqlContext {
-	protected Faker DATA_GENERATOR = new Faker();
 }

@@ -2,13 +2,9 @@ package com.sf.honeymorning.brief.application.port.in;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.sf.honeymorning.brief.common.TopicWordConstraint.SECTION_MAXIMUM_SIZE;
-import static com.sf.honeymorning.brief.common.TopicWordConstraint.SECTION_MINIMUM_SIZE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,14 +19,11 @@ import org.springframework.http.HttpHeaders;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWordEntity;
-import com.sf.honeymorning.common.entity.basic.EventStatus;
+import com.sf.honeymorning.brief.utils.BriefingMockGenerator;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.event.FailTtsEventEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.event.FailTtsEventEntityRepository;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
+import com.sf.honeymorning.common.entity.basic.EventStatus;
 import com.sf.honeymorning.config.constant.AwsS3Properties;
 import com.sf.honeymorning.context.infra.database.MySqlContext;
 import com.sf.honeymorning.context.infra.storage.AwsS3Context;
@@ -38,6 +31,8 @@ import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
 
 @AutoConfigureWireMock(port = 8089)
 class TtsFailCompensateUseCaseTest extends DefaultIntegrationTest implements MySqlContext, AwsS3Context {
+	@Autowired
+	TtsFailCompensateUseCase sut;
 
 	@Autowired
 	FailTtsEventEntityRepository failTtsEventEntityRepository;
@@ -53,9 +48,6 @@ class TtsFailCompensateUseCaseTest extends DefaultIntegrationTest implements MyS
 
 	@Autowired
 	AwsS3Properties awsS3Properties;
-
-	@Autowired
-	TtsFailCompensateUseCase sut;
 
 	@BeforeEach
 	void updateUp() throws IOException {
@@ -75,7 +67,7 @@ class TtsFailCompensateUseCaseTest extends DefaultIntegrationTest implements MyS
 	@Test
 	void testRetryTts() {
 		//given
-		var briefingEntity = briefingRepository.save(createBriefing(1L));
+		var briefingEntity = briefingRepository.save(BriefingMockGenerator.createBriefing(1L));
 		var failTtsEventEntity = failTtsEventEntityRepository.save(new FailTtsEventEntity(briefingEntity.getId()));
 
 		//when
@@ -96,31 +88,5 @@ class TtsFailCompensateUseCaseTest extends DefaultIntegrationTest implements MyS
 				.withHeader(HttpHeaders.CONTENT_TYPE, "audio/mpeg")
 				.withHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(mockResource.contentLength()))
 				.withBody(mockResource.getInputStream().readAllBytes())));
-	}
-
-	BriefingEntity createBriefing(Long userId) {
-		return new BriefingEntity(
-			userId,
-			DATE_GENERATOR.lorem().sentence(3),
-			DATE_GENERATOR.lorem().sentence(3),
-			DATE_GENERATOR.internet().url(),
-			List.of(new BriefingTagEntity("경제")),
-			List.of(
-				new QuizEntity(
-					DATE_GENERATOR.friends().quote(),
-					DATE_GENERATOR.number().numberBetween(1, 4),
-					Stream.generate(() -> DATE_GENERATOR.lorem().sentence()).limit(4).toList()
-				),
-				new QuizEntity(
-					DATE_GENERATOR.friends().quote(),
-					DATE_GENERATOR.number().numberBetween(1, 4),
-					Stream.generate(() -> DATE_GENERATOR.lorem().sentence()).limit(4).toList())
-			),
-			Stream.generate(() -> new TopicModelWordEntity(
-					DATE_GENERATOR.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
-					DATE_GENERATOR.lorem().word(),
-					DATE_GENERATOR.number().randomDouble(2, 0, 100)))
-				.limit(150).toList()
-		);
 	}
 }

@@ -1,6 +1,7 @@
 package com.sf.honeymorning.alarm.adapter.out.external.api;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.apache.http.HttpHeaders.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.springframework.http.HttpStatus.*;
@@ -29,7 +30,7 @@ public class WakeUpCallSongClientTest extends EndPointIntegrationTest {
 	@Test
 	void testSend() throws JsonProcessingException {
 		/// given
-		var expectedSongUrl = DATE_GENERATOR.file().fileName();
+		var expectedSongUrl = GENERATOR.file().fileName();
 		WakeUpCallSongResponse expectedResponse = new WakeUpCallSongResponse(expectedSongUrl);
 		String briefingReadContent = "트럼프 당선이후 많은 비트 코인들이 역대 최고치를 찍으며 경제적 ... ";
 		String expectedBody = objectMapper.writeValueAsString(expectedResponse);

@@ -10,7 +10,6 @@ import com.github.javafaker.Faker;
 
 @Testcontainers
 public sealed class CommonIntegrationContext permits DefaultIntegrationTest, EndPointIntegrationTest {
-	protected static final Faker DATE_GENERATOR = new Faker();
 
 	@Container
 	static ElasticsearchContainer elasticsearchContainer = new ElasticsearchContainer(

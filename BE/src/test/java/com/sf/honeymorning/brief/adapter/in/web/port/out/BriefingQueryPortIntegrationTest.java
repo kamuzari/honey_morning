@@ -1,26 +1,21 @@
 package com.sf.honeymorning.brief.adapter.in.web.port.out;
 
-import static com.sf.honeymorning.brief.common.TopicWordConstraint.*;
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.List;
-import java.util.stream.Stream;
+import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.github.javafaker.Faker;
+import com.sf.honeymorning.brief.utils.BriefingMockGenerator;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.TopicModelWordEntity;
 import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.sf.honeymorning.context.integration.DefaultIntegrationTest;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
 
 class BriefingQueryPortIntegrationTest extends DefaultIntegrationTest {
-
-	protected static final Faker FAKE_DATA_FACTORY = new Faker();
 
 	@Autowired
 	BriefingQueryPort sut;
@@ -62,28 +57,13 @@ class BriefingQueryPortIntegrationTest extends DefaultIntegrationTest {
 	PageSampleResponse createPagingSampleData(Long authUserId) {
 		BriefingEntity briefingEntity = briefingRepository.save(new BriefingEntity(
 			authUserId,
-			FAKE_DATA_FACTORY.lorem().sentence(3),
-			FAKE_DATA_FACTORY.lorem().sentence(3),
-			FAKE_DATA_FACTORY.internet().url(),
-			List.of(new BriefingTagEntity("경제")),
-			List.of(
-				new QuizEntity(
-					FAKE_DATA_FACTORY.friends().quote(),
-					FAKE_DATA_FACTORY.number().numberBetween(1, 4),
-					Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList()
-					),
-				new QuizEntity(
-					FAKE_DATA_FACTORY.friends().quote(),
-					FAKE_DATA_FACTORY.number().numberBetween(1, 4),
-					Stream.generate(() -> FAKE_DATA_FACTORY.lorem().sentence()).limit(4).toList())
-			),
-			Stream.generate(() -> new TopicModelWordEntity(
-					FAKE_DATA_FACTORY.number().numberBetween(SECTION_MINIMUM_SIZE, SECTION_MAXIMUM_SIZE),
-					FAKE_DATA_FACTORY.lorem().word(),
-					FAKE_DATA_FACTORY.number().randomDouble(2, 0, 100)))
-				.limit(150).toList()
+			GENERATOR.lorem().sentence(3),
+			GENERATOR.lorem().sentence(3),
+			GENERATOR.internet().url(),
+			Set.of(new BriefingTagEntity("경제")),
+			BriefingMockGenerator.createQuizzes(),
+			BriefingMockGenerator.createTopicModelWords()
 		));
-
 		briefingRepository.save(briefingEntity);
 
 		return new PageSampleResponse(1, 1);

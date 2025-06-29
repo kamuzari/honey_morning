@@ -1,5 +1,6 @@
 package com.sf.honeymorning.alarm.adapter.in.web.unit;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
@@ -67,7 +68,7 @@ class AlarmTagControllerTest extends MockControllerTest {
 	@DisplayName("나의 알람 카테고리를 추가한다")
 	void testAdd() throws Exception {
 		//given
-		String tagWord = DATE_GENERATOR.lorem().word();
+		String tagWord = GENERATOR.lorem().word();
 		String body = objectMapper.writeValueAsString(new AddAlarmTagRequestDto(tagWord));
 		//when
 		mockMvc.perform(post(URI_PREFIX)
@@ -95,7 +96,7 @@ class AlarmTagControllerTest extends MockControllerTest {
 	@DisplayName("나의 알람카테고리를 삭제한다")
 	void testRemove() throws Exception {
 		//given
-		String tagWord = DATE_GENERATOR.lorem().word();
+		String tagWord = GENERATOR.lorem().word();
 		String body = objectMapper.writeValueAsString(new RemoveAlarmTagRequestDto(tagWord));
 		//when
 		mockMvc.perform(delete(URI_PREFIX)

@@ -1,5 +1,6 @@
 package com.sf.honeymorning.alarm.application.port.in.unit;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -46,9 +47,9 @@ class AlarmCommandUseCaseTest extends MockTest {
 		AlarmSetRequest requestDto = new AlarmSetRequest(
 			alarmId,
 			LocalTime.now(),
-			DATE_GENERATOR.number().numberBetween(1, 127),
-			DATE_GENERATOR.number().numberBetween(1, 10),
-			DATE_GENERATOR.number().numberBetween(1, 10),
+			GENERATOR.number().numberBetween(1, 127),
+			GENERATOR.number().numberBetween(1, 10),
+			GENERATOR.number().numberBetween(1, 10),
 			true
 		);
 
@@ -56,9 +57,9 @@ class AlarmCommandUseCaseTest extends MockTest {
 			1L,
 			alarmId,
 			LocalTime.now(),
-			DATE_GENERATOR.number().numberBetween(1, 127),
-			DATE_GENERATOR.number().numberBetween(1, 10),
-			DATE_GENERATOR.number().numberBetween(1, 10),
+			GENERATOR.number().numberBetween(1, 127),
+			GENERATOR.number().numberBetween(1, 10),
+			GENERATOR.number().numberBetween(1, 10),
 			true
 		);
 

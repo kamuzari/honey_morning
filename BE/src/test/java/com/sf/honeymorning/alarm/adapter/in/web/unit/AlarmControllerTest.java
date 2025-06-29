@@ -1,5 +1,6 @@
 package com.sf.honeymorning.alarm.adapter.in.web.unit;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.times;
 import static org.mockito.BDDMockito.verify;
@@ -64,9 +65,9 @@ class AlarmControllerTest extends MockControllerTest {
 		AlarmSetRequest alarmSetRequest = new AlarmSetRequest(
 			1L,
 			LocalTime.now(),
-			DATE_GENERATOR.number().numberBetween(1, 127),
-			DATE_GENERATOR.number().numberBetween(1, 10),
-			DATE_GENERATOR.number().numberBetween(1, 10),
+			GENERATOR.number().numberBetween(1, 127),
+			GENERATOR.number().numberBetween(1, 10),
+			GENERATOR.number().numberBetween(1, 10),
 			true
 		);
 		String body = objectMapper.writeValueAsString(alarmSetRequest);
@@ -122,8 +123,8 @@ class AlarmControllerTest extends MockControllerTest {
 				1L,
 				LocalTime.now(),
 				invalidWeekDay,
-				DATE_GENERATOR.number().numberBetween(1, 10),
-				DATE_GENERATOR.number().numberBetween(1, 10),
+				GENERATOR.number().numberBetween(1, 10),
+				GENERATOR.number().numberBetween(1, 10),
 				true
 			);
 			String body = objectMapper.writeValueAsString(alarmSetRequest);
@@ -143,7 +144,7 @@ class AlarmControllerTest extends MockControllerTest {
 				LocalTime.now(),
 				7,
 				invalidFrequency,
-				DATE_GENERATOR.number().numberBetween(1, 10),
+				GENERATOR.number().numberBetween(1, 10),
 				true
 			);
 			String body = objectMapper.writeValueAsString(alarmSetRequest);

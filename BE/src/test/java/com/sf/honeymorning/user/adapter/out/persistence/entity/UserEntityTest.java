@@ -1,5 +1,6 @@
 package com.sf.honeymorning.user.adapter.out.persistence.entity;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +12,6 @@ import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
 import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
 
 class UserEntityTest {
-	static final Faker DATE_GENERATOR = new Faker();
 
 	@DisplayName("사용자의 최대 스트릭을 갱신할때, 이전보다 값과 같다면 갱신하지 않는다")
 	@Test
@@ -19,9 +19,9 @@ class UserEntityTest {
 		//given
 		int consecutiveDays = 1;
 		UserEntity userEntity = new UserEntity(
-			DATE_GENERATOR.name().username(),
-			DATE_GENERATOR.internet().password(8, 22),
-			DATE_GENERATOR.name().title(),
+			GENERATOR.name().username(),
+			GENERATOR.internet().password(8, 22),
+			GENERATOR.name().title(),
 			UserRole.ROLE_USER
 		);
 		//when
@@ -36,9 +36,9 @@ class UserEntityTest {
 		//given
 		int newConsecutiveDays = 4;
 		UserEntity userEntity = new UserEntity(
-			DATE_GENERATOR.name().username(),
-			DATE_GENERATOR.internet().password(8, 22),
-			DATE_GENERATOR.name().title(),
+			GENERATOR.name().username(),
+			GENERATOR.internet().password(8, 22),
+			GENERATOR.name().title(),
 			UserRole.ROLE_USER
 		);
 		ReflectionTestUtils.setField(userEntity, "maximumStreak", 3);
@@ -56,9 +56,9 @@ class UserEntityTest {
 		//given
 		int consecutiveDays = 2;
 		UserEntity userEntity = new UserEntity(
-			DATE_GENERATOR.name().username(),
-			DATE_GENERATOR.internet().password(8, 22),
-			DATE_GENERATOR.name().title(),
+			GENERATOR.name().username(),
+			GENERATOR.internet().password(8, 22),
+			GENERATOR.name().title(),
 			UserRole.ROLE_USER
 		);
 		int alreadyExistedMaxStreak = 3;

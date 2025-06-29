@@ -1,5 +1,6 @@
 package com.sf.honeymorning.user.application.port.in;
 
+import static com.sf.honeymorning.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -69,7 +70,7 @@ class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisCon
 			//when
 			//then
 			assertThatThrownBy(() -> sut.login(new LoginAuthRequestDto(invalidUsername,
-				DATE_GENERATOR.internet().password())))
+				GENERATOR.internet().password())))
 				.isInstanceOf(BadCredentialsException.class);
 		}
 
@@ -83,7 +84,7 @@ class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisCon
 			//when
 			//then
 			assertThatThrownBy(() -> sut.login(new LoginAuthRequestDto(accountSignUpRequest.username(),
-				DATE_GENERATOR.internet().password())))
+				GENERATOR.internet().password())))
 				.isInstanceOf(BadCredentialsException.class);
 		}
 	}
@@ -107,8 +108,8 @@ class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisCon
 
 	AccountSignUpRequest createFake() {
 		return new AccountSignUpRequest(
-			DATE_GENERATOR.name().username(),
-			DATE_GENERATOR.internet().password(8, 22),
-			DATE_GENERATOR.name().title());
+			GENERATOR.name().username(),
+			GENERATOR.internet().password(8, 22),
+			GENERATOR.name().title());
 	}
 }
