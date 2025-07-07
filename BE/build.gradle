@@ -125,6 +125,9 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
 
+    // Elasticsearch
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
     runtimeOnly 'com.mysql:mysql-connector-j'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -140,6 +143,7 @@ dependencies {
     // Test Container
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:elasticsearch'
     testImplementation 'org.testcontainers:localstack'
     testImplementation 'org.testcontainers:rabbitmq'
     testImplementation 'org.testcontainers:kafka'
