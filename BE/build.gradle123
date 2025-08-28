@@ -1,0 +1,180 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.3'
+    id 'io.spring.dependency-management' version '1.1.3'
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = "0.8.10"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml') // ✅ HTML 리포트 경로
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect { fileTree(dir: it, exclude: [
+                        '**/config/**',
+                        '**/common/**',
+                        '**/dto/**',
+                        '**/client/**',
+                        '**/exception/**',
+                        '**/service/mapper/**'
+                ]) })
+        )
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            enabled = true
+            element = 'CLASS'
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+            }
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 100
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+            }
+
+            limit {
+                counter = 'COMPLEXITY'
+                value = 'COVEREDRATIO'
+            }
+        }
+    }
+}
+
+group = 'com.sf'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2022.0.4"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+
+    // AWS
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.2.1'
+
+    // AWS S3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.780'
+
+    // Encrypt
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+
+    // Jwt
+    implementation 'com.auth0:java-jwt:3.18.1'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Feign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // RabbitMQ
+    implementation 'org.springframework.boot:spring-boot-starter-amqp:3.4.2'
+
+    // Metric
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'com.h2database:h2'
+
+    // Rest Assured
+    testImplementation 'io.rest-assured:rest-assured'
+
+    // Test Container
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:localstack'
+    testImplementation 'org.testcontainers:rabbitmq'
+    testImplementation 'org.testcontainers:kafka'
+    testImplementation 'org.testcontainers:mysql'
+    testImplementation 'org.testcontainers:elasticsearch:1.19.8'
+
+    // Mock Exterior Server Test
+    testImplementation 'org.springframework.cloud:spring-cloud-contract-stub-runner'
+    testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:4.0.4'
+
+    // Fake Data
+    implementation group: 'com.github.javafaker', name: 'javafaker', version: '0.15'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+
+        afterSuite { desc, result ->
+            if (!desc.parent) {
+                println "\n=== Test Summary ==="
+                println "Total: ${result.testCount}, Passed: ${result.successfulTestCount}, Failed: ${result.failedTestCount}, Skipped: ${result.skippedTestCount}"
+                println "====================\n"
+            }
+        }
+    }
+}
+
+tasks.jacocoTestReport {
+    dependsOn test
+}
+
+tasks.check {
+    dependsOn jacocoTestCoverageVerification
+}

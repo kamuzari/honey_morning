@@ -1,0 +1,11 @@
+package com.honeymorning.api.alarm.adapter.in.web.dto.request;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record RemoveAlarmTagRequestDto(
+	@NotNull
+	@NotBlank
+	String word
+) {
+}

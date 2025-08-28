@@ -1,0 +1,19 @@
+package com.honeymorning.api.brief.adapter.in.web.dto.response;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import com.honeymorning.api.brief.adapter.in.web.dto.response.detail.QuizResponseDto;
+import com.honeymorning.api.brief.adapter.in.web.dto.response.detail.TopicModelWordResponse;
+
+public record BriefingDetailResponseDto(
+	Long briefId,
+	String summaryText,
+	String contentText,
+	String voiceContentUrl,
+	List<TopicModelWordResponse> topicModelResponses,
+	List<String> tagNames,
+	List<QuizResponseDto> quizResponses,
+	LocalDateTime createdAt) {
+
+}

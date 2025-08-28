@@ -1,0 +1,199 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+
+  kafka:
+    bootstrap-servers: ENC(Hggvm9zvjIATkyaHd5n1Qztzok2H155k)
+    consumer:
+      group-id: "alarm-contents-cdc-group"
+      topic: "alarm_contents.honeymorning.outbox_alarm_event"
+      auto-offset-reset: "earliest"
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual_immediate
+    properties:
+      isolation.level: read_committed
+  data:
+    redis:
+      host: ENC(Mdm3ZYu19EpQS7ZSZ1d/kKG8d/2RGVBy)
+      port: ENC(u7qkh3ysOlEOXaVQlVJRdw==)
+      password: ENC(Out1FLk6AczM8qYCZ2r4YGUpt5LCpp7i)
+      connect-timeout: ENC(BR+NA152pLTvtizL5hBrxQ==)
+      timeout: ENC(w952krjtcayAnH1nsIEiSw==)
+
+  datasource:
+    primary:
+      url: ENC(xZDkAzthzyGE1C72KPqfJOuxhc3ayV4fQGZ5md/pzjIPv+QquUXpKEtB/7CVnaqkcxJf4XU/dTpDd3y6k5ntzbRuUN6SxC5Khjzl5MHLUpaWMV05G7qE4tzpLZ9C4GIlXDLPiIHQvif8u8N4H7L9hb6dKHPl08bS)
+      username: ENC(4bVSlObkLOxikway4Ip0czodcbatpmA4)
+      password: ENC(dP/YyZ2a7IEf5ybHgc357/iIDu8jAe1H)
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      hikari:
+        minimum-idle: 15
+        maximum-pool-size: 20
+        max-lifetime: 25200000
+        idle-timeout: 1800000
+        connection-timeout: 3000
+        validation-timeout: 5000
+
+    event:
+      url: ENC(5bTpOVwxt9brEY31eEcwVQ4ZokiFFIkS1vIsV2V5BwUe9cuDj+mdIxGnKtC0rMfM)
+      username: ENC(4bVSlObkLOxikway4Ip0czodcbatpmA4)
+      password: ENC(dP/YyZ2a7IEf5ybHgc357/iIDu8jAe1H)
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      hikari:
+        minimum-idle: 10
+        maximum-pool-size: 10
+        max-lifetime: 25200000
+        idle-timeout: 1800000
+        connection-timeout: 3000
+        validation-timeout: 5000
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: create
+      show-sql: false
+    defer-datasource-initialization: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: always
+
+  rabbitmq:
+    host: ENC(3c3rBT0e0I4eLxq2i7WQI3dQQP2m6izd)
+    port: ENC(KgnOnUUSLJbB0N1rtgCfCA==)
+    username: ENC(egHMI2wBoxjsFRgwodbrGw==)
+    password: ENC(2oBor7W8ilV6FGD+BI7rdw==)
+    publisher-returns: true
+
+  elasticsearch:
+    uris: ENC(K8zCDMLMddI9SWe1Kas8b4CUrh/eqG3Nc5QhnlKkptc=)
+    username: ENC(1O9wcUwv8S8ufBPaxDekbfEC6/IPjniR)
+    password: ENV(C7WXlz9nfxy+Gg6+EwIQxM/rNCp2exfF)
+    connection-timeout: 3s
+    socket-timeout: 5s
+    socket-keep-alive: true
+
+jwt:
+  issuer: ENC(PazcZ21ocRNS74Kr3cHrkhdSjvfSCMzq)
+  access-token:
+    header: ENC(XXHVYj0tsPfymXbzxScERFFPhkiwf08S)
+    expiry-seconds: ${ACCESS_EXPIRY_SECOND:ENC(TDrBoMkhMZrTt/cwfl0qug==)}
+  refresh-token:
+    header: ENC(qbKLojrcSZlXAfg3KyXmTuIKMrggnMzv)
+    expiry-seconds: ${REFRESH_EXPIRY_SECOND:ENC(qgEqfPLe7Yv9XLDNhHpaIA==)}
+  secret-key: ${SECRET_KEY:ENC(Puo2Y1vQGKk7B/xVoELd0yK63SxRUvnMf1NIew9jXXo=)}
+
+web:
+  cors:
+    allowed-origins:
+      - ENC(FUAQL1i0rUJejed6pnrQxK/Ax5PTUpr7wxzTQOLw+PI=)
+      - ENC(LCEPAqi3qsGsegiqgzk9CI8yv+VaSzSBru8XOWBM0+n+nJK4+K8dFA==)
+      - ENC(HEdYY0KD9C7eEER+Ma7h4K++mBc66RCVHhLc9/y1j54=)
+      - ENC(6UqINXqO8U6UqkUAIgc71GemHdKAAR9hzMWp+ABL6LE=)
+    allowed-methods:
+      - ENC(G7ZLJaKSHLuKLIEgEhxClA==)
+      - ENC(OMhFJ+01FoMZlyliLnz3bQ==)
+      - ENC(ZZ3LCf1IGbXIdl8JaPF3Iw==)
+      - ENC(RlYaFglzgIDnTCqQUqw4Uw==)
+      - ENC(q/IeMV+hvW+iitIVRXfpQQ==)
+      - ENC(SPetTvoUtSqpHEboxuh4xQ==)
+    allowed-headers:
+      - ENC(udJaeOPv6tro8S/PvD4b8Wfswl3W0qQC)
+    exposed-headers:
+      - ENC(zawNibKZ37XbuF99U1MuPgxupXbsepFL)
+    allow-credentials: true
+
+security:
+  url-pattern:
+    ignoring:
+      GET:
+        - ENC(c8vD1N66eJO/GxFSlgRXXKsMOL0+/84U)
+        - ENC(UYACp25SidA7SyaRwTxQQ4iu58KbmgQc)
+        - ENC(Jj5DshZnYbCcus185YtARn0yNrwecuFkLjfD1K6UgrI=)
+        - ENC(0y1hnS8NwQvpq14+aB5Lpw==)
+        - ENC(hkWrBlWf8qbdK0T0+jBcCDDOvCQ/H661)
+        - ENC(Ovn+mEKiZzgTxqbqh4isznjgPc3LqD1g)
+      POST:
+        - ENC(cX06x50vqq0M7qcxpQKaU64V8LvxkUDS1+L6lUl8PMQ=)
+        - ENC(GhZrFGuMsRcWuhBLuYGiU6xXsF2wzLgBIN+uRCMeYCI=)
+      PATCH:
+        - ENC(iv1dk6YjfwUZCP4o2mbeAi+RpQwpTAs5)
+      PUT:
+        - ENC(DDJCSLreDqSw9wmniZUkXJ9DPe7mz6ua)
+      DELETE:
+        - ENC(XoRy7x2VBG1Kg87v3PaSceQqYzDxkGfB)
+    permit-all:
+      GET: [ ]
+      POST: [ ]
+      PATCH: [ ]
+      PUT: [ ]
+      DELETE: [ ]
+      OPTIONS: /**
+
+aws:
+  s3:
+    client:
+      access-key: ENC(CG2kGpzauXUGc5AMUfvIig==)
+      secret-access-key: ENC(wL4ZBDG69Z9RL91aKTB1tQ==)
+      region: ENC(CurWBvXC9t9keeApu2cA8ijLkS2X5AKN)
+      endpoint: ENC(uksqy4TCBYybyBCR5WRV0ot/QLh2PzCRis98O0w7R7M=)
+    bucket-name:
+      tts: ENC(H+mJWwChPkcvjeQZ3dcNoO1yKYrHSy6H)
+    domain-name: http://localhost:4566/${aws.s3.bucket-name.tts}
+
+cookie:
+  secure: ${COOKIE_SECURE:ENC(HDfUXBUpjV2TFLDs+cDo2w==)}
+  same-site: ${COOKIE_SAME_SITE:ENC(lNIKQoe0yCJO8bYchDCtLA==)}
+  domain: ${DOMAIN:ENC(8oopqns3PXQmdpHYwqvGLUEVS51gnVcm)}
+
+ai:
+  client:
+    brief: ENC(Vctnoxd7vvLZNQJA/9gTYU+bU9224Z0LJCErqOvPnLApiFHsT5Eh61/8Bt1sglkk)
+    quiz: ENC(iPGCMk5OuYjylnz/P5pTfVFmXM4x5fNHrpQcpq9QzykcUr7Ti8IbhA==)
+    song: ENC(Ihp/8Uz6a3eoBaagYUxdW7Uv2g58fo9K/x9jJwM/eXuKvEdEqFiswAIO2i79z6ZE)
+    topic-model: ENC(K37CfhnlVJ4Z2ruV7bR8UG+v2+x+Ee9yNAqPCRrTAHCouTtuU/nrqAd2ApocmUyN)
+
+voice:
+  client:
+    base-url: https://api.elevenlabs.io/v1
+    resources:
+      path:
+        voice-id: ENC(oHL4IVSptV/dsyyaECzXqmx3baTxkpoPMjHebyvc7Mo=)
+      header:
+        optimize-streaming-Latency: ENC(xLq4jskZeNScCloU837EDw==)
+        output_format: ENC(uINyBGA1XRBMmMkN3xFB+IuQlB2rRMuI)
+        xi-api-key: ENC(fq1nxPppj0fKrnCxz4wdgzxTo+jaIIf9q86P1f3HOKKQQyNvwey4+L4swVM1xJPb5iX4zyepGNQWW50m2QBE1g==)
+      body:
+        model-id: ENC(PVI3+2C/nWQQBn57xf04LUN2FyAUxfj1xF7wxqnS3S4=)
+        stability: ENC(2Hzak7m4jLw/Ph5NWJUMxg==)
+        similarity-boost: ENC(pvPpTDNrUfWqRdPLTeupyw==)
+        style: ENC(jOPHWrXge1pLxMbfVMaS0Q==)
+
+file:
+  directory:
+    path:
+      content: ENC(2HQTjTbC8xySkIgz6ktS4Y5VzA+5D3cKxew9VXunOGnHCMk8LlTX4zVS4YPu1fbqAZTxdFxKVWA=)
+      summary: ENC(Cj301Z07a9MFTvutszAHTDpTgPDHSJC2FFKmTQu1a5nFEf0BlmdvbGltFp9AYa58yzW7CPYGSkg=)
+      quiz: ENC(zW3TcGnHTLX5Na1Q3LeYkp9doE1F3u5L1bYSvUtrSKq4IJ/Q2OkM3+R/f0Epggu6xFtRksKPShs=)
+      music: ENC(v8uwAbdOo/41AGKIKDSi5a+Po/vYAzWFHpkoQZhfD82FFaqcqGotm77x51dnvEGedxAxdkmFRPI=)
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ENC(sTxVW0nfmc5PZsJMVl8dVw==)
+  endpoint:
+    prometheus:
+      enabled: true
+  metrics:
+    enabled: true
+

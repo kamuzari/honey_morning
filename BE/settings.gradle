@@ -1,1 +1,5 @@
 rootProject.name = 'honeymorning'
+
+include 'api'
+include 'batch'
+include 'common'

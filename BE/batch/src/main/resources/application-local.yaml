@@ -1,0 +1,37 @@
+spring:
+  batch:
+    jdbc:
+      initialize-schema: ALWAYS
+
+  datasource:
+    primary:
+      url: ENC(5bTpOVwxt9brEY31eEcwVQ4ZokiFFIkS1vIsV2V5BwUe9cuDj+mdIxGnKtC0rMfM)
+      username: ENC(4bVSlObkLOxikway4Ip0czodcbatpmA4)
+      password: ENC(dP/YyZ2a7IEf5ybHgc357/iIDu8jAe1H)
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      hikari:
+        minimum-idle: 10
+        maximum-pool-size: 10
+        max-lifetime: 25200000
+        idle-timeout: 1800000
+        connection-timeout: 3000
+        validation-timeout: 5000
+
+    read:
+      url: ENC(xZDkAzthzyGE1C72KPqfJOuxhc3ayV4fQGZ5md/pzjIPv+QquUXpKEtB/7CVnaqkcxJf4XU/dTpDd3y6k5ntzbRuUN6SxC5Khjzl5MHLUpaWMV05G7qE4tzpLZ9C4GIlXDLPiIHQvif8u8N4H7L9hb6dKHPl08bS)
+      username: ENC(4bVSlObkLOxikway4Ip0czodcbatpmA4)
+      password: ENC(dP/YyZ2a7IEf5ybHgc357/iIDu8jAe1H)
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: create
+      show-sql: false
+    defer-datasource-initialization: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
+

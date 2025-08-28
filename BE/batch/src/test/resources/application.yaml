@@ -1,0 +1,31 @@
+spring:
+
+  datasource:
+    primary:
+      url: jdbc:h2:mem:honeymorning;MODE=MySQL
+      username: sa
+      password:
+
+    read:
+      url: jdbc:h2:mem:honeymorning-read;MODE=MySQL
+      username: sa
+      password:
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: create
+      show-sql: true
+    defer-datasource-initialization: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  batch:
+    jdbc:
+      initialize-schema: ALWAYS
+
+jasypt:
+  password: ${JASYPT_PASSWORD:honeymorning}

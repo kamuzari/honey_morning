@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: honeymorning-batch
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+
+  batch:
+    jdbc:
+      initialize-schema: ALWAYS
+
+jasypt:
+  password: ${JASYPT_PASSWORD:honeymorning}
