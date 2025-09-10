@@ -13,17 +13,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
-import com.sf.honeymorning.alarm.adapter.in.web.dto.response.AlarmTagResponseDto;
-import com.sf.honeymorning.alarm.adapter.out.persistence.AlarmTagPersistenceAdapter;
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmTagEntity;
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.DefaultTags;
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.TagEntity;
-import com.sf.honeymorning.alarm.adapter.out.persistence.mapper.AlarmTagPersistenceMapper;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmTagRepository;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.TagRepository;
+import com.honeymorning.api.alarm.adapter.in.web.dto.response.AlarmTagResponseDto;
+import com.honeymorning.api.alarm.adapter.out.persistence.AlarmTagPersistenceAdapter;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmEntity;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmTagEntity;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.DefaultTags;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.TagEntity;
+import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmTagPersistenceMapper;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmRepository;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmTagRepository;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.TagRepository;
 import com.honeymorning.api.context.mock.MockPersistenceTest;
+
 
 @Import({AlarmTagPersistenceAdapter.class, AlarmTagPersistenceMapper.class})
 class AlarmTagQueryPortTest extends MockPersistenceTest {
@@ -47,9 +48,11 @@ class AlarmTagQueryPortTest extends MockPersistenceTest {
 
 	@BeforeEach
 	void setUp() {
-		sut=sutImpl;
+		sut = sutImpl;
 
-		List<TagEntity> tagEntities = Arrays.stream(DefaultTags.values()).map(tag-> new TagEntity(tag.getWord())).toList();
+		List<TagEntity> tagEntities = Arrays.stream(DefaultTags.values())
+			.map(tag -> new TagEntity(tag.getWord()))
+			.toList();
 		tagRepository.saveAll(tagEntities);
 		userAlarmEntity = alarmRepository.save(AlarmEntity.initialize(USER_ID));
 	}

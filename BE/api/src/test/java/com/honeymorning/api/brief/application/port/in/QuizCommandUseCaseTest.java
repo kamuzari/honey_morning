@@ -6,7 +6,6 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,13 +13,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 
-import com.sf.honeymorning.brief.adapter.in.web.dto.request.SelectionRequestDto;
-import com.sf.honeymorning.brief.application.domain.EmptySelectionQuiz;
-import com.sf.honeymorning.brief.application.port.out.CommandQuizPort;
-import com.sf.honeymorning.brief.application.port.out.LoadQuizPort;
-import com.sf.honeymorning.brief.application.service.QuizService;
-import com.sf.honeymorning.brief.application.service.mapper.QuizServiceMapper;
-import com.sf.honeymorning.brief.common.QuizConstraint;
+import com.honeymorning.api.brief.adapter.in.web.dto.request.SelectionRequestDto;
+import com.honeymorning.api.brief.application.domain.EmptySelectionQuiz;
+import com.honeymorning.api.brief.application.port.out.CommandQuizPort;
+import com.honeymorning.api.brief.application.port.out.LoadQuizPort;
+import com.honeymorning.api.brief.application.service.QuizService;
+import com.honeymorning.api.brief.application.service.mapper.QuizServiceMapper;
+import com.honeymorning.api.brief.common.QuizConstraint;
 import com.honeymorning.api.context.mock.MockTest;
 
 class QuizCommandUseCaseTest extends MockTest {
@@ -68,7 +67,7 @@ class QuizCommandUseCaseTest extends MockTest {
 		sut.solve(1L, requestDto);
 
 		//then
-		Assertions.assertThat(expectedEmptySelectionQuizzes).hasSize(QuizConstraint.TOTAL_QUIZ_SIZE);
+		assertThat(expectedEmptySelectionQuizzes).hasSize(QuizConstraint.TOTAL_QUIZ_SIZE);
 		expectedEmptySelectionQuizzes.forEach(emptySelectionQuiz ->
 			assertThat(emptySelectionQuiz.getSelection()).isNotNull()
 		);

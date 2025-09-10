@@ -1,6 +1,6 @@
 package com.honeymorning.api.brief.adapter.in.web.port.out;
 
-import static com.sf.honeymorning.brief.common.QuizConstraint.TOTAL_QUIZ_SIZE;
+import static com.honeymorning.api.brief.common.QuizConstraint.TOTAL_QUIZ_SIZE;
 import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,13 +11,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.honeymorning.api.brief.adapter.in.web.dto.response.detail.QuizResponseDto;
+import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
+import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingTagEntity;
+import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
+import com.honeymorning.api.brief.adapter.out.persistence.mapper.QuizPersistenceMapper;
+import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.honeymorning.api.brief.utils.BriefingMockGenerator;
-import com.sf.honeymorning.brief.adapter.in.web.dto.response.detail.QuizResponseDto;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingTagEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.mapper.QuizPersistenceMapper;
-import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.honeymorning.api.context.infra.database.MySqlContext;
 import com.honeymorning.api.context.integration.DefaultIntegrationTest;
 
@@ -48,7 +48,9 @@ public class QuizQueryPortIntegrationTest extends DefaultIntegrationTest impleme
 		);
 
 		BriefingEntity savedBriefingEntity = briefingRepository.save(briefingEntity);
-		var expectQuizResponses = savedQuizzes.stream().map(savedQuiz -> quizPersistenceMapper.toQuizResponseDto(savedQuiz)).toList();
+		var expectQuizResponses = savedQuizzes.stream()
+			.map(savedQuiz -> quizPersistenceMapper.toQuizResponseDto(savedQuiz))
+			.toList();
 
 		//when
 		List<QuizResponseDto> quizzes = sut.getQuizzes(userId, savedBriefingEntity.getId());

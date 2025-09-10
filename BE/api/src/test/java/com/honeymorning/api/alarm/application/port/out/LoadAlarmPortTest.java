@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.sf.honeymorning.alarm.adapter.out.persistence.AlarmPersistenceAdapter;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
-import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
+import com.honeymorning.api.alarm.adapter.out.persistence.AlarmPersistenceAdapter;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmRepository;
 import com.honeymorning.api.context.mock.MockTest;
+import com.honeymorning.common.exception.NotFoundResourceException;
 
 class LoadAlarmPortTest extends MockTest {
 	LoadAlarmPort sut;
@@ -24,7 +24,7 @@ class LoadAlarmPortTest extends MockTest {
 
 	@BeforeEach
 	void setUp() {
-		this.sut=alarmPersistenceAdapter;
+		this.sut = alarmPersistenceAdapter;
 	}
 
 	@Test

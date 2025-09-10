@@ -3,7 +3,7 @@ package com.honeymorning.api.alarm.adapter.out.persistence.entity;
 import static com.honeymorning.api.alarm.common.AlarmResultConstraint.MATCH_COUNT_MAXIMUM_VALUE;
 import static com.honeymorning.api.alarm.common.AlarmResultConstraint.MATCH_COUNT_MINIMUM_VALUE;
 
-import com.honeymorning.api.common.entity.basic.BaseEntity;
+import com.honeymorning.common.common.basic.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

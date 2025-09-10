@@ -1,7 +1,8 @@
 package com.honeymorning.api.brief.adapter.out.persistence.entity.event;
 
-import com.honeymorning.api.common.entity.basic.BaseEventEntity;
-import com.honeymorning.api.common.entity.basic.EventStatus;
+
+import com.honeymorning.common.common.basic.BaseEventEntity;
+import com.honeymorning.common.common.basic.EventStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

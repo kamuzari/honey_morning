@@ -2,7 +2,7 @@ package com.honeymorning.api.alarm.adapter.out.persistence.entity;
 
 import java.time.LocalTime;
 
-import com.honeymorning.api.common.entity.basic.BaseEntity;
+import com.honeymorning.common.common.basic.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -12,16 +12,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmTagEntity;
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.DefaultTags;
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.TagEntity;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmTagRepository;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.TagRepository;
-import com.sf.honeymorning.alarm.application.port.in.AlarmTagCommandUseCase;
-import com.honeymorning.api.context.integration.DefaultIntegrationTest;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmEntity;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmTagEntity;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.DefaultTags;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.TagEntity;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmRepository;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmTagRepository;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.TagRepository;
+import com.honeymorning.api.alarm.application.port.in.AlarmTagCommandUseCase;
 import com.honeymorning.api.context.infra.database.MySqlContext;
+import com.honeymorning.api.context.integration.DefaultIntegrationTest;
+
 
 class AlarmTagServiceIntegrationTest extends DefaultIntegrationTest implements MySqlContext {
 
@@ -30,8 +31,6 @@ class AlarmTagServiceIntegrationTest extends DefaultIntegrationTest implements M
 	@Autowired
 	AlarmTagCommandUseCase sut;
 
-	// @Autowired
-	// AlarmTagService sut;
 
 	@Autowired
 	AlarmRepository alarmRepository;
@@ -46,7 +45,9 @@ class AlarmTagServiceIntegrationTest extends DefaultIntegrationTest implements M
 
 	@BeforeEach
 	void setUp() {
-		List<TagEntity> tagEntities =Arrays.stream(DefaultTags.values()).map(tag-> new TagEntity(tag.getWord())).toList();
+		List<TagEntity> tagEntities = Arrays.stream(DefaultTags.values())
+			.map(tag -> new TagEntity(tag.getWord()))
+			.toList();
 		tagRepository.saveAll(tagEntities);
 		userAlarmEntity = alarmRepository.save(AlarmEntity.initialize(USER_ID));
 	}
@@ -99,7 +100,6 @@ class AlarmTagServiceIntegrationTest extends DefaultIntegrationTest implements M
 			.map(alarmTag -> alarmTag.getTagEntity().getWord())
 			.collect(Collectors.joining())).contains(addingTag2);
 	}
-
 
 	@Test
 	@DisplayName("카테고리를 삭제할때, 없는 것을 삭제해도 예외 발생하지 않고 삭제되지도 않는다")

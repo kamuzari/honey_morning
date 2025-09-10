@@ -13,15 +13,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.sf.honeymorning.brief.adapter.in.web.port.out.BriefingQueryPort;
-import com.sf.honeymorning.config.WebSecurityConfig;
+import com.honeymorning.api.brief.adapter.in.web.port.out.BriefingQueryPort;
+import com.honeymorning.api.common.security.authentication.JwtProviderManager;
+import com.honeymorning.api.common.security.authentication.constant.JwtProperty;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenGenerator;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenWebExtractor;
+import com.honeymorning.api.config.WebSecurityConfig;
 import com.honeymorning.api.context.mock.MockControllerTest;
-import com.sf.honeymorning.common.security.authentication.constant.JwtProperty;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenWebExtractor;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenGenerator;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
-import com.sf.honeymorning.common.security.authentication.JwtProviderManager;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateDiscardHandler;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateSuccessHandler;
 
 @WebMvcTest({BriefingController.class,
 	WebSecurityConfig.class,

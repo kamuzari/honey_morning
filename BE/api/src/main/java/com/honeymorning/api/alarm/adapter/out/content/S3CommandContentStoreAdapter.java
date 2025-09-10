@@ -11,8 +11,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.honeymorning.api.brief.application.port.out.CommandContentStorePort;
-import com.honeymorning.api.common.exception.model.BusinessException;
-import com.honeymorning.api.common.exception.model.constant.ErrorProtocol;
+import com.honeymorning.common.exception.BusinessException;
+import com.honeymorning.common.exception.constant.ErrorProtocol;
 
 @Service
 public class S3CommandContentStoreAdapter implements CommandContentStorePort {

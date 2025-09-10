@@ -1,9 +1,12 @@
 package com.honeymorning.api.alarm.adapter.out.external.api;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
-import static org.apache.http.HttpHeaders.*;
-import static org.springframework.http.HttpStatus.*;
+import static org.apache.http.HttpHeaders.CONTENT_TYPE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.OK;
 
 import java.util.List;
 
@@ -16,8 +19,8 @@ import org.springframework.http.MediaType;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.sf.honeymorning.alarm.adapter.out.external.dto.QuizOption;
-import com.sf.honeymorning.alarm.adapter.out.external.dto.QuizResponseDto;
+import com.honeymorning.api.alarm.adapter.out.external.dto.QuizOption;
+import com.honeymorning.api.alarm.adapter.out.external.dto.QuizResponseDto;
 import com.honeymorning.api.context.integration.EndPointIntegrationTest;
 
 @AutoConfigureWireMock(port = 8089)

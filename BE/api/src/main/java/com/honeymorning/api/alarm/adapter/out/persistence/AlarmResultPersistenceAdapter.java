@@ -1,6 +1,6 @@
 package com.honeymorning.api.alarm.adapter.out.persistence;
 
-import static com.honeymorning.api.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
+import static com.honeymorning.common.exception.constant.ErrorProtocol.POLICY_VIOLATION;
 import static java.text.MessageFormat.format;
 
 import java.util.List;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 
 import com.honeymorning.api.alarm.adapter.in.web.dto.response.AlarmResultResponseDto;
 import com.honeymorning.api.alarm.adapter.in.web.port.out.AlarmResultQueryPort;
-import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmResultRepository;
 import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
-import com.honeymorning.api.common.exception.model.NotFoundResourceException;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmResultRepository;
 import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
+import com.honeymorning.common.exception.NotFoundResourceException;
 
 @Component
 public class AlarmResultPersistenceAdapter implements AlarmResultQueryPort {

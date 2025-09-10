@@ -19,19 +19,19 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.sf.honeymorning.alarm.adapter.out.persistence.AlarmPersistenceAdapter;
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
-import com.sf.honeymorning.alarm.adapter.out.persistence.mapper.AlarmPersistenceAdapterMapper;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
-import com.sf.honeymorning.brief.adapter.out.persistence.repository.QuizRepository;
-import com.sf.honeymorning.brief.common.QuizConstraint;
-import com.sf.honeymorning.common.entity.content.AccessAuthority;
-import com.sf.honeymorning.common.entity.content.Content;
-import com.sf.honeymorning.common.entity.content.FileType;
+import com.honeymorning.api.alarm.adapter.out.persistence.AlarmPersistenceAdapter;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmEntity;
+import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmPersistenceAdapterMapper;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmRepository;
+import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
+import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
+import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingRepository;
+import com.honeymorning.api.brief.adapter.out.persistence.repository.QuizRepository;
+import com.honeymorning.api.brief.common.QuizConstraint;
 import com.honeymorning.api.context.mock.MockTest;
+import com.honeymorning.common.common.content.AccessAuthority;
+import com.honeymorning.common.common.content.Content;
+import com.honeymorning.common.common.content.FileType;
 
 class AlarmQueryPortTest extends MockTest {
 	AlarmQueryPort sut;
@@ -96,8 +96,10 @@ class AlarmQueryPortTest extends MockTest {
 		verify(briefingRepository, times(1)).findTopByUserIdOrderByCreatedAtDesc(AUTH_USER_ENTITY.getId());
 		verify(quizRepository, times(1)).findByBriefingEntity(expectedBriefingEntity);
 		Assertions.assertThat(preparedAlarmContents.quizVoiceUrl()).hasSize(expectedQuizzes.size());
-		Assertions.assertThat(preparedAlarmContents.repeatFrequency()).isEqualTo(expectedAlarmEntity.getRepeatFrequency());
-		Assertions.assertThat(preparedAlarmContents.repeatInterval()).isEqualTo(expectedAlarmEntity.getRepeatInterval());
+		Assertions.assertThat(preparedAlarmContents.repeatFrequency())
+			.isEqualTo(expectedAlarmEntity.getRepeatFrequency());
+		Assertions.assertThat(preparedAlarmContents.repeatInterval())
+			.isEqualTo(expectedAlarmEntity.getRepeatInterval());
 		Assertions.assertThat(preparedAlarmContents.wakeUpTime()).isEqualTo(expectedAlarmEntity.getWakeUpTime());
 		Assertions.assertThat(preparedAlarmContents.briefingVoiceUrl()).isEqualTo(
 			expectedBriefingEntity.getWakeUpBriefingContent().getFileUrl());

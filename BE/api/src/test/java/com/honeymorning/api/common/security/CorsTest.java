@@ -1,7 +1,9 @@
 package com.honeymorning.api.common.security;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,14 +14,14 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sf.honeymorning.config.WebSecurityConfig;
-import com.sf.honeymorning.common.security.authentication.constant.JwtProperty;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenWebExtractor;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenGenerator;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
-import com.sf.honeymorning.common.security.authentication.JwtProviderManager;
-import com.sf.honeymorning.common.security.authentication.service.TokenService;
+import com.honeymorning.api.common.security.authentication.JwtProviderManager;
+import com.honeymorning.api.common.security.authentication.constant.JwtProperty;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenGenerator;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenWebExtractor;
+import com.honeymorning.api.common.security.authentication.service.TokenService;
+import com.honeymorning.api.config.WebSecurityConfig;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateDiscardHandler;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateSuccessHandler;
 
 @WebMvcTest({
 	WebSecurityConfig.class,
@@ -38,7 +40,6 @@ public class CorsTest {
 
 	@SpyBean
 	ObjectMapper objectMapper;
-
 
 	@MockBean
 	TokenService tokenService;

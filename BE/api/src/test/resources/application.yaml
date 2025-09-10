@@ -2,24 +2,6 @@ spring:
   application:
     name: honeymorning
 
-  batch:
-    jdbc:
-      initialize-schema: ALWAYS
-
-  kafka:
-    bootstrap-servers: ENC(Hggvm9zvjIATkyaHd5n1Qztzok2H155k)
-    consumer:
-      group-id: "alarm-contents-cdc-group"
-      topic: "alarm_contents.honeymorning.outbox_alarm_event"
-      auto-offset-reset: "earliest"
-      enable-auto-commit: false
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    listener:
-      ack-mode: manual_immediate
-    properties:
-      isolation.level: read_committed
-
   data:
     redis:
       connect-timeout: 30s
@@ -52,15 +34,6 @@ spring:
   sql:
     init:
       mode: always
-
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: admin
-    password: admin
-    publisher-confirm-type: correlated
-    publisher-returns: true
-
 aws:
   s3:
     client:
@@ -71,23 +44,6 @@ aws:
     bucket-name:
       tts: ENC(H+mJWwChPkcvjeQZ3dcNoO1yKYrHSy6H)
     domain-name: ${mock.server.base-url}
-
-voice:
-  client:
-    base-url: ${mock.server.base-url}
-    resources:
-      path:
-        voice-id: ENC(oHL4IVSptV/dsyyaECzXqmx3baTxkpoPMjHebyvc7Mo=)
-      header:
-        optimize-streaming-Latency: ENC(xLq4jskZeNScCloU837EDw==)
-        output_format: ENC(uINyBGA1XRBMmMkN3xFB+IuQlB2rRMuI)
-        xi-api-key: ENC(fq1nxPppj0fKrnCxz4wdgzxTo+jaIIf9q86P1f3HOKKQQyNvwey4+L4swVM1xJPb5iX4zyepGNQWW50m2QBE1g==)
-      body:
-        model-id: ENC(PVI3+2C/nWQQBn57xf04LUN2FyAUxfj1xF7wxqnS3S4=)
-        stability: ENC(2Hzak7m4jLw/Ph5NWJUMxg==)
-        similarity-boost: ENC(pvPpTDNrUfWqRdPLTeupyw==)
-        style: ENC(jOPHWrXge1pLxMbfVMaS0Q==)
-
 
 jasypt:
   password: ${JASYPT_PASSWORD:honeymorning}
@@ -106,6 +62,7 @@ ai:
 mock:
   server:
     base-url: http://localhost:8089
+
 
 file:
   directory:

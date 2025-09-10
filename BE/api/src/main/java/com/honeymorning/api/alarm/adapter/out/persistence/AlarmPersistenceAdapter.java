@@ -1,7 +1,7 @@
 package com.honeymorning.api.alarm.adapter.out.persistence;
 
-import static com.honeymorning.api.common.exception.model.constant.ErrorProtocol.BUSINESS_VIOLATION;
-import static com.honeymorning.api.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
+import static com.honeymorning.common.exception.constant.ErrorProtocol.BUSINESS_VIOLATION;
+import static com.honeymorning.common.exception.constant.ErrorProtocol.POLICY_VIOLATION;
 import static java.text.MessageFormat.format;
 
 import java.text.MessageFormat;
@@ -23,9 +23,9 @@ import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
 import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.honeymorning.api.brief.adapter.out.persistence.repository.QuizRepository;
-import com.honeymorning.api.common.exception.model.BusinessException;
-import com.honeymorning.api.common.exception.model.NotFoundResourceException;
-import com.honeymorning.api.common.exception.model.constant.ErrorProtocol;
+import com.honeymorning.common.exception.BusinessException;
+import com.honeymorning.common.exception.NotFoundResourceException;
+import com.honeymorning.common.exception.constant.ErrorProtocol;
 
 @Component
 public class AlarmPersistenceAdapter implements AlarmQueryPort, LoadAlarmPort, CommandAlarmPort {
@@ -50,12 +50,12 @@ public class AlarmPersistenceAdapter implements AlarmQueryPort, LoadAlarmPort, C
 		AlarmEntity alarmEntity = alarmRepository.findByUserIdAndIsActiveTrue(userId)
 			.orElseThrow(() -> new BusinessException(
 				MessageFormat.format("존재하지 않는 사용자입니다. userId : {0}", userId),
-				ErrorProtocol.BUSINESS_VIOLATION
+				BUSINESS_VIOLATION
 			));
 		BriefingEntity briefingEntity = briefingRepository.findTopByUserIdOrderByCreatedAtDesc(userId)
 			.orElseThrow(() -> new BusinessException(
 				MessageFormat.format("알람 콘텐츠가 완성되지 않았어요. userId : {0}", userId),
-				ErrorProtocol.POLICY_VIOLATION
+				POLICY_VIOLATION
 			));
 		List<QuizEntity> quizEntities = quizRepository.findByBriefingEntity(briefingEntity);
 

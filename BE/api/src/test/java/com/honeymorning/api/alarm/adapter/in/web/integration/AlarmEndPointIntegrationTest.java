@@ -1,9 +1,9 @@
 package com.honeymorning.api.alarm.adapter.in.web.integration;
 
 import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
-import static io.restassured.RestAssured.*;
-import static io.restassured.http.ContentType.*;
-import static org.hamcrest.Matchers.*;
+import static io.restassured.RestAssured.given;
+import static io.restassured.http.ContentType.JSON;
+import static org.hamcrest.Matchers.equalTo;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -18,17 +18,17 @@ import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sf.honeymorning.alarm.adapter.in.web.dto.request.AlarmSetRequest;
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
+import com.honeymorning.api.alarm.adapter.in.web.dto.request.AlarmSetRequest;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmEntity;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmRepository;
+import com.honeymorning.api.common.security.authentication.JwtProviderManager;
+import com.honeymorning.api.common.security.core.JwtClaim;
 import com.honeymorning.api.context.infra.database.MySqlContext;
 import com.honeymorning.api.context.infra.database.RedisContext;
 import com.honeymorning.api.context.integration.EndPointIntegrationTest;
-import com.sf.honeymorning.common.security.core.JwtClaim;
-import com.sf.honeymorning.common.security.authentication.JwtProviderManager;
-import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
-import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
-import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
+import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
+import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
+import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
 
 import io.restassured.RestAssured;
 import io.restassured.http.Cookie.Builder;

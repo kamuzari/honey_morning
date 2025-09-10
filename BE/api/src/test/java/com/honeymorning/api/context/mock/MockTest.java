@@ -5,7 +5,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.honeymorning.api.brief.utils.BriefingMockGenerator;
-import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
+import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
 
 @ExtendWith(MockitoExtension.class)
 public class MockTest {

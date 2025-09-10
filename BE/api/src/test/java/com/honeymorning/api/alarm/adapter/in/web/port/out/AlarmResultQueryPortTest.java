@@ -1,9 +1,9 @@
 package com.honeymorning.api.alarm.adapter.in.web.port.out;
 
-import static com.sf.honeymorning.alarm.common.AlarmResultConstraint.MATCH_COUNT_MAXIMUM_VALUE;
-import static com.sf.honeymorning.alarm.common.AlarmResultConstraint.MATCH_COUNT_MINIMUM_VALUE;
+import static com.honeymorning.api.alarm.common.AlarmResultConstraint.MATCH_COUNT_MAXIMUM_VALUE;
+import static com.honeymorning.api.alarm.common.AlarmResultConstraint.MATCH_COUNT_MINIMUM_VALUE;
 import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
-import static com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole.ROLE_USER;
+import static com.honeymorning.api.user.adapter.out.persistence.entity.UserRole.ROLE_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -15,15 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
-import com.sf.honeymorning.alarm.adapter.in.web.dto.response.AlarmResultResponseDto;
-import com.sf.honeymorning.alarm.adapter.out.persistence.AlarmResultPersistenceAdapter;
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmResultEntity;
-import com.sf.honeymorning.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmResultRepository;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
+import com.honeymorning.api.alarm.adapter.in.web.dto.response.AlarmResultResponseDto;
+import com.honeymorning.api.alarm.adapter.out.persistence.AlarmResultPersistenceAdapter;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmResultEntity;
+import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmResultRepository;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
 import com.honeymorning.api.context.mock.MockPersistenceTest;
-import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
-import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
+import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
+import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
 
 @Import({AlarmResultPersistenceAdapter.class, AlarmResultPersistenceMapper.class})
 class AlarmResultQueryPortTest extends MockPersistenceTest {
@@ -41,7 +41,6 @@ class AlarmResultQueryPortTest extends MockPersistenceTest {
 
 	@MockBean
 	private UserAlarmResultStreakRepository userAlarmResultStreakRepository;
-
 
 	@Test
 	@DisplayName("커서 페이징으로 마지막 ID 보다 작은 것들을 5개씩 가져온다")
@@ -90,6 +89,5 @@ class AlarmResultQueryPortTest extends MockPersistenceTest {
 		//then
 		assertThat(maximumStreak).isEqualTo(userEntity.getMaxStreak());
 	}
-
 
 }

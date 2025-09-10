@@ -2,8 +2,8 @@ package com.honeymorning.api.brief.adapter.out.persistence.entity;
 
 import java.util.Set;
 
-import com.honeymorning.api.common.entity.basic.BaseEntity;
-import com.honeymorning.api.common.entity.content.Content;
+import com.honeymorning.common.common.basic.BaseEntity;
+import com.honeymorning.common.common.content.Content;
 
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;

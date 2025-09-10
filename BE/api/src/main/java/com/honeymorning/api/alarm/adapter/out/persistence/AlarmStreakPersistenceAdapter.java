@@ -1,6 +1,6 @@
 package com.honeymorning.api.alarm.adapter.out.persistence;
 
-import static com.honeymorning.api.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
+import static com.honeymorning.common.exception.constant.ErrorProtocol.POLICY_VIOLATION;
 import static java.text.MessageFormat.format;
 
 import org.springframework.stereotype.Component;
@@ -15,9 +15,9 @@ import com.honeymorning.api.alarm.application.domain.CreateUserAlarmStreak;
 import com.honeymorning.api.alarm.application.domain.UpdateStreakUser;
 import com.honeymorning.api.alarm.application.port.out.CommandAlarmResultPort;
 import com.honeymorning.api.alarm.application.port.out.LoadAlarmResultPort;
-import com.honeymorning.api.common.exception.model.NotFoundResourceException;
 import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
 import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
+import com.honeymorning.common.exception.NotFoundResourceException;
 
 @Component
 public class AlarmStreakPersistenceAdapter implements CommandAlarmResultPort, LoadAlarmResultPort {

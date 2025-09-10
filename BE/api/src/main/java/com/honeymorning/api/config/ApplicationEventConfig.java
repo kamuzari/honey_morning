@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.honeymorning.api.common.event.handler.EventDispatcherHandler;
+import com.honeymorning.common.event.handler.EventDispatcherHandler;
 
 @Configuration
 public class ApplicationEventConfig {

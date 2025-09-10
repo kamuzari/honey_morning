@@ -2,12 +2,10 @@ package com.honeymorning.api.brief.adapter.out.persistence.mapper;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import com.honeymorning.api.alarm.application.service.dto.response.AiResponseDto;
 import com.honeymorning.api.brief.adapter.in.web.dto.response.BriefHistoryResponseDto;
 import com.honeymorning.api.brief.adapter.in.web.dto.response.BriefingDetailResponseDto;
 import com.honeymorning.api.brief.adapter.in.web.dto.response.briefs.MyBriefing;
@@ -17,7 +15,6 @@ import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
 import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingTagEntity;
 import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
 import com.honeymorning.api.brief.adapter.out.persistence.entity.TopicModelWordEntity;
-import com.honeymorning.api.brief.application.domain.TextToSpeechContent;
 
 @Component
 public class BriefingPersistenceMapper {
@@ -73,34 +70,5 @@ public class BriefingPersistenceMapper {
 						quiz.getAnswer()
 					)).toList(),
 			briefingEntity.getCreatedAt());
-	}
-
-	public BriefingEntity toTotalAlarmContent(AiResponseDto response) {
-		return new BriefingEntity(
-			response.userId(),
-			response.aiBriefings().voiceContent(),
-			response.aiBriefings().readContent(),
-			response.AiWakeUpCallPath(),
-			response.requestTags().stream().map(BriefingTagEntity::new).collect(Collectors.toSet()),
-			response.aiQuizzes().stream().map(aiQuizDto ->
-				new QuizEntity(aiQuizDto.problem(),
-					aiQuizDto.answer(),
-					aiQuizDto.selections()
-				)).collect(Collectors.toSet()),
-			response.aiTopics().stream().map(aiTopicDto -> new TopicModelWordEntity(
-				aiTopicDto.sectionId(),
-				aiTopicDto.word(),
-				aiTopicDto.weight())).collect(Collectors.toSet())
-		);
-	}
-
-	public TextToSpeechContent toTextToSpeechContent(BriefingEntity briefingEntity) {
-		return new TextToSpeechContent(
-			briefingEntity.getId(), briefingEntity.getSummaryText(),
-			briefingEntity.getQuizEntities().stream()
-				.map(
-					quizEntity -> new TextToSpeechContent.textToSpeechQuiz(quizEntity.getId(), quizEntity.getProblem()))
-				.toList()
-		);
 	}
 }

@@ -7,9 +7,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.honeymorning.api.common.exception.model.NotFoundResourceException;
-import com.honeymorning.api.common.exception.model.UnExpectedFatalException;
-import com.honeymorning.api.common.exception.model.constant.ErrorProtocol;
+import com.honeymorning.common.exception.NotFoundResourceException;
+import com.honeymorning.common.exception.UnExpectedFatalException;
+import com.honeymorning.common.exception.constant.ErrorProtocol;
 
 import feign.Request;
 import feign.RetryableException;
@@ -18,7 +18,7 @@ import feign.codec.ErrorDecoder;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@EnableFeignClients(basePackages = "com.sf.honeymorning.*")
+@EnableFeignClients(basePackages = "com.honeymorning.api.*")
 @Configuration
 public class FeignConfig {
 

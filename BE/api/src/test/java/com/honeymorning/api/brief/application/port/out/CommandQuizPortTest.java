@@ -18,15 +18,15 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.sf.honeymorning.brief.adapter.out.persistence.QuizPersistenceAdapter;
-import com.sf.honeymorning.brief.adapter.out.persistence.entity.QuizEntity;
-import com.sf.honeymorning.brief.adapter.out.persistence.mapper.QuizPersistenceMapper;
-import com.sf.honeymorning.brief.adapter.out.persistence.repository.BriefingRepository;
-import com.sf.honeymorning.brief.adapter.out.persistence.repository.QuizRepository;
-import com.sf.honeymorning.brief.application.domain.EmptySelectionQuiz;
-import com.sf.honeymorning.brief.common.QuizConstraint;
-import com.sf.honeymorning.common.exception.model.NotFoundResourceException;
+import com.honeymorning.api.brief.adapter.out.persistence.QuizPersistenceAdapter;
+import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
+import com.honeymorning.api.brief.adapter.out.persistence.mapper.QuizPersistenceMapper;
+import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingRepository;
+import com.honeymorning.api.brief.adapter.out.persistence.repository.QuizRepository;
+import com.honeymorning.api.brief.application.domain.EmptySelectionQuiz;
+import com.honeymorning.api.brief.common.QuizConstraint;
 import com.honeymorning.api.context.mock.MockTest;
+import com.honeymorning.common.exception.NotFoundResourceException;
 
 public class CommandQuizPortTest extends MockTest {
 	CommandQuizPort sut;

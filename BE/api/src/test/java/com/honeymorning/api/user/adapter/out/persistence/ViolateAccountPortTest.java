@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.honeymorning.api.context.mock.MockPersistenceTest;
-import com.sf.honeymorning.user.adapter.out.persistence.mapper.AccountMappers;
-import com.sf.honeymorning.user.application.port.out.ViolateAccountPort;
+import com.honeymorning.api.user.adapter.out.persistence.mapper.AccountMappers;
+import com.honeymorning.api.user.application.port.out.ViolateAccountPort;
 
 @Import({UserPersistenceAdapter.class, AccountMappers.class})
 class ViolateAccountPortTest extends MockPersistenceTest {

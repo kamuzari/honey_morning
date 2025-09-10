@@ -1,6 +1,7 @@
 package com.honeymorning.api.brief.adapter.out.persistence.entity;
 
-import com.honeymorning.api.common.entity.basic.BaseEntity;
+
+import com.honeymorning.common.common.basic.BaseEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

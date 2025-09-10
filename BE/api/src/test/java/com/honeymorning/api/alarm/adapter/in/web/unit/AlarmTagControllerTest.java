@@ -20,19 +20,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.sf.honeymorning.alarm.adapter.in.web.AlarmTagController;
-import com.sf.honeymorning.alarm.adapter.in.web.dto.request.AddAlarmTagRequestDto;
-import com.sf.honeymorning.alarm.adapter.in.web.dto.request.RemoveAlarmTagRequestDto;
-import com.sf.honeymorning.alarm.adapter.in.web.port.out.AlarmTagQueryPort;
-import com.sf.honeymorning.alarm.application.service.AlarmTagService;
-import com.sf.honeymorning.config.WebSecurityConfig;
+import com.honeymorning.api.alarm.adapter.in.web.AlarmTagController;
+import com.honeymorning.api.alarm.adapter.in.web.dto.request.AddAlarmTagRequestDto;
+import com.honeymorning.api.alarm.adapter.in.web.dto.request.RemoveAlarmTagRequestDto;
+import com.honeymorning.api.alarm.adapter.in.web.port.out.AlarmTagQueryPort;
+import com.honeymorning.api.alarm.application.service.AlarmTagService;
+import com.honeymorning.api.common.security.authentication.JwtProviderManager;
+import com.honeymorning.api.common.security.authentication.constant.JwtProperty;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenGenerator;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenWebExtractor;
+import com.honeymorning.api.config.WebSecurityConfig;
 import com.honeymorning.api.context.mock.MockControllerTest;
-import com.sf.honeymorning.common.security.authentication.constant.JwtProperty;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenWebExtractor;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenGenerator;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
-import com.sf.honeymorning.common.security.authentication.JwtProviderManager;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateDiscardHandler;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateSuccessHandler;
 
 @WebMvcTest({AlarmTagController.class,
 	WebSecurityConfig.class,

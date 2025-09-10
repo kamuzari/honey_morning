@@ -12,16 +12,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 
-import com.sf.honeymorning.alarm.adapter.in.web.dto.request.AddAlarmResultRequestDto;
-import com.sf.honeymorning.alarm.application.domain.CreateUserAlarmStreak;
-import com.sf.honeymorning.alarm.application.domain.UpdateStreakUser;
-import com.sf.honeymorning.alarm.application.port.in.AlarmResultCommandUseCase;
-import com.sf.honeymorning.alarm.application.port.out.CommandAlarmResultPort;
-import com.sf.honeymorning.alarm.application.port.out.LoadAlarmResultPort;
-import com.sf.honeymorning.alarm.application.service.AlarmResultService;
-import com.sf.honeymorning.alarm.application.service.mapper.AlarmResultMapper;
+import com.honeymorning.api.alarm.adapter.in.web.dto.request.AddAlarmResultRequestDto;
+import com.honeymorning.api.alarm.application.domain.CreateUserAlarmStreak;
+import com.honeymorning.api.alarm.application.domain.UpdateStreakUser;
+import com.honeymorning.api.alarm.application.port.in.AlarmResultCommandUseCase;
+import com.honeymorning.api.alarm.application.port.out.CommandAlarmResultPort;
+import com.honeymorning.api.alarm.application.port.out.LoadAlarmResultPort;
+import com.honeymorning.api.alarm.application.service.AlarmResultService;
+import com.honeymorning.api.alarm.application.service.mapper.AlarmResultMapper;
 import com.honeymorning.api.context.mock.MockTest;
-import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
+
 
 class AlarmResultCommandUseCaseTest extends MockTest {
 

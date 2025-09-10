@@ -22,19 +22,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.sf.honeymorning.alarm.adapter.in.web.AlarmController;
-import com.sf.honeymorning.alarm.adapter.in.web.dto.request.AlarmSetRequest;
-import com.sf.honeymorning.alarm.adapter.in.web.port.out.AlarmQueryPort;
-import com.sf.honeymorning.alarm.application.port.in.AlarmCommandUseCase;
-import com.sf.honeymorning.alarm.application.port.in.ValidateAlarmUseCase;
-import com.sf.honeymorning.config.WebSecurityConfig;
+import com.honeymorning.api.alarm.adapter.in.web.AlarmController;
+import com.honeymorning.api.alarm.adapter.in.web.dto.request.AlarmSetRequest;
+import com.honeymorning.api.alarm.adapter.in.web.port.out.AlarmQueryPort;
+import com.honeymorning.api.alarm.application.port.in.AlarmCommandUseCase;
+import com.honeymorning.api.alarm.application.port.in.ValidateAlarmUseCase;
+import com.honeymorning.api.common.security.authentication.JwtProviderManager;
+import com.honeymorning.api.common.security.authentication.constant.JwtProperty;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenGenerator;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenWebExtractor;
+import com.honeymorning.api.config.WebSecurityConfig;
 import com.honeymorning.api.context.mock.MockControllerTest;
-import com.sf.honeymorning.common.security.authentication.constant.JwtProperty;
-import com.sf.honeymorning.common.security.authentication.JwtProviderManager;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenWebExtractor;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenGenerator;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateDiscardHandler;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateSuccessHandler;
 
 @WebMvcTest({AlarmController.class,
 	WebSecurityConfig.class,
@@ -56,7 +56,6 @@ class AlarmControllerTest extends MockControllerTest {
 
 	@MockBean
 	AlarmQueryPort alarmQueryPort;
-
 
 	@Test
 	@DisplayName("나의 알람 설정 일부문을 변경한다")

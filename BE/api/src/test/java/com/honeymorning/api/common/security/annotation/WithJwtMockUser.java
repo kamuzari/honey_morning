@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
 
-import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
+import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)

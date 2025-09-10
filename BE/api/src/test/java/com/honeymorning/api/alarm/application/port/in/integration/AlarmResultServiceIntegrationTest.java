@@ -15,14 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.redis.RedisConnectionFailureException;
 
-import com.sf.honeymorning.alarm.adapter.in.web.dto.request.AddAlarmResultRequestDto;
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.UserAlarmResultStreakEntity;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmResultRepository;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
-import com.sf.honeymorning.alarm.application.service.AlarmResultService;
-import com.sf.honeymorning.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
-import com.honeymorning.api.context.integration.DefaultIntegrationTest;
+import com.honeymorning.api.alarm.adapter.in.web.dto.request.AddAlarmResultRequestDto;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.UserAlarmResultStreakEntity;
+import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmResultRepository;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
+import com.honeymorning.api.alarm.application.service.AlarmResultService;
 import com.honeymorning.api.context.infra.database.RedisContext;
+import com.honeymorning.api.context.integration.DefaultIntegrationTest;
+
 
 class AlarmResultServiceIntegrationTest extends DefaultIntegrationTest implements RedisContext {
 	@Autowired

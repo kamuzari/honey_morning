@@ -9,7 +9,7 @@ import java.time.LocalTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.DayOfTheWeek;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.DayOfTheWeek;
 
 class AlarmTest {
 
@@ -101,7 +101,6 @@ class AlarmTest {
 		//then
 		assertThat(canSleepMode).isFalse();
 	}
-
 
 	@Test
 	@DisplayName("슬립모드는 알람 시작 시간 5시간 보다 적으면 불가능하다")

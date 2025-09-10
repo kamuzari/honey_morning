@@ -3,19 +3,6 @@ server:
 
 spring:
 
-  kafka:
-    bootstrap-servers: ENC(Hggvm9zvjIATkyaHd5n1Qztzok2H155k)
-    consumer:
-      group-id: "alarm-contents-cdc-group"
-      topic: "alarm_contents.honeymorning.outbox_alarm_event"
-      auto-offset-reset: "earliest"
-      enable-auto-commit: false
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    listener:
-      ack-mode: manual_immediate
-    properties:
-      isolation.level: read_committed
   data:
     redis:
       host: ENC(Mdm3ZYu19EpQS7ZSZ1d/kKG8d/2RGVBy)
@@ -66,21 +53,6 @@ spring:
   sql:
     init:
       mode: always
-
-  rabbitmq:
-    host: ENC(3c3rBT0e0I4eLxq2i7WQI3dQQP2m6izd)
-    port: ENC(KgnOnUUSLJbB0N1rtgCfCA==)
-    username: ENC(egHMI2wBoxjsFRgwodbrGw==)
-    password: ENC(2oBor7W8ilV6FGD+BI7rdw==)
-    publisher-returns: true
-
-  elasticsearch:
-    uris: ENC(K8zCDMLMddI9SWe1Kas8b4CUrh/eqG3Nc5QhnlKkptc=)
-    username: ENC(1O9wcUwv8S8ufBPaxDekbfEC6/IPjniR)
-    password: ENV(C7WXlz9nfxy+Gg6+EwIQxM/rNCp2exfF)
-    connection-timeout: 3s
-    socket-timeout: 5s
-    socket-keep-alive: true
 
 jwt:
   issuer: ENC(PazcZ21ocRNS74Kr3cHrkhdSjvfSCMzq)
@@ -161,22 +133,6 @@ ai:
     quiz: ENC(iPGCMk5OuYjylnz/P5pTfVFmXM4x5fNHrpQcpq9QzykcUr7Ti8IbhA==)
     song: ENC(Ihp/8Uz6a3eoBaagYUxdW7Uv2g58fo9K/x9jJwM/eXuKvEdEqFiswAIO2i79z6ZE)
     topic-model: ENC(K37CfhnlVJ4Z2ruV7bR8UG+v2+x+Ee9yNAqPCRrTAHCouTtuU/nrqAd2ApocmUyN)
-
-voice:
-  client:
-    base-url: https://api.elevenlabs.io/v1
-    resources:
-      path:
-        voice-id: ENC(oHL4IVSptV/dsyyaECzXqmx3baTxkpoPMjHebyvc7Mo=)
-      header:
-        optimize-streaming-Latency: ENC(xLq4jskZeNScCloU837EDw==)
-        output_format: ENC(uINyBGA1XRBMmMkN3xFB+IuQlB2rRMuI)
-        xi-api-key: ENC(fq1nxPppj0fKrnCxz4wdgzxTo+jaIIf9q86P1f3HOKKQQyNvwey4+L4swVM1xJPb5iX4zyepGNQWW50m2QBE1g==)
-      body:
-        model-id: ENC(PVI3+2C/nWQQBn57xf04LUN2FyAUxfj1xF7wxqnS3S4=)
-        stability: ENC(2Hzak7m4jLw/Ph5NWJUMxg==)
-        similarity-boost: ENC(pvPpTDNrUfWqRdPLTeupyw==)
-        style: ENC(jOPHWrXge1pLxMbfVMaS0Q==)
 
 file:
   directory:

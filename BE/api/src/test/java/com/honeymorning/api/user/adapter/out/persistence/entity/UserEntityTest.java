@@ -1,13 +1,12 @@
 package com.honeymorning.api.user.adapter.out.persistence.entity;
 
 import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
-import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
 
 class UserEntityTest {
 

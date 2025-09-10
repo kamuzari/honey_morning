@@ -1,6 +1,7 @@
 package com.honeymorning.api.alarm.application.service;
 
-import static com.honeymorning.api.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
+
+import static com.honeymorning.common.exception.constant.ErrorProtocol.POLICY_VIOLATION;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +15,7 @@ import com.honeymorning.api.alarm.application.port.in.AlarmCommandUseCase;
 import com.honeymorning.api.alarm.application.port.in.ValidateAlarmUseCase;
 import com.honeymorning.api.alarm.application.port.out.CommandAlarmPort;
 import com.honeymorning.api.alarm.application.port.out.LoadAlarmPort;
-import com.honeymorning.api.common.exception.model.BusinessException;
+import com.honeymorning.common.exception.BusinessException;
 
 @Service
 @Transactional(readOnly = true)

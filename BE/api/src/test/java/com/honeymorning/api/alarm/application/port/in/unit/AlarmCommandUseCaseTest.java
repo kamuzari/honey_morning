@@ -14,13 +14,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.sf.honeymorning.alarm.adapter.in.web.dto.request.AlarmSetRequest;
-import com.sf.honeymorning.alarm.application.domain.UpdateAlarm;
-import com.sf.honeymorning.alarm.application.port.in.AlarmCommandUseCase;
-import com.sf.honeymorning.alarm.application.port.out.CommandAlarmPort;
-import com.sf.honeymorning.alarm.application.port.out.LoadAlarmPort;
-import com.sf.honeymorning.alarm.application.service.AlarmService;
+import com.honeymorning.api.alarm.adapter.in.web.dto.request.AlarmSetRequest;
+import com.honeymorning.api.alarm.application.domain.UpdateAlarm;
+import com.honeymorning.api.alarm.application.port.in.AlarmCommandUseCase;
+import com.honeymorning.api.alarm.application.port.out.CommandAlarmPort;
+import com.honeymorning.api.alarm.application.port.out.LoadAlarmPort;
+import com.honeymorning.api.alarm.application.service.AlarmService;
 import com.honeymorning.api.context.mock.MockTest;
+
 
 class AlarmCommandUseCaseTest extends MockTest {
 	AlarmCommandUseCase sut;
@@ -36,7 +37,7 @@ class AlarmCommandUseCaseTest extends MockTest {
 
 	@BeforeEach
 	void setUp() {
-		this.sut=alarmService;
+		this.sut = alarmService;
 	}
 
 	@Test

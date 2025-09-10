@@ -9,9 +9,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.honeymorning.api.brief.utils.BriefingMockGenerator;
-import com.sf.honeymorning.common.entity.content.AccessAuthority;
-import com.sf.honeymorning.common.entity.content.Content;
-import com.sf.honeymorning.common.entity.content.FileType;
+import com.honeymorning.common.common.content.AccessAuthority;
+import com.honeymorning.common.common.content.Content;
+import com.honeymorning.common.common.content.FileType;
 
 class BriefingEntityTest {
 
@@ -65,7 +65,7 @@ class BriefingEntityTest {
 
 	@Test
 	@DisplayName("브리핑 객체 생성 후에, summaryText 기반 Content를 추가할 수 있다.")
-	void testAddContent(){
+	void testAddContent() {
 		//given
 		long userId = 1L;
 		BriefingEntity briefingEntity = new BriefingEntity(
@@ -92,7 +92,7 @@ class BriefingEntityTest {
 
 	@Test
 	@DisplayName("브리핑 객체에 퀴즈 객체들이 존재하면 true를 반환한다")
-	void testTrueIsEmptyQuizzes(){
+	void testTrueIsEmptyQuizzes() {
 		//given
 		long userId = 1L;
 		BriefingEntity briefingEntity = new BriefingEntity(
@@ -102,7 +102,6 @@ class BriefingEntityTest {
 			GENERATOR.internet().domainName()
 		);
 
-
 		//when
 		boolean isEmptyQuizzes = briefingEntity.isEmptyQuizzes();
 		//then
@@ -111,7 +110,7 @@ class BriefingEntityTest {
 
 	@Test
 	@DisplayName("브리핑 객체에 퀴즈 객체들이 존재지 않으면 false를 반환한다")
-	void testFalseIsEmptyQuizzes(){
+	void testFalseIsEmptyQuizzes() {
 		long userId = 1L;
 		Set<QuizEntity> createdQuizzes = BriefingMockGenerator.createQuizzes();
 		Set<TopicModelWordEntity> createdTopicModels = BriefingMockGenerator.createTopicModelWords();

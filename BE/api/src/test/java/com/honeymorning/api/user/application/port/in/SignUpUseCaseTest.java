@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmEntity;
-import com.sf.honeymorning.alarm.adapter.out.persistence.repository.AlarmRepository;
-import com.sf.honeymorning.common.exception.model.BusinessException;
+import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmEntity;
+import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmRepository;
 import com.honeymorning.api.context.infra.database.MySqlContext;
 import com.honeymorning.api.context.integration.DefaultIntegrationTest;
-import com.sf.honeymorning.user.adapter.in.web.dto.request.AccountSignUpRequest;
-import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
-import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
+import com.honeymorning.api.user.adapter.in.web.dto.request.AccountSignUpRequest;
+import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
+import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
+import com.honeymorning.common.exception.BusinessException;
 
 class SignUpUseCaseTest extends DefaultIntegrationTest implements MySqlContext {
 	@Autowired
@@ -62,6 +62,13 @@ class SignUpUseCaseTest extends DefaultIntegrationTest implements MySqlContext {
 			.isInstanceOf(BusinessException.class);
 	}
 
+	AccountSignUpRequest createFake() {
+		return new AccountSignUpRequest(
+			GENERATOR.name().username(),
+			GENERATOR.internet().password(8, 22),
+			GENERATOR.name().title());
+	}
+
 	@DisplayName("회원가입 하기 전 중복된 username이 있는지 확인한다")
 	@Nested
 	class DuplicateEmail {
@@ -91,12 +98,5 @@ class SignUpUseCaseTest extends DefaultIntegrationTest implements MySqlContext {
 			//then
 			assertThat(usable).isTrue();
 		}
-	}
-
-	AccountSignUpRequest createFake() {
-		return new AccountSignUpRequest(
-			GENERATOR.name().username(),
-			GENERATOR.internet().password(8, 22),
-			GENERATOR.name().title());
 	}
 }

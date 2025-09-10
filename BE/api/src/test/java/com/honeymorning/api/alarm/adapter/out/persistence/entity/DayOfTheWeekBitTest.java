@@ -1,13 +1,11 @@
 package com.honeymorning.api.alarm.adapter.out.persistence.entity;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.DayOfTheWeek;
 
 class DayOfTheWeekBitTest {
 

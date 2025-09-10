@@ -1,6 +1,6 @@
 package com.honeymorning.api.alarm.adapter.out.persistence;
 
-import static com.honeymorning.api.common.exception.model.constant.ErrorProtocol.BUSINESS_VIOLATION;
+import static com.honeymorning.common.exception.constant.ErrorProtocol.BUSINESS_VIOLATION;
 import static java.text.MessageFormat.format;
 
 import java.util.List;
@@ -18,8 +18,8 @@ import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmTagRep
 import com.honeymorning.api.alarm.adapter.out.persistence.repository.TagRepository;
 import com.honeymorning.api.alarm.application.port.out.CommandAlarmTagPort;
 import com.honeymorning.api.alarm.application.port.out.ValidationAlarmTagPort;
-import com.honeymorning.api.common.exception.model.BusinessException;
-import com.honeymorning.api.common.exception.model.NotFoundResourceException;
+import com.honeymorning.common.exception.BusinessException;
+import com.honeymorning.common.exception.NotFoundResourceException;
 
 @Component
 public class AlarmTagPersistenceAdapter implements AlarmTagQueryPort, ValidationAlarmTagPort, CommandAlarmTagPort {

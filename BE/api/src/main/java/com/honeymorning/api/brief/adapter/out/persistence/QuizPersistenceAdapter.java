@@ -1,6 +1,6 @@
 package com.honeymorning.api.brief.adapter.out.persistence;
 
-import static com.honeymorning.api.common.exception.model.constant.ErrorProtocol.POLICY_VIOLATION;
+import static com.honeymorning.common.exception.constant.ErrorProtocol.POLICY_VIOLATION;
 import static java.text.MessageFormat.format;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import com.honeymorning.api.brief.adapter.out.persistence.repository.QuizReposit
 import com.honeymorning.api.brief.application.domain.EmptySelectionQuiz;
 import com.honeymorning.api.brief.application.port.out.CommandQuizPort;
 import com.honeymorning.api.brief.application.port.out.LoadQuizPort;
-import com.honeymorning.api.common.exception.model.NotFoundResourceException;
+import com.honeymorning.common.exception.NotFoundResourceException;
 
 @Component
 public class QuizPersistenceAdapter implements QuizQueryPort, CommandQuizPort, LoadQuizPort {

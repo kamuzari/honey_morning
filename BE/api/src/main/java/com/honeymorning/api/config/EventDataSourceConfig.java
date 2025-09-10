@@ -18,7 +18,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 
 @EnableJpaRepositories(
-	basePackages = "com.sf.honeymorning.*.adapter.out.persistence.entity.event",
+	basePackages = "com.honeymorning.api.*.adapter.out.persistence.entity.event", // 이런 이벤트 경로에서 .. 이게 바뀌지 않는 치명적인 단점이 ... 상대 경로로 못하나 ..?
 	entityManagerFactoryRef = "eventEntityManagerFactory",
 	transactionManagerRef = "eventTransactionManager"
 )
@@ -44,7 +44,7 @@ public class EventDataSourceConfig {
 		EntityManagerFactoryBuilder builder,
 		@Qualifier("eventDataSource") DataSource dataSource) {
 		return builder.dataSource(dataSource)
-			.packages("com.sf.honeymorning.*.adapter.out.persistence.entity.event")
+			.packages("com.honeymorning.api.*.adapter.out.persistence.entity.event")
 			.build();
 	}
 

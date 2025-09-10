@@ -3,8 +3,8 @@ package com.honeymorning.api.alarm.adapter.out.persistence.entity;
 import java.time.LocalDate;
 import java.util.Arrays;
 
-import com.honeymorning.api.common.exception.model.UnExpectedFatalException;
-import com.honeymorning.api.common.exception.model.constant.ErrorProtocol;
+import com.honeymorning.common.exception.UnExpectedFatalException;
+import com.honeymorning.common.exception.constant.ErrorProtocol;
 
 import lombok.Getter;
 

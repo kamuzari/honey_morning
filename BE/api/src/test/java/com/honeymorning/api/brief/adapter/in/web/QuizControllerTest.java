@@ -20,17 +20,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.sf.honeymorning.brief.adapter.in.web.dto.request.SelectionRequestDto;
-import com.sf.honeymorning.brief.adapter.in.web.port.out.QuizQueryPort;
-import com.sf.honeymorning.brief.application.port.in.QuizCommandUseCase;
-import com.sf.honeymorning.config.WebSecurityConfig;
+import com.honeymorning.api.brief.adapter.in.web.dto.request.SelectionRequestDto;
+import com.honeymorning.api.brief.adapter.in.web.port.out.QuizQueryPort;
+import com.honeymorning.api.brief.application.port.in.QuizCommandUseCase;
+import com.honeymorning.api.common.security.authentication.JwtProviderManager;
+import com.honeymorning.api.common.security.authentication.constant.JwtProperty;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenGenerator;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenWebExtractor;
+import com.honeymorning.api.config.WebSecurityConfig;
 import com.honeymorning.api.context.mock.MockControllerTest;
-import com.sf.honeymorning.common.security.authentication.constant.JwtProperty;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenWebExtractor;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenGenerator;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
-import com.sf.honeymorning.common.security.authentication.JwtProviderManager;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateDiscardHandler;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateSuccessHandler;
+
 
 @WebMvcTest({QuizController.class,
 	WebSecurityConfig.class,
@@ -54,7 +55,7 @@ class QuizControllerTest extends MockControllerTest {
 	void testGetQuizzes() throws Exception {
 		//given
 		Long briefingId = 1L;
-		String path = "/"+ briefingId;
+		String path = "/" + briefingId;
 
 		//when
 		ResultActions perform = mockMvc.perform(get(URI_PREFIX + path)

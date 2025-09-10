@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.sf.honeymorning.alarm.adapter.out.persistence.entity.AlarmResultEntity;
 
 class AlarmResultEntityTest {
 
@@ -45,7 +44,7 @@ class AlarmResultEntityTest {
 
 	@DisplayName("참석 여부가 false인데 match count 가 0보다 크면 객체를 생성할 수 없다")
 	@ParameterizedTest(name = "matchCount : {0}")
-	@ValueSource(ints = {1,2})
+	@ValueSource(ints = {1, 2})
 	void failInvalidMatchCountAndAbsence(int matchCount) {
 		//given
 		long userId = 1L;

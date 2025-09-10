@@ -16,18 +16,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.sf.honeymorning.alarm.adapter.in.web.AlarmResultController;
-import com.sf.honeymorning.alarm.adapter.in.web.dto.request.AddAlarmResultRequestDto;
-import com.sf.honeymorning.alarm.adapter.in.web.port.out.AlarmResultQueryPort;
-import com.sf.honeymorning.alarm.application.port.in.AlarmResultCommandUseCase;
-import com.sf.honeymorning.config.WebSecurityConfig;
+import com.honeymorning.api.alarm.adapter.in.web.AlarmResultController;
+import com.honeymorning.api.alarm.adapter.in.web.dto.request.AddAlarmResultRequestDto;
+import com.honeymorning.api.alarm.adapter.in.web.port.out.AlarmResultQueryPort;
+import com.honeymorning.api.alarm.application.port.in.AlarmResultCommandUseCase;
+import com.honeymorning.api.common.security.authentication.JwtProviderManager;
+import com.honeymorning.api.common.security.authentication.constant.JwtProperty;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenGenerator;
+import com.honeymorning.api.common.security.authentication.helper.JwtTokenWebExtractor;
+import com.honeymorning.api.config.WebSecurityConfig;
 import com.honeymorning.api.context.mock.MockControllerTest;
-import com.sf.honeymorning.common.security.authentication.constant.JwtProperty;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenWebExtractor;
-import com.sf.honeymorning.common.security.authentication.helper.JwtTokenGenerator;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateSuccessHandler;
-import com.sf.honeymorning.user.adapter.in.web.handler.AuthenticateDiscardHandler;
-import com.sf.honeymorning.common.security.authentication.JwtProviderManager;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateDiscardHandler;
+import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateSuccessHandler;
 
 @WebMvcTest({AlarmResultController.class,
 	WebSecurityConfig.class,
@@ -88,6 +88,18 @@ class AlarmResultControllerTest extends MockControllerTest {
 		verify(alarmResultCommandUseCase, times(1)).add(AUTH_ID, addAlarmResultRequestDto);
 	}
 
+	@Test
+	@DisplayName("최대 연속 출석 스트릭을 조회한다")
+	void testGetMaximumStreak() throws Exception {
+		//given
+		//when
+		ResultActions perform = mockMvc.perform(get(URI_PREFIX + "/streak")
+			.contentType(MediaType.APPLICATION_JSON));
+		//then
+		perform.andExpect(status().isOk());
+		verify(alarmResultQueryPort, times(1)).getMaximumStreak(AUTH_ID);
+	}
+
 	@DisplayName("알람 결과를 저장할때, 잘못된 요청은 400코드 예외가 발생한다")
 	@Nested
 	class ValidatingAdd {
@@ -133,17 +145,5 @@ class AlarmResultControllerTest extends MockControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(body));
 		}
-	}
-
-	@Test
-	@DisplayName("최대 연속 출석 스트릭을 조회한다")
-	void testGetMaximumStreak() throws Exception {
-		//given
-		//when
-		ResultActions perform = mockMvc.perform(get(URI_PREFIX+"/streak")
-			.contentType(MediaType.APPLICATION_JSON));
-		//then
-		perform.andExpect(status().isOk());
-		verify(alarmResultQueryPort, times(1)).getMaximumStreak(AUTH_ID);
 	}
 }

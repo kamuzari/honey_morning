@@ -1,7 +1,13 @@
 package com.honeymorning.api.alarm.adapter.out.persistence.entity;
 
-import com.honeymorning.api.common.entity.basic.BaseEntity;
-import jakarta.persistence.*;
+import com.honeymorning.common.common.basic.BaseEntity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 
 @Getter

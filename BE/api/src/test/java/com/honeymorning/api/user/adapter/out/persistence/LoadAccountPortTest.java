@@ -1,6 +1,7 @@
 package com.honeymorning.api.user.adapter.out.persistence;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,10 +11,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.honeymorning.api.context.mock.MockPersistenceTest;
-import com.sf.honeymorning.user.adapter.out.persistence.entity.UserRole;
-import com.sf.honeymorning.user.adapter.out.persistence.mapper.AccountMappers;
-import com.sf.honeymorning.user.application.domain.AuthenticateAccount;
-import com.sf.honeymorning.user.application.port.out.LoadAccountPort;
+import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
+import com.honeymorning.api.user.adapter.out.persistence.mapper.AccountMappers;
+import com.honeymorning.api.user.application.domain.AuthenticateAccount;
+import com.honeymorning.api.user.application.port.out.LoadAccountPort;
 
 @Import({UserPersistenceAdapter.class, AccountMappers.class})
 class LoadAccountPortTest extends MockPersistenceTest {

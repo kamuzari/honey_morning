@@ -10,16 +10,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 
+import com.honeymorning.api.common.security.authentication.constant.JwtProperty;
+import com.honeymorning.api.common.security.authentication.service.TokenService;
 import com.honeymorning.api.context.infra.database.MySqlContext;
 import com.honeymorning.api.context.infra.database.RedisContext;
 import com.honeymorning.api.context.integration.DefaultIntegrationTest;
-import com.sf.honeymorning.common.security.authentication.constant.JwtProperty;
-import com.sf.honeymorning.common.security.authentication.service.TokenService;
-import com.sf.honeymorning.user.adapter.in.web.dto.request.AccountSignUpRequest;
-import com.sf.honeymorning.user.adapter.in.web.dto.request.LoginAuthRequestDto;
-import com.sf.honeymorning.user.adapter.in.web.dto.response.LoginAuthResponseDto;
-import com.sf.honeymorning.user.adapter.out.persistence.entity.UserEntity;
-import com.sf.honeymorning.user.adapter.out.persistence.repository.UserRepository;
+import com.honeymorning.api.user.adapter.in.web.dto.request.AccountSignUpRequest;
+import com.honeymorning.api.user.adapter.in.web.dto.request.LoginAuthRequestDto;
+import com.honeymorning.api.user.adapter.in.web.dto.response.LoginAuthResponseDto;
+import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
+import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
 
 class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisContext, MySqlContext {
 	@Autowired
@@ -58,6 +58,31 @@ class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisCon
 		assertThat(loginResponse.refreshToken().expirySeconds()).isEqualTo(jwtProperty.refreshToken().expirySeconds());
 	}
 
+	@DisplayName("로그아웃을 요청하면 기존에 있던 리프레시 토큰 정보를 제거한다")
+	@Test
+	void testLogout() {
+		//given
+		var accountSignUpRequest = createFake();
+		signUpUseCase.register(accountSignUpRequest);
+		sut.login(new LoginAuthRequestDto(accountSignUpRequest.username(), accountSignUpRequest.rawPassword()));
+		UserEntity removalRefreshTokenUserEntity = userRepository.findByUsername(accountSignUpRequest.username())
+			.orElseThrow();
+
+		//when
+		sut.logout(removalRefreshTokenUserEntity.getId());
+
+		//then
+		String refreshTokenByUserId = tokenService.findRefreshTokenByUserId(removalRefreshTokenUserEntity.getId());
+		assertThat(refreshTokenByUserId).isNull();
+	}
+
+	AccountSignUpRequest createFake() {
+		return new AccountSignUpRequest(
+			GENERATOR.name().username(),
+			GENERATOR.internet().password(8, 22),
+			GENERATOR.name().title());
+	}
+
 	@DisplayName("잘못된 정보로 로그인을 시도하면 예외가 발생한다")
 	@Nested
 	class InvalidateAccount {
@@ -87,29 +112,5 @@ class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisCon
 				GENERATOR.internet().password())))
 				.isInstanceOf(BadCredentialsException.class);
 		}
-	}
-
-	@DisplayName("로그아웃을 요청하면 기존에 있던 리프레시 토큰 정보를 제거한다")
-	@Test
-	void testLogout() {
-		//given
-		var accountSignUpRequest = createFake();
-		signUpUseCase.register(accountSignUpRequest);
-		sut.login(new LoginAuthRequestDto(accountSignUpRequest.username(), accountSignUpRequest.rawPassword()));
-		UserEntity removalRefreshTokenUserEntity = userRepository.findByUsername(accountSignUpRequest.username()).orElseThrow();
-
-		//when
-		sut.logout(removalRefreshTokenUserEntity.getId());
-
-		//then
-		String refreshTokenByUserId = tokenService.findRefreshTokenByUserId(removalRefreshTokenUserEntity.getId());
-		assertThat(refreshTokenByUserId).isNull();
-	}
-
-	AccountSignUpRequest createFake() {
-		return new AccountSignUpRequest(
-			GENERATOR.name().username(),
-			GENERATOR.internet().password(8, 22),
-			GENERATOR.name().title());
 	}
 }
