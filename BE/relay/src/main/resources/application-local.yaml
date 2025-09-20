@@ -1,0 +1,96 @@
+spring:
+  datasource:
+    primary:
+      url: ENC(xZDkAzthzyGE1C72KPqfJOuxhc3ayV4fQGZ5md/pzjIPv+QquUXpKEtB/7CVnaqkcxJf4XU/dTpDd3y6k5ntzbRuUN6SxC5Khjzl5MHLUpaWMV05G7qE4tzpLZ9C4GIlXDLPiIHQvif8u8N4H7L9hb6dKHPl08bS)
+      username: ENC(4bVSlObkLOxikway4Ip0czodcbatpmA4)
+      password: ENC(dP/YyZ2a7IEf5ybHgc357/iIDu8jAe1H)
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      hikari:
+        minimum-idle: 15
+        maximum-pool-size: 20
+        max-lifetime: 25200000
+        idle-timeout: 1800000
+        connection-timeout: 3000
+        validation-timeout: 5000
+
+    event:
+      url: ENC(5bTpOVwxt9brEY31eEcwVQ4ZokiFFIkS1vIsV2V5BwUe9cuDj+mdIxGnKtC0rMfM)
+      username: ENC(4bVSlObkLOxikway4Ip0czodcbatpmA4)
+      password: ENC(dP/YyZ2a7IEf5ybHgc357/iIDu8jAe1H)
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      hikari:
+        minimum-idle: 10
+        maximum-pool-size: 10
+        max-lifetime: 25200000
+        idle-timeout: 1800000
+        connection-timeout: 3000
+        validation-timeout: 5000
+
+  kafka:
+    bootstrap-servers: ENC(Hggvm9zvjIATkyaHd5n1Qztzok2H155k)
+    consumer:
+      group-id: "alarm-contents-cdc-group"
+      topic: "alarm_contents.honeymorning.outbox_alarm_event"
+      auto-offset-reset: "earliest"
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual_immediate
+    properties:
+      isolation.level: read_committed
+
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: create
+      show-sql: false
+    defer-datasource-initialization: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  rabbitmq:
+    host: ENC(3c3rBT0e0I4eLxq2i7WQI3dQQP2m6izd)
+    port: ENC(KgnOnUUSLJbB0N1rtgCfCA==)
+    username: ENC(egHMI2wBoxjsFRgwodbrGw==)
+    password: ENC(2oBor7W8ilV6FGD+BI7rdw==)
+    publisher-returns: true
+
+  elasticsearch:
+    uris: ENC(K8zCDMLMddI9SWe1Kas8b4CUrh/eqG3Nc5QhnlKkptc=)
+    username: ENC(1O9wcUwv8S8ufBPaxDekbfEC6/IPjniR)
+    password: ENV(C7WXlz9nfxy+Gg6+EwIQxM/rNCp2exfF)
+    connection-timeout: 3s
+    socket-timeout: 5s
+    socket-keep-alive: true
+
+aws:
+  s3:
+    client:
+      access-key: ENC(CG2kGpzauXUGc5AMUfvIig==)
+      secret-access-key: ENC(wL4ZBDG69Z9RL91aKTB1tQ==)
+      region: ENC(CurWBvXC9t9keeApu2cA8ijLkS2X5AKN)
+      endpoint: ENC(uksqy4TCBYybyBCR5WRV0ot/QLh2PzCRis98O0w7R7M=)
+    bucket-name:
+      tts: ENC(H+mJWwChPkcvjeQZ3dcNoO1yKYrHSy6H)
+    domain-name: http://localhost:4566/${aws.s3.bucket-name.tts}
+
+voice:
+  client:
+    base-url: https://api.elevenlabs.io/v1
+    resources:
+      path:
+        voice-id: ENC(oHL4IVSptV/dsyyaECzXqmx3baTxkpoPMjHebyvc7Mo=)
+      header:
+        optimize-streaming-Latency: ENC(xLq4jskZeNScCloU837EDw==)
+        output_format: ENC(uINyBGA1XRBMmMkN3xFB+IuQlB2rRMuI)
+        xi-api-key: ENC(fq1nxPppj0fKrnCxz4wdgzxTo+jaIIf9q86P1f3HOKKQQyNvwey4+L4swVM1xJPb5iX4zyepGNQWW50m2QBE1g==)
+      body:
+        model-id: ENC(PVI3+2C/nWQQBn57xf04LUN2FyAUxfj1xF7wxqnS3S4=)
+        stability: ENC(2Hzak7m4jLw/Ph5NWJUMxg==)
+        similarity-boost: ENC(pvPpTDNrUfWqRdPLTeupyw==)
+        style: ENC(jOPHWrXge1pLxMbfVMaS0Q==)

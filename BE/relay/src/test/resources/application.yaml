@@ -1,0 +1,97 @@
+spring:
+  application:
+    name: relay
+  datasource:
+    primary:
+      url: jdbc:h2:mem:honeymorning;MODE=MySQL
+      username: sa
+      password:
+
+    event:
+      url: jdbc:h2:mem:honeymorning-event;MODE=MySQL
+      username: sa
+      password:
+
+  kafka:
+    bootstrap-servers: ENC(Hggvm9zvjIATkyaHd5n1Qztzok2H155k)
+    consumer:
+      group-id: "alarm-contents-cdc-group"
+      topic: "alarm_contents.honeymorning.outbox_alarm_event"
+      auto-offset-reset: "earliest"
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual_immediate
+    properties:
+      isolation.level: read_committed
+
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: create-drop
+      type:
+        descriptor:
+          sql:
+            BasicBinder: TRACE
+    generate-ddl: true
+
+  sql:
+    init:
+      mode: always
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+    publisher-confirm-type: correlated
+    publisher-returns: true
+
+aws:
+  s3:
+    client:
+      access-key: ENC(CG2kGpzauXUGc5AMUfvIig==)
+      secret-access-key: ENC(wL4ZBDG69Z9RL91aKTB1tQ==)
+      region: ENC(CurWBvXC9t9keeApu2cA8ijLkS2X5AKN)
+      endpoint: ENC(uksqy4TCBYybyBCR5WRV0ot/QLh2PzCRis98O0w7R7M=)
+    bucket-name:
+      tts: ENC(H+mJWwChPkcvjeQZ3dcNoO1yKYrHSy6H)
+    domain-name: ${mock.server.base-url}
+
+voice:
+  client:
+    base-url: ${mock.server.base-url}
+    resources:
+      path:
+        voice-id: ENC(oHL4IVSptV/dsyyaECzXqmx3baTxkpoPMjHebyvc7Mo=)
+      header:
+        optimize-streaming-Latency: ENC(xLq4jskZeNScCloU837EDw==)
+        output_format: ENC(uINyBGA1XRBMmMkN3xFB+IuQlB2rRMuI)
+        xi-api-key: ENC(fq1nxPppj0fKrnCxz4wdgzxTo+jaIIf9q86P1f3HOKKQQyNvwey4+L4swVM1xJPb5iX4zyepGNQWW50m2QBE1g==)
+      body:
+        model-id: ENC(PVI3+2C/nWQQBn57xf04LUN2FyAUxfj1xF7wxqnS3S4=)
+        stability: ENC(2Hzak7m4jLw/Ph5NWJUMxg==)
+        similarity-boost: ENC(pvPpTDNrUfWqRdPLTeupyw==)
+        style: ENC(jOPHWrXge1pLxMbfVMaS0Q==)
+
+
+jasypt:
+  password: ${JASYPT_PASSWORD:honeymorning}
+
+mock:
+  server:
+    base-url: http://localhost:8089
+
+logging:
+  level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.amqp: DEBUG
+    org.springframework.amqp.rabbit: DEBUG
+    com.rabbitmq.client: DEBUG
+    org.springframework.batch: DEBUG
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    org.springframework.jdbc.datasource.DataSourceTransactionManager: DEBUG

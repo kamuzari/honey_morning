@@ -1,0 +1,80 @@
+package com.honeymorning.relay.briefing.adapter.out.persistence;
+
+import static com.honeymorning.common.exception.constant.ErrorProtocol.POLICY_VIOLATION;
+import static java.text.MessageFormat.format;
+
+import java.text.MessageFormat;
+
+import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
+
+import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
+import com.honeymorning.common.exception.NotFoundResourceException;
+import com.honeymorning.common.exception.constant.ErrorProtocol;
+import com.honeymorning.relay.briefing.adapter.out.persistence.mapper.BriefingPersistenceMapper;
+import com.honeymorning.relay.briefing.application.domain.TextToSpeechContent;
+import com.honeymorning.relay.briefing.application.port.out.CommandBriefingPort;
+import com.honeymorning.relay.briefing.application.port.out.LoadBriefingPort;
+import com.honeymorning.relay.briefing.application.port.out.ValidBriefingContentPort;
+import com.honeymorning.relay.briefing.application.service.dto.AiResponseDto;
+
+@Validated
+@Component
+public class BriefingPersistenceAdapter implements ValidBriefingContentPort, CommandBriefingPort, LoadBriefingPort {
+	private final AlarmRepository alarmRepository;
+	private final BriefingRepository briefingRepository;
+	private final BriefingPersistenceMapper briefingPersistenceMapper;
+
+	public BriefingPersistenceAdapter(
+		AlarmRepository alarmRepository,
+		BriefingRepository briefingRepository,
+		BriefingPersistenceMapper briefingPersistenceMapper) {
+		this.alarmRepository = alarmRepository;
+		this.briefingRepository = briefingRepository;
+		this.briefingPersistenceMapper = briefingPersistenceMapper;
+	}
+
+	@Override
+	public Long create(AiResponseDto aiResponseDto) {
+		BriefingEntity totalAlarmContent = briefingPersistenceMapper.toTotalAlarmContent(aiResponseDto);
+
+		return briefingRepository.save(totalAlarmContent).getId();
+	}
+
+	@Override
+	public void reflect(TextToSpeechContent textToSpeechContent) {
+		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(textToSpeechContent.getBriefingId())
+			.orElseThrow(() -> new NotFoundResourceException(
+				MessageFormat.format("브리핑 데이터가 반드시 존재해야 합니다. briefingId : {0}", textToSpeechContent.getBriefingId()),
+				ErrorProtocol.BUSINESS_VIOLATION
+			));
+
+		briefingEntity.addWakeUpBriefingContent(textToSpeechContent.getContent());
+		textToSpeechContent.getTtsQuizzes().forEach(quiz ->
+			briefingEntity.addQuizContent(quiz.getId(), quiz.getContent())
+		);
+	}
+
+	@Override
+	public void verifyStillAliveAlarm(Long userId) {
+		if (!alarmRepository.existsById(userId)) {
+			throw new NotFoundResourceException(
+				format("알람 설정을 종료한 사용자입니다. userId -> {0}", userId)
+				, POLICY_VIOLATION
+			);
+		}
+	}
+
+	@Override
+	public TextToSpeechContent getTtsBriefingWithQuizzes(Long id) {
+		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(id)
+			.orElseThrow(() -> new NotFoundResourceException(
+				MessageFormat.format("브리핑 데이터가 반드시 존재해야 합니다. briefingId : {0}", id),
+				ErrorProtocol.BUSINESS_VIOLATION
+			));
+
+		return briefingPersistenceMapper.toTextToSpeechContent(briefingEntity);
+	}
+}
