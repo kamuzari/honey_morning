@@ -14,15 +14,15 @@ import org.springframework.validation.annotation.Validated;
 import com.honeymorning.api.brief.adapter.in.web.dto.response.BriefHistoryResponseDto;
 import com.honeymorning.api.brief.adapter.in.web.dto.response.BriefingDetailResponseDto;
 import com.honeymorning.api.brief.adapter.in.web.port.out.BriefingQueryPort;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingTagEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.TopicModelWordEntity;
 import com.honeymorning.api.brief.adapter.out.persistence.mapper.BriefingPersistenceMapper;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingRepository;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingTagRepository;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.QuizRepository;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.TopicModelWordRepository;
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.entity.BriefingTagEntity;
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
+import com.honeymorning.common.domain.briefing.entity.TopicModelWordEntity;
+import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
+import com.honeymorning.common.domain.briefing.repository.BriefingTagRepository;
+import com.honeymorning.common.domain.briefing.repository.QuizRepository;
+import com.honeymorning.common.domain.briefing.repository.TopicModelWordRepository;
 import com.honeymorning.common.exception.NotFoundResourceException;
 
 @Validated

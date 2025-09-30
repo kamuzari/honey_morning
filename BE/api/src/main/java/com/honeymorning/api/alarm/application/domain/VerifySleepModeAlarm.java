@@ -1,11 +1,11 @@
 package com.honeymorning.api.alarm.application.domain;
 
-import static com.honeymorning.api.alarm.common.AlarmConstraint.SLEEP_MODE_INTERVAL_CONDITION;
+import static com.honeymorning.common.domain.alarm.constraint.AlarmConstraint.SLEEP_MODE_INTERVAL_CONDITION;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import com.honeymorning.api.alarm.adapter.out.persistence.entity.DayOfTheWeek;
+import com.honeymorning.common.domain.alarm.entity.DayOfTheWeek;
 
 public record VerifySleepModeAlarm(
 	LocalTime wakeUpTime,

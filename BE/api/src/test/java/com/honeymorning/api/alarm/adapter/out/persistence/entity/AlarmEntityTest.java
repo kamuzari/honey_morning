@@ -8,7 +8,8 @@ import java.time.LocalTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-
+import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
+import com.honeymorning.common.domain.alarm.entity.DayOfTheWeek;
 
 class AlarmEntityTest {
 

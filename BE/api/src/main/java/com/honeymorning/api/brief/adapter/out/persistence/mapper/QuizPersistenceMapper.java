@@ -1,8 +1,8 @@
 package com.honeymorning.api.brief.adapter.out.persistence.mapper;
 
 import com.honeymorning.api.brief.adapter.in.web.dto.response.detail.QuizResponseDto;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
 import com.honeymorning.api.brief.application.domain.EmptySelectionQuiz;
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
 
 import org.springframework.stereotype.Component;
 

@@ -9,13 +9,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmEntity;
-import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmRepository;
 import com.honeymorning.api.context.infra.database.MySqlContext;
 import com.honeymorning.api.context.integration.DefaultIntegrationTest;
 import com.honeymorning.api.user.adapter.in.web.dto.request.AccountSignUpRequest;
 import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
 import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
+import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
+import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
 import com.honeymorning.common.exception.BusinessException;
 
 class SignUpUseCaseTest extends DefaultIntegrationTest implements MySqlContext {

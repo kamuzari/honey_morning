@@ -14,13 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import com.honeymorning.api.alarm.adapter.out.persistence.entity.DayOfTheWeek;
 import com.honeymorning.api.alarm.application.domain.VerifySleepModeAlarm;
 import com.honeymorning.api.alarm.application.port.in.ValidateAlarmUseCase;
 import com.honeymorning.api.alarm.application.port.out.CommandAlarmPort;
 import com.honeymorning.api.alarm.application.port.out.LoadAlarmPort;
 import com.honeymorning.api.alarm.application.service.AlarmService;
 import com.honeymorning.api.context.mock.MockTest;
+import com.honeymorning.common.domain.alarm.entity.DayOfTheWeek;
 import com.honeymorning.common.exception.BusinessException;
 
 class ValidateAlarmUseCaseTest extends MockTest {

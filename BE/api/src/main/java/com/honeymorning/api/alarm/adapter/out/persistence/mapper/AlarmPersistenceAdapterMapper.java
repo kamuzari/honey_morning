@@ -6,11 +6,11 @@ import org.springframework.stereotype.Component;
 
 import com.honeymorning.api.alarm.adapter.in.web.dto.response.AlarmResponse;
 import com.honeymorning.api.alarm.adapter.in.web.dto.response.PreparedAlarmContentResponse;
-import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmEntity;
 import com.honeymorning.api.alarm.application.domain.UpdateAlarm;
 import com.honeymorning.api.alarm.application.domain.VerifySleepModeAlarm;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
+import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
 
 @Component
 public class AlarmPersistenceAdapterMapper {

@@ -3,7 +3,7 @@ package com.honeymorning.api.alarm.adapter.out.persistence.mapper;
 import org.springframework.stereotype.Component;
 
 import com.honeymorning.api.alarm.adapter.in.web.dto.response.AlarmTagResponseDto;
-import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmTagEntity;
+import com.honeymorning.common.domain.alarm.entity.AlarmTagEntity;
 
 @Component
 public class AlarmTagPersistenceMapper {

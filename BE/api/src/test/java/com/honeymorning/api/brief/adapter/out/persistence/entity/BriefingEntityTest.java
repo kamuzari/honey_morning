@@ -12,6 +12,10 @@ import com.honeymorning.api.brief.utils.BriefingMockGenerator;
 import com.honeymorning.common.common.content.AccessAuthority;
 import com.honeymorning.common.common.content.Content;
 import com.honeymorning.common.common.content.FileType;
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.entity.BriefingTagEntity;
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
+import com.honeymorning.common.domain.briefing.entity.TopicModelWordEntity;
 
 class BriefingEntityTest {
 

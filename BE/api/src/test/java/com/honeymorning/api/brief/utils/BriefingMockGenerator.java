@@ -1,8 +1,8 @@
 package com.honeymorning.api.brief.utils;
 
-import static com.honeymorning.api.brief.common.TopicWordConstraint.SECTION_MAXIMUM_SIZE;
-import static com.honeymorning.api.brief.common.TopicWordConstraint.SECTION_MINIMUM_SIZE;
-import static com.honeymorning.api.brief.common.TopicWordConstraint.TOPIC_WORD_TOTAL_SIZE;
+import static com.honeymorning.common.domain.briefing.constraint.TopicWordConstraint.SECTION_MAXIMUM_SIZE;
+import static com.honeymorning.common.domain.briefing.constraint.TopicWordConstraint.SECTION_MINIMUM_SIZE;
+import static com.honeymorning.common.domain.briefing.constraint.TopicWordConstraint.TOPIC_WORD_TOTAL_SIZE;
 
 import java.util.List;
 import java.util.Set;
@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.github.javafaker.Faker;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingTagEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.TopicModelWordEntity;
-import com.honeymorning.api.brief.common.QuizConstraint;
+import com.honeymorning.common.domain.briefing.constraint.QuizConstraint;
 import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
 import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.entity.BriefingTagEntity;
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
+import com.honeymorning.common.domain.briefing.entity.TopicModelWordEntity;
 
 // todo: 여기저기 흩어져있는 MockDataGenerator를 모아놓는 클래스
 public class BriefingMockGenerator {

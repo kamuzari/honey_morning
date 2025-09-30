@@ -9,8 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import com.honeymorning.api.alarm.adapter.out.persistence.AlarmPersistenceAdapter;
-import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmRepository;
 import com.honeymorning.api.context.mock.MockTest;
+import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
 import com.honeymorning.common.exception.NotFoundResourceException;
 
 class LoadAlarmPortTest extends MockTest {

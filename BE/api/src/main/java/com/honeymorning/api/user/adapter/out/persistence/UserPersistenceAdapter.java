@@ -4,8 +4,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmEntity;
-import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmRepository;
 import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
 import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
 import com.honeymorning.api.user.adapter.out.persistence.mapper.AccountMappers;
@@ -14,6 +12,8 @@ import com.honeymorning.api.user.application.domain.AuthenticateAccount;
 import com.honeymorning.api.user.application.port.out.LoadAccountPort;
 import com.honeymorning.api.user.application.port.out.ViolateAccountPort;
 import com.honeymorning.api.user.application.port.out.WriteAccountPort;
+import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
+import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
 import com.honeymorning.common.exception.BusinessException;
 import com.honeymorning.common.exception.constant.ErrorProtocol;
 

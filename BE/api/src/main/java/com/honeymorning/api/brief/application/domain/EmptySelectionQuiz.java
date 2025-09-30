@@ -1,7 +1,7 @@
 package com.honeymorning.api.brief.application.domain;
 
-import static com.honeymorning.api.brief.common.QuizConstraint.ANSWER_MAXIMUM_VALUE;
-import static com.honeymorning.api.brief.common.QuizConstraint.ANSWER_MINIMUM_VALUE;
+import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.ANSWER_MAXIMUM_VALUE;
+import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.ANSWER_MINIMUM_VALUE;
 
 public class EmptySelectionQuiz {
 	Long quizId;

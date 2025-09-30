@@ -1,7 +1,7 @@
 package com.honeymorning.api.alarm.application.domain;
 
-import static com.honeymorning.api.alarm.common.AlarmResultConstraint.MATCH_COUNT_MAXIMUM_VALUE;
-import static com.honeymorning.api.alarm.common.AlarmResultConstraint.MATCH_COUNT_MINIMUM_VALUE;
+import static com.honeymorning.common.domain.alarm.constraint.AlarmResultConstraint.MATCH_COUNT_MAXIMUM_VALUE;
+import static com.honeymorning.common.domain.alarm.constraint.AlarmResultConstraint.MATCH_COUNT_MINIMUM_VALUE;
 
 public record AddAlarmResult(
 	Long userId,

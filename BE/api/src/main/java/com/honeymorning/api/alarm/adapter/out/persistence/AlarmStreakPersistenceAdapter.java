@@ -5,10 +5,10 @@ import static java.text.MessageFormat.format;
 
 import org.springframework.stereotype.Component;
 
-import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmResultEntity;
+import com.honeymorning.common.domain.alarm.entity.AlarmResultEntity;
 import com.honeymorning.api.alarm.adapter.out.persistence.entity.UserAlarmResultStreakEntity;
 import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmStreakPersistenceMapper;
-import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmResultRepository;
+import com.honeymorning.common.domain.alarm.repository.AlarmResultRepository;
 import com.honeymorning.api.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
 import com.honeymorning.api.alarm.application.domain.AddAlarmResult;
 import com.honeymorning.api.alarm.application.domain.CreateUserAlarmStreak;

@@ -1,6 +1,6 @@
 package com.honeymorning.api.brief.adapter.in.web.port.out;
 
-import static com.honeymorning.api.brief.common.QuizConstraint.TOTAL_QUIZ_SIZE;
+import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.TOTAL_QUIZ_SIZE;
 import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,14 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.honeymorning.api.brief.adapter.in.web.dto.response.detail.QuizResponseDto;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingTagEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
 import com.honeymorning.api.brief.adapter.out.persistence.mapper.QuizPersistenceMapper;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.honeymorning.api.brief.utils.BriefingMockGenerator;
 import com.honeymorning.api.context.infra.database.MySqlContext;
 import com.honeymorning.api.context.integration.DefaultIntegrationTest;
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.entity.BriefingTagEntity;
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
+import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
 
 public class QuizQueryPortIntegrationTest extends DefaultIntegrationTest implements MySqlContext {
 	@Autowired

@@ -20,18 +20,18 @@ import org.mockito.Spy;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.honeymorning.api.alarm.adapter.out.persistence.AlarmPersistenceAdapter;
-import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmEntity;
 import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmPersistenceAdapterMapper;
-import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmRepository;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingRepository;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.QuizRepository;
-import com.honeymorning.api.brief.common.QuizConstraint;
+import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
+import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
+import com.honeymorning.common.domain.briefing.constraint.QuizConstraint;
 import com.honeymorning.api.context.mock.MockTest;
 import com.honeymorning.common.common.content.AccessAuthority;
 import com.honeymorning.common.common.content.Content;
 import com.honeymorning.common.common.content.FileType;
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
+import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
+import com.honeymorning.common.domain.briefing.repository.QuizRepository;
 
 class AlarmQueryPortTest extends MockTest {
 	AlarmQueryPort sut;

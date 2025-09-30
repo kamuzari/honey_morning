@@ -1,8 +1,8 @@
 package com.honeymorning.api.brief.adapter.out.persistence.entity;
 
-import static com.honeymorning.api.brief.common.QuizConstraint.ANSWER_MAXIMUM_VALUE;
-import static com.honeymorning.api.brief.common.QuizConstraint.ANSWER_MINIMUM_VALUE;
-import static com.honeymorning.api.brief.common.QuizConstraint.OPTION_SIZE;
+import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.ANSWER_MAXIMUM_VALUE;
+import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.ANSWER_MINIMUM_VALUE;
+import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.OPTION_SIZE;
 import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
 
 class QuizEntityTest {
 

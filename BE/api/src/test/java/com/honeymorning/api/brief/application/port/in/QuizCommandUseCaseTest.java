@@ -19,7 +19,7 @@ import com.honeymorning.api.brief.application.port.out.CommandQuizPort;
 import com.honeymorning.api.brief.application.port.out.LoadQuizPort;
 import com.honeymorning.api.brief.application.service.QuizService;
 import com.honeymorning.api.brief.application.service.mapper.QuizServiceMapper;
-import com.honeymorning.api.brief.common.QuizConstraint;
+import com.honeymorning.common.domain.briefing.constraint.QuizConstraint;
 import com.honeymorning.api.context.mock.MockTest;
 
 class QuizCommandUseCaseTest extends MockTest {

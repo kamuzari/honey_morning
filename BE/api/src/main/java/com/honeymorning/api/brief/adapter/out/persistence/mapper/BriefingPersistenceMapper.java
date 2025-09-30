@@ -11,10 +11,10 @@ import com.honeymorning.api.brief.adapter.in.web.dto.response.BriefingDetailResp
 import com.honeymorning.api.brief.adapter.in.web.dto.response.briefs.MyBriefing;
 import com.honeymorning.api.brief.adapter.in.web.dto.response.detail.QuizResponseDto;
 import com.honeymorning.api.brief.adapter.in.web.dto.response.detail.TopicModelWordResponse;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingTagEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.TopicModelWordEntity;
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.entity.BriefingTagEntity;
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
+import com.honeymorning.common.domain.briefing.entity.TopicModelWordEntity;
 
 @Component
 public class BriefingPersistenceMapper {

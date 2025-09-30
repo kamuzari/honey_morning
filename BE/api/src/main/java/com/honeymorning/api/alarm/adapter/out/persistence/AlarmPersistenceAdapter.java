@@ -12,20 +12,19 @@ import org.springframework.stereotype.Component;
 import com.honeymorning.api.alarm.adapter.in.web.dto.response.AlarmResponse;
 import com.honeymorning.api.alarm.adapter.in.web.dto.response.PreparedAlarmContentResponse;
 import com.honeymorning.api.alarm.adapter.in.web.port.out.AlarmQueryPort;
-import com.honeymorning.api.alarm.adapter.out.persistence.entity.AlarmEntity;
 import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmPersistenceAdapterMapper;
-import com.honeymorning.api.alarm.adapter.out.persistence.repository.AlarmRepository;
 import com.honeymorning.api.alarm.application.domain.UpdateAlarm;
 import com.honeymorning.api.alarm.application.domain.VerifySleepModeAlarm;
 import com.honeymorning.api.alarm.application.port.out.CommandAlarmPort;
 import com.honeymorning.api.alarm.application.port.out.LoadAlarmPort;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingRepository;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.QuizRepository;
+import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
+import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
+import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
+import com.honeymorning.common.domain.briefing.repository.QuizRepository;
 import com.honeymorning.common.exception.BusinessException;
 import com.honeymorning.common.exception.NotFoundResourceException;
-import com.honeymorning.common.exception.constant.ErrorProtocol;
 
 @Component
 public class AlarmPersistenceAdapter implements AlarmQueryPort, LoadAlarmPort, CommandAlarmPort {

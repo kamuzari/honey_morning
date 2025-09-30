@@ -7,6 +7,8 @@ import java.util.Arrays;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.honeymorning.common.domain.alarm.entity.DayOfTheWeek;
+
 class DayOfTheWeekBitTest {
 
 	@Test

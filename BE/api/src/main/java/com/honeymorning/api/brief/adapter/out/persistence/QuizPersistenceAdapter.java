@@ -9,14 +9,14 @@ import org.springframework.stereotype.Component;
 
 import com.honeymorning.api.brief.adapter.in.web.dto.response.detail.QuizResponseDto;
 import com.honeymorning.api.brief.adapter.in.web.port.out.QuizQueryPort;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
 import com.honeymorning.api.brief.adapter.out.persistence.mapper.QuizPersistenceMapper;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingRepository;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.QuizRepository;
 import com.honeymorning.api.brief.application.domain.EmptySelectionQuiz;
 import com.honeymorning.api.brief.application.port.out.CommandQuizPort;
 import com.honeymorning.api.brief.application.port.out.LoadQuizPort;
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
+import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
+import com.honeymorning.common.domain.briefing.repository.QuizRepository;
 import com.honeymorning.common.exception.NotFoundResourceException;
 
 @Component

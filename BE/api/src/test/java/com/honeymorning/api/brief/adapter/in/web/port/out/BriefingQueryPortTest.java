@@ -1,7 +1,7 @@
 package com.honeymorning.api.brief.adapter.in.web.port.out;
 
-import static com.honeymorning.api.brief.common.QuizConstraint.ANSWER_MAXIMUM_VALUE;
-import static com.honeymorning.api.brief.common.QuizConstraint.ANSWER_MINIMUM_VALUE;
+import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.ANSWER_MAXIMUM_VALUE;
+import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.ANSWER_MINIMUM_VALUE;
 import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -24,18 +24,18 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.honeymorning.api.brief.adapter.in.web.dto.response.BriefingDetailResponseDto;
 import com.honeymorning.api.brief.adapter.out.persistence.BriefingPersistenceAdapter;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.QuizEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.TopicModelWordEntity;
 import com.honeymorning.api.brief.adapter.out.persistence.mapper.BriefingPersistenceMapper;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingRepository;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingTagRepository;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.QuizRepository;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.TopicModelWordRepository;
 import com.honeymorning.api.context.mock.MockTest;
 import com.honeymorning.common.common.content.AccessAuthority;
 import com.honeymorning.common.common.content.Content;
 import com.honeymorning.common.common.content.FileType;
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.entity.QuizEntity;
+import com.honeymorning.common.domain.briefing.entity.TopicModelWordEntity;
+import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
+import com.honeymorning.common.domain.briefing.repository.BriefingTagRepository;
+import com.honeymorning.common.domain.briefing.repository.QuizRepository;
+import com.honeymorning.common.domain.briefing.repository.TopicModelWordRepository;
 import com.honeymorning.common.exception.NotFoundResourceException;
 
 public class BriefingQueryPortTest extends MockTest {

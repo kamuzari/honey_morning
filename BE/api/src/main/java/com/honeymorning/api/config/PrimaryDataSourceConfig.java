@@ -5,7 +5,6 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +19,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 
 @EnableJpaRepositories(
-	basePackages = {"com.honeymorning.api.*.adapter.out.persistence.repository"},
+	basePackages = {"com.honeymorning.common.domain.*.repository",
+		"com.honeymorning.api.*.adapter.out.persistence.repository"},
 	entityManagerFactoryRef = "primaryEntityManagerFactory",
 	transactionManagerRef = "primaryTransactionManager"
 )
@@ -49,7 +49,10 @@ public class PrimaryDataSourceConfig {
 		@Qualifier("primaryDataSource") DataSource dataSource) {
 
 		return builder.dataSource(dataSource)
-			.packages("com.honeymorning.api.*.adapter.out.persistence.entity")
+			.packages(
+				"com.honeymorning.common.domain.*.entity",
+				"com.honeymorning.api.*.adapter.out.persistence.entity"
+			).persistenceUnit("<<primary>>")
 			.build();
 	}
 

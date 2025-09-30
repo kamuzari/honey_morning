@@ -9,12 +9,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.entity.BriefingTagEntity;
-import com.honeymorning.api.brief.adapter.out.persistence.repository.BriefingRepository;
 import com.honeymorning.api.brief.utils.BriefingMockGenerator;
 import com.honeymorning.api.context.integration.DefaultIntegrationTest;
-
+import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
+import com.honeymorning.common.domain.briefing.entity.BriefingTagEntity;
+import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
 
 class BriefingQueryPortIntegrationTest extends DefaultIntegrationTest {
 
