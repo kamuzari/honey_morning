@@ -45,6 +45,7 @@ public class EventDataSourceConfig {
 		@Qualifier("eventDataSource") DataSource dataSource) {
 		return builder.dataSource(dataSource)
 			.packages("com.honeymorning.relay.event.entity")
+			.persistenceUnit("<<eventDataSource>>")
 			.build();
 	}
 

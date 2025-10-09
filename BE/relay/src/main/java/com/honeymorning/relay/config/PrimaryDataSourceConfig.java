@@ -49,6 +49,7 @@ public class PrimaryDataSourceConfig {
 
 		return builder.dataSource(dataSource)
 			.packages("com.honeymorning.common.domain.*.entity")
+			.persistenceUnit("<<primary>>")
 			.build();
 	}
 

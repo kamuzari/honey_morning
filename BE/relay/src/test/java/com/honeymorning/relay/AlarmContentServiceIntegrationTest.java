@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,7 +69,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 	TextToSpeechGenerateService ttsGenerateService;
 
 	@BeforeEach
-	void updateUp() {
+	void initialize() {
 		if (!amazonS3Client.doesBucketExistV2(bucketName)) {
 			amazonS3Client.createBucket(new CreateBucketRequest(
 				bucketName, awsS3Properties.region()));
@@ -79,7 +80,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 	@Test
 	void testCreateTotalContents() throws IOException {
 		//given
-		Long userId =1L;
+		Long userId = 1L;
 		AlarmEntity alarmEntity = AlarmEntity.initialize(userId);
 		alarmEntity.update(LocalTime.now(), DayOfTheWeek.getToday(), 3, 3, true);
 		alarmRepository.save(alarmEntity);
@@ -87,7 +88,8 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		AiResponseDto responseDto = new AiResponseDto(
 			userId,
 			new AiBriefingDto(
-				BriefingMockGenerator.GENERATOR.lorem().sentence(10), BriefingMockGenerator.GENERATOR.lorem().sentence(40)),
+				BriefingMockGenerator.GENERATOR.lorem().sentence(10),
+				BriefingMockGenerator.GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TopicWordConstraint.TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
@@ -114,13 +116,14 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		Assertions.assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().voiceContent());
 		Assertions.assertThat(briefingEntity.getText()).isEqualTo(responseDto.aiBriefings().readContent());
 		Assertions.assertThat(briefingEntity.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
-		Assertions.assertThat(briefingEntity.getQuizEntities().stream().map(QuizEntity::getWakeUpQuizContent).toList()).hasSize(2);
+		Assertions.assertThat(briefingEntity.getQuizEntities().stream().map(QuizEntity::getWakeUpQuizContent).toList())
+			.hasSize(2);
 	}
 
 	@DisplayName("이벤트를 발행하고 리스너에서 예외가 나도 일부 데이터는 저장된다")
 	@Test
 	void testCreateTotalContentsNotPropagateError() {
-		Long userId =1L;
+		Long userId = 2L;
 		//given
 		AlarmEntity alarmEntity = AlarmEntity.initialize(userId);
 		alarmEntity.update(LocalTime.now(), DayOfTheWeek.getToday(), 3, 3, true);
@@ -129,7 +132,8 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		AiResponseDto responseDto = new AiResponseDto(
 			userId,
 			new AiBriefingDto(
-				BriefingMockGenerator.GENERATOR.lorem().sentence(10), BriefingMockGenerator.GENERATOR.lorem().sentence(40)),
+				BriefingMockGenerator.GENERATOR.lorem().sentence(10),
+				BriefingMockGenerator.GENERATOR.lorem().sentence(40)),
 			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
 			createFakeAiTopicDtos(TopicWordConstraint.TOPIC_WORD_TOTAL_SIZE),
 			List.of("정치"),
@@ -155,7 +159,8 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 	List<AiTopicDto> createFakeAiTopicDtos(int size) {
 		return Stream.generate(() -> new AiTopicDto(
-				BriefingMockGenerator.GENERATOR.number().numberBetween(TopicWordConstraint.SECTION_MINIMUM_SIZE, TopicWordConstraint.SECTION_MAXIMUM_SIZE),
+				BriefingMockGenerator.GENERATOR.number()
+					.numberBetween(TopicWordConstraint.SECTION_MINIMUM_SIZE, TopicWordConstraint.SECTION_MAXIMUM_SIZE),
 				BriefingMockGenerator.GENERATOR.lorem().word(),
 				BriefingMockGenerator.GENERATOR.number().randomDouble(2, 0, 100)))
 			.limit(size).toList();

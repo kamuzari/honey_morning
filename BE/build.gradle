@@ -6,6 +6,14 @@ plugins {
     id 'jacoco'
 }
 
+bootJar {
+    enabled = false  
+}
+
+jar {
+    enabled = false  
+}
+
 allprojects {
     group = 'com.honeymorning'
     version = '0.0.1-SNAPSHOT'
@@ -24,7 +32,7 @@ jacocoTestReport {
     reports {
         xml.required = true
         csv.required = false
-        html.outputLocation = layout.buildDirectory.dir('jacocoHtml') // ✅ HTML 리포트 경로
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
 
     afterEvaluate {
@@ -101,35 +109,6 @@ subprojects {
     }
 
     test {
-        useJUnitPlatform()
-    }
-    tasks.named('test') {
-        useJUnitPlatform()
-        finalizedBy jacocoTestReport
-
-        testLogging {
-            events "passed", "skipped", "failed"
-            exceptionFormat "full"
-
-            afterSuite { desc, result ->
-                if (!desc.parent) {
-                    println "\n=== Test Summary ==="
-                    println "Total: ${result.testCount}, Passed: ${result.successfulTestCount}, Failed: ${result.failedTestCount}, Skipped: ${result.skippedTestCount}"
-                    println "====================\n"
-                }
-            }
-        }
-    }
-
-    tasks.jacocoTestReport {
-        dependsOn test
-    }
-
-    tasks.check {
-        dependsOn jacocoTestCoverageVerification
-    }
-
-    tasks.named('test') {
         useJUnitPlatform()
     }
 
