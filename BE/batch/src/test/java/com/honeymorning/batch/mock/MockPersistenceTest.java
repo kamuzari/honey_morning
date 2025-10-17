@@ -6,13 +6,13 @@ import org.springframework.context.annotation.Import;
 
 import com.honeymorning.batch.config.JpaConfig;
 import com.honeymorning.batch.config.PrimaryDataSourceConfig;
-import com.honeymorning.batch.config.SubDataSourceConfig;
+import com.honeymorning.batch.config.ReadDataSourceConfig;
 import com.honeymorning.batch.context.infra.MySqlContext;
 
 @Import({
 	JpaConfig.class,
 	PrimaryDataSourceConfig.class,
-	SubDataSourceConfig.class
+	ReadDataSourceConfig.class
 })
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest

@@ -41,12 +41,6 @@ public class PrimaryDataSourceConfig {
 			.build();
 	}
 
-	@Primary
-	@Bean(name = "primaryTransactionManager")
-	public PlatformTransactionManager primaryTransactionManager(@Qualifier("primaryEntityManagerFactory") EntityManagerFactory emf) {
-		return new JpaTransactionManager(emf);
-	}
-
 	@Bean(name = "primaryEntityManagerFactory")
 	@Primary
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(
@@ -57,5 +51,11 @@ public class PrimaryDataSourceConfig {
 			.packages("com.honeymorning.batch.*")
 			.persistenceUnit("<<primary>>")
 			.build();
+	}
+
+	@Primary
+	@Bean(name = "primaryTransactionManager")
+	public PlatformTransactionManager primaryTransactionManager(@Qualifier("primaryEntityManagerFactory") EntityManagerFactory emf) {
+		return new JpaTransactionManager(emf);
 	}
 }

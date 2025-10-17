@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import com.honeymorning.batch.exception.ErrorProtocol;
 import com.honeymorning.batch.exception.ReadyAlramBatchException;
 import com.honeymorning.batch.utils.TimeUtils;
-import com.honeymorning.common.domain.DayOfTheWeek;
+import com.honeymorning.common.domain.alarm.entity.DayOfTheWeek;
 
 import lombok.extern.slf4j.Slf4j;
 

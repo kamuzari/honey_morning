@@ -18,40 +18,40 @@ import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 
 @EnableJpaRepositories(
-	basePackages = "com.honeymorning.utils",
-	entityManagerFactoryRef = "subEntityManagerFactory",
-	transactionManagerRef = "subTransactionManager"
+	basePackages = "com.honeymorning.common.domain.*.repository",
+	entityManagerFactoryRef = "readOnlyEntityManagerFactory",
+	transactionManagerRef = "readOnlyTransactionManager"
 )
 @Configuration
-public class SubDataSourceConfig {
+public class ReadDataSourceConfig {
 	@Bean
 	@ConfigurationProperties(prefix = "spring.datasource.read")
 	public DataSourceProperties readDataSourceProperties() {
 		return new DataSourceProperties();
 	}
 
-	@Bean(name = "alarmContentReadDataSource")
+	@Bean(name = "mainReadOnlyDataSource")
 	@ConfigurationProperties(prefix = "spring.datasource.read.hikari")
-	public DataSource alarmContentReadDataSource(DataSourceProperties readDataSourceProperties) {
+	public DataSource mainReadOnlyDataSource(DataSourceProperties readDataSourceProperties) {
 		return readDataSourceProperties.initializeDataSourceBuilder()
 			.type(HikariDataSource.class)
 			.build();
 	}
 
-	@Bean(name = "subEntityManagerFactory")
-	public LocalContainerEntityManagerFactoryBean subEntityManagerFactory(
+	@Bean(name = "readOnlyEntityManagerFactory")
+	public LocalContainerEntityManagerFactoryBean readOnlyEntityManagerFactory(
 		EntityManagerFactoryBuilder builder,
-		@Qualifier("alarmContentReadDataSource") DataSource subDataSource) {
+		@Qualifier("mainReadOnlyDataSource") DataSource subDataSource) {
 
 		return builder.dataSource(subDataSource)
-			.packages("com.honeymorning.utils")
-			.persistenceUnit("<<sub: main service readOnly>>")
+			.packages("com.honeymorning.common.domain.*.entity")
+			.persistenceUnit("<<readings: main service readOnly>>")
 			.build();
 	}
 
-	@Bean(name = "alarmReadTransactionManager")
-	public PlatformTransactionManager alarmReadTransactionManager(
-		@Qualifier("subEntityManagerFactory") EntityManagerFactory emf) {
+	@Bean(name = "readOnlyTransactionManager")
+	public PlatformTransactionManager readTransactionManager(
+		@Qualifier("readOnlyEntityManagerFactory") EntityManagerFactory emf) {
 		return new JpaTransactionManager(emf);
 	}
 

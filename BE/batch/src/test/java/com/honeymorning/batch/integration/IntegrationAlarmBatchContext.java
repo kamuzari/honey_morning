@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.LongStream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,12 +26,18 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
 import com.honeymorning.batch.config.TestSubDataBaseConfig;
-import com.honeymorning.batch.context.infra.MySqlContext;
 import com.honeymorning.batch.context.DefaultIntegrationContext;
+import com.honeymorning.batch.context.infra.MySqlContext;
 import com.honeymorning.batch.outbox.OutBoxAlarmEvent;
 import com.honeymorning.batch.outbox.OutBoxAlarmEventRepository;
 import com.honeymorning.batch.utils.TimeUtils;
-import com.honeymorning.common.domain.DayOfTheWeek;
+import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
+import com.honeymorning.common.domain.alarm.entity.AlarmTagEntity;
+import com.honeymorning.common.domain.alarm.entity.DayOfTheWeek;
+import com.honeymorning.common.domain.alarm.entity.TagEntity;
+import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
+import com.honeymorning.common.domain.alarm.repository.AlarmTagRepository;
+import com.honeymorning.common.domain.alarm.repository.TagRepository;
 
 @Import(TestSubDataBaseConfig.class)
 @SpringBatchTest
@@ -49,6 +56,15 @@ class IntegrationAlarmBatchContext extends DefaultIntegrationContext implements 
 
 	@Autowired
 	OutBoxAlarmEventRepository outBoxAlarmEventRepository;
+
+	@Autowired
+	TagRepository tagRepository;
+
+	@Autowired
+	AlarmTagRepository alarmTagRepository;
+
+	@Autowired
+	AlarmRepository alarmRepository;
 
 	@AfterEach
 	void tearDown() {
@@ -76,7 +92,6 @@ class IntegrationAlarmBatchContext extends DefaultIntegrationContext implements 
 		List<OutBoxAlarmEvent> result = outBoxAlarmEventRepository.findAll();
 		assertThat(result).hasSize(EXPECTED_BATCH_TOTAL_DATA_SIZE);
 	}
-
 
 	@Test
 	@DisplayName("job parameter 값이 똑같은게 들어온다면 오류를 발생시켜 재 실행을 하지 않는다.")
@@ -113,16 +128,16 @@ class IntegrationAlarmBatchContext extends DefaultIntegrationContext implements 
 	}
 
 	private void createAlarmContents(LocalTime wakeupTime, int size) {
-		// LongStream.rangeClosed(1, size).forEach((userId) -> {
-		// 	TagEntity economy = tagRepository.save(new TagEntity("경제"));
-		// 	TagEntity society = tagRepository.save(new TagEntity("사회"));
-		//
-		// 	AlarmEntity alarmEntity = alarmRepository.save(AlarmEntity.initialize(userId));
-		// 	alarmEntity.update(wakeupTime, DayOfTheWeek.getToday(), 1, 1, true);
-		// 	alarmRepository.save(alarmEntity);
-		//
-		// 	alarmTagRepository.save(new AlarmTagEntity(alarmEntity, society));
-		// 	alarmTagRepository.save(new AlarmTagEntity(alarmEntity, economy));
-		// });
+		LongStream.rangeClosed(1, size).forEach((userId) -> {
+			TagEntity economy = tagRepository.save(new TagEntity("경제"));
+			TagEntity society = tagRepository.save(new TagEntity("사회"));
+
+			AlarmEntity alarmEntity = alarmRepository.save(AlarmEntity.initialize(userId));
+			alarmEntity.update(wakeupTime, DayOfTheWeek.getToday(), 1, 1, true);
+			alarmRepository.save(alarmEntity);
+
+			alarmTagRepository.save(new AlarmTagEntity(alarmEntity, society));
+			alarmTagRepository.save(new AlarmTagEntity(alarmEntity, economy));
+		});
 	}
 }

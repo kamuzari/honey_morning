@@ -39,7 +39,7 @@ public class AlarmContentStepConfig {
 	private final JobRepository jobRepository;
 	private final PlatformTransactionManager transactionManager;
 	private final DataSource primaryDataSource;
-	private final DataSource alarmContentReadDataSource;
+	private final DataSource mainReadOnlyDataSource;
 	private final ObjectMapper objectMapper;
 	private final int chunkSize;
 
@@ -47,13 +47,13 @@ public class AlarmContentStepConfig {
 		JobRepository jobRepository,
 		PlatformTransactionManager transactionManager,
 		DataSource primaryDataSource,
-		@Qualifier("alarmContentReadDataSource") DataSource alarmContentReadDataSource,
+		@Qualifier("mainReadOnlyDataSource") DataSource mainReadOnlyDataSource,
 		ObjectMapper objectMapper,
 		@Value("${batch.alarm.chunk-size:1000}") int chunkSize) {
 		this.jobRepository = jobRepository;
 		this.transactionManager = transactionManager;
 		this.primaryDataSource = primaryDataSource;
-		this.alarmContentReadDataSource = alarmContentReadDataSource;
+		this.mainReadOnlyDataSource = mainReadOnlyDataSource;
 		this.objectMapper = objectMapper;
 		this.chunkSize = chunkSize;
 	}
@@ -71,7 +71,7 @@ public class AlarmContentStepConfig {
 
 		return new JdbcPagingItemReaderBuilder<ReadyAlarmDto>()
 			.name(ALARM_TO_ALARM_EVENT_CREATE_JOB + "_reader")
-			.dataSource(alarmContentReadDataSource)
+			.dataSource(mainReadOnlyDataSource)
 			.queryProvider(READ_QUERY_GENERATOR.createQuery())
 			.parameterValues(READ_QUERY_GENERATOR.getParameters(startTime, endTime, today, modular, partition))
 			.rowMapper(READ_QUERY_GENERATOR.getRowMapper())
