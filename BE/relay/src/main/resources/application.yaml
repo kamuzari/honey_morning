@@ -1,0 +1,6 @@
+spring:
+  application.name=: relay
+  profiles:
+    active: local
+jasypt:
+  password: ${JASYPT_PASSWORD:honeymorning}

@@ -1,0 +1,27 @@
+dependencies {
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // JSON
+    api 'org.springframework.boot:spring-boot-starter-json'
+
+    // Encrypt
+    api 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
+    api 'io.awspring.cloud:spring-cloud-aws-starter:3.2.1'
+
+    // Fake Data
+    api group: 'com.github.javafaker', name: 'javafaker', version: '0.15'
+
+    // LOMBOK
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+}
+
+// common은 라이브러리 모듈이므로 bootJar 비활성화
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+    archiveClassifier = ''
+}

@@ -19,7 +19,7 @@ public interface RabbitMqContext {
 	String RABBITMQ_PASSWORD = "spring.rabbitmq.password";
 
 	@Container
-	static RabbitMQContainer rabbitMqContainer = new RabbitMQContainer("rabbitmq:management")
+	RabbitMQContainer rabbitMqContainer = new RabbitMQContainer("rabbitmq:management")
 		.withExposedPorts(PORTS)
 		.withUser(USERNAME, PASSWORD)
 		.withReuse(true);

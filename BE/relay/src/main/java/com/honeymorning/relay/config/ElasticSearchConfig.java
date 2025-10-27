@@ -6,6 +6,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 
 @Configuration
 @EnableElasticsearchAuditing
+@EnableElasticsearchRepositories
 public class ElasticSearchConfig {
 
 }
