@@ -16,10 +16,25 @@ services:
       file: local/redis/redis.yml
       service: redis
 
-  rabbitmq:
+  rabbitmq-1:
     extends:
       file: local/rabbitmq/rabbitmq.yml
-      service: rabbitmq
+      service: rabbitmq-1
+
+  rabbitmq-2:
+    extends:
+      file: local/rabbitmq/rabbitmq.yml
+      service: rabbitmq-2
+
+  rabbitmq-3:
+    extends:
+      file: local/rabbitmq/rabbitmq.yml
+      service: rabbitmq-3
+
+  rabbitmq-haproxy:
+    extends:
+      file: local/rabbitmq/rabbitmq.yml
+      service: haproxy
 
   localstack:
     extends:
@@ -36,15 +51,18 @@ services:
       file: local/monitoring/monitoring.yml
       service: grafana
 
-  zookeeper:
+  kafka-1:
     extends:
       file: ./local/cdc/cdc.yml
-      service: zookeeper
-
-  kafka:
+      service: kafka-1
+  kafka-2:
     extends:
       file: ./local/cdc/cdc.yml
-      service: kafka
+      service: kafka-2
+  kafka-3:
+    extends:
+      file: ./local/cdc/cdc.yml
+      service: kafka-3
 
   kafka-connect:
     extends:

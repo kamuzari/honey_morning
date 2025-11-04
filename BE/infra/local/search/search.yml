@@ -14,7 +14,9 @@ services:
       - "9300:9300"
     command: >
       bash -c "
-        elasticsearch-plugin install --batch analysis-nori &&
+        if ! elasticsearch-plugin list | grep -q analysis-nori; then
+          elasticsearch-plugin install --batch analysis-nori
+        fi &&
         /usr/local/bin/docker-entrypoint.sh
       "
 
