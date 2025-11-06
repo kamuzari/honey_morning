@@ -39,6 +39,11 @@ spring:
       ack-mode: manual_immediate
     properties:
       isolation.level: read_committed
+      group.instance.id: ${HOSTNAME:cdc-consumer}-${SERVER_PORT:8080}
+      session.timeout.ms: 60000
+      heartbeat.interval.ms: 20000
+      max.poll.interval.ms: 300000
+      partition.assignment.strategy: org.apache.kafka.clients.consumer.CooperativeStickyAssignor
 
 
   jpa:
@@ -54,11 +59,18 @@ spring:
         format_sql: true
 
   rabbitmq:
-    host: ENC(3c3rBT0e0I4eLxq2i7WQI3dQQP2m6izd)
-    port: ENC(KgnOnUUSLJbB0N1rtgCfCA==)
+    host: ENC(RyEvtEFXcfkwizhcXpPLwEn+UkSgQZ2k)
+    port: ENC(zFIGxsGyQO09AOU8Y3b5AQ==)
     username: ENC(egHMI2wBoxjsFRgwodbrGw==)
     password: ENC(2oBor7W8ilV6FGD+BI7rdw==)
     publisher-returns: true
+    publisher-confirm-type: correlated
+    listener:
+      simple:
+        prefetch: 10
+        concurrency: 5
+        max-concurrency: 5
+        acknowledge-mode: manual
 
   elasticsearch:
     uris: ENC(K8zCDMLMddI9SWe1Kas8b4CUrh/eqG3Nc5QhnlKkptc=)
