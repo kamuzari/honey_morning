@@ -4,7 +4,6 @@ import static com.honeymorning.common.domain.briefing.constraint.TopicWordConstr
 import static com.honeymorning.common.domain.briefing.constraint.TopicWordConstraint.SECTION_MINIMUM_SIZE;
 import static com.honeymorning.common.domain.briefing.constraint.TopicWordConstraint.TOPIC_WORD_TOTAL_SIZE;
 import static com.honeymorning.relay.context.mock.BriefingMockGenerator.GENERATOR;
-import static com.honeymorning.relay.config.RabbitConfig.AI_GENERATED_ALARM_CONTENTS_RESPONSE_QUEUE_NAME;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -34,10 +33,10 @@ import com.honeymorning.relay.briefing.application.service.dto.AiBriefingDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiQuizDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiResponseDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiTopicDto;
+import com.honeymorning.relay.config.constant.rabbitmq.FromAiQueue;
 import com.honeymorning.relay.context.infra.broker.RabbitMqContext;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 import com.rabbitmq.client.Channel;
-
 
 class AiClientConsumerTest extends DefaultIntegrationTest implements RabbitMqContext {
 
@@ -45,7 +44,10 @@ class AiClientConsumerTest extends DefaultIntegrationTest implements RabbitMqCon
 	RabbitTemplate rabbitTemplate;
 
 	@SpyBean
-	AiClientConsumer aiClientConsumer;
+	AiClientConsumer sut;
+
+	@Autowired
+	FromAiQueue fromAiQueue;
 
 	@Autowired
 	ConnectionFactory connectionFactory;
@@ -98,8 +100,7 @@ class AiClientConsumerTest extends DefaultIntegrationTest implements RabbitMqCon
 		);
 
 		doNothing().when(alarmContentService).create(expectResponseDto);
-		rabbitTemplate.convertAndSend("", AI_GENERATED_ALARM_CONTENTS_RESPONSE_QUEUE_NAME,
-			expectResponseDto);
+		rabbitTemplate.convertAndSend(fromAiQueue.getExchangeName(), fromAiQueue.getRoutingKey(), expectResponseDto);
 
 		//when
 		//then
@@ -107,7 +108,7 @@ class AiClientConsumerTest extends DefaultIntegrationTest implements RabbitMqCon
 			.untilAsserted(() -> {
 				ArgumentCaptor<Channel> channelCaptor = ArgumentCaptor.forClass(Channel.class);
 				ArgumentCaptor<Long> tagCaptor = ArgumentCaptor.forClass(Long.class);
-				verify(aiClientConsumer, times(1)).createAlarmContents(eq(expectResponseDto), channelCaptor.capture(),
+				verify(sut, times(1)).createAlarmContents(eq(expectResponseDto), channelCaptor.capture(),
 					tagCaptor.capture());
 			});
 	}
@@ -128,12 +129,11 @@ class AiClientConsumerTest extends DefaultIntegrationTest implements RabbitMqCon
 		doThrow(new IllegalTransactionStateException("트랜잭션 예외")).when(alarmContentService).create(responseDto);
 
 		// when
-		rabbitTemplate.convertAndSend("", AiClientConsumer.SUBSCRIBE_QUEUE_NAME, responseDto);
+		rabbitTemplate.convertAndSend(fromAiQueue.getExchangeName(), fromAiQueue.getRoutingKey(), responseDto);
 
 		// then
-		Message expectedMessageOnDeadLetterQueue = rabbitTemplate.receive("ai.generated.alarm_contents_response.dlq",
-			5000);
-		Message failedMessage = rabbitTemplate.receive(AiClientConsumer.SUBSCRIBE_QUEUE_NAME, 5000);
+		Message expectedMessageOnDeadLetterQueue = rabbitTemplate.receive(fromAiQueue.getDeadQueueName(), 5000);
+		Message failedMessage = rabbitTemplate.receive(fromAiQueue.getQueueName(), 5000);
 		assertThat(expectedMessageOnDeadLetterQueue).isNotNull();
 		assertThat(failedMessage).isNull();
 	}

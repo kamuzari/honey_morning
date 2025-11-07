@@ -3,6 +3,8 @@ package com.honeymorning.relay.config;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.retry.MessageRecoverer;
+import org.springframework.amqp.rabbit.retry.RejectAndDontRequeueRecoverer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Configuration
 public class RabbitConfig {
-
 	@Bean
 	public Jackson2JsonMessageConverter jsonMessageConverter() {
 		return new Jackson2JsonMessageConverter();
@@ -32,6 +33,11 @@ public class RabbitConfig {
 		rabbitTemplate.setReturnsCallback(configureComeBack(rabbitTemplate));
 		rabbitTemplate.setRetryTemplate(configureRetryTemplate());
 		return rabbitTemplate;
+	}
+
+	@Bean
+	public MessageRecoverer recoverer() {
+		return new RejectAndDontRequeueRecoverer();
 	}
 
 	private RetryTemplate configureRetryTemplate() {

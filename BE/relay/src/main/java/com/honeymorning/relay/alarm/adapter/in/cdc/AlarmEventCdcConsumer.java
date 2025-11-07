@@ -1,30 +1,28 @@
 package com.honeymorning.relay.alarm.adapter.in.cdc;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.honeymorning.relay.config.RabbitConfig;
+import com.honeymorning.relay.briefing.application.port.out.MessagePort;
 
 @Component
 public class AlarmEventCdcConsumer {
-	private static final Logger log = LoggerFactory.getLogger(AlarmEventCdcConsumer.class);
-	private static final String PUBLISH_QUEUE_NAME = RabbitConfig.AI_GENERATIVE_ALARM_CONTENTS_QUEUE_NAME;
+	private static final Logger LOGGER = LoggerFactory.getLogger(AlarmEventCdcConsumer.class);
 
 	private final ObjectMapper objectMapper;
-	private final RabbitTemplate rabbitTemplate;
+	private final MessagePort messagePort;
 
-	public AlarmEventCdcConsumer(
-		ObjectMapper objectMapper,
-		RabbitTemplate rabbitTemplate
-	) {
+	public AlarmEventCdcConsumer(ObjectMapper objectMapper, MessagePort messagePort) {
 		this.objectMapper = objectMapper;
-		this.rabbitTemplate = rabbitTemplate;
+		this.messagePort = messagePort;
 	}
 
 	@KafkaListener(
@@ -33,13 +31,13 @@ public class AlarmEventCdcConsumer {
 	public void consumeOutboxEvent(
 		String message,
 		Acknowledgment acknowledgment
-	) throws JacksonException {
+	) throws JacksonException, ExecutionException, InterruptedException, TimeoutException {
 
-		log.info("consume outbox event {}", message);
-		CdcAlarmEventDto scheduledAlarmContent = objectMapper.convertValue(
+		LOGGER.info("consume outbox event {}", message);
+		var scheduledAlarmContent = objectMapper.convertValue(
 			objectMapper.readTree(message).path("payload"),
 			CdcAlarmEventDto.class);
-		rabbitTemplate.convertAndSend(PUBLISH_QUEUE_NAME, scheduledAlarmContent.getPayload());
+		messagePort.publish(message, scheduledAlarmContent);
 		acknowledgment.acknowledge();
 	}
 }
