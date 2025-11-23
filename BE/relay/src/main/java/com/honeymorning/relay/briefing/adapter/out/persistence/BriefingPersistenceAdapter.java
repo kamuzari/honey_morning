@@ -6,6 +6,7 @@ import static java.text.MessageFormat.format;
 import java.text.MessageFormat;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
@@ -36,14 +37,13 @@ public class BriefingPersistenceAdapter implements ValidBriefingContentPort, Com
 		this.briefingPersistenceMapper = briefingPersistenceMapper;
 	}
 
-	@Override
 	public Long create(AiResponseDto aiResponseDto) {
 		BriefingEntity totalAlarmContent = briefingPersistenceMapper.toTotalAlarmContent(aiResponseDto);
 
 		return briefingRepository.save(totalAlarmContent).getId();
 	}
 
-	@Override
+	@Transactional
 	public void reflect(TextToSpeechContent textToSpeechContent) {
 		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(textToSpeechContent.getBriefingId())
 			.orElseThrow(() -> new NotFoundResourceException(
@@ -57,7 +57,6 @@ public class BriefingPersistenceAdapter implements ValidBriefingContentPort, Com
 		);
 	}
 
-	@Override
 	public void verifyStillAliveAlarm(Long userId) {
 		if (!alarmRepository.existsById(userId)) {
 			throw new NotFoundResourceException(
@@ -67,7 +66,7 @@ public class BriefingPersistenceAdapter implements ValidBriefingContentPort, Com
 		}
 	}
 
-	@Override
+	@Transactional
 	public TextToSpeechContent getTtsBriefingWithQuizzes(Long id) {
 		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(id)
 			.orElseThrow(() -> new NotFoundResourceException(

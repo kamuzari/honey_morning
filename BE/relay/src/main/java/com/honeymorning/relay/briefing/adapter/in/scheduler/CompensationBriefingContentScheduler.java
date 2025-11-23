@@ -18,8 +18,10 @@ public class CompensationBriefingContentScheduler {
 	private final TtsFailCompensateUseCase ttsFailCompensateUseCase;
 	private final SearchDocumentFailCompensateUseCase searchDocumentFailCompensateUseCase;
 
-	public CompensationBriefingContentScheduler(TtsFailCompensateUseCase ttsFailCompensateUseCase,
-		SearchDocumentFailCompensateUseCase searchDocumentFailCompensateUseCase) {
+	public CompensationBriefingContentScheduler(
+		TtsFailCompensateUseCase ttsFailCompensateUseCase,
+		SearchDocumentFailCompensateUseCase searchDocumentFailCompensateUseCase
+	) {
 		this.ttsFailCompensateUseCase = ttsFailCompensateUseCase;
 		this.searchDocumentFailCompensateUseCase = searchDocumentFailCompensateUseCase;
 	}

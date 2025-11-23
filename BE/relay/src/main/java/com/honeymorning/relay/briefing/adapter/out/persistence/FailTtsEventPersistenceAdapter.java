@@ -3,6 +3,7 @@ package com.honeymorning.relay.briefing.adapter.out.persistence;
 import static java.text.MessageFormat.format;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.honeymorning.common.exception.NotFoundResourceException;
 import com.honeymorning.common.exception.constant.ErrorProtocol;
@@ -26,11 +27,13 @@ public class FailTtsEventPersistenceAdapter implements CommandFailTtsEventPort, 
 		);
 	}
 
+	@Transactional(transactionManager = "eventTransactionManager")
 	public void reflect(RetryingFailTts failTts) {
 		FailTtsEventEntity failTtsEvent = getFailTtsEventId(failTts.getFailTtsEventId());
 		failTtsEvent.complete(failTts.getEventStatus());
 	}
 
+	@Transactional(transactionManager = "eventTransactionManager")
 	public RetryingFailTts loadTopOnSkipLock() {
 		return failTtsEventEntityRepository.findFailStatusForUpdateSkipLocked(1L)
 			.map(FailTtsEventPersistenceAdapter::toEndingFailTts)

@@ -49,7 +49,6 @@ public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase, 
 		this.commandFailTtsEventPort = commandFailTtsEventPort;
 	}
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void create(Long briefingId) {
 		TextToSpeechContent textToSpeechContent = loadBriefingPort.getTtsBriefingWithQuizzes(briefingId);
 		addBriefingContent(textToSpeechContent);

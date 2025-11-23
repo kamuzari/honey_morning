@@ -30,13 +30,21 @@ public class BriefingContentCompensationService implements TtsFailCompensateUseC
 		this.briefingSearchService = briefingSearchService;
 	}
 
-	@Transactional(transactionManager = "eventTransactionManager", timeout = 3)
 	public void retryTts() {
+		/**
+		 * 0. 트랜잭션 시작
+		 * 1. db에서 가장 오래된 실패한 이벤트 가져오기
+		 * 2. 새로운 트랜잭션(required new) 새로운 tts 생성 시도(외부 api 호출 -> s3 업로드)
+		 * 3. 1번에서 가져온 이벤트 상태변경
+		 * 4. 커밋
+ 		 */
+
 		RetryingFailTts retryingFailTts = ttsCompensationPort.loadTopOnSkipLock();
 		if (retryingFailTts.isEmpty()) {
 			return;
 		}
 
+		// 아래 creete 메소드에서 새로운 트랜잭션 이루어짐 ..
 		textToSpeechGenerateService.create(retryingFailTts.getFailBriefingId());
 		retryingFailTts.complete();
 		ttsCompensationPort.reflect(retryingFailTts);
