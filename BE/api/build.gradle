@@ -37,25 +37,11 @@ dependencies {
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-	// MySQL
-	runtimeOnly 'com.mysql:mysql-connector-j'
-
-	// LOMBOK
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'com.h2database:h2'
 
 	// Rest Assured
 	testImplementation 'io.rest-assured:rest-assured'
-
-	// Test Container
-	testImplementation 'org.testcontainers:junit-jupiter'
-	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
-	testImplementation 'org.testcontainers:mysql'
 
 	// Mock Exterior Server Test
 	testImplementation 'org.springframework.cloud:spring-cloud-contract-stub-runner'
