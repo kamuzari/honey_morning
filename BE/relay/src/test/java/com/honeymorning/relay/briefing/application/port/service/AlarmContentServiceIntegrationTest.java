@@ -1,5 +1,6 @@
 package com.honeymorning.relay.briefing.application.port.service;
 
+import static com.honeymorning.relay.context.mock.BriefingMockGenerator.GENERATOR;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
 
@@ -37,7 +38,7 @@ import com.honeymorning.relay.briefing.application.service.dto.AiBriefingDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiQuizDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiResponseDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiTopicDto;
-import com.honeymorning.relay.config.constant.AwsS3Properties;
+import com.honeymorning.relay.config.constant.aws.s3.AwsS3Properties;
 import com.honeymorning.relay.context.mock.BriefingMockGenerator;
 import com.honeymorning.relay.context.infra.database.MySqlContext;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
@@ -113,7 +114,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 		Assertions.assertThat(briefingEntity).isNotNull();
 		Assertions.assertThat(briefingEntity.getBriefingTagEntities()).isNotNull();
-		Assertions.assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().voiceContent());
+		Assertions.assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().summaryContent());
 		Assertions.assertThat(briefingEntity.getText()).isEqualTo(responseDto.aiBriefings().readContent());
 		Assertions.assertThat(briefingEntity.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
 		Assertions.assertThat(briefingEntity.getQuizEntities().stream().map(QuizEntity::getWakeUpQuizContent).toList())
@@ -150,7 +151,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 
 		Assertions.assertThat(briefingEntity).isNotNull();
 		Assertions.assertThat(briefingEntity.getBriefingTagEntities()).isNotNull();
-		Assertions.assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().voiceContent());
+		Assertions.assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().summaryContent());
 		Assertions.assertThat(briefingEntity.getText()).isEqualTo(responseDto.aiBriefings().readContent());
 		Assertions.assertThat(briefingEntity.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
 		Assertions.assertThat(briefingEntity.getWakeUpBriefingContent()).isNull();
@@ -167,14 +168,23 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 	}
 
 	List<AiQuizDto> createFakeQuizDtos(int size) {
-		return Stream.generate(() -> new AiQuizDto(
-				BriefingMockGenerator.GENERATOR.lorem().sentence(2),
+		return List.of(
+			new AiQuizDto(
 				1,
-				Stream.generate(() -> BriefingMockGenerator.GENERATOR.lorem().word())
+				GENERATOR.lorem().sentence(2),
+				1,
+				Stream.generate(() -> GENERATOR.lorem().word())
 					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
-			))
-			.limit(size)
-			.toList();
+			),
+			new AiQuizDto(
+				2,
+				GENERATOR.lorem().sentence(2),
+				4,
+				Stream.generate(() -> GENERATOR.lorem().word())
+					.limit(QuizConstraint.OPTION_SIZE)
+					.toList()
+			)
+		);
 	}
 }

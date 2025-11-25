@@ -19,7 +19,7 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.honeymorning.common.common.basic.EventStatus;
 import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
 import com.honeymorning.relay.context.mock.BriefingMockGenerator;
-import com.honeymorning.relay.config.constant.AwsS3Properties;
+import com.honeymorning.relay.config.constant.aws.s3.AwsS3Properties;
 import com.honeymorning.relay.context.infra.database.MySqlContext;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 import com.honeymorning.relay.context.infra.storage.AwsS3Context;

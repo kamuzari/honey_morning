@@ -1,7 +1,7 @@
 package com.honeymorning.common.domain.briefing.repository;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,6 +13,5 @@ public interface QuizRepository extends JpaRepository<QuizEntity, Long> {
 
 	List<QuizEntity> findByBriefingEntity(BriefingEntity briefingEntity);
 
-	List<QuizEntity> findByIdInAndBriefingEntityId(Collection<Long> ids, Long briefingId);
-
+	Optional<QuizEntity> findByBriefingEntityIdAndSequenceOrder(Long briefingId, Integer sequenceOrder);
 }

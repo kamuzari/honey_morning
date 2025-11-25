@@ -52,6 +52,8 @@ public class QuizEntity extends BaseEntity {
 
 	private Integer selection;
 
+	private Integer sequenceOrder;
+
 	@Embedded
 	@AttributeOverride(name = "file", column = @Column(name = "access_url"))
 	private Content wakeUpQuizContent;
@@ -62,7 +64,8 @@ public class QuizEntity extends BaseEntity {
 	public QuizEntity(
 		String problem,
 		int answer,
-		List<String> options) {
+		List<String> options,
+		Integer sequenceOrder) {
 
 		if (problem == null || problem.isBlank()) {
 			throw new IllegalArgumentException("문제는 null 이거나 공백으로만 이루어질 수 없습니다");
@@ -82,9 +85,10 @@ public class QuizEntity extends BaseEntity {
 		this.option2 = options.get(1);
 		this.option3 = options.get(2);
 		this.option4 = options.get(3);
+		this.sequenceOrder = sequenceOrder;
 	}
 
-	void addContent(Content wakeUpQuizContent) {
+	public void addContent(Content wakeUpQuizContent) {
 		this.wakeUpQuizContent = wakeUpQuizContent;
 	}
 

@@ -11,6 +11,7 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 
 @Configuration
 @EnableEncryptableProperties
+
 public class JasyptConfig {
 
 	@Value("${jasypt.password}")

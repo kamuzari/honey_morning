@@ -1,9 +1,9 @@
 package com.honeymorning.api.brief.adapter.out.persistence.entity;
 
+import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
 import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.ANSWER_MAXIMUM_VALUE;
 import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.ANSWER_MINIMUM_VALUE;
 import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.OPTION_SIZE;
-import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -59,7 +59,7 @@ class QuizEntityTest {
 	}
 
 	QuizEntity createQuiz(String problem, int answer, List<String> options) {
-		return new QuizEntity(problem, answer, options);
+		return new QuizEntity(problem, answer, options, 1);
 	}
 
 	@DisplayName("퀴즈 객체 생성에 실패한다")

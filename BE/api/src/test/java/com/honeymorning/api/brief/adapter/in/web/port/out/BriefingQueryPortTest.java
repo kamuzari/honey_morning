@@ -1,8 +1,8 @@
 package com.honeymorning.api.brief.adapter.in.web.port.out;
 
+import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
 import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.ANSWER_MAXIMUM_VALUE;
 import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.ANSWER_MINIMUM_VALUE;
-import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -81,12 +81,16 @@ public class BriefingQueryPortTest extends MockTest {
 			AccessAuthority.PART_ALLOWED)
 		);
 		ReflectionTestUtils.setField(briefingEntity, "id", 1L);
-		List<QuizEntity> quizEntities = List.of(new QuizEntity(GENERATOR.lorem().sentence(),
+		List<QuizEntity> quizEntities = List.of(
+			new QuizEntity(
+				GENERATOR.lorem().sentence(),
 				GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE),
-				Stream.generate(() -> GENERATOR.lorem().sentence()).limit(4).toList()),
+				Stream.generate(() -> GENERATOR.lorem().sentence()).limit(4).toList(),
+				1),
 			new QuizEntity(GENERATOR.lorem().sentence(),
 				GENERATOR.number().numberBetween(ANSWER_MINIMUM_VALUE, ANSWER_MAXIMUM_VALUE),
-				Stream.generate(() -> GENERATOR.lorem().sentence()).limit(4).toList())
+				Stream.generate(() -> GENERATOR.lorem().sentence()).limit(4).toList(),
+				2)
 		);
 
 		quizEntities.forEach(quiz -> ReflectionTestUtils.setField(quiz, "briefingEntity", briefingEntity));

@@ -1,5 +1,6 @@
 package com.honeymorning.api.brief.utils;
 
+import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.TOTAL_QUIZ_SIZE;
 import static com.honeymorning.common.domain.briefing.constraint.TopicWordConstraint.SECTION_MAXIMUM_SIZE;
 import static com.honeymorning.common.domain.briefing.constraint.TopicWordConstraint.SECTION_MINIMUM_SIZE;
 import static com.honeymorning.common.domain.briefing.constraint.TopicWordConstraint.TOPIC_WORD_TOTAL_SIZE;
@@ -7,10 +8,10 @@ import static com.honeymorning.common.domain.briefing.constraint.TopicWordConstr
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.github.javafaker.Faker;
-import com.honeymorning.common.domain.briefing.constraint.QuizConstraint;
 import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
 import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
 import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
@@ -31,14 +32,15 @@ public class BriefingMockGenerator {
 	}
 
 	public static Set<QuizEntity> createQuizzes() {
-		return Stream.generate(() -> new QuizEntity(
+		return IntStream.rangeClosed(1, TOTAL_QUIZ_SIZE).mapToObj(order -> new QuizEntity(
 				GENERATOR.lorem().sentence(),
 				GENERATOR.number().numberBetween(1, 4),
 				List.of(GENERATOR.lorem().word(),
 					GENERATOR.lorem().word(),
 					GENERATOR.lorem().word(),
-					GENERATOR.lorem().word())))
-			.limit(QuizConstraint.TOTAL_QUIZ_SIZE).collect(Collectors.toSet());
+					GENERATOR.lorem().word()),
+				order))
+			.collect(Collectors.toSet());
 	}
 
 	public static BriefingEntity createBriefing(Long userId) {

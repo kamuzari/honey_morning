@@ -21,13 +21,13 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.honeymorning.api.alarm.adapter.out.persistence.AlarmPersistenceAdapter;
 import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmPersistenceAdapterMapper;
-import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
-import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
-import com.honeymorning.common.domain.briefing.constraint.QuizConstraint;
 import com.honeymorning.api.context.mock.MockTest;
 import com.honeymorning.common.common.content.AccessAuthority;
 import com.honeymorning.common.common.content.Content;
 import com.honeymorning.common.common.content.FileType;
+import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
+import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
+import com.honeymorning.common.domain.briefing.constraint.QuizConstraint;
 import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
 import com.honeymorning.common.domain.briefing.entity.QuizEntity;
 import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
@@ -80,7 +80,7 @@ class AlarmQueryPortTest extends MockTest {
 			GENERATOR.internet().url().toLowerCase(),
 			AccessAuthority.PART_ALLOWED)
 		);
-		List<QuizEntity> expectedQuizzes = createFakeQuiz(QuizConstraint.TOTAL_QUIZ_SIZE);
+		List<QuizEntity> expectedQuizzes = createFakeQuiz();
 
 		given(alarmRepository.findByUserIdAndIsActiveTrue(AUTH_USER_ENTITY.getId())).willReturn(
 			Optional.of(expectedAlarmEntity));
@@ -105,15 +105,15 @@ class AlarmQueryPortTest extends MockTest {
 			expectedBriefingEntity.getWakeUpBriefingContent().getFileUrl());
 	}
 
-	private List<QuizEntity> createFakeQuiz(int size) {
-		List<QuizEntity> quizEntities = Stream.generate(() -> new QuizEntity(
+	private List<QuizEntity> createFakeQuiz() {
+		return Stream.generate(() -> new QuizEntity(
 				GENERATOR.lorem().sentence(2),
 				1,
 				Stream.generate(() -> GENERATOR.lorem().word())
 					.limit(QuizConstraint.OPTION_SIZE)
-					.toList()
+					.toList(), 1
 			))
-			.limit(size)
+			.limit(QuizConstraint.TOTAL_QUIZ_SIZE)
 			.map(quiz -> {
 				ReflectionTestUtils.setField(quiz, "wakeUpQuizContent", new Content(
 					GENERATOR.file().fileName(),
@@ -125,6 +125,5 @@ class AlarmQueryPortTest extends MockTest {
 				return quiz;
 			})
 			.toList();
-		return quizEntities;
 	}
 }

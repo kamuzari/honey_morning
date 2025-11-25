@@ -1,5 +1,6 @@
 package com.honeymorning.relay.briefing.application.port.in;
 
+import static com.honeymorning.relay.context.mock.BriefingMockGenerator.GENERATOR;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.times;
@@ -53,7 +54,7 @@ class AlarmContentCommandUseCaseTest extends MockTest {
 		//given
 		AiResponseDto responseDto = createAiResponseDto();
 		Mockito.doThrow(new BusinessException("알람 설정을 종료한 사용자", null))
-			.when(validBriefingContentPort).verifyStillAliveAlarm(MockTest.USER_ID);
+			.when(validBriefingContentPort).isStillAliveAlarm(MockTest.USER_ID);
 
 		//when
 		//then
@@ -71,6 +72,7 @@ class AlarmContentCommandUseCaseTest extends MockTest {
 		BriefingEntity briefingEntity = new BriefingEntity(MockTest.USER_ID, "test", "test", "test");
 		long briefingId = 1L;
 		ReflectionTestUtils.setField(briefingEntity, "id", briefingId);
+		given(validBriefingContentPort.isStillAliveAlarm(1L)).willReturn(true);
 		given(commandBriefingPort.create(responseDto)).willReturn(briefingId);
 
 		//when
@@ -80,25 +82,35 @@ class AlarmContentCommandUseCaseTest extends MockTest {
 		verify(commandBriefingPort, times(1)).create(responseDto);
 	}
 
-	List<AiTopicDto> createFakeAiTopicDtos(int size) {
+	List<AiTopicDto> createFakeAiTopicDtos() {
 		return Stream.generate(() -> new AiTopicDto(
 				BriefingMockGenerator.GENERATOR.number()
 					.numberBetween(TopicWordConstraint.SECTION_MINIMUM_SIZE, TopicWordConstraint.SECTION_MAXIMUM_SIZE),
 				BriefingMockGenerator.GENERATOR.lorem().word(),
 				BriefingMockGenerator.GENERATOR.number().randomDouble(2, 0, 100)))
-			.limit(size).toList();
+			.limit(TopicWordConstraint.TOPIC_WORD_TOTAL_SIZE)
+			.toList();
 	}
 
-	List<AiQuizDto> createFakeQuizDtos(int size) {
-		return Stream.generate(() -> new AiQuizDto(
-				BriefingMockGenerator.GENERATOR.lorem().sentence(2),
+	List<AiQuizDto> createFakeQuizDtos() {
+		return List.of(
+			new AiQuizDto(
 				1,
-				Stream.generate(() -> BriefingMockGenerator.GENERATOR.lorem().word())
+				GENERATOR.lorem().sentence(2),
+				1,
+				Stream.generate(() -> GENERATOR.lorem().word())
 					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
-			))
-			.limit(size)
-			.toList();
+			),
+			new AiQuizDto(
+				2,
+				GENERATOR.lorem().sentence(2),
+				4,
+				Stream.generate(() -> GENERATOR.lorem().word())
+					.limit(QuizConstraint.OPTION_SIZE)
+					.toList()
+			)
+		);
 	}
 
 	AiResponseDto createAiResponseDto() {
@@ -108,8 +120,8 @@ class AlarmContentCommandUseCaseTest extends MockTest {
 				BriefingMockGenerator.GENERATOR.lorem().sentence(10),
 				BriefingMockGenerator.GENERATOR.lorem().sentence(40)
 			),
-			createFakeQuizDtos(QuizConstraint.TOTAL_QUIZ_SIZE),
-			createFakeAiTopicDtos(TopicWordConstraint.TOPIC_WORD_TOTAL_SIZE),
+			createFakeQuizDtos(),
+			createFakeAiTopicDtos(),
 			List.of("정치"),
 			"https://cdn.ycloud.com/03jidmmk39d"
 		);

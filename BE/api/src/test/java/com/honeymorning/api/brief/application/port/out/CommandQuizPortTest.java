@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import java.util.List;
-import java.util.stream.LongStream;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
@@ -52,15 +52,20 @@ public class CommandQuizPortTest extends MockTest {
 	@Test
 	void testReflect() {
 		//given
-		List<QuizEntity> quizEntities = LongStream.rangeClosed(1, 2).mapToObj((quizId) -> {
-			QuizEntity quizEntity = new QuizEntity(
+		List<QuizEntity> quizEntities = List.of(
+			new QuizEntity(
 				GENERATOR.lorem().sentence(3),
 				1,
-				Stream.generate(() -> GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList());
-			ReflectionTestUtils.setField(quizEntity, "id", quizId);
-
-			return quizEntity;
-		}).toList();
+				Stream.generate(() -> GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList(),
+				1),
+			new QuizEntity(
+				GENERATOR.lorem().sentence(3),
+				1,
+				Stream.generate(() -> GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList(),
+				2)
+		);
+		ReflectionTestUtils.setField(quizEntities.get(0), "id", 1L);
+		ReflectionTestUtils.setField(quizEntities.get(1), "id", 2L);
 
 		List<EmptySelectionQuiz> filledSelectionQuizzes = List.of(
 			new EmptySelectionQuiz(1L, null),
@@ -91,15 +96,21 @@ public class CommandQuizPortTest extends MockTest {
 	@Test
 	void failInvalidQuizId() {
 		//given
-		List<QuizEntity> quizEntities = LongStream.rangeClosed(1, 2).mapToObj((quizId) -> {
-			QuizEntity quizEntity = new QuizEntity(
+		List<QuizEntity> quizEntities = List.of(
+			new QuizEntity(
 				GENERATOR.lorem().sentence(3),
 				1,
-				Stream.generate(() -> GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList());
-			ReflectionTestUtils.setField(quizEntity, "id", quizId);
+				Stream.generate(() -> GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList(),
+				1),
+			new QuizEntity(
+				GENERATOR.lorem().sentence(3),
+				1,
+				Stream.generate(() -> GENERATOR.lorem().word()).limit(QuizConstraint.OPTION_SIZE).toList(),
+				2)
+		);
+		ReflectionTestUtils.setField(quizEntities.get(0), "id", 1L);
+		ReflectionTestUtils.setField(quizEntities.get(1), "id", 2L);
 
-			return quizEntity;
-		}).toList();
 
 		List<EmptySelectionQuiz> invalidFilledQuizzes = List.of(
 			new EmptySelectionQuiz(3L, null),
