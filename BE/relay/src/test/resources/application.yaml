@@ -15,8 +15,6 @@ spring:
   kafka:
     bootstrap-servers: ENC(Hggvm9zvjIATkyaHd5n1Qztzok2H155k)
     consumer:
-      group-id: "alarm-contents-cdc-group"
-      topic: "alarm_contents.honeymorning.outbox_alarm_event"
       auto-offset-reset: "earliest"
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -83,6 +81,41 @@ jasypt:
 mock:
   server:
     base-url: http://localhost:8089
+
+app:
+  kafka:
+    topics:
+      cdc:
+        name: "alarm_contents-outbox_alarm_event"
+        partitions: 3
+        replicas: 3
+      fail-tts:
+        name: "alarm-contents-fail-tts-event"
+        partitions: 3
+        replicas: 3
+      fromAi:
+        name: "alarm-contents-from-ai"
+        partitions: 3
+        replicas: 3
+    consumers:
+      cdc:
+        topic: "alarm_contents.honeymorning.outbox_alarm_event"
+        group-id: "alarm-contents-cdc-group"
+      fail-tts:
+        topic: "alarm-contents-fail-tts-event"
+        group-id: "fail-tts-compensation-group"
+      ai-store:
+        topic: "alarm-contents-from-ai"
+        group-id: "ai-response-store-group"
+      ai-briefing-tts:
+        topic: "alarm-contents-from-ai"
+        group-id: "ai-response-briefing-tts-group"
+      ai-quiz1-tts:
+        topic: "alarm-contents-from-ai"
+        group-id: "ai-response-quiz1-tts-group"
+      ai-quiz2-tts:
+        topic: "alarm-contents-from-ai"
+        group-id: "ai-response-quiz2-tts-group"
 
 logging:
   level:

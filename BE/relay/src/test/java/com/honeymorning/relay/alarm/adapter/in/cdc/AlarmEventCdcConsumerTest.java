@@ -31,7 +31,7 @@ class AlarmEventCdcConsumerTest extends DefaultIntegrationTest implements KafkaC
 	@SpyBean
 	AlarmEventCdcConsumer sut;
 
-	@Value("${spring.kafka.consumer.topic}")
+	@Value("${app.kafka.topics.cdc.name}")
 	String topic;
 
 	@Autowired

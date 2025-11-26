@@ -147,15 +147,24 @@ class AiClientConsumerTest extends DefaultIntegrationTest implements RabbitMqCon
 	}
 
 	private List<AiQuizDto> createFakeQuizDtos(int size) {
-		return Stream.generate(() -> new AiQuizDto(
+		return List.of(
+			new AiQuizDto(
+				1,
 				GENERATOR.lorem().sentence(2),
 				1,
 				Stream.generate(() -> GENERATOR.lorem().word())
 					.limit(QuizConstraint.OPTION_SIZE)
 					.toList()
-			))
-			.limit(size)
-			.toList();
+			),
+			new AiQuizDto(
+				2,
+				GENERATOR.lorem().sentence(2),
+				4,
+				Stream.generate(() -> GENERATOR.lorem().word())
+					.limit(QuizConstraint.OPTION_SIZE)
+					.toList()
+			)
+		);
 	}
 
 	private RabbitTemplate createRabbitTemplate() {

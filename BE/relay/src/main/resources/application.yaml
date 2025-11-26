@@ -1,5 +1,6 @@
 spring:
-  application.name=: relay
+  application:
+    name: relay
   profiles:
     active: local
 jasypt:

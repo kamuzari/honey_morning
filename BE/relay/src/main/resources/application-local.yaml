@@ -27,24 +27,20 @@ spring:
         validation-timeout: 5000
 
   kafka:
-    bootstrap-servers: ENC(Hggvm9zvjIATkyaHd5n1Qztzok2H155k)
+    bootstrap-servers: localhost:19092,localhost:19093,localhost:19094
     consumer:
-      group-id: "alarm-contents-cdc-group"
-      topic: "alarm_contents.honeymorning.outbox_alarm_event"
-      auto-offset-reset: "earliest"
-      enable-auto-commit: false
+      auto-offset-reset: earliest
+      enable-auto-commit: true
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     listener:
       ack-mode: manual_immediate
     properties:
       isolation.level: read_committed
-      group.instance.id: ${HOSTNAME:cdc-consumer}-${SERVER_PORT:8080}
       session.timeout.ms: 60000
       heartbeat.interval.ms: 20000
       max.poll.interval.ms: 300000
       partition.assignment.strategy: org.apache.kafka.clients.consumer.CooperativeStickyAssignor
-
 
   jpa:
     database: mysql
@@ -79,6 +75,42 @@ spring:
     connection-timeout: 3s
     socket-timeout: 5s
     socket-keep-alive: true
+
+app:
+  kafka:
+    topics:
+      cdc:
+        name: "alarm_contents-outbox_alarm_event"
+        partitions: 3
+        replicas: 3
+      fail-tts:
+        name: "alarm-contents-fail-tts-event"
+        partitions: 3
+        replicas: 3
+      fromAi:
+        name: "alarm-contents-from-ai"
+        partitions: 3
+        replicas: 3
+    consumers:
+      cdc:
+        topic: "alarm_contents.honeymorning.outbox_alarm_event"
+        group-id: "alarm-contents-cdc-group"
+      fail-tts:
+        topic: "alarm-contents-fail-tts-event"
+        group-id: "fail-tts-compensation-group"
+      ai-store:
+        topic: "alarm-contents-from-ai"
+        group-id: "ai-response-store-group"
+      ai-briefing-tts:
+        topic: "alarm-contents-from-ai"
+        group-id: "ai-response-briefing-tts-group"
+      ai-quiz1-tts:
+        topic: "alarm-contents-from-ai"
+        group-id: "ai-response-quiz1-tts-group"
+      ai-quiz2-tts:
+        topic: "alarm-contents-from-ai"
+        group-id: "ai-response-quiz2-tts-group"
+
 
 aws:
   s3:

@@ -1,4 +1,4 @@
-package com.honeymorning.relay.config.constant;
+package com.honeymorning.relay.config.constant.aws.s3;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;

@@ -13,14 +13,19 @@ import org.springframework.transaction.annotation.Transactional;
 import com.honeymorning.common.common.content.AccessAuthority;
 import com.honeymorning.common.common.content.Content;
 import com.honeymorning.common.common.content.FileType;
+import com.honeymorning.relay.briefing.application.domain.EmptyBriefingTts;
+import com.honeymorning.relay.briefing.application.domain.EmptyQuizTts;
+import com.honeymorning.relay.briefing.application.domain.LatestBriefing;
 import com.honeymorning.relay.briefing.application.domain.TextToSpeechContent;
 import com.honeymorning.relay.briefing.application.port.in.FallBackTtsCommandUseCase;
 import com.honeymorning.relay.briefing.application.port.in.TextToSpeechCommandUseCase;
 import com.honeymorning.relay.briefing.application.port.out.CommandBriefingPort;
 import com.honeymorning.relay.briefing.application.port.out.CommandContentStorePort;
 import com.honeymorning.relay.briefing.application.port.out.CommandFailTtsEventPort;
+import com.honeymorning.relay.briefing.application.port.out.CommandQuizPort;
 import com.honeymorning.relay.briefing.application.port.out.CommandTextToSpeechPort;
 import com.honeymorning.relay.briefing.application.port.out.LoadBriefingPort;
+import com.honeymorning.relay.briefing.application.port.out.LoadQuizPort;
 import com.honeymorning.relay.util.ResponseEntityUtils;
 
 @Service
@@ -28,9 +33,12 @@ public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase, 
 
 	private final CommandContentStorePort s3CommandContentStorePort;
 	private final CommandTextToSpeechPort commandTextToSpeechPort;
-	private final LoadBriefingPort loadBriefingPort;
 	private final CommandBriefingPort commandBriefingPort;
+	private final CommandQuizPort commandQuizPort;
 	private final CommandFailTtsEventPort commandFailTtsEventPort;
+
+	private final LoadBriefingPort loadBriefingPort;
+	private final LoadQuizPort loadQuizPort;
 
 	@Value("${aws.s3.domain-name}")
 	private String contentDomainName;
@@ -40,13 +48,17 @@ public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase, 
 		CommandTextToSpeechPort commandTextToSpeechPort,
 		LoadBriefingPort loadBriefingPort,
 		CommandBriefingPort commandBriefingPort,
-		CommandFailTtsEventPort commandFailTtsEventPort) {
+		CommandQuizPort commandQuizPort,
+		CommandFailTtsEventPort commandFailTtsEventPort,
+		LoadQuizPort loadQuizPort) {
 
 		this.s3CommandContentStorePort = s3ContentStoreAdapter;
 		this.commandTextToSpeechPort = commandTextToSpeechPort;
 		this.loadBriefingPort = loadBriefingPort;
 		this.commandBriefingPort = commandBriefingPort;
+		this.commandQuizPort = commandQuizPort;
 		this.commandFailTtsEventPort = commandFailTtsEventPort;
+		this.loadQuizPort = loadQuizPort;
 	}
 
 	public void create(Long briefingId) {
@@ -54,6 +66,25 @@ public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase, 
 		addBriefingContent(textToSpeechContent);
 		addQuizContents(textToSpeechContent);
 		commandBriefingPort.reflect(textToSpeechContent);
+	}
+
+	@Override
+	public void createBriefing(Long userId, String summaryText) {
+		Content content = createContent(summaryText, FileType.BRIEFING);
+		EmptyBriefingTts emptyBriefingTts = commandBriefingPort.getEmptyBriefingTts(userId);
+		emptyBriefingTts.add(content);
+		commandBriefingPort.addBriefingTts(emptyBriefingTts);
+	}
+
+	@Override
+	public void createQuizTts(Long userId, String quizText, Integer order) {
+		Content content = createContent(quizText, FileType.QUIZ);
+		LatestBriefing latestBriefing = commandBriefingPort.getLatestBriefingId(userId);
+		// quiz 위 아래 업자나 ;;  ㅅㅂ 것 객체로 하나하나 만들어야 겟구만...?
+		EmptyQuizTts emptyQuizTts = loadQuizPort.getEmptyTtsQuiz(latestBriefing.briefingId(), order);
+		emptyQuizTts.add(content);
+		commandQuizPort.addQuizTts(emptyQuizTts);
+
 	}
 
 	@Transactional(transactionManager = "eventTransactionManager", propagation = Propagation.REQUIRES_NEW)

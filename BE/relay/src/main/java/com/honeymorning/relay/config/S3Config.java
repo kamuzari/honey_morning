@@ -14,7 +14,7 @@ import com.amazonaws.handlers.RequestHandler2;
 import com.amazonaws.retry.PredefinedRetryPolicies;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.honeymorning.relay.config.constant.AwsS3Properties;
+import com.honeymorning.relay.config.constant.aws.s3.AwsS3Properties;
 
 import lombok.extern.slf4j.Slf4j;
 

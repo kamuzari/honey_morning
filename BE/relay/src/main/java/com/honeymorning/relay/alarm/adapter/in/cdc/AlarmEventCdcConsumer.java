@@ -26,8 +26,10 @@ public class AlarmEventCdcConsumer {
 	}
 
 	@KafkaListener(
-		topics = "${spring.kafka.consumer.topic}",
-		groupId = "${spring.kafka.consumer.group-id}")
+		topics = "${app.kafka.topics.cdc.name}",
+		groupId = "${app.kafka.consumers.cdc.group-id}",
+		containerFactory = "cdcKafkaListenerContainerFactory"
+	)
 	public void consumeOutboxEvent(
 		String message,
 		Acknowledgment acknowledgment
