@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.honeymorning.relay.config.JsonConfig.MicrosecondToLocalDateTimeDeserializer;
+import com.honeymorning.relay.config.framework.JsonConfig.MicrosecondToLocalDateTimeDeserializer;
 
 import lombok.AccessLevel;
 import lombok.Getter;

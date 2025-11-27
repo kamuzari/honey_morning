@@ -13,65 +13,65 @@ services:
 
   redis:
     extends:
-      file: local/redis/redis.yml
+      file: ../relay/src/main/resources/infra/redis/redis.yml
       service: redis
 
   rabbitmq-1:
     extends:
-      file: local/rabbitmq/rabbitmq.yml
+      file: ../relay/src/main/resources/infra/rabbitmq/rabbitmq.yml
       service: rabbitmq-1
 
   rabbitmq-2:
     extends:
-      file: local/rabbitmq/rabbitmq.yml
+      file: ../relay/src/main/resources/infra/rabbitmq/rabbitmq.yml
       service: rabbitmq-2
 
   rabbitmq-3:
     extends:
-      file: local/rabbitmq/rabbitmq.yml
+      file: ../relay/src/main/resources/infra/rabbitmq/rabbitmq.yml
       service: rabbitmq-3
 
   rabbitmq-haproxy:
     extends:
-      file: local/rabbitmq/rabbitmq.yml
+      file: ../relay/src/main/resources/infra/rabbitmq/rabbitmq.yml
       service: haproxy
 
   localstack:
     extends:
-      file: local/localstack/localstack.yml
+      file: ../relay/src/main/resources/infra/localstack/localstack.yml
       service: localstack
 
   prometheus:
     extends:
-      file: local/monitoring/monitoring.yml
+      file: ../relay/src/main/resources/infra/monitoring/monitoring.yml
       service: prometheus
 
   grafana:
     extends:
-      file: local/monitoring/monitoring.yml
+      file: ../relay/src/main/resources/infra/monitoring/monitoring.yml
       service: grafana
 
   kafka-1:
     extends:
-      file: ./local/cdc/cdc.yml
+      file: ../relay/src/main/resources/infra/cdc/cdc.yml
       service: kafka-1
   kafka-2:
     extends:
-      file: ./local/cdc/cdc.yml
+      file: ../relay/src/main/resources/infra/cdc/cdc.yml
       service: kafka-2
   kafka-3:
     extends:
-      file: ./local/cdc/cdc.yml
+      file: ../relay/src/main/resources/infra/cdc/cdc.yml
       service: kafka-3
 
   kafka-connect:
     extends:
-      file: ./local/cdc/cdc.yml
+      file: ../relay/src/main/resources/infra/cdc/cdc.yml
       service: kafka-connect
 
   kafka-ui:
     extends:
-      file: ./local/cdc/cdc.yml
+      file: ../relay/src/main/resources/infra/cdc/cdc.yml
       service: kafka-ui
 
   elasticsearch:

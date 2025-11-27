@@ -33,7 +33,7 @@ import com.honeymorning.relay.briefing.application.service.dto.AiBriefingDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiQuizDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiResponseDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiTopicDto;
-import com.honeymorning.relay.config.constant.rabbitmq.FromAiQueue;
+import com.honeymorning.relay.config.messaging.rabbitmq.constant.FromAiQueue;
 import com.honeymorning.relay.context.infra.broker.RabbitMqContext;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 import com.rabbitmq.client.Channel;

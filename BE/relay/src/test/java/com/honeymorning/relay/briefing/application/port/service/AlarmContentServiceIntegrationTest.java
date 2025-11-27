@@ -38,7 +38,7 @@ import com.honeymorning.relay.briefing.application.service.dto.AiBriefingDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiQuizDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiResponseDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiTopicDto;
-import com.honeymorning.relay.config.constant.aws.s3.AwsS3Properties;
+import com.honeymorning.relay.config.storage.constant.AwsS3Properties;
 import com.honeymorning.relay.context.mock.BriefingMockGenerator;
 import com.honeymorning.relay.context.infra.database.MySqlContext;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;

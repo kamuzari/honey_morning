@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.honeymorning.relay.alarm.adapter.in.cdc.CdcAlarmEventDto;
 import com.honeymorning.relay.briefing.application.port.out.MessagePort;
-import com.honeymorning.relay.config.constant.rabbitmq.ToAiQueue;
+import com.honeymorning.relay.config.messaging.rabbitmq.constant.ToAiQueue;
 
 @Component
 public class AlarmContentCreatePublisher implements MessagePort {

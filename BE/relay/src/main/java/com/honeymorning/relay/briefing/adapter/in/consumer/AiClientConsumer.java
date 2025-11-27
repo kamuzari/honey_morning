@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import com.honeymorning.relay.briefing.application.port.in.AlarmContentCommandUseCase;
 import com.honeymorning.relay.briefing.application.port.in.TextToSpeechCommandUseCase;
 import com.honeymorning.relay.briefing.application.service.dto.AiResponseDto;
-import com.honeymorning.relay.config.constant.rabbitmq.FromAiQueue;
+import com.honeymorning.relay.config.messaging.rabbitmq.constant.FromAiQueue;
 import com.rabbitmq.client.Channel;
 
 @Component
