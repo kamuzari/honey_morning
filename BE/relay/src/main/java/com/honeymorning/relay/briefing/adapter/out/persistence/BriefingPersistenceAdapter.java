@@ -82,7 +82,7 @@ public class BriefingPersistenceAdapter implements ValidBriefingContentPort,
 	}
 
 	@Override
-	public void addBriefingTts(EmptyBriefingTts emptyBriefingTts) {
+	public void reflect(EmptyBriefingTts emptyBriefingTts) {
 		var briefingEntity = briefingRepository.findById(emptyBriefingTts.getBriefingId())
 			.orElseThrow(() -> new NotFoundResourceException(
 					format("브리핑 데이터가 반드시 존재해야 합니다. briefingId : {0}", emptyBriefingTts.getBriefingId()),

@@ -28,4 +28,20 @@ public record KafkaTopicProperties(Map<String, TopicConfig> topics) {
 	public TopicConfig fromAi() {
 		return topics.get("fromAi");
 	}
+
+	public TopicConfig fromAiStore() {
+		return topics.get("from-ai-store");
+	}
+
+	public TopicConfig fromAiBriefingTts() {
+		return topics.get("from-ai-briefing-tts");
+	}
+
+	public TopicConfig fromAiQuiz1Tts() {
+		return topics.get("from-ai-quiz1-tts");
+	}
+
+	public TopicConfig fromAiQuiz2Tts() {
+		return topics.get("from-ai-quiz2-tts");
+	}
 }

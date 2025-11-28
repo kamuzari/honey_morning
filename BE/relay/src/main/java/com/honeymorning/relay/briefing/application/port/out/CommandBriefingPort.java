@@ -14,5 +14,5 @@ public interface CommandBriefingPort {
 
 	LatestBriefing getLatestBriefingId(Long userId);
 
-	void addBriefingTts(EmptyBriefingTts emptyBriefingTts);
+	void reflect(EmptyBriefingTts emptyBriefingTts);
 }

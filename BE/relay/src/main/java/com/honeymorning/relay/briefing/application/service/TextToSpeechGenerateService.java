@@ -69,22 +69,20 @@ public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase, 
 	}
 
 	@Override
-	public void createBriefing(Long userId, String summaryText) {
+	public void createBriefingTts(Long userId, String summaryText) {
 		Content content = createContent(summaryText, FileType.BRIEFING);
 		EmptyBriefingTts emptyBriefingTts = commandBriefingPort.getEmptyBriefingTts(userId);
 		emptyBriefingTts.add(content);
-		commandBriefingPort.addBriefingTts(emptyBriefingTts);
+		commandBriefingPort.reflect(emptyBriefingTts);
 	}
 
 	@Override
 	public void createQuizTts(Long userId, String quizText, Integer order) {
 		Content content = createContent(quizText, FileType.QUIZ);
 		LatestBriefing latestBriefing = commandBriefingPort.getLatestBriefingId(userId);
-		// quiz 위 아래 업자나 ;;  ㅅㅂ 것 객체로 하나하나 만들어야 겟구만...?
 		EmptyQuizTts emptyQuizTts = loadQuizPort.getEmptyTtsQuiz(latestBriefing.briefingId(), order);
 		emptyQuizTts.add(content);
-		commandQuizPort.addQuizTts(emptyQuizTts);
-
+		commandQuizPort.reflect(emptyQuizTts);
 	}
 
 	@Transactional(transactionManager = "eventTransactionManager", propagation = Propagation.REQUIRES_NEW)

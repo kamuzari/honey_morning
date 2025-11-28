@@ -93,28 +93,40 @@ app:
         name: "alarm-contents-fail-tts-event"
         partitions: 3
         replicas: 3
-      fromAi:
-        name: "alarm-contents-from-ai"
+      from-ai-store:
+        name: "alarm-contents-ai-store"
+        partitions: 3
+        replicas: 3
+      from-ai-briefing-tts:
+        name: "alarm-contents-ai-briefing-tts"
+        partitions: 3
+        replicas: 3
+      from-ai-quiz1-tts:
+        name: "alarm-contents-ai-quiz1-tts"
+        partitions: 3
+        replicas: 3
+      from-ai-quiz2-tts:
+        name: "alarm-contents-ai-quiz2-tts"
         partitions: 3
         replicas: 3
     consumers:
       cdc:
-        topic: "alarm_contents.honeymorning.outbox_alarm_event"
+        topic: ${app.kafka.topics.cdc.name}
         group-id: "alarm-contents-cdc-group"
       fail-tts:
-        topic: "alarm-contents-fail-tts-event"
+        topic: ${app.kafka.topics.fail-tts.name}
         group-id: "fail-tts-compensation-group"
       ai-store:
-        topic: "alarm-contents-from-ai"
+        topic: ${app.kafka.topics.from-ai-store.name}
         group-id: "ai-response-store-group"
       ai-briefing-tts:
-        topic: "alarm-contents-from-ai"
+        topic: ${app.kafka.topics.from-ai-briefing-tts.name}
         group-id: "ai-response-briefing-tts-group"
       ai-quiz1-tts:
-        topic: "alarm-contents-from-ai"
+        topic: ${app.kafka.topics.from-ai-quiz1-tts.name}
         group-id: "ai-response-quiz1-tts-group"
       ai-quiz2-tts:
-        topic: "alarm-contents-from-ai"
+        topic: ${app.kafka.topics.from-ai-quiz2-tts.name}
         group-id: "ai-response-quiz2-tts-group"
 
 logging:

@@ -19,12 +19,12 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Import;
 
 import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
-import com.honeymorning.relay.event.repository.FailTtsEventEntityRepository;
 import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
 import com.honeymorning.relay.briefing.adapter.in.event.dto.BriefingTtsCommandDto;
 import com.honeymorning.relay.briefing.application.port.in.TextToSpeechCommandUseCase;
 import com.honeymorning.relay.config.AsyncTestConfig;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
+import com.honeymorning.relay.event.repository.FailTtsEventEntityRepository;
 
 import jakarta.validation.ValidationException;
 
@@ -73,6 +73,7 @@ class TtsGenerateListenerTest extends DefaultIntegrationTest {
 			GENERATOR.lorem().sentences(10).stream().collect(Collectors.joining()),
 			GENERATOR.file().fileName()
 		));
+
 		doThrow(new RuntimeException("알수 없는 예외")).when(textToSpeechCommandUseCase).create(any());
 
 		//when

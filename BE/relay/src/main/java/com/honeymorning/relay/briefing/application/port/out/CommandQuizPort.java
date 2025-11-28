@@ -3,5 +3,5 @@ package com.honeymorning.relay.briefing.application.port.out;
 import com.honeymorning.relay.briefing.application.domain.EmptyQuizTts;
 
 public interface CommandQuizPort {
-	void addQuizTts(EmptyQuizTts emptyQuizTts);
+	void reflect(EmptyQuizTts emptyQuizTts);
 }

@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.amazonaws.event.ProgressListener;
 import com.amazonaws.services.s3.AmazonS3;
@@ -14,7 +14,7 @@ import com.honeymorning.common.exception.BusinessException;
 import com.honeymorning.common.exception.constant.ErrorProtocol;
 import com.honeymorning.relay.briefing.application.port.out.CommandContentStorePort;
 
-@Service
+@Component
 public class S3StoreAdapter implements CommandContentStorePort {
 
 	private final String bucketName;

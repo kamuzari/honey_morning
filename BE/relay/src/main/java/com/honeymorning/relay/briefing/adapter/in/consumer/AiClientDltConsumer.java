@@ -1,7 +1,5 @@
 package com.honeymorning.relay.briefing.adapter.in.consumer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -10,10 +8,9 @@ import com.honeymorning.relay.briefing.application.port.in.TextToSpeechCommandUs
 import com.honeymorning.relay.briefing.application.service.dto.AiResponseDto;
 
 @Component
-public class AiClientConsumer extends AiClientMessenger {
-	private static final Logger log = LoggerFactory.getLogger(AiClientConsumer.class);
+public class AiClientDltConsumer extends AiClientMessenger {
 
-	public AiClientConsumer(
+	protected AiClientDltConsumer(
 		AlarmContentCommandUseCase alarmContentCommandUseCase,
 		TextToSpeechCommandUseCase textToSpeechCommandUseCase
 	) {
@@ -21,7 +18,7 @@ public class AiClientConsumer extends AiClientMessenger {
 	}
 
 	@KafkaListener(
-		topics = "${app.kafka.consumers.ai-store.topic}",
+		topics = "${app.kafka.consumers.ai-store.topic}.DLT",
 		groupId = "${app.kafka.consumers.ai-store.group-id}"
 	)
 	public void storeAiResponse(AiResponseDto response) {
@@ -29,7 +26,7 @@ public class AiClientConsumer extends AiClientMessenger {
 	}
 
 	@KafkaListener(
-		topics = "${app.kafka.consumers.ai-briefing-tts.topic}",
+		topics = "${app.kafka.consumers.ai-briefing-tts.topic}.DLT",
 		groupId = "${app.kafka.consumers.ai-briefing-tts.group-id}"
 	)
 	public void createBriefingTts(AiResponseDto response) {
@@ -37,7 +34,7 @@ public class AiClientConsumer extends AiClientMessenger {
 	}
 
 	@KafkaListener(
-		topics = "${app.kafka.consumers.ai-quiz1-tts.topic}",
+		topics = "${app.kafka.consumers.ai-quiz1-tts.topic}.DLT",
 		groupId = "${app.kafka.consumers.ai-quiz1-tts.group-id}"
 	)
 	public void createQuiz1Tts(AiResponseDto response) {
@@ -45,11 +42,10 @@ public class AiClientConsumer extends AiClientMessenger {
 	}
 
 	@KafkaListener(
-		topics = "${app.kafka.consumers.ai-quiz2-tts.topic}",
+		topics = "${app.kafka.consumers.ai-quiz2-tts.topic}.DLT",
 		groupId = "${app.kafka.consumers.ai-quiz2-tts.group-id}"
 	)
 	public void createQuiz2Tts(AiResponseDto response) {
 		processQuiz2Tts(response);
 	}
-
 }

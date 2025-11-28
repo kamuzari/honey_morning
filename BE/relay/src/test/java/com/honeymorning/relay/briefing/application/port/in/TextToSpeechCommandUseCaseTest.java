@@ -10,6 +10,7 @@ import static org.springframework.http.HttpHeaders.CONTENT_LENGTH;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,11 +26,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.honeymorning.common.domain.briefing.constraint.QuizConstraint;
+import com.honeymorning.relay.briefing.application.domain.EmptyBriefingTts;
+import com.honeymorning.relay.briefing.application.domain.EmptyQuizTts;
+import com.honeymorning.relay.briefing.application.domain.LatestBriefing;
 import com.honeymorning.relay.briefing.application.domain.TextToSpeechContent;
 import com.honeymorning.relay.briefing.application.port.out.CommandBriefingPort;
 import com.honeymorning.relay.briefing.application.port.out.CommandContentStorePort;
+import com.honeymorning.relay.briefing.application.port.out.CommandQuizPort;
 import com.honeymorning.relay.briefing.application.port.out.CommandTextToSpeechPort;
 import com.honeymorning.relay.briefing.application.port.out.LoadBriefingPort;
+import com.honeymorning.relay.briefing.application.port.out.LoadQuizPort;
 import com.honeymorning.relay.briefing.application.service.TextToSpeechGenerateService;
 import com.honeymorning.relay.context.mock.BriefingMockGenerator;
 import com.honeymorning.relay.context.mock.MockTest;
@@ -51,6 +57,12 @@ class TextToSpeechCommandUseCaseTest extends MockTest {
 	CommandBriefingPort commandBriefingPort;
 
 	@Mock
+	LoadQuizPort loadQuizPort;
+
+	@Mock
+	CommandQuizPort commandQuizPort;
+
+	@Mock
 	CommandTextToSpeechPort commandTextToSpeechPort;
 
 	@Mock
@@ -59,6 +71,43 @@ class TextToSpeechCommandUseCaseTest extends MockTest {
 	@BeforeEach
 	void setUp() {
 		this.sut = sutImpl;
+	}
+
+	@Test
+	@DisplayName("브리핑 tts 를 만든다")
+	void testCreateBriefingTts() throws IOException {
+		//given
+		var expectedTtsFileResponse = getResource();
+		var emptyBriefingTts = new EmptyBriefingTts(USER_ID, null);
+		given(commandTextToSpeechPort.create(anyString())).willReturn(expectedTtsFileResponse);
+		given(commandBriefingPort.getEmptyBriefingTts(USER_ID)).willReturn(emptyBriefingTts);
+
+		//when
+		sutImpl.createBriefingTts(USER_ID, "테스트용 브리핑 텍스트");
+
+		//then
+		assertThat(emptyBriefingTts.getTts()).isNotNull();
+	}
+
+	@Test
+	@DisplayName("퀴즈 tts 를 만든다")
+	void testCreateQuizTts() throws IOException {
+		//given
+		Long briefingId = 1L;
+		Long quizId = 1L;
+		var expectedTtsFileResponse = getResource();
+		var latestCreatedBriefing = new LatestBriefing(briefingId, LocalDateTime.now().minusMinutes(2));
+		var emptyQuizTts = new EmptyQuizTts(quizId, null);
+
+		given(commandTextToSpeechPort.create(anyString())).willReturn(expectedTtsFileResponse);
+		given(commandBriefingPort.getLatestBriefingId(USER_ID)).willReturn(latestCreatedBriefing);
+		given(loadQuizPort.getEmptyTtsQuiz(briefingId, 1)).willReturn(emptyQuizTts);
+
+		//when
+		sutImpl.createQuizTts(USER_ID, "테스트용 브리핑 텍스트", 1);
+
+		//then
+		assertThat(emptyQuizTts.getTts()).isNotNull();
 	}
 
 	@DisplayName("tts 파일을 만들고 클라우드 업로드 후 변경사항을 반영한다")

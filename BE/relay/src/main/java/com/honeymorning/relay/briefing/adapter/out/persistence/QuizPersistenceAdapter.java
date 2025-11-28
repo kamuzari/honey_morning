@@ -40,7 +40,7 @@ public class QuizPersistenceAdapter implements LoadQuizPort, CommandQuizPort {
 
 	@Transactional
 	@Override
-	public void addQuizTts(EmptyQuizTts emptyQuizTts) {
+	public void reflect(EmptyQuizTts emptyQuizTts) {
 		var quizEntity = quizRepository.findById(emptyQuizTts.getQuizId())
 			.orElseThrow(() -> new NotFoundResourceException(
 				format("퀴즈 데이터가 반드시 존재해야 합니다. quizId : {0}", emptyQuizTts.getQuizId()),
