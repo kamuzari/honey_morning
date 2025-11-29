@@ -15,16 +15,15 @@ import org.springframework.context.annotation.Import;
 
 import com.honeymorning.api.alarm.adapter.in.web.dto.response.AlarmTagResponseDto;
 import com.honeymorning.api.alarm.adapter.out.persistence.AlarmTagPersistenceAdapter;
+import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmTagPersistenceMapper;
+import com.honeymorning.api.context.mock.MockPersistenceTest;
 import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
 import com.honeymorning.common.domain.alarm.entity.AlarmTagEntity;
 import com.honeymorning.common.domain.alarm.entity.DefaultTags;
 import com.honeymorning.common.domain.alarm.entity.TagEntity;
-import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmTagPersistenceMapper;
 import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
 import com.honeymorning.common.domain.alarm.repository.AlarmTagRepository;
 import com.honeymorning.common.domain.alarm.repository.TagRepository;
-import com.honeymorning.api.context.mock.MockPersistenceTest;
-
 
 @Import({AlarmTagPersistenceAdapter.class, AlarmTagPersistenceMapper.class})
 class AlarmTagQueryPortTest extends MockPersistenceTest {

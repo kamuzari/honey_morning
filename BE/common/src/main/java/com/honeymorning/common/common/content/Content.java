@@ -1,6 +1,5 @@
 package com.honeymorning.common.common.content;
 
-
 import com.honeymorning.common.common.basic.BaseEntity;
 
 import jakarta.persistence.AttributeOverride;

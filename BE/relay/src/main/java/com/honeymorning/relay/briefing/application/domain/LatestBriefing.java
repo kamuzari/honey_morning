@@ -12,7 +12,7 @@ public record LatestBriefing(Long briefingId, LocalDateTime createdAt) {
 
 		Duration duration = Duration.between(LocalDateTime.now(), createdAt);
 		boolean isNotLatest = duration.toHours() > 1;
-		if(isNotLatest){
+		if (isNotLatest) {
 			throw new IllegalArgumentException("방금 생성된 브리핑 데이터가 아닙니다.");
 		}
 	}

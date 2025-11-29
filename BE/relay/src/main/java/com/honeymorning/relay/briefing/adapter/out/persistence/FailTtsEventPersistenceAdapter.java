@@ -21,6 +21,14 @@ public class FailTtsEventPersistenceAdapter implements CommandFailTtsEventPort, 
 		this.failTtsEventEntityRepository = failTtsEventEntityRepository;
 	}
 
+	private static RetryingFailTts toEndingFailTts(FailTtsEventEntity failTtsEventEntity) {
+		return new RetryingFailTts(
+			failTtsEventEntity.getId(),
+			failTtsEventEntity.getBriefingId(),
+			failTtsEventEntity.getEventStatus()
+		);
+	}
+
 	public void save(Long briefingId) {
 		failTtsEventEntityRepository.save(
 			new FailTtsEventEntity(briefingId)
@@ -38,14 +46,6 @@ public class FailTtsEventPersistenceAdapter implements CommandFailTtsEventPort, 
 		return failTtsEventEntityRepository.findFailStatusForUpdateSkipLocked(1L)
 			.map(FailTtsEventPersistenceAdapter::toEndingFailTts)
 			.orElseGet(RetryingFailTts::createEmpty);
-	}
-
-	private static RetryingFailTts toEndingFailTts(FailTtsEventEntity failTtsEventEntity) {
-		return new RetryingFailTts(
-			failTtsEventEntity.getId(),
-			failTtsEventEntity.getBriefingId(),
-			failTtsEventEntity.getEventStatus()
-		);
 	}
 
 	private FailTtsEventEntity getFailTtsEventId(Long failTtsEventId) {

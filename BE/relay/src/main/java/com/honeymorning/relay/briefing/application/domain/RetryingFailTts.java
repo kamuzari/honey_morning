@@ -1,6 +1,5 @@
 package com.honeymorning.relay.briefing.application.domain;
 
-
 import com.honeymorning.common.common.basic.EventStatus;
 
 import lombok.Getter;
@@ -13,14 +12,14 @@ public class RetryingFailTts {
 	private Long failBriefingId;
 	private EventStatus eventStatus;
 
-	public static RetryingFailTts createEmpty() {
-		return new RetryingFailTts(EMPTY, null, null);
-	}
-
 	public RetryingFailTts(Long failTtsEventId, Long failBriefingId, EventStatus eventStatus) {
 		this.failTtsEventId = failTtsEventId;
 		this.failBriefingId = failBriefingId;
 		this.eventStatus = eventStatus;
+	}
+
+	public static RetryingFailTts createEmpty() {
+		return new RetryingFailTts(EMPTY, null, null);
 	}
 
 	public void complete() {

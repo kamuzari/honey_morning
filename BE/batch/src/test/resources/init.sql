@@ -43,12 +43,12 @@ VALUES (1, '사회'),
        (4, '스포츠'),
        (5, 'IT');
 
-INSERT INTO alarms (id,user_id, is_active, day_of_the_weeks, wake_up_time)
-VALUES (1,1001, TRUE, 127, ADDTIME(CURTIME(), '00:40:00')),
-       (2,1002, TRUE, 127, ADDTIME(CURTIME(), '00:40:00')),
-       (3,1003, TRUE, 127, ADDTIME(CURTIME(), '00:40:00')),
-       (4,1004, TRUE, 127, ADDTIME(CURTIME(), '00:40:00')),
-       (5,1005, TRUE, 127, ADDTIME(CURTIME(), '00:40:00'));
+INSERT INTO alarms (id, user_id, is_active, day_of_the_weeks, wake_up_time)
+VALUES (1, 1001, TRUE, 127, ADDTIME(CURTIME(), '00:40:00')),
+       (2, 1002, TRUE, 127, ADDTIME(CURTIME(), '00:40:00')),
+       (3, 1003, TRUE, 127, ADDTIME(CURTIME(), '00:40:00')),
+       (4, 1004, TRUE, 127, ADDTIME(CURTIME(), '00:40:00')),
+       (5, 1005, TRUE, 127, ADDTIME(CURTIME(), '00:40:00'));
 
 INSERT INTO alarm_tags (alarm_id, tag_id)
 VALUES (1, 1),

@@ -1,7 +1,7 @@
 package com.honeymorning.api.brief.adapter.in.web.port.out;
 
-import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.TOTAL_QUIZ_SIZE;
 import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
+import static com.honeymorning.common.domain.briefing.constraint.QuizConstraint.TOTAL_QUIZ_SIZE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;

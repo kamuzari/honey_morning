@@ -10,12 +10,12 @@ import com.honeymorning.relay.event.entity.FailTtsEventEntity;
 
 public interface FailTtsEventEntityRepository extends JpaRepository<FailTtsEventEntity, Long> {
 	@Query(value = """
-        SELECT * FROM fail_tts_events
+		      SELECT * FROM fail_tts_events
 		WHERE event_status = 'FAILED'
-        ORDER BY id
-        LIMIT :limit
-        FOR UPDATE SKIP LOCKED
-        """, nativeQuery = true)
+		      ORDER BY id
+		      LIMIT :limit
+		      FOR UPDATE SKIP LOCKED
+		""", nativeQuery = true)
 	Optional<FailTtsEventEntity> findFailStatusForUpdateSkipLocked(@Param("limit") Long limit);
 
 	Optional<FailTtsEventEntity> findByBriefingId(Long briefingId);

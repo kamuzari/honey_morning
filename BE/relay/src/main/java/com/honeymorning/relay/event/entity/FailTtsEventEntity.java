@@ -1,6 +1,5 @@
 package com.honeymorning.relay.event.entity;
 
-
 import com.honeymorning.common.common.basic.BaseEventEntity;
 import com.honeymorning.common.common.basic.EventStatus;
 

@@ -7,15 +7,15 @@ public class EmptySelectionQuiz {
 	Long quizId;
 	Integer selection = null;
 
-	public Long getQuizId() {
-		return quizId;
-	}
-
 	public EmptySelectionQuiz(Long quizId, Integer selection) {
 		this.quizId = quizId;
 		if (selection != null) {
 			throw new IllegalStateException(" 선택사항은 null 이어야 합니다.");
 		}
+	}
+
+	public Long getQuizId() {
+		return quizId;
 	}
 
 	public void solve(Integer selection) {

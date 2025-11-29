@@ -1,6 +1,5 @@
 package com.honeymorning.common.domain.briefing.entity;
 
-
 import com.honeymorning.common.common.basic.BaseEntity;
 
 import jakarta.persistence.Entity;

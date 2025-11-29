@@ -24,11 +24,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class KafkaConsumerConfig {
 
-	private final KafkaProperties kafkaProperties;
-
 	private static final long INITIAL_INTERVAL = 1000L;
 	private static final double MULTIPLIER = 2.0;
 	private static final long MAX_RETRY_TIME = 3000L;
+	private final KafkaProperties kafkaProperties;
 
 	@Bean
 	public ConsumerFactory<String, String> consumerFactory() {

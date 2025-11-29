@@ -1,6 +1,5 @@
 package com.honeymorning.common.domain.alarm.entity;
 
-
 import com.honeymorning.common.common.basic.BaseEntity;
 import com.honeymorning.common.domain.alarm.constraint.AlarmResultConstraint;
 
@@ -49,7 +48,8 @@ public class AlarmResultEntity extends BaseEntity {
 		Integer count,
 		boolean isAttended) {
 
-		if (count < AlarmResultConstraint.MATCH_COUNT_MINIMUM_VALUE || count > AlarmResultConstraint.MATCH_COUNT_MAXIMUM_VALUE) {
+		if (count < AlarmResultConstraint.MATCH_COUNT_MINIMUM_VALUE
+			|| count > AlarmResultConstraint.MATCH_COUNT_MAXIMUM_VALUE) {
 			throw new IllegalArgumentException("맞은 개수는 반드시 [0=2] 사이여야 합니다");
 		}
 

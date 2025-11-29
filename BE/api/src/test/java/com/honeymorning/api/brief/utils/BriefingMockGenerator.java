@@ -19,7 +19,6 @@ import com.honeymorning.common.domain.briefing.entity.BriefingTagEntity;
 import com.honeymorning.common.domain.briefing.entity.QuizEntity;
 import com.honeymorning.common.domain.briefing.entity.TopicModelWordEntity;
 
-// todo: 여기저기 흩어져있는 MockDataGenerator를 모아놓는 클래스
 public class BriefingMockGenerator {
 	public static final Faker GENERATOR = new Faker();
 

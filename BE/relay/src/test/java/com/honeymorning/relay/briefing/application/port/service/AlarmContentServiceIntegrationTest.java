@@ -40,13 +40,11 @@ import com.honeymorning.relay.briefing.application.service.dto.AiQuizDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiResponseDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiTopicDto;
 import com.honeymorning.relay.config.storage.constant.AwsS3Properties;
-import com.honeymorning.relay.context.infra.database.MySqlContext;
-import com.honeymorning.relay.context.infra.storage.AwsS3Context;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 import com.honeymorning.relay.context.mock.BriefingMockGenerator;
 
 @AutoConfigureWireMock(port = 8089)
-class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest{
+class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest {
 	static final String MOCK_TTS_PATH = "/text-to-speech/XrExE9yKIg1WjnnlVkGX";
 
 	@Autowired

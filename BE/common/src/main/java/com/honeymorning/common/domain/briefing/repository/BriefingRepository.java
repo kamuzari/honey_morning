@@ -12,6 +12,7 @@ import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
 
 public interface BriefingRepository extends JpaRepository<BriefingEntity, Long> {
 	Page<BriefingEntity> findByUserId(Long userId, Pageable pageable);
+
 	Optional<BriefingEntity> findByUserIdAndId(Long userId, Long id);
 
 	Optional<BriefingEntity> findTopByUserIdOrderByCreatedAtDesc(Long userId);

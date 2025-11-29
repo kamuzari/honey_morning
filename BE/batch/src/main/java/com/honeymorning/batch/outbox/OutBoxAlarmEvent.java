@@ -59,7 +59,7 @@ public class OutBoxAlarmEvent {
 			EventStatus.PENDING,
 			"application/json",
 			payload
-			);
+		);
 	}
 
 	public void updateStatus(EventStatus eventStatus) {

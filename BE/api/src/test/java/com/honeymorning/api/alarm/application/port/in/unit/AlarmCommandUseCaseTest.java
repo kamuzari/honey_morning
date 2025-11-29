@@ -22,7 +22,6 @@ import com.honeymorning.api.alarm.application.port.out.LoadAlarmPort;
 import com.honeymorning.api.alarm.application.service.AlarmService;
 import com.honeymorning.api.context.mock.MockTest;
 
-
 class AlarmCommandUseCaseTest extends MockTest {
 	AlarmCommandUseCase sut;
 

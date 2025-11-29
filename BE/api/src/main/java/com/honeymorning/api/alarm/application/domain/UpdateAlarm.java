@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 public class UpdateAlarm {
-	private Long id;
 	private final Long userId;
+	boolean isActive;
+	private Long id;
 	private LocalTime wakeUpTime;
 	private Integer dayOfTheWeeks;
 	private Integer repeatFrequency;
 	private Integer repeatInterval;
-	boolean isActive;
 
 	public UpdateAlarm(
 		Long id,

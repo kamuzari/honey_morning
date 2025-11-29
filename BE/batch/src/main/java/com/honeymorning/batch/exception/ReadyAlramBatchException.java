@@ -1,6 +1,5 @@
 package com.honeymorning.batch.exception;
 
-
 public class ReadyAlramBatchException extends RuntimeException {
 	private final ErrorProtocol errorProtocol;
 

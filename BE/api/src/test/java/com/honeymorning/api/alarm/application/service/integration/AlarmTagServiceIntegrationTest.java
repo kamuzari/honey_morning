@@ -12,6 +12,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.honeymorning.api.alarm.application.port.in.AlarmTagCommandUseCase;
+import com.honeymorning.api.context.infra.database.MySqlContext;
+import com.honeymorning.api.context.integration.DefaultIntegrationTest;
 import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
 import com.honeymorning.common.domain.alarm.entity.AlarmTagEntity;
 import com.honeymorning.common.domain.alarm.entity.DefaultTags;
@@ -19,10 +22,6 @@ import com.honeymorning.common.domain.alarm.entity.TagEntity;
 import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
 import com.honeymorning.common.domain.alarm.repository.AlarmTagRepository;
 import com.honeymorning.common.domain.alarm.repository.TagRepository;
-import com.honeymorning.api.alarm.application.port.in.AlarmTagCommandUseCase;
-import com.honeymorning.api.context.infra.database.MySqlContext;
-import com.honeymorning.api.context.integration.DefaultIntegrationTest;
-
 
 class AlarmTagServiceIntegrationTest extends DefaultIntegrationTest implements MySqlContext {
 
@@ -30,7 +29,6 @@ class AlarmTagServiceIntegrationTest extends DefaultIntegrationTest implements M
 
 	@Autowired
 	AlarmTagCommandUseCase sut;
-
 
 	@Autowired
 	AlarmRepository alarmRepository;

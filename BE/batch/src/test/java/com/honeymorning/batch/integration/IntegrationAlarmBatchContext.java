@@ -47,24 +47,18 @@ import com.honeymorning.common.domain.alarm.repository.TagRepository;
 })
 class IntegrationAlarmBatchContext extends DefaultIntegrationContext implements MySqlContext {
 	static final int EXPECTED_BATCH_TOTAL_DATA_SIZE = 5;
-
-	@Value("${batch.alarm.thread-pool-size}")
-	private int poolSize;
-
 	@Autowired
 	JobLauncherTestUtils jobLauncherTestUtils;
-
 	@Autowired
 	OutBoxAlarmEventRepository outBoxAlarmEventRepository;
-
 	@Autowired
 	TagRepository tagRepository;
-
 	@Autowired
 	AlarmTagRepository alarmTagRepository;
-
 	@Autowired
 	AlarmRepository alarmRepository;
+	@Value("${batch.alarm.thread-pool-size}")
+	private int poolSize;
 
 	@AfterEach
 	void tearDown() {

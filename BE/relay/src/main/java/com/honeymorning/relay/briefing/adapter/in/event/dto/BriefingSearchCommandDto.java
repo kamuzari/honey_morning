@@ -1,6 +1,5 @@
 package com.honeymorning.relay.briefing.adapter.in.event.dto;
 
-
 import com.honeymorning.relay.event.compensation.compensator.FailEventTyper;
 import com.honeymorning.relay.event.compensation.compensator.FailType;
 

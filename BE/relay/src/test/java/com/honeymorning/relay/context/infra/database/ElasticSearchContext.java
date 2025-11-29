@@ -1,10 +1,7 @@
 package com.honeymorning.relay.context.infra.database;
 
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 
 import com.honeymorning.relay.config.TestcontainersConfig;

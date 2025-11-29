@@ -32,7 +32,6 @@ import com.honeymorning.api.context.mock.MockControllerTest;
 import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateDiscardHandler;
 import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateSuccessHandler;
 
-
 @WebMvcTest({QuizController.class,
 	WebSecurityConfig.class,
 	JwtProviderManager.class,

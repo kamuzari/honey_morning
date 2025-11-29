@@ -5,10 +5,8 @@ import static java.text.MessageFormat.format;
 
 import org.springframework.stereotype.Component;
 
-import com.honeymorning.common.domain.alarm.entity.AlarmResultEntity;
 import com.honeymorning.api.alarm.adapter.out.persistence.entity.UserAlarmResultStreakEntity;
 import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmStreakPersistenceMapper;
-import com.honeymorning.common.domain.alarm.repository.AlarmResultRepository;
 import com.honeymorning.api.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
 import com.honeymorning.api.alarm.application.domain.AddAlarmResult;
 import com.honeymorning.api.alarm.application.domain.CreateUserAlarmStreak;
@@ -17,6 +15,8 @@ import com.honeymorning.api.alarm.application.port.out.CommandAlarmResultPort;
 import com.honeymorning.api.alarm.application.port.out.LoadAlarmResultPort;
 import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
 import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
+import com.honeymorning.common.domain.alarm.entity.AlarmResultEntity;
+import com.honeymorning.common.domain.alarm.repository.AlarmResultRepository;
 import com.honeymorning.common.exception.NotFoundResourceException;
 
 @Component

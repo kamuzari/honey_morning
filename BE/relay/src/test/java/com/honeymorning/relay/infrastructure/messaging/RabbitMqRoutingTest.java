@@ -12,10 +12,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.honeymorning.relay.config.messaging.rabbitmq.constant.FromAiQueue;
-import com.honeymorning.relay.context.infra.broker.RabbitMqContext;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 
-class RabbitMqRoutingTest extends DefaultIntegrationTest{
+class RabbitMqRoutingTest extends DefaultIntegrationTest {
 	@Autowired
 	RabbitTemplate rabbitTemplate;
 

@@ -1,6 +1,5 @@
 package com.honeymorning.relay.alarm.adapter.in.cdc;
 
-
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -15,21 +15,21 @@ import lombok.Getter;
 @Entity
 public class TagEntity extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(length = 50, nullable = false)
-    private String word;
+	@Column(length = 50, nullable = false)
+	private String word;
 
-    protected TagEntity() {
-    }
+	protected TagEntity() {
+	}
 
-    public TagEntity(String word) {
-        if (word == null || word.isBlank()) {
-            throw new IllegalArgumentException("word of tag object is not blank");
-        }
+	public TagEntity(String word) {
+		if (word == null || word.isBlank()) {
+			throw new IllegalArgumentException("word of tag object is not blank");
+		}
 
-        this.word = word;
-    }
+		this.word = word;
+	}
 }

@@ -41,6 +41,12 @@ public class TextToSpeechContent {
 		return this.content;
 	}
 
+	private void validateTtsQuizzes(List<textToSpeechQuiz> textToSpeechQuizzes) {
+		if (textToSpeechQuizzes == null || textToSpeechQuizzes.size() != QuizConstraint.TOTAL_QUIZ_SIZE) {
+			throw new IllegalArgumentException("정확히 2개의 퀴즈를 포함해야 합니다.");
+		}
+	}
+
 	public static class textToSpeechQuiz {
 		private final Long id;
 		private final String questionText;
@@ -70,12 +76,6 @@ public class TextToSpeechContent {
 
 		public Content getContent() {
 			return this.content;
-		}
-	}
-
-	private void validateTtsQuizzes(List<textToSpeechQuiz> textToSpeechQuizzes) {
-		if (textToSpeechQuizzes == null || textToSpeechQuizzes.size() != QuizConstraint.TOTAL_QUIZ_SIZE) {
-			throw new IllegalArgumentException("정확히 2개의 퀴즈를 포함해야 합니다.");
 		}
 	}
 }

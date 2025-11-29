@@ -7,16 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "app.kafka")
 public record KafkaTopicProperties(Map<String, TopicConfig> topics) {
 
-	public record TopicConfig(
-		String name,
-		int partitions,
-		int replicas
-	) {
-		public String deadLetterName() {
-			return TopicNameUtils.deadLetterTopic(name);
-		}
-	}
-
 	public TopicConfig cdc() {
 		return topics.get("cdc");
 	}
@@ -43,5 +33,15 @@ public record KafkaTopicProperties(Map<String, TopicConfig> topics) {
 
 	public TopicConfig fromAiQuiz2Tts() {
 		return topics.get("from-ai-quiz2-tts");
+	}
+
+	public record TopicConfig(
+		String name,
+		int partitions,
+		int replicas
+	) {
+		public String deadLetterName() {
+			return TopicNameUtils.deadLetterTopic(name);
+		}
 	}
 }

@@ -20,7 +20,6 @@ import com.amazonaws.services.s3.model.CreateBucketRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.honeymorning.relay.config.storage.constant.AwsS3Properties;
-import com.honeymorning.relay.context.infra.storage.AwsS3Context;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 
 class ContentsStoreServiceIntegrationTest extends DefaultIntegrationTest {

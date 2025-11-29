@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import com.honeymorning.relay.event.compensation.model.CompensationFactory;
 import com.honeymorning.relay.event.compensation.compensator.FailEventTyper;
+import com.honeymorning.relay.event.compensation.model.CompensationFactory;
 
 import jakarta.validation.ValidationException;
 

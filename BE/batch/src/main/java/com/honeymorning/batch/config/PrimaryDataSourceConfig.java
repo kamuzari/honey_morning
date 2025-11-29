@@ -55,7 +55,8 @@ public class PrimaryDataSourceConfig {
 
 	@Primary
 	@Bean(name = "primaryTransactionManager")
-	public PlatformTransactionManager primaryTransactionManager(@Qualifier("primaryEntityManagerFactory") EntityManagerFactory emf) {
+	public PlatformTransactionManager primaryTransactionManager(
+		@Qualifier("primaryEntityManagerFactory") EntityManagerFactory emf) {
 		return new JpaTransactionManager(emf);
 	}
 }

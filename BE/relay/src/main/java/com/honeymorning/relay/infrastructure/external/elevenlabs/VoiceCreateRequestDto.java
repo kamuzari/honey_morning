@@ -1,6 +1,5 @@
 package com.honeymorning.relay.infrastructure.external.elevenlabs;
 
-
 import com.honeymorning.relay.config.external.VoiceClientProperties;
 
 import lombok.Getter;

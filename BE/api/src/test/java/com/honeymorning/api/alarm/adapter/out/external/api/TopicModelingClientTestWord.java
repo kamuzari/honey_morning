@@ -25,7 +25,6 @@ import com.honeymorning.api.alarm.adapter.out.external.dto.TopicModelDetailRespo
 import com.honeymorning.api.alarm.adapter.out.external.dto.TopicModelingResponse;
 import com.honeymorning.api.context.integration.EndPointIntegrationTest;
 
-
 @AutoConfigureWireMock(port = 8089)
 class TopicModelingClientTestWord extends EndPointIntegrationTest {
 

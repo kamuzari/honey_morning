@@ -1,6 +1,5 @@
 package com.honeymorning.common.common.basic;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

@@ -6,7 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import java.util.List;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
@@ -110,7 +109,6 @@ public class CommandQuizPortTest extends MockTest {
 		);
 		ReflectionTestUtils.setField(quizEntities.get(0), "id", 1L);
 		ReflectionTestUtils.setField(quizEntities.get(1), "id", 2L);
-
 
 		List<EmptySelectionQuiz> invalidFilledQuizzes = List.of(
 			new EmptySelectionQuiz(3L, null),

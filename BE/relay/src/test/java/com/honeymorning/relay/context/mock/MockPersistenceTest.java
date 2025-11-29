@@ -5,9 +5,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import com.honeymorning.relay.config.database.EventDataSourceConfig;
-import com.honeymorning.relay.config.framework.JpaConfig;
 import com.honeymorning.relay.config.database.PrimaryDataSourceConfig;
-import com.honeymorning.relay.context.infra.database.MySqlContext;
+import com.honeymorning.relay.config.framework.JpaConfig;
 
 @Import({
 	PrimaryDataSourceConfig.class,

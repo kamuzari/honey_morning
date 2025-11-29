@@ -1,16 +1,8 @@
 package com.honeymorning.relay.context.infra.database;
 
-import java.util.Map;
-
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-
-import com.honeymorning.relay.config.TestcontainersConfig;
 
 public interface MySqlContext {
 	String VERSION = "mysql:8.0";

@@ -7,6 +7,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "app.kafka")
 public record KafkaConsumerProperties(Map<String, ConsumerConfig> consumers) {
 
+	public ConsumerConfig cdc() {
+		return consumers.get("cdc");
+	}
+
+	public ConsumerConfig failTts() {
+		return consumers.get("fail-tts");
+	}
+
 	public record ConsumerConfig(
 		String topic,
 		String groupId,
@@ -18,13 +26,5 @@ public record KafkaConsumerProperties(Map<String, ConsumerConfig> consumers) {
 		public String deadLetterTopic() {
 			return TopicNameUtils.deadLetterTopic(topic);
 		}
-	}
-
-	public ConsumerConfig cdc() {
-		return consumers.get("cdc");
-	}
-
-	public ConsumerConfig failTts() {
-		return consumers.get("fail-tts");
 	}
 }

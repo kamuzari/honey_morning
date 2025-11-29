@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
-
 class UserEntityTest {
 
 	@DisplayName("사용자의 최대 스트릭을 갱신할때, 이전보다 값과 같다면 갱신하지 않는다")

@@ -15,7 +15,7 @@ public class CompensationFactory {
 	}
 
 	public void compensate(FailEventTyper typer) {
-		var compensatorRepresent = compensators.stream().filter(c-> c.isEqual(typer))
+		var compensatorRepresent = compensators.stream().filter(c -> c.isEqual(typer))
 			.findAny()
 			.orElseThrow(() -> new IllegalStateException("Compensator doesn't exist"));
 		compensatorRepresent.fallback(typer);

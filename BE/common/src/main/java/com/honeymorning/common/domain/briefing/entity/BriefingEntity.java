@@ -42,7 +42,7 @@ public class BriefingEntity extends BaseEntity {
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String text;
 
-	@Column(name="wake_up_call_path",length = 1000)
+	@Column(name = "wake_up_call_path", length = 1000)
 	private String wakeUpCallPath;
 
 	@OneToMany(

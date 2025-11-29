@@ -20,7 +20,6 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import com.honeymorning.api.alarm.adapter.out.external.dto.WakeUpCallSongResponse;
 import com.honeymorning.api.context.integration.EndPointIntegrationTest;
 
-
 @AutoConfigureWireMock(port = 8089)
 public class WakeUpCallSongClientTest extends EndPointIntegrationTest {
 

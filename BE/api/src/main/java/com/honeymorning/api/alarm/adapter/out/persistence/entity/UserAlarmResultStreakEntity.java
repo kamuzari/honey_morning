@@ -27,7 +27,6 @@ public class UserAlarmResultStreakEntity {
 		this.consecutiveDays = consecutiveDays;
 	}
 
-	// todo: 이게 과연 .. 도메인에 있어야 맞는거 아닌가..?
 	public static UserAlarmResultStreakEntity initialize(Long userId) {
 		return new UserAlarmResultStreakEntity(userId, LocalDateTime.now(), 0);
 	}
