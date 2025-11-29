@@ -15,7 +15,7 @@ import com.honeymorning.relay.config.messaging.rabbitmq.constant.FromAiQueue;
 import com.honeymorning.relay.context.infra.broker.RabbitMqContext;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 
-class RabbitMqRoutingTest extends DefaultIntegrationTest implements RabbitMqContext {
+class RabbitMqRoutingTest extends DefaultIntegrationTest{
 	@Autowired
 	RabbitTemplate rabbitTemplate;
 

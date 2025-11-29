@@ -1,14 +1,17 @@
 package com.honeymorning.relay.context.infra.database;
 
-import org.springframework.test.annotation.DirtiesContext;
+import java.util.Map;
+
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+import com.honeymorning.relay.config.TestcontainersConfig;
+
 public interface MySqlContext {
 	String VERSION = "mysql:8.0";
 
@@ -28,19 +31,29 @@ public interface MySqlContext {
 	String EVENT_DATASOURCE_USERNAME = "spring.datasource.event.username";
 	String EVENT_DATASOURCE_PASSWORD = "spring.datasource.event.password";
 
-	@Container
-	MySQLContainer<?> primaryDb = new MySQLContainer<>(VERSION)
-		.withDatabaseName(PRIMARY_DATABASE_NAME)
-		.withUsername(PRIMARY_DATABASE_USERNAME)
-		.withPassword(PRIMARY_DATABASE_PASSWORD)
-		.withReuse(true);
+	MySQLContainer<?> primaryDb = createPrimaryDb();
 
-	@Container
-	MySQLContainer<?> eventDb = new MySQLContainer<>(VERSION)
-		.withDatabaseName(EVENT_DATABASE_NAME)
-		.withUsername(EVENT_DATABASE_USERNAME)
-		.withPassword(EVENT_DATABASE_PASSWORD)
-		.withReuse(true);
+	MySQLContainer<?> eventDb = createEventDb();
+
+	private static MySQLContainer<?> createPrimaryDb() {
+		MySQLContainer<?> container = new MySQLContainer<>(VERSION)
+			.withDatabaseName(PRIMARY_DATABASE_NAME)
+			.withUsername(PRIMARY_DATABASE_USERNAME)
+			.withPassword(PRIMARY_DATABASE_PASSWORD)
+			.withReuse(true);
+		container.start();
+		return container;
+	}
+
+	private static MySQLContainer<?> createEventDb() {
+		MySQLContainer<?> container = new MySQLContainer<>(VERSION)
+			.withDatabaseName(EVENT_DATABASE_NAME)
+			.withUsername(EVENT_DATABASE_USERNAME)
+			.withPassword(EVENT_DATABASE_PASSWORD)
+			.withReuse(true);
+		container.start();
+		return container;
+	}
 
 	@DynamicPropertySource
 	static void setDataSourceProperties(DynamicPropertyRegistry registry) {

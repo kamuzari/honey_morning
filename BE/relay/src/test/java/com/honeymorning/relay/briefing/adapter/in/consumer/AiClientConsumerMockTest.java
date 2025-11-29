@@ -8,7 +8,10 @@ import static com.honeymorning.relay.context.mock.BriefingMockGenerator.GENERATO
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.timeout;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
@@ -16,12 +19,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.test.context.TestPropertySource;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,10 +36,15 @@ import com.honeymorning.relay.briefing.application.service.dto.AiBriefingDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiQuizDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiResponseDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiTopicDto;
-import com.honeymorning.relay.context.infra.broker.KafkaContext;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 
-class AiClientConsumerMockTest extends DefaultIntegrationTest implements KafkaContext {
+@TestPropertySource(properties = {
+	"app.kafka.consumers.ai-store.group-id=${random.uuid}",
+	"app.kafka.consumers.ai-briefing-tts.group-id=${random.uuid}",
+	"app.kafka.consumers.ai-quiz1-tts.group-id=${random.uuid}",
+	"app.kafka.consumers.ai-quiz2-tts.group-id=${random.uuid}"
+})
+class AiClientConsumerMockTest extends DefaultIntegrationTest {
 
 	@SpyBean
 	AiClientConsumer sut;
@@ -43,10 +52,10 @@ class AiClientConsumerMockTest extends DefaultIntegrationTest implements KafkaCo
 	@SpyBean
 	AiClientDltConsumer subSut;
 
-	@SpyBean
+	@MockBean
 	AlarmContentService alarmContentService;
 
-	@SpyBean
+	@MockBean
 	TextToSpeechGenerateService textToSpeechGenerateService;
 
 	@Value("${app.kafka.topics.from-ai-store.name}")
@@ -73,26 +82,27 @@ class AiClientConsumerMockTest extends DefaultIntegrationTest implements KafkaCo
 		// given
 		AiResponseDto response = createAiResponseDto();
 		String data = objectMapper.writeValueAsString(response);
+		willDoNothing().given(alarmContentService).create(any());
 
 		// when
 		kafkaTemplate.send(aiStoreTopic, data);
 
 		// then
-		await().atMost(2, SECONDS)
+		await().atMost(5, SECONDS)
 			.untilAsserted(() -> {
-					then(sut).should(timeout(2000)).storeAiResponse(response);
+					then(sut).should(timeout(5000)).storeAiResponse(response);
 				}
 			);
 	}
 
 	@Test
 	@DisplayName("AI 응답 메시지를 소비하고 예외가 발생되면 2번의 재시도 후 .DLT로 메시지가 전달된다")
-	void failConsumeToStoreDb() throws JsonProcessingException {
+	void
+	failConsumeToStoreDb() throws JsonProcessingException {
 		// given
 		AiResponseDto response = createAiResponseDto();
 		String data = objectMapper.writeValueAsString(response);
-		willThrow(new RuntimeException("DB 저장 중 오류가 발생했습니다."))
-			.given(alarmContentService).create(response);
+		willThrow(new RuntimeException("DB 저장 중 오류가 발생했습니다.")).given(alarmContentService).create(response);
 
 		// when
 		kafkaTemplate.send(aiStoreTopic, data);
@@ -103,6 +113,13 @@ class AiClientConsumerMockTest extends DefaultIntegrationTest implements KafkaCo
 				then(sut).should(timeout(5000)).storeAiResponse(response);
 				then(subSut).should(timeout(5000)).storeAiResponse(response);
 			});
+
+		reset(alarmContentService);
+		willDoNothing().given(alarmContentService).create(any());
+		await().atMost(5, SECONDS)
+			.untilAsserted(() -> {
+				then(alarmContentService).should(atLeastOnce()).create(response);
+			});
 	}
 
 	@Test
@@ -111,14 +128,15 @@ class AiClientConsumerMockTest extends DefaultIntegrationTest implements KafkaCo
 		// given
 		AiResponseDto response = createAiResponseDto();
 		String data = objectMapper.writeValueAsString(response);
+		willDoNothing().given(textToSpeechGenerateService).createBriefingTts(any(), any());
 
 		// when
 		kafkaTemplate.send(briefingTtsTopic, data);
 
 		// then
-		await().atMost(2, SECONDS)
+		await().atMost(5, SECONDS)
 			.untilAsserted(() -> {
-					then(sut).should(timeout(2000)).createBriefingTts(response);
+					then(sut).should(timeout(5000)).createBriefingTts(response);
 				}
 			);
 	}
@@ -129,14 +147,15 @@ class AiClientConsumerMockTest extends DefaultIntegrationTest implements KafkaCo
 		// given
 		AiResponseDto response = createAiResponseDto();
 		String data = objectMapper.writeValueAsString(response);
+		willDoNothing().given(textToSpeechGenerateService).createQuizTts(any(), any(), any());
 
 		// when
 		kafkaTemplate.send(quizTts1Topic, data);
 
 		// then
-		await().atMost(2, SECONDS)
+		await().atMost(5, SECONDS)
 			.untilAsserted(() -> {
-					then(sut).should(timeout(2000)).createQuiz1Tts(response);
+					then(sut).should(timeout(5000)).createQuiz1Tts(response);
 				}
 			);
 	}
@@ -147,14 +166,15 @@ class AiClientConsumerMockTest extends DefaultIntegrationTest implements KafkaCo
 		// given
 		AiResponseDto response = createAiResponseDto();
 		String data = objectMapper.writeValueAsString(response);
+		willDoNothing().given(textToSpeechGenerateService).createQuizTts(any(), any(), any());
 
 		// when
 		kafkaTemplate.send(quizTts2Topic, data);
 
 		// then
-		await().atMost(2, SECONDS)
+		await().atMost(5, SECONDS)
 			.untilAsserted(() -> {
-					then(sut).should(timeout(2000)).createQuiz2Tts(response);
+					then(sut).should(timeout(5000)).createQuiz2Tts(response);
 				}
 			);
 	}

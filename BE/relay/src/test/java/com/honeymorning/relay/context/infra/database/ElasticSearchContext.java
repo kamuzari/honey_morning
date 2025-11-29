@@ -1,25 +1,33 @@
 package com.honeymorning.relay.context.infra.database;
 
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
+import com.honeymorning.relay.config.TestcontainersConfig;
+
 public interface ElasticSearchContext {
 
-	@Container
-	ElasticsearchContainer elasticsearchContainer = new ElasticsearchContainer(
-		"docker.elastic.co/elasticsearch/elasticsearch:8.13.4")
-		.withEnv("discovery.type", "single-node")
-		.withEnv("xpack.security.enabled", "false")
-		.withEnv("xpack.security.http.ssl.enabled", "false")
-		.withEnv("ES_JAVA_OPTS", "-Xms1g -Xmx1g")
-		.withEnv("TZ", "Asia/Seoul")
-		.withExposedPorts(9200, 9300)
-		.withCommand("bash", "-c",
-			"elasticsearch-plugin install --batch analysis-nori && /usr/local/bin/docker-entrypoint.sh");
+	ElasticsearchContainer elasticsearchContainer = createElasticsearch();
+
+	private static ElasticsearchContainer createElasticsearch() {
+		ElasticsearchContainer container = new ElasticsearchContainer(
+			"docker.elastic.co/elasticsearch/elasticsearch:8.13.4")
+			.withEnv("discovery.type", "single-node")
+			.withEnv("xpack.security.enabled", "false")
+			.withEnv("xpack.security.http.ssl.enabled", "false")
+			.withEnv("ES_JAVA_OPTS", "-Xms1g -Xmx1g")
+			.withEnv("TZ", "Asia/Seoul")
+			.withExposedPorts(9200, 9300)
+			.withCommand("bash", "-c",
+				"elasticsearch-plugin install --batch analysis-nori && /usr/local/bin/docker-entrypoint.sh")
+			.withReuse(TestcontainersConfig.REUSE_ENABLED);
+		container.start();
+		return container;
+	}
 
 	@DynamicPropertySource
 	static void configureProperties(DynamicPropertyRegistry registry) {

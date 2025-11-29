@@ -1,6 +1,7 @@
 package com.honeymorning.relay.briefing.application.port.service;
 
 import static com.honeymorning.relay.context.mock.BriefingMockGenerator.GENERATOR;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
 
@@ -9,7 +10,6 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +20,7 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CreateBucketRequest;
@@ -39,13 +40,13 @@ import com.honeymorning.relay.briefing.application.service.dto.AiQuizDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiResponseDto;
 import com.honeymorning.relay.briefing.application.service.dto.AiTopicDto;
 import com.honeymorning.relay.config.storage.constant.AwsS3Properties;
-import com.honeymorning.relay.context.mock.BriefingMockGenerator;
 import com.honeymorning.relay.context.infra.database.MySqlContext;
-import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 import com.honeymorning.relay.context.infra.storage.AwsS3Context;
+import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
+import com.honeymorning.relay.context.mock.BriefingMockGenerator;
 
 @AutoConfigureWireMock(port = 8089)
-class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implements MySqlContext, AwsS3Context {
+class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest{
 	static final String MOCK_TTS_PATH = "/text-to-speech/XrExE9yKIg1WjnnlVkGX";
 
 	@Autowired
@@ -75,9 +76,12 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 			amazonS3Client.createBucket(new CreateBucketRequest(
 				bucketName, awsS3Properties.region()));
 		}
+
+		briefingRepository.deleteAll();
 	}
 
 	@DisplayName("AI 로부터 응답받은 데이터를 저장하고, 이벤트를 발행하여 tts 콘텐츠를 만들고 tts 정보를 삽입하여 업데이트 한다")
+	@Transactional
 	@Test
 	void testCreateTotalContents() throws IOException {
 		//given
@@ -110,17 +114,18 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		sut.create(responseDto);
 
 		//then
-		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(userId).orElseThrow();
+		BriefingEntity briefingEntity = briefingRepository.findTopByUserIdOrderByCreatedAtDesc(userId).orElseThrow();
 
-		Assertions.assertThat(briefingEntity).isNotNull();
-		Assertions.assertThat(briefingEntity.getBriefingTagEntities()).isNotNull();
-		Assertions.assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().summaryContent());
-		Assertions.assertThat(briefingEntity.getText()).isEqualTo(responseDto.aiBriefings().readContent());
-		Assertions.assertThat(briefingEntity.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
-		Assertions.assertThat(briefingEntity.getQuizEntities().stream().map(QuizEntity::getWakeUpQuizContent).toList())
+		assertThat(briefingEntity).isNotNull();
+		assertThat(briefingEntity.getBriefingTagEntities()).isNotNull();
+		assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().summaryContent());
+		assertThat(briefingEntity.getText()).isEqualTo(responseDto.aiBriefings().readContent());
+		assertThat(briefingEntity.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
+		assertThat(briefingEntity.getQuizEntities().stream().map(QuizEntity::getWakeUpQuizContent).toList())
 			.hasSize(2);
 	}
 
+	@Transactional
 	@DisplayName("이벤트를 발행하고 리스너에서 예외가 나도 일부 데이터는 저장된다")
 	@Test
 	void testCreateTotalContentsNotPropagateError() {
@@ -147,15 +152,15 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest implemen
 		sut.create(responseDto);
 
 		//then
-		BriefingEntity briefingEntity = briefingRepository.findByIdWithQuizzes(userId).orElseThrow();
+		BriefingEntity briefingEntity = briefingRepository.findTopByUserIdOrderByCreatedAtDesc(userId).orElseThrow();
 
-		Assertions.assertThat(briefingEntity).isNotNull();
-		Assertions.assertThat(briefingEntity.getBriefingTagEntities()).isNotNull();
-		Assertions.assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().summaryContent());
-		Assertions.assertThat(briefingEntity.getText()).isEqualTo(responseDto.aiBriefings().readContent());
-		Assertions.assertThat(briefingEntity.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
-		Assertions.assertThat(briefingEntity.getWakeUpBriefingContent()).isNull();
-		briefingEntity.getQuizEntities().forEach(quiz -> Assertions.assertThat(quiz.getWakeUpQuizContent()).isNull());
+		assertThat(briefingEntity).isNotNull();
+		assertThat(briefingEntity.getBriefingTagEntities()).isNotNull();
+		assertThat(briefingEntity.getSummaryText()).isEqualTo(responseDto.aiBriefings().summaryContent());
+		assertThat(briefingEntity.getText()).isEqualTo(responseDto.aiBriefings().readContent());
+		assertThat(briefingEntity.getWakeUpCallPath()).isEqualTo(responseDto.AiWakeUpCallPath());
+		assertThat(briefingEntity.getWakeUpBriefingContent()).isNull();
+		briefingEntity.getQuizEntities().forEach(quiz -> assertThat(quiz.getWakeUpQuizContent()).isNull());
 	}
 
 	List<AiTopicDto> createFakeAiTopicDtos(int size) {

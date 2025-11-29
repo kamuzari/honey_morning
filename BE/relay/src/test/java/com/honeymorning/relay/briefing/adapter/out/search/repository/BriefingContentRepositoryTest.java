@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.elasticsearch.DataElasticsearchTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -27,6 +28,7 @@ import com.honeymorning.relay.context.mock.BriefingMockGenerator;
 @Testcontainers
 class BriefingContentRepositoryTest {
 
+	@ServiceConnection
 	@Container
 	static ElasticsearchContainer elasticsearchContainer = new ElasticsearchContainer(
 		"docker.elastic.co/elasticsearch/elasticsearch:8.13.4")
@@ -38,16 +40,9 @@ class BriefingContentRepositoryTest {
 		.withExposedPorts(9200, 9300)
 		.withCommand("bash", "-c",
 			"elasticsearch-plugin install --batch analysis-nori && /usr/local/bin/docker-entrypoint.sh");
+
 	@Autowired
 	BriefingContentRepository briefingContentRepository;
-
-	@DynamicPropertySource
-	static void configureProperties(DynamicPropertyRegistry registry) {
-		registry.add("spring.elasticsearch.uris",
-			() -> "http://localhost:" + elasticsearchContainer.getMappedPort(9200));
-		registry.add("spring.elasticsearch.socket-timeout", () -> "10s");
-		registry.add("spring.elasticsearch.connection-timeout", () -> "5s");
-	}
 
 	@AfterEach
 	void tearDown() {

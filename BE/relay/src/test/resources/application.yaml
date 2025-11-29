@@ -15,7 +15,7 @@ spring:
   kafka:
     bootstrap-servers: ENC(Hggvm9zvjIATkyaHd5n1Qztzok2H155k)
     consumer:
-      auto-offset-reset: "earliest"
+      auto-offset-reset: "latest"
       enable-auto-commit: false
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -23,6 +23,9 @@ spring:
       ack-mode: manual_immediate
     properties:
       isolation.level: read_committed
+      partition.assignment.strategy: org.apache.kafka.clients.consumer.CooperativeStickyAssignor
+      session.timeout.ms: 10000
+      heartbeat.interval.ms: 3000
 
 
   jpa:
@@ -87,28 +90,28 @@ app:
     topics:
       cdc:
         name: "alarm_contents-outbox_alarm_event"
-        partitions: 3
-        replicas: 3
+        partitions: 1
+        replicas: 1
       fail-tts:
         name: "alarm-contents-fail-tts-event"
-        partitions: 3
-        replicas: 3
+        partitions: 1
+        replicas: 1
       from-ai-store:
         name: "alarm-contents-ai-store"
-        partitions: 3
-        replicas: 3
+        partitions: 1
+        replicas: 1
       from-ai-briefing-tts:
         name: "alarm-contents-ai-briefing-tts"
-        partitions: 3
-        replicas: 3
+        partitions: 1
+        replicas: 1
       from-ai-quiz1-tts:
         name: "alarm-contents-ai-quiz1-tts"
-        partitions: 3
-        replicas: 3
+        partitions: 1
+        replicas: 1
       from-ai-quiz2-tts:
         name: "alarm-contents-ai-quiz2-tts"
-        partitions: 3
-        replicas: 3
+        partitions: 1
+        replicas: 1
     consumers:
       cdc:
         topic: ${app.kafka.topics.cdc.name}
@@ -132,11 +135,11 @@ app:
 logging:
   level:
     root: INFO
+    org.springframework.test.context.cache: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.springframework.amqp: DEBUG
     org.springframework.amqp.rabbit: DEBUG
     com.rabbitmq.client: DEBUG
-    org.springframework.batch: DEBUG
     org.springframework.jdbc.core.JdbcTemplate: DEBUG
     org.springframework.jdbc.datasource.DataSourceTransactionManager: DEBUG

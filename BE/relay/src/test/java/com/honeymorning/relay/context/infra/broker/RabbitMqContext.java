@@ -3,10 +3,9 @@ package com.honeymorning.relay.context.infra.broker;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.RabbitMQContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@Testcontainers
+import com.honeymorning.relay.config.TestcontainersConfig;
+
 public interface RabbitMqContext {
 
 	Integer[] PORTS = {5672, 15672};
@@ -18,11 +17,16 @@ public interface RabbitMqContext {
 	String RABBITMQ_USERNAME = "spring.rabbitmq.username";
 	String RABBITMQ_PASSWORD = "spring.rabbitmq.password";
 
-	@Container
-	RabbitMQContainer rabbitMqContainer = new RabbitMQContainer("rabbitmq:management")
-		.withExposedPorts(PORTS)
-		.withUser(USERNAME, PASSWORD)
-		.withReuse(true);
+	RabbitMQContainer rabbitMqContainer = createRabbitMq();
+
+	private static RabbitMQContainer createRabbitMq() {
+		RabbitMQContainer container = new RabbitMQContainer("rabbitmq:management")
+			.withExposedPorts(PORTS)
+			.withUser(USERNAME, PASSWORD)
+			.withReuse(TestcontainersConfig.REUSE_ENABLED);
+		container.start();
+		return container;
+	}
 
 	@DynamicPropertySource
 	static void setRabbitMqProperties(DynamicPropertyRegistry registry) {
@@ -31,5 +35,4 @@ public interface RabbitMqContext {
 		registry.add(RABBITMQ_USERNAME, rabbitMqContainer::getAdminUsername);
 		registry.add(RABBITMQ_PASSWORD, rabbitMqContainer::getAdminPassword);
 	}
-
 }

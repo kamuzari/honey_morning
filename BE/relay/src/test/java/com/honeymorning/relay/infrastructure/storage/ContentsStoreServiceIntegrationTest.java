@@ -23,7 +23,7 @@ import com.honeymorning.relay.config.storage.constant.AwsS3Properties;
 import com.honeymorning.relay.context.infra.storage.AwsS3Context;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 
-class ContentsStoreServiceIntegrationTest extends DefaultIntegrationTest implements AwsS3Context {
+class ContentsStoreServiceIntegrationTest extends DefaultIntegrationTest {
 
 	static final String KEY_PREFIX = "briefing";
 	static final String FILE_NAME = "sample-sound.mp3";
@@ -44,8 +44,10 @@ class ContentsStoreServiceIntegrationTest extends DefaultIntegrationTest impleme
 
 	@BeforeEach
 	void setUp() {
-		amazonS3Client.createBucket(new CreateBucketRequest(
-			bucketName, awsS3Properties.region()));
+		if (!amazonS3Client.doesBucketExistV2(bucketName)) {
+			amazonS3Client.createBucket(new CreateBucketRequest(
+				bucketName, awsS3Properties.region()));
+		}
 	}
 
 	@Test

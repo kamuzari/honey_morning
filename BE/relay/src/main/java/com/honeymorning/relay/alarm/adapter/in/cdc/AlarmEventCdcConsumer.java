@@ -30,10 +30,8 @@ public class AlarmEventCdcConsumer {
 		groupId = "${app.kafka.consumers.cdc.group-id}",
 		containerFactory = "cdcKafkaListenerContainerFactory"
 	)
-	public void consumeOutboxEvent(
-		String message,
-		Acknowledgment acknowledgment
-	) throws JacksonException, ExecutionException, InterruptedException, TimeoutException {
+	public void consumeOutboxEvent(String message, Acknowledgment acknowledgment)
+		throws JacksonException, ExecutionException, InterruptedException, TimeoutException {
 
 		LOGGER.info("consume outbox event {}", message);
 		var scheduledAlarmContent = objectMapper.convertValue(

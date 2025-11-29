@@ -29,7 +29,7 @@ public class JsonReadingTest extends DefaultIntegrationTest {
 	@DisplayName("cdc 에서 가져온 json 형식의 데이터를 변환한다")
 	@Test
 	void testReadCdcEventJson() throws IOException {
-		/// given
+		// given
 		Resource resource = resourceLoader.getResource(JSON_SAMPLE_FILE_LOCATION);
 		JsonNode rootNode = objectMapper.readTree(resource.getInputStream());
 

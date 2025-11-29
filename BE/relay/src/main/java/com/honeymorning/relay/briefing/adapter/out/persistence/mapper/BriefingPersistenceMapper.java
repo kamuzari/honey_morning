@@ -29,9 +29,10 @@ public class BriefingPersistenceMapper {
 					aiQuizDto.order()
 				)).collect(Collectors.toSet()),
 			response.aiTopics().stream().map(aiTopicDto -> new TopicModelWordEntity(
-				aiTopicDto.sectionId(),
-				aiTopicDto.word(),
-				aiTopicDto.weight())).collect(Collectors.toSet())
+					aiTopicDto.sectionId(),
+					aiTopicDto.word(),
+					aiTopicDto.weight()))
+				.collect(Collectors.toSet())
 		);
 	}
 
@@ -47,7 +48,7 @@ public class BriefingPersistenceMapper {
 	}
 
 	public EmptyBriefingTts toEmptyBriefingTts(BriefingEntity briefingEntity) {
-		return new EmptyBriefingTts(briefingEntity.getId(),briefingEntity.getWakeUpBriefingContent());
+		return new EmptyBriefingTts(briefingEntity.getId(), briefingEntity.getWakeUpBriefingContent());
 	}
 
 	public LatestBriefing toLatestBriefing(BriefingEntity briefingEntity) {

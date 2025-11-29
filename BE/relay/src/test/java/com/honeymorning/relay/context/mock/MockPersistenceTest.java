@@ -16,5 +16,5 @@ import com.honeymorning.relay.context.infra.database.MySqlContext;
 })
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-public class MockPersistenceTest implements MySqlContext {
+public class MockPersistenceTest {
 }

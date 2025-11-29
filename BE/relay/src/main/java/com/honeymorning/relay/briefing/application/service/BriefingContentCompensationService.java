@@ -30,7 +30,6 @@ public class BriefingContentCompensationService implements TtsFailCompensateUseC
 		this.briefingSearchService = briefingSearchService;
 	}
 
-	// TODO: 재시도 삭제
 	public void retryTts() {
 		RetryingFailTts retryingFailTts = ttsCompensationPort.loadTopOnSkipLock();
 		if (retryingFailTts.isEmpty()) {
