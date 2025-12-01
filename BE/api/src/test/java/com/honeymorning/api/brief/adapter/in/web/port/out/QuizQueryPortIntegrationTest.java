@@ -14,14 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.honeymorning.api.brief.adapter.in.web.dto.response.detail.QuizResponseDto;
 import com.honeymorning.api.brief.adapter.out.persistence.mapper.QuizPersistenceMapper;
 import com.honeymorning.api.brief.utils.BriefingMockGenerator;
-import com.honeymorning.api.context.infra.database.MySqlContext;
 import com.honeymorning.api.context.integration.DefaultIntegrationTest;
 import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
 import com.honeymorning.common.domain.briefing.entity.BriefingTagEntity;
 import com.honeymorning.common.domain.briefing.entity.QuizEntity;
 import com.honeymorning.common.domain.briefing.repository.BriefingRepository;
 
-public class QuizQueryPortIntegrationTest extends DefaultIntegrationTest implements MySqlContext {
+public class QuizQueryPortIntegrationTest extends DefaultIntegrationTest {
 	@Autowired
 	QuizQueryPort sut;
 
@@ -37,7 +36,7 @@ public class QuizQueryPortIntegrationTest extends DefaultIntegrationTest impleme
 		//given
 		Long userId = 1L;
 		Set<QuizEntity> savedQuizzes = BriefingMockGenerator.createQuizzes();
-		BriefingEntity briefingEntity = briefingRepository.save(new BriefingEntity(
+		BriefingEntity savedBriefingEntity = briefingRepository.save(new BriefingEntity(
 			userId,
 			GENERATOR.lorem().sentence(3),
 			GENERATOR.lorem().sentence(3),
@@ -47,7 +46,6 @@ public class QuizQueryPortIntegrationTest extends DefaultIntegrationTest impleme
 			BriefingMockGenerator.createTopicModelWords())
 		);
 
-		BriefingEntity savedBriefingEntity = briefingRepository.save(briefingEntity);
 		var expectQuizResponses = savedQuizzes.stream()
 			.map(savedQuiz -> quizPersistenceMapper.toQuizResponseDto(savedQuiz))
 			.toList();

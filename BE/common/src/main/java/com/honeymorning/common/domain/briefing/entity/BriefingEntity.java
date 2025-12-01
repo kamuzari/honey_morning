@@ -46,21 +46,21 @@ public class BriefingEntity extends BaseEntity {
 	private String wakeUpCallPath;
 
 	@OneToMany(
+		mappedBy = "briefingEntity",
 		cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 		orphanRemoval = true)
-	@JoinColumn(name = "briefing_id")
 	private Set<BriefingTagEntity> briefingTagEntities;
 
 	@OneToMany(
+		mappedBy = "briefingEntity",
 		cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 		orphanRemoval = true)
-	@JoinColumn(name = "briefing_id")
 	private Set<QuizEntity> quizEntities;
 
 	@OneToMany(
+		mappedBy = "briefingEntity",
 		cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 		orphanRemoval = true)
-	@JoinColumn(name = "briefing_id")
 	private Set<TopicModelWordEntity> topicModelWordEntities;
 
 	@Embedded

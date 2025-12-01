@@ -55,7 +55,7 @@ class BriefingQueryPortIntegrationTest extends DefaultIntegrationTest {
 	}
 
 	PageSampleResponse createPagingSampleData(Long authUserId) {
-		BriefingEntity briefingEntity = briefingRepository.save(new BriefingEntity(
+		briefingRepository.save(new BriefingEntity(
 			authUserId,
 			GENERATOR.lorem().sentence(3),
 			GENERATOR.lorem().sentence(3),
@@ -64,7 +64,6 @@ class BriefingQueryPortIntegrationTest extends DefaultIntegrationTest {
 			BriefingMockGenerator.createQuizzes(),
 			BriefingMockGenerator.createTopicModelWords()
 		));
-		briefingRepository.save(briefingEntity);
 
 		return new PageSampleResponse(1, 1);
 	}

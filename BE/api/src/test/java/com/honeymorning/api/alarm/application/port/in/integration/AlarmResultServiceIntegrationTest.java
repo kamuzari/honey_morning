@@ -24,7 +24,7 @@ import com.honeymorning.api.context.infra.database.RedisContext;
 import com.honeymorning.api.context.integration.DefaultIntegrationTest;
 import com.honeymorning.common.domain.alarm.repository.AlarmResultRepository;
 
-class AlarmResultServiceIntegrationTest extends DefaultIntegrationTest implements RedisContext {
+class AlarmResultServiceIntegrationTest extends DefaultIntegrationTest {
 	@Autowired
 	AlarmResultService sut;
 

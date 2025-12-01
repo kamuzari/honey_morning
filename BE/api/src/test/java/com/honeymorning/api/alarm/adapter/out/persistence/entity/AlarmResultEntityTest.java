@@ -3,20 +3,25 @@ package com.honeymorning.api.alarm.adapter.out.persistence.entity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.function.Supplier;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.github.javafaker.Faker;
 import com.honeymorning.common.domain.alarm.entity.AlarmResultEntity;
 
 class AlarmResultEntityTest {
+
+	Supplier<Long> createId = () -> Faker.instance().number().randomNumber();
 
 	@Test
 	@DisplayName("알람 결과 객체를 생성한다")
 	void createAlarmResult() {
 		//given
-		long userId = 1L;
+		long userId = createId.get();
 		long briefingId = 1L;
 		int matchCount = 1;
 		boolean attendance = true;

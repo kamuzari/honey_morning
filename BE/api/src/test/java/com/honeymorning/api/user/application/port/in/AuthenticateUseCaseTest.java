@@ -12,8 +12,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 
 import com.honeymorning.api.common.security.authentication.constant.JwtProperty;
 import com.honeymorning.api.common.security.authentication.service.TokenService;
-import com.honeymorning.api.context.infra.database.MySqlContext;
-import com.honeymorning.api.context.infra.database.RedisContext;
 import com.honeymorning.api.context.integration.DefaultIntegrationTest;
 import com.honeymorning.api.user.adapter.in.web.dto.request.AccountSignUpRequest;
 import com.honeymorning.api.user.adapter.in.web.dto.request.LoginAuthRequestDto;
@@ -21,7 +19,7 @@ import com.honeymorning.api.user.adapter.in.web.dto.response.LoginAuthResponseDt
 import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
 import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
 
-class AuthenticateUseCaseTest extends DefaultIntegrationTest implements RedisContext, MySqlContext {
+class AuthenticateUseCaseTest extends DefaultIntegrationTest{
 	@Autowired
 	AuthenticateUseCase sut;
 

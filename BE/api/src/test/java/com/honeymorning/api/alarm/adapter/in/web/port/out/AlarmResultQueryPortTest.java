@@ -56,8 +56,9 @@ class AlarmResultQueryPortTest extends MockPersistenceTest {
 		List<AlarmResultEntity> totalAlarmResultEntities = alarmResultRepository.saveAll(samples)
 			.stream()
 			.sorted((a, b) -> b.getId().compareTo(a.getId()))
+			.limit(10)
 			.toList();
-		long lastId = totalAlarmResultEntities.size() + 1L;
+		long lastId = totalAlarmResultEntities.get(0).getId() + 1L;
 
 		// when
 		List<AlarmResultResponseDto> pageContent = sut.getMyAlarmResults(userId, lastId);
