@@ -25,7 +25,7 @@ import com.honeymorning.common.domain.alarm.repository.TagRepository;
 
 class AlarmTagServiceIntegrationTest extends DefaultIntegrationTest {
 
-	static final long USER_ID = Faker.instance().number().randomDigit();
+	static final long USER_ID = Faker.instance().number().randomNumber(10, true);
 
 	@Autowired
 	AlarmTagCommandUseCase sut;

@@ -4,8 +4,6 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.RabbitMQContainer;
 
-import com.honeymorning.relay.config.TestcontainersConfig;
-
 public interface RabbitMqContext {
 
 	Integer[] PORTS = {5672, 15672};
@@ -22,9 +20,9 @@ public interface RabbitMqContext {
 	private static RabbitMQContainer createRabbitMq() {
 		RabbitMQContainer container = new RabbitMQContainer("rabbitmq:management")
 			.withExposedPorts(PORTS)
-			.withUser(USERNAME, PASSWORD)
-			.withReuse(TestcontainersConfig.REUSE_ENABLED);
+			.withUser(USERNAME, PASSWORD);
 		container.start();
+
 		return container;
 	}
 

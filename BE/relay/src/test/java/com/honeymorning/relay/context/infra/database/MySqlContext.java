@@ -31,9 +31,9 @@ public interface MySqlContext {
 		MySQLContainer<?> container = new MySQLContainer<>(VERSION)
 			.withDatabaseName(PRIMARY_DATABASE_NAME)
 			.withUsername(PRIMARY_DATABASE_USERNAME)
-			.withPassword(PRIMARY_DATABASE_PASSWORD)
-			.withReuse(true);
+			.withPassword(PRIMARY_DATABASE_PASSWORD);
 		container.start();
+
 		return container;
 	}
 
@@ -41,9 +41,9 @@ public interface MySqlContext {
 		MySQLContainer<?> container = new MySQLContainer<>(VERSION)
 			.withDatabaseName(EVENT_DATABASE_NAME)
 			.withUsername(EVENT_DATABASE_USERNAME)
-			.withPassword(EVENT_DATABASE_PASSWORD)
-			.withReuse(true);
+			.withPassword(EVENT_DATABASE_PASSWORD);
 		container.start();
+
 		return container;
 	}
 

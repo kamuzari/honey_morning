@@ -5,16 +5,13 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.utility.DockerImageName;
 
-import com.honeymorning.relay.config.TestcontainersConfig;
-
 public interface KafkaContext {
 	String SPRING_KAFKA_BOOTSTRAP_SERVERS = "spring.kafka.bootstrap-servers";
 
 	KafkaContainer kafka = createKafka();
 
-	private static KafkaContainer createKafka() {
-		KafkaContainer container = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.3.1"))
-			.withReuse(TestcontainersConfig.REUSE_ENABLED);
+	static KafkaContainer createKafka() {
+		KafkaContainer container = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.3.1"));
 		container.start();
 
 		return container;

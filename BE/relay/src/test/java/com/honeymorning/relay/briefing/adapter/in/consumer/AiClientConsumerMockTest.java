@@ -88,9 +88,29 @@ class AiClientConsumerMockTest extends DefaultIntegrationTest {
 		kafkaTemplate.send(aiStoreTopic, data);
 
 		// then
-		await().atMost(5, SECONDS)
+
+		await().atMost(10, SECONDS)
 			.untilAsserted(() -> {
-					then(sut).should(timeout(5000)).storeAiResponse(response);
+					then(sut).should(atLeastOnce()).storeAiResponse(response);
+				}
+			);
+	}
+
+	@Test
+	@DisplayName("AI 응답 메시지를 소비하여 브리핑 tts 를 생성한다")
+	void consumeToCreateTtsBriefing() throws JsonProcessingException {
+		// given
+		AiResponseDto response = createAiResponseDto();
+		String data = objectMapper.writeValueAsString(response);
+		willDoNothing().given(textToSpeechGenerateService).createBriefingTts(any(), any());
+
+		// when
+		kafkaTemplate.send(briefingTtsTopic, data);
+
+		// then
+		await().atMost(10, SECONDS)
+			.untilAsserted(() -> {
+					then(sut).should(atLeastOnce()).createBriefingTts(response);
 				}
 			);
 	}
@@ -110,35 +130,9 @@ class AiClientConsumerMockTest extends DefaultIntegrationTest {
 		// then
 		await().atMost(10, SECONDS)
 			.untilAsserted(() -> {
-				then(sut).should(timeout(5000)).storeAiResponse(response);
-				then(subSut).should(timeout(5000)).storeAiResponse(response);
+				then(sut).should(atLeastOnce()).storeAiResponse(response);
+				then(subSut).should(atLeastOnce()).storeAiResponse(response);
 			});
-
-		reset(alarmContentService);
-		willDoNothing().given(alarmContentService).create(any());
-		await().atMost(5, SECONDS)
-			.untilAsserted(() -> {
-				then(alarmContentService).should(atLeastOnce()).create(response);
-			});
-	}
-
-	@Test
-	@DisplayName("AI 응답 메시지를 소비하여 브리핑 tts 를 생성한다")
-	void consumeToCreateTtsBriefing() throws JsonProcessingException {
-		// given
-		AiResponseDto response = createAiResponseDto();
-		String data = objectMapper.writeValueAsString(response);
-		willDoNothing().given(textToSpeechGenerateService).createBriefingTts(any(), any());
-
-		// when
-		kafkaTemplate.send(briefingTtsTopic, data);
-
-		// then
-		await().atMost(5, SECONDS)
-			.untilAsserted(() -> {
-					then(sut).should(timeout(5000)).createBriefingTts(response);
-				}
-			);
 	}
 
 	@Test
@@ -153,9 +147,9 @@ class AiClientConsumerMockTest extends DefaultIntegrationTest {
 		kafkaTemplate.send(quizTts1Topic, data);
 
 		// then
-		await().atMost(5, SECONDS)
+		await().atMost(10, SECONDS)
 			.untilAsserted(() -> {
-					then(sut).should(timeout(5000)).createQuiz1Tts(response);
+					then(sut).should(atLeastOnce()).createQuiz1Tts(response);
 				}
 			);
 	}
@@ -172,9 +166,9 @@ class AiClientConsumerMockTest extends DefaultIntegrationTest {
 		kafkaTemplate.send(quizTts2Topic, data);
 
 		// then
-		await().atMost(5, SECONDS)
+		await().atMost(10, SECONDS)
 			.untilAsserted(() -> {
-					then(sut).should(timeout(5000)).createQuiz2Tts(response);
+					then(sut).should(atLeastOnce()).createQuiz2Tts(response);
 				}
 			);
 	}

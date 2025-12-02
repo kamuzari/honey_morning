@@ -4,8 +4,6 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.elasticsearch.ElasticsearchContainer;
 
-import com.honeymorning.relay.config.TestcontainersConfig;
-
 public interface ElasticSearchContext {
 
 	ElasticsearchContainer elasticsearchContainer = createElasticsearch();
@@ -20,9 +18,9 @@ public interface ElasticSearchContext {
 			.withEnv("TZ", "Asia/Seoul")
 			.withExposedPorts(9200, 9300)
 			.withCommand("bash", "-c",
-				"elasticsearch-plugin install --batch analysis-nori && /usr/local/bin/docker-entrypoint.sh")
-			.withReuse(TestcontainersConfig.REUSE_ENABLED);
+				"elasticsearch-plugin install --batch analysis-nori && /usr/local/bin/docker-entrypoint.sh");
 		container.start();
+
 		return container;
 	}
 
