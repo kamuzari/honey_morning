@@ -1,7 +1,7 @@
 spring:
   batch:
-    jdbc:
-      initialize-schema: ALWAYS
+    job:
+      enabled: false
 
   datasource:
     primary:
@@ -18,9 +18,9 @@ spring:
         validation-timeout: 5000
 
     read:
-      url: ENC(xZDkAzthzyGE1C72KPqfJOuxhc3ayV4fQGZ5md/pzjIPv+QquUXpKEtB/7CVnaqkcxJf4XU/dTpDd3y6k5ntzbRuUN6SxC5Khjzl5MHLUpaWMV05G7qE4tzpLZ9C4GIlXDLPiIHQvif8u8N4H7L9hb6dKHPl08bS)
-      username: ENC(4bVSlObkLOxikway4Ip0czodcbatpmA4)
-      password: ENC(dP/YyZ2a7IEf5ybHgc357/iIDu8jAe1H)
+      url: ENC(fvY+b0P6S9DMldbaXHV4H/sRaCkOayzB7seXoZIFdc4yoBpepu5wy8Nx5ey952gMAnIsUC30WHdOKNURQbP5GWf4QUIHW+qEvrCPf/BIsCVpU8LVD6nSCz4D9XuT+auwJjL1piaMzc3Ha7UpGqdLjWNzZ3257/aA)
+      username: ENC(HrXN/yuXf+kntxje8zkgow==)
+      password: ENC(kPuHNfwdp3HsSbnZ97SBKw==)
       driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:

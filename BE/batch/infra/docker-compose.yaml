@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  honeymorning_db:
+    extends:
+      file: database/mysql.yml
+      service: honeymorning_db
+
+  honeymorning_read_only_db:
+    extends:
+      file: database/mysql.yml
+      service: honeymorning_read_only_db
+    depends_on:
+      - honeymorning_db
+
+  event-db:
+    extends:
+      file: database/mysql.yml
+      service: event-db

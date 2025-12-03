@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  honeymorning_db:
+    image: mysql:8.0
+    platform: linux/arm64
+    restart: unless-stopped
+    mem_limit: "1g"
+    cpus: "1.5"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: honeymorning
+      MYSQL_USER: honeymorning
+      MYSQL_PASSWORD: honeymorning
+      TZ: Asia/Seoul
+    volumes:
+      - ./master-data:/var/lib/mysql
+      - ./master-slave/master.cnf:/etc/mysql/conf.d/my.cnf
+      - ./master-slave/master.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+
+  honeymorning_read_only_db:
+    image: mysql:8.0
+    platform: linux/arm64
+    restart: unless-stopped
+    mem_limit: "1g"
+    cpus: "1.5"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: honeymorning
+      MYSQL_USER: honeymorning
+      MYSQL_PASSWORD: honeymorning
+      TZ: Asia/Seoul
+    volumes:
+      - ./slave-data:/var/lib/mysql
+      - ./master-slave/slave.cnf:/etc/mysql/conf.d/my.cnf
+      - ./master-slave/slave.sql:/tmp/slave.sql
+    ports:
+      - "3308:3306"
+    command: >
+      bash -c "
+        docker-entrypoint.sh mysqld &
+        sleep 10 &&
+        mysql -uroot -proot < /tmp/slave.sql &&
+        wait
+      "
+
+  event-db:
+    image: mysql:8.0
+    platform: linux/arm64
+    restart: unless-stopped
+    mem_limit: "1g"
+    cpus: "1.5"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: event_store
+      MYSQL_USER: honeymorning
+      MYSQL_PASSWORD: honeymorning
+      TZ: Asia/Seoul
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql/event:/var/lib/mysql
