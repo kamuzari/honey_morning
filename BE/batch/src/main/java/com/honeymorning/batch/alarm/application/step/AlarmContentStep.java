@@ -1,6 +1,7 @@
 package com.honeymorning.batch.alarm.application.step;
 
-import static com.honeymorning.batch.alarm.application.job.AlarmContentJob.ALARM_TO_ALARM_EVENT_CREATE_JOB;
+import static com.honeymorning.batch.alarm.application.constant.AlarmBatchConstant.READER;
+import static com.honeymorning.batch.alarm.application.constant.AlarmBatchConstant.STEP;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -65,7 +66,7 @@ public class AlarmContentStep {
 		ItemProcessor<ReadyAlarmDto, OutBoxAlarmEventEntity> processor,
 		ItemWriter<OutBoxAlarmEventEntity> writer) {
 
-		return new StepBuilder(ALARM_TO_ALARM_EVENT_CREATE_JOB + "_step", jobRepository)
+		return new StepBuilder(STEP, jobRepository)
 			.<ReadyAlarmDto, OutBoxAlarmEventEntity>chunk(chunkSize, transactionManager)
 			.reader(reader)
 			.processor(processor)
@@ -87,7 +88,7 @@ public class AlarmContentStep {
 	) {
 
 		return new JdbcPagingItemReaderBuilder<ReadyAlarmDto>()
-			.name(ALARM_TO_ALARM_EVENT_CREATE_JOB + "_reader")
+			.name(READER)
 			.dataSource(mainReadOnlyDataSource)
 			.queryProvider(READ_QUERY_GENERATOR.createQuery())
 			.parameterValues(READ_QUERY_GENERATOR.getParameters(startTime, endTime, today, modular, partition))

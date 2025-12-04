@@ -1,6 +1,8 @@
 package com.honeymorning.batch.alarm.application.step.partition;
 
-import static com.honeymorning.batch.alarm.application.job.AlarmContentJob.ALARM_TO_ALARM_EVENT_CREATE_JOB;
+import static com.honeymorning.batch.alarm.application.constant.AlarmBatchConstant.STEP_MANAGER;
+import static com.honeymorning.batch.alarm.application.constant.AlarmBatchConstant.STEP_PARTITIONER;
+import static com.honeymorning.batch.alarm.application.constant.AlarmBatchConstant.THREAD_PREFIX;
 
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.partition.support.TaskExecutorPartitionHandler;
@@ -31,7 +33,7 @@ public class AlarmContentPartition {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 		executor.setCorePoolSize(batchThreadPoolSize);
 		executor.setMaxPoolSize(batchThreadPoolSize);
-		executor.setThreadNamePrefix(String.join(" -- ", "multi-thread", ALARM_TO_ALARM_EVENT_CREATE_JOB));
+		executor.setThreadNamePrefix(THREAD_PREFIX);
 		executor.setWaitForTasksToCompleteOnShutdown(true);
 		executor.initialize();
 
@@ -53,13 +55,13 @@ public class AlarmContentPartition {
 	}
 
 	@Bean
-	public Step stepManager(
+	public Step alarmsStepManager(
 		ModularPartitioner partitioner,
 		Step alarmStep,
 		TaskExecutorPartitionHandler partitionHandler) {
 
-		return new StepBuilder("alarmStep.manager", jobRepository)
-			.partitioner("alarmStep", partitioner)
+		return new StepBuilder(STEP_MANAGER, jobRepository)
+			.partitioner(STEP_PARTITIONER, partitioner)
 			.step(alarmStep)
 			.partitionHandler(partitionHandler)
 			.build();

@@ -19,6 +19,7 @@ public class ModularPartitioner implements Partitioner {
 					ExecutionContext context = new ExecutionContext();
 					context.putInt("partition", partitionId);
 					context.putInt("modular", gridSize);
+
 					return context;
 				}
 			));

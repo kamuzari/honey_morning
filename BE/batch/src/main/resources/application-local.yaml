@@ -1,4 +1,9 @@
 spring:
+  task:
+    scheduling:
+      pool:
+        size: 5
+
   batch:
     job:
       enabled: false
