@@ -16,11 +16,6 @@ jar {
 dependencies {
     implementation project(':common')
 
-    // Test Container (module specific)
-    testImplementation 'org.testcontainers:localstack'
-    testImplementation 'org.testcontainers:rabbitmq'
-    testImplementation 'org.testcontainers:kafka'
-    testImplementation 'org.testcontainers:elasticsearch:1.19.8'
     testImplementation 'com.h2database:h2'
 
     // BATCH
