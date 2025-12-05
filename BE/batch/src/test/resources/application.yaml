@@ -26,6 +26,15 @@ spring:
   batch:
     jdbc:
       initialize-schema: ALWAYS
+    job:
+      enabled: false
 
 jasypt:
   password: ${JASYPT_PASSWORD:honeymorning}
+
+
+logging:
+  level:
+    org.springframework.batch.core: DEBUG
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    com.honeymorning.batch: DEBUG

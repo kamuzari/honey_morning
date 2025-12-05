@@ -4,9 +4,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import com.honeymorning.batch.config.JpaConfig;
-import com.honeymorning.batch.config.PrimaryDataSourceConfig;
-import com.honeymorning.batch.config.ReadDataSourceConfig;
+import com.honeymorning.batch.config.framework.jpa.JpaConfig;
+import com.honeymorning.batch.config.database.PrimaryDataSourceConfig;
+import com.honeymorning.batch.config.database.ReadDataSourceConfig;
 import com.honeymorning.batch.context.infra.MySqlContext;
 
 @Import({

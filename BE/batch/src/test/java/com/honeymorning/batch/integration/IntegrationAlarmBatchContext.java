@@ -2,9 +2,11 @@ package com.honeymorning.batch.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.LongStream;
 
 import org.junit.jupiter.api.AfterEach;
@@ -25,11 +27,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
+import com.honeymorning.batch.alarm.adapter.out.persistence.entity.OutBoxAlarmEventEntity;
+import com.honeymorning.batch.alarm.adapter.out.persistence.repository.OutBoxAlarmEventRepository;
 import com.honeymorning.batch.config.TestSubDataBaseConfig;
 import com.honeymorning.batch.context.DefaultIntegrationContext;
-import com.honeymorning.batch.context.infra.MySqlContext;
-import com.honeymorning.batch.outbox.OutBoxAlarmEvent;
-import com.honeymorning.batch.outbox.OutBoxAlarmEventRepository;
 import com.honeymorning.batch.utils.TimeUtils;
 import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
 import com.honeymorning.common.domain.alarm.entity.AlarmTagEntity;
@@ -45,18 +46,24 @@ import com.honeymorning.common.domain.alarm.repository.TagRepository;
 	"batch.alarm.chunk-size=50",
 	"batch.alarm.thread-pool-size=4"
 })
-class IntegrationAlarmBatchContext extends DefaultIntegrationContext implements MySqlContext {
+class IntegrationAlarmBatchContext extends DefaultIntegrationContext {
 	static final int EXPECTED_BATCH_TOTAL_DATA_SIZE = 5;
+
 	@Autowired
 	JobLauncherTestUtils jobLauncherTestUtils;
+
 	@Autowired
 	OutBoxAlarmEventRepository outBoxAlarmEventRepository;
+
 	@Autowired
 	TagRepository tagRepository;
+
 	@Autowired
 	AlarmTagRepository alarmTagRepository;
+
 	@Autowired
 	AlarmRepository alarmRepository;
+
 	@Value("${batch.alarm.thread-pool-size}")
 	private int poolSize;
 
@@ -82,9 +89,15 @@ class IntegrationAlarmBatchContext extends DefaultIntegrationContext implements 
 		);
 
 		//then
+		await().atMost(30, TimeUnit.SECONDS)
+			.until(
+				() -> jobExecution.getStatus().isUnsuccessful() || jobExecution.getStatus() == BatchStatus.COMPLETED
+			);
+
 		assertThat(jobExecution.getStatus()).isEqualTo(BatchStatus.COMPLETED);
-		List<OutBoxAlarmEvent> result = outBoxAlarmEventRepository.findAll();
+		List<OutBoxAlarmEventEntity> result = outBoxAlarmEventRepository.findAll();
 		assertThat(result).hasSize(EXPECTED_BATCH_TOTAL_DATA_SIZE);
+
 	}
 
 	@Test
@@ -93,10 +106,14 @@ class IntegrationAlarmBatchContext extends DefaultIntegrationContext implements 
 		//given
 		LocalTime startTime = LocalTime.now().plusMinutes(40);
 		LocalTime endTime = startTime.plusMinutes(1).minusSeconds(1);
+		JobExecution alreadyJobExecution = jobLauncherTestUtils.launchJob(createAlarmJob(startTime, endTime));
+		await().atMost(30, TimeUnit.SECONDS)
+			.until(
+				() -> alreadyJobExecution.getStatus() == BatchStatus.COMPLETED
+			);
 
 		//when
 		//then
-		jobLauncherTestUtils.launchJob(createAlarmJob(startTime, endTime));
 		assertThatThrownBy(() -> jobLauncherTestUtils.launchJob(createAlarmJob(startTime, endTime)))
 			.isInstanceOf(JobInstanceAlreadyCompleteException.class);
 	}

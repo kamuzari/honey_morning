@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.batch.item.ExecutionContext;
 
+import com.honeymorning.batch.common.step.ModularPartitioner;
+
 @ExtendWith(MockitoExtension.class)
 class ModularPartitionerTest {
 	@InjectMocks
