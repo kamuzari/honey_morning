@@ -13,4 +13,10 @@ binlog_do_db            = honeymorning
 
 gtid_mode                = on
 enforce_gtid_consistency = on
-log_slave_updates        = on
+log_replica_updates        = on
+event_scheduler = on
+
+slow_query_log           = 1 # 슬로우 쿼리 추적을 위한
+slow_query_log_file      = /var/lib/mysql/slow-query.log
+long_query_time          = 1 # 슬로우 쿼리 최소 초 단위
+log_queries_not_using_indexes = 1 # 인덱스 안쓰 쿼리 추적을 위한

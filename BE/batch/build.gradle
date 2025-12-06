@@ -18,6 +18,9 @@ dependencies {
 
     testImplementation 'com.h2database:h2'
 
+    // LOG
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
+
     // BATCH
     implementation 'org.springframework.boot:spring-boot-starter-batch'
     testImplementation 'org.springframework.batch:spring-batch-test'

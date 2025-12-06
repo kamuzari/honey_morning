@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   honeymorning_db:
+    container_name: honeymorning_db
     image: mysql:8.0
     platform: linux/arm64
     restart: unless-stopped
@@ -15,12 +16,13 @@ services:
       TZ: Asia/Seoul
     volumes:
       - ./master-data:/var/lib/mysql
-      - ./master-slave/master.cnf:/etc/mysql/conf.d/my.cnf
-      - ./master-slave/master.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./replication/master.cnf:/etc/mysql/conf.d/my.cnf
+      - ./replication/master.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
 
   honeymorning_read_only_db:
+    container_name: honeymorning_read_only_db
     image: mysql:8.0
     platform: linux/arm64
     restart: unless-stopped
@@ -34,19 +36,30 @@ services:
       TZ: Asia/Seoul
     volumes:
       - ./slave-data:/var/lib/mysql
-      - ./master-slave/slave.cnf:/etc/mysql/conf.d/my.cnf
-      - ./master-slave/slave.sql:/tmp/slave.sql
+      - ./replication/slave.cnf:/etc/mysql/conf.d/my.cnf
+      - ./replication/slave.sql:/tmp/slave.sql
+      - ./replication/warming/seed.sql:/tmp/seed.sql
     ports:
       - "3308:3306"
+    depends_on:
+      honeymorning_db:
+        condition: service_healthy
     command: >
       bash -c "
         docker-entrypoint.sh mysqld &
-        sleep 10 &&
+      
+        until mysql -u root -proot -e 'SELECT 1'; do
+          echo 'MySQL is unavailable - sleeping'
+          sleep 1
+        done
+      
         mysql -uroot -proot < /tmp/slave.sql &&
+      
+        echo 'Replication complete.'
         wait
       "
-
   event-db:
+    container_name: event-db
     image: mysql:8.0
     platform: linux/arm64
     restart: unless-stopped

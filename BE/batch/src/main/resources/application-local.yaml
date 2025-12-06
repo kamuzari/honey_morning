@@ -1,3 +1,6 @@
+server:
+  port: ${SERVER_PORT:8080}
+
 spring:
   task:
     scheduling:
@@ -40,3 +43,21 @@ spring:
       hibernate:
         format_sql: true
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    enable:
+      all: true
+    tags:
+      application: ${spring.application.name}
+
+decorator:
+  datasource:
+    p6spy:
+      log-format: "⏱️ %(executionTime)ms | %(sql)"
