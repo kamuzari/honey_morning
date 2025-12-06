@@ -1,6 +1,6 @@
 package com.honeymorning.api.user.application.port.out;
 
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
+import com.honeymorning.common.domain.user.entity.UserRole;
 
 public interface TokenGeneratePort {
 	String generateAccessToken(Long userId, UserRole role);

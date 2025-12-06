@@ -13,10 +13,10 @@ import com.honeymorning.api.alarm.application.domain.CreateUserAlarmStreak;
 import com.honeymorning.api.alarm.application.domain.UpdateStreakUser;
 import com.honeymorning.api.alarm.application.port.out.CommandAlarmResultPort;
 import com.honeymorning.api.alarm.application.port.out.LoadAlarmResultPort;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
-import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
 import com.honeymorning.common.domain.alarm.entity.AlarmResultEntity;
 import com.honeymorning.common.domain.alarm.repository.AlarmResultRepository;
+import com.honeymorning.common.domain.user.entity.UserEntity;
+import com.honeymorning.common.domain.user.repository.UserRepository;
 import com.honeymorning.common.exception.NotFoundResourceException;
 
 @Component

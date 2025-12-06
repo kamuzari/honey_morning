@@ -11,7 +11,7 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 
 import com.honeymorning.api.common.security.core.JwtAuthentication;
 import com.honeymorning.api.common.security.core.JwtAuthenticationToken;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
+import com.honeymorning.common.domain.user.entity.UserRole;
 
 public class MockUserCustomFactory implements WithSecurityContextFactory<WithJwtMockUser> {
 	@Override

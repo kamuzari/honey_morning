@@ -11,8 +11,6 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.timeout;
 import static org.testcontainers.shaded.org.awaitility.Awaitility.await;
 
 import java.util.List;

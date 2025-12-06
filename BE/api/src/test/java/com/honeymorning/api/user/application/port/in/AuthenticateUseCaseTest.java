@@ -16,10 +16,10 @@ import com.honeymorning.api.context.integration.DefaultIntegrationTest;
 import com.honeymorning.api.user.adapter.in.web.dto.request.AccountSignUpRequest;
 import com.honeymorning.api.user.adapter.in.web.dto.request.LoginAuthRequestDto;
 import com.honeymorning.api.user.adapter.in.web.dto.response.LoginAuthResponseDto;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
-import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
+import com.honeymorning.common.domain.user.entity.UserEntity;
+import com.honeymorning.common.domain.user.repository.UserRepository;
 
-class AuthenticateUseCaseTest extends DefaultIntegrationTest{
+class AuthenticateUseCaseTest extends DefaultIntegrationTest {
 	@Autowired
 	AuthenticateUseCase sut;
 

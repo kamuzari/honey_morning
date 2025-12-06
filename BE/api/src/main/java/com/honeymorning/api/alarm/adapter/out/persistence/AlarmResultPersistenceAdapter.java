@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.honeymorning.api.alarm.adapter.in.web.dto.response.AlarmResultResponseDto;
 import com.honeymorning.api.alarm.adapter.in.web.port.out.AlarmResultQueryPort;
 import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
-import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
 import com.honeymorning.common.domain.alarm.repository.AlarmResultRepository;
+import com.honeymorning.common.domain.user.repository.UserRepository;
 import com.honeymorning.common.exception.NotFoundResourceException;
 
 @Component

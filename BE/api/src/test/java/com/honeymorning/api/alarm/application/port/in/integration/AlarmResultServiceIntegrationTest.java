@@ -20,7 +20,6 @@ import com.honeymorning.api.alarm.adapter.out.persistence.entity.UserAlarmResult
 import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
 import com.honeymorning.api.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
 import com.honeymorning.api.alarm.application.service.AlarmResultService;
-import com.honeymorning.api.context.infra.database.RedisContext;
 import com.honeymorning.api.context.integration.DefaultIntegrationTest;
 import com.honeymorning.common.domain.alarm.repository.AlarmResultRepository;
 

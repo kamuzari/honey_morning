@@ -20,8 +20,8 @@ import com.honeymorning.api.common.security.authentication.helper.JwtTokenGenera
 import com.honeymorning.api.common.security.authentication.helper.JwtTokenWebExtractor;
 import com.honeymorning.api.common.security.authentication.service.TokenService;
 import com.honeymorning.api.common.security.core.JwtClaim;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
 import com.honeymorning.api.user.application.port.out.TokenGeneratePort;
+import com.honeymorning.common.domain.user.entity.UserRole;
 
 import jakarta.servlet.http.HttpServletRequest;
 

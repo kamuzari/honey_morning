@@ -50,7 +50,7 @@ public class AlarmContentStep {
 		DataSource primaryDataSource,
 		@Qualifier("mainReadOnlyDataSource") DataSource mainReadOnlyDataSource,
 		ObjectMapper objectMapper,
-		@Value("${batch.alarm.chunk-size:1000}") int chunkSize
+		@Value("${batch.alarm.chunk-size:100}") int chunkSize
 	) {
 		this.jobRepository = jobRepository;
 		this.transactionManager = transactionManager;

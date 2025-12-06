@@ -1,9 +1,9 @@
 package com.honeymorning.api.alarm.adapter.in.web.port.out;
 
 import static com.honeymorning.api.brief.utils.BriefingMockGenerator.GENERATOR;
-import static com.honeymorning.api.user.adapter.out.persistence.entity.UserRole.ROLE_USER;
 import static com.honeymorning.common.domain.alarm.constraint.AlarmResultConstraint.MATCH_COUNT_MAXIMUM_VALUE;
 import static com.honeymorning.common.domain.alarm.constraint.AlarmResultConstraint.MATCH_COUNT_MINIMUM_VALUE;
+import static com.honeymorning.common.domain.user.entity.UserRole.ROLE_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -20,10 +20,10 @@ import com.honeymorning.api.alarm.adapter.out.persistence.AlarmResultPersistence
 import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmResultPersistenceMapper;
 import com.honeymorning.api.alarm.adapter.out.persistence.repository.UserAlarmResultStreakRepository;
 import com.honeymorning.api.context.mock.MockPersistenceTest;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
-import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
 import com.honeymorning.common.domain.alarm.entity.AlarmResultEntity;
 import com.honeymorning.common.domain.alarm.repository.AlarmResultRepository;
+import com.honeymorning.common.domain.user.entity.UserEntity;
+import com.honeymorning.common.domain.user.repository.UserRepository;
 
 @Import({AlarmResultPersistenceAdapter.class, AlarmResultPersistenceMapper.class})
 class AlarmResultQueryPortTest extends MockPersistenceTest {

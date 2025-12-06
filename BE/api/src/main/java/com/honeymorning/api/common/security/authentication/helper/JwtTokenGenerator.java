@@ -9,7 +9,7 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.honeymorning.api.common.security.authentication.constant.JwtProperty;
 import com.honeymorning.api.common.security.core.JwtClaim;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
+import com.honeymorning.common.domain.user.entity.UserRole;
 
 @Component
 public class JwtTokenGenerator {

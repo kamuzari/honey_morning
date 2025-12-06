@@ -1,6 +1,6 @@
 package com.honeymorning.api.user.adapter.in.web;
 
-import static com.honeymorning.api.user.adapter.out.persistence.entity.UserRole.ROLE_USER;
+import static com.honeymorning.common.domain.user.entity.UserRole.ROLE_USER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.times;
@@ -35,8 +35,8 @@ import com.honeymorning.api.user.adapter.in.web.dto.response.LogoutAuthResponseD
 import com.honeymorning.api.user.adapter.in.web.dto.response.TokenResponseDto;
 import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateDiscardHandler;
 import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateSuccessHandler;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
 import com.honeymorning.api.user.application.AccountService;
+import com.honeymorning.common.domain.user.entity.UserEntity;
 
 @WebMvcTest({AccountController.class,
 	WebSecurityConfig.class,

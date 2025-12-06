@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import com.honeymorning.api.alarm.adapter.out.persistence.entity.UserAlarmResultStreakEntity;
 import com.honeymorning.api.alarm.application.domain.CreateUserAlarmStreak;
 import com.honeymorning.api.alarm.application.domain.UpdateStreakUser;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
+import com.honeymorning.common.domain.user.entity.UserEntity;
 
 @Component
 public class AlarmStreakPersistenceMapper {

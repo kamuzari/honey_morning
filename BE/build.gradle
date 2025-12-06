@@ -103,7 +103,10 @@ subprojects {
     }
 
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+
+        // ACTUATOR
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
         // Lombok
         compileOnly 'org.projectlombok:lombok'

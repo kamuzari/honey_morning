@@ -1,4 +1,4 @@
-package com.honeymorning.api.user.adapter.out.persistence.entity;
+package com.honeymorning.common.domain.user.entity;
 
 import com.honeymorning.common.common.basic.BaseEntity;
 

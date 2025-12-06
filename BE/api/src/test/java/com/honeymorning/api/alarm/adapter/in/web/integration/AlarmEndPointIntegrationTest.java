@@ -22,11 +22,11 @@ import com.honeymorning.api.alarm.adapter.in.web.dto.request.AlarmSetRequest;
 import com.honeymorning.api.common.security.authentication.JwtProviderManager;
 import com.honeymorning.api.common.security.core.JwtClaim;
 import com.honeymorning.api.context.integration.EndPointIntegrationTest;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
-import com.honeymorning.api.user.adapter.out.persistence.repository.UserRepository;
 import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
 import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
+import com.honeymorning.common.domain.user.entity.UserEntity;
+import com.honeymorning.common.domain.user.entity.UserRole;
+import com.honeymorning.common.domain.user.repository.UserRepository;
 
 import io.restassured.RestAssured;
 import io.restassured.http.Cookie.Builder;

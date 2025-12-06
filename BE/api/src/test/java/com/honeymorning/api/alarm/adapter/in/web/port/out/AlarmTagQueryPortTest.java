@@ -28,7 +28,7 @@ import com.honeymorning.common.domain.alarm.repository.TagRepository;
 
 @Import({AlarmTagPersistenceAdapter.class, AlarmTagPersistenceMapper.class})
 class AlarmTagQueryPortTest extends MockPersistenceTest {
-	static final long USER_ID =Faker.instance().number().randomNumber(10, true);
+	static final long USER_ID = Faker.instance().number().randomNumber(10, true);
 
 	AlarmTagQueryPort sut;
 

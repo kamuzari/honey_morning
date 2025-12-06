@@ -12,12 +12,12 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.github.javafaker.Faker;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserEntity;
-import com.honeymorning.api.user.adapter.out.persistence.entity.UserRole;
 import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
 import com.honeymorning.common.domain.briefing.entity.BriefingTagEntity;
 import com.honeymorning.common.domain.briefing.entity.QuizEntity;
 import com.honeymorning.common.domain.briefing.entity.TopicModelWordEntity;
+import com.honeymorning.common.domain.user.entity.UserEntity;
+import com.honeymorning.common.domain.user.entity.UserRole;
 
 public class BriefingMockGenerator {
 	public static final Faker GENERATOR = new Faker();
