@@ -23,7 +23,7 @@ public class AlarmContentPartition {
 
 	public AlarmContentPartition(
 		JobRepository jobRepository,
-		@Value("${batch.alarm.thread-pool-size:10}") Integer batchThreadPoolSize) {
+		@Value("${batch.alarm.thread-pool-size:15}") Integer batchThreadPoolSize) {
 
 		this.jobRepository = jobRepository;
 		this.batchThreadPoolSize = batchThreadPoolSize;
@@ -32,7 +32,7 @@ public class AlarmContentPartition {
 	public TaskExecutor executor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 		executor.setCorePoolSize(batchThreadPoolSize);
-		executor.setMaxPoolSize(batchThreadPoolSize);
+		executor.setMaxPoolSize(batchThreadPoolSize + 10);
 		executor.setThreadNamePrefix(THREAD_PREFIX);
 		executor.setWaitForTasksToCompleteOnShutdown(true);
 		executor.initialize();

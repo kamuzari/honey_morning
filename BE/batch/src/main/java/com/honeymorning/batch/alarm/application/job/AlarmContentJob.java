@@ -2,16 +2,15 @@ package com.honeymorning.batch.alarm.application.job;
 
 import static com.honeymorning.batch.alarm.application.constant.AlarmBatchConstant.JOB;
 
-import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.honeymorning.batch.common.step.LoggingJobListener;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,11 +24,11 @@ public class AlarmContentJob {
 	}
 
 	@Bean
-	public Job alarmToAlarmEventCreateJob(Step alarmsStepManager, JobExecutionListener commonJobListener) {
+	public Job alarmToAlarmEventCreateJob(Step alarmsStepManager) {
 		return new JobBuilder(JOB, jobRepository)
 			.incrementer(new RunIdIncrementer())
 			.start(alarmsStepManager)
-			.listener(commonJobListener)
+			.listener(new LoggingJobListener())
 			.build();
 	}
 }

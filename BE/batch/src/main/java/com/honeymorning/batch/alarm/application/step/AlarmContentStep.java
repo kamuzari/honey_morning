@@ -94,7 +94,7 @@ public class AlarmContentStep {
 			.parameterValues(READ_QUERY_GENERATOR.getParameters(startTime, endTime, today, modular, partition))
 			.rowMapper(READ_QUERY_GENERATOR.getRowMapper())
 			.pageSize(chunkSize)
-			.saveState(false)
+			.saveState(true)
 			.build();
 	}
 

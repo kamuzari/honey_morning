@@ -57,9 +57,9 @@ public class AlarmPagingQueryGenerator {
 			JOIN tags t ON at.tag_id = t.id
 			"""),
 		WHERE("""
-			WHERE is_active = true
+			WHERE wake_up_time BETWEEN :startTime AND :endTime
 			AND (day_of_the_weeks & :dayOfWeekMask) != 0
-			AND wake_up_time BETWEEN :startTime AND :endTime
+			AND is_active = true
 			AND MOD(user_id, :modular) = :partition
 			"""),
 		GROUP("GROUP BY user_id"),

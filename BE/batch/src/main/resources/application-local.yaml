@@ -18,10 +18,10 @@ spring:
       password: ENC(dP/YyZ2a7IEf5ybHgc357/iIDu8jAe1H)
       driver-class-name: com.mysql.cj.jdbc.Driver
       hikari:
-        minimum-idle: 10
-        maximum-pool-size: 10
-        max-lifetime: 25200000
-        idle-timeout: 1800000
+        minimum-idle: 15
+        maximum-pool-size: 25
+        max-lifetime: 1800000
+        idle-timeout: 600000
         connection-timeout: 3000
         validation-timeout: 5000
 
@@ -30,6 +30,13 @@ spring:
       username: ENC(HrXN/yuXf+kntxje8zkgow==)
       password: ENC(kPuHNfwdp3HsSbnZ97SBKw==)
       driver-class-name: com.mysql.cj.jdbc.Driver
+      hikari:
+        minimum-idle: 10
+        maximum-pool-size: 15
+        max-lifetime: 1800000
+        idle-timeout: 600000
+        connection-timeout: 3000
+        validation-timeout: 5000
 
   jpa:
     database: mysql

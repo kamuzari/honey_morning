@@ -18,7 +18,8 @@ import lombok.ToString;
 @Getter
 @Table(name = "alarms",
 	indexes = {
-		@Index(name = "alarm_user_id_idx", columnList = "user_id")
+		@Index(name = "alarm_user_id_idx", columnList = "user_id"),
+		@Index(name = "batch_reader_idx", columnList = "wake_up_time, is_active, user_id")
 	})
 @Entity
 public class AlarmEntity extends BaseEntity {
