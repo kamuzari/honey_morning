@@ -1,0 +1,3 @@
+[submodule "BE/secret"]
+	path = BE/secret
+	url = https://github.com/Onigiriiiiiiii/honeymorning_secrets.git
