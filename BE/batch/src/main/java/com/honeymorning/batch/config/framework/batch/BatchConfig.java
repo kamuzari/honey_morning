@@ -1,11 +1,13 @@
 package com.honeymorning.batch.config.framework.batch;
 
-import org.springframework.batch.core.BatchStatus;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobExecutionListener;
+import javax.sql.DataSource;
+
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.batch.BatchDataSourceScriptDatabaseInitializer;
+import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -18,6 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 public class BatchConfig {
 
 	@Bean
+	public BatchDataSourceScriptDatabaseInitializer batchDataSourceInitializer(
+		@Qualifier("primaryDataSource") DataSource dataSource,
+		BatchProperties properties) {
+		return new BatchDataSourceScriptDatabaseInitializer(dataSource, properties.getJdbc());
+	}
+
+	@Bean
 	@Primary
 	public JobLauncher asyncJobLauncher(JobRepository jobRepository) throws Exception {
 		TaskExecutorJobLauncher launcher = new TaskExecutorJobLauncher();
@@ -27,6 +36,7 @@ public class BatchConfig {
 
 		launcher.setTaskExecutor(executor);
 		launcher.afterPropertiesSet();
+
 		return launcher;
 	}
 

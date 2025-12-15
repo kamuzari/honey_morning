@@ -12,8 +12,9 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.honeymorning.batch.utils.TimeUtils;
 import com.honeymorning.common.domain.alarm.entity.DayOfTheWeek;
@@ -22,38 +23,39 @@ import lombok.extern.slf4j.Slf4j;
 
 @Profile({"local", "prod"})
 @Slf4j
-@Component
-public class AlarmBatchScheduler {
-	private static final String CRON_PER_MINUTE = "0 0/1 * * * *";
+@RequestMapping("/api/batch/alarm")
+@RestController
+public class AlarmBatchController {
 
 	private final JobLauncher asyncJobLauncher;
 	private final Job alarmToAlarmEventCreateJob;
 
 	@Autowired
-	public AlarmBatchScheduler(JobLauncher asyncJobLauncher, Job alarmToAlarmEventCreateJob) {
+	public AlarmBatchController(JobLauncher asyncJobLauncher, Job alarmToAlarmEventCreateJob) {
 		this.asyncJobLauncher = asyncJobLauncher;
 		this.alarmToAlarmEventCreateJob = alarmToAlarmEventCreateJob;
 	}
 
-	@Scheduled(cron = CRON_PER_MINUTE)
+	@PostMapping
 	public void scheduleAlarmJob() throws
 		JobInstanceAlreadyCompleteException,
 		JobExecutionAlreadyRunningException,
 		JobParametersInvalidException,
 		JobRestartException
 	{
+
 		LocalTime startTime = TimeUtils.getNow().plusMinutes(40);
 		LocalTime endTime = startTime.plusMinutes(1).minusSeconds(1);
 		Integer today = DayOfTheWeek.getToday();
 		log.info("start batch job start time -> {}, end time -> {}, today -> {}", startTime, endTime, today);
 
 		asyncJobLauncher.run(alarmToAlarmEventCreateJob, new JobParametersBuilder()
+			.addLong("createdAt", LocalDate.now().toEpochDay())
 			.addLocalDate("startAt", LocalDate.now())
 			.addLong("today", (long)today)
 			.addLocalTime("startTime", startTime)
 			.addLocalTime("endTime", endTime)
 			.toJobParameters()
 		);
-
 	}
 }

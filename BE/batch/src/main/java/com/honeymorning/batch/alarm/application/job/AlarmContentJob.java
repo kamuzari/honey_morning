@@ -26,7 +26,6 @@ public class AlarmContentJob {
 	@Bean
 	public Job alarmToAlarmEventCreateJob(Step alarmsStepManager) {
 		return new JobBuilder(JOB, jobRepository)
-			.incrementer(new RunIdIncrementer())
 			.start(alarmsStepManager)
 			.listener(new LoggingJobListener())
 			.build();
