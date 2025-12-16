@@ -1,0 +1,32 @@
+services:
+  honeymorning-db:
+    image: mysql:8.0
+    restart: unless-stopped
+    mem_limit: "1g"
+    cpus: "1.5"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: honeymorning
+      MYSQL_USER: honeymorning
+      MYSQL_PASSWORD: honeymorning
+    volumes:
+      - ./mysql/honeymorning:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - "3306:3306"
+
+  event-db:
+    image: mysql:8.0
+    restart: unless-stopped
+    mem_limit: "1g"
+    cpus: "1.5"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: event_store
+      MYSQL_USER: honeymorning
+      MYSQL_PASSWORD: honeymorning
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql/event:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf

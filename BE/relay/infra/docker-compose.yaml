@@ -1,0 +1,73 @@
+services:
+  honeymorning-db:
+    extends:
+      file: database/mysql.yml
+      service: honeymorning-db
+
+  event-db:
+    extends:
+      file: database/mysql.yml
+      service: event-db
+
+  rabbitmq-1:
+    extends:
+      file: rabbitmq/rabbitmq.yml
+      service: rabbitmq-1
+
+  rabbitmq-2:
+    extends:
+      file: rabbitmq/rabbitmq.yml
+      service: rabbitmq-2
+
+  rabbitmq-3:
+    extends:
+      file: rabbitmq/rabbitmq.yml
+      service: rabbitmq-3
+
+  rabbitmq-haproxy:
+    extends:
+      file: rabbitmq/rabbitmq.yml
+      service: haproxy
+
+  localstack:
+    extends:
+      file: localstack/localstack.yml
+      service: localstack
+  
+  prometheus:
+    extends:
+      file: monitoring/monitoring.yml
+      service: prometheus
+
+  grafana:
+    extends:
+      file: monitoring/monitoring.yml
+      service: grafana
+
+  kafka-1:
+    extends:
+      file: cdc/cdc.yml
+      service: kafka-1
+  kafka-2:
+    extends:
+      file: cdc/cdc.yml
+      service: kafka-2
+  kafka-3:
+    extends:
+      file: cdc/cdc.yml
+      service: kafka-3
+
+  kafka-connect:
+    extends:
+      file: cdc/cdc.yml
+      service: kafka-connect
+
+  kafka-ui:
+    extends:
+      file: cdc/cdc.yml
+      service: kafka-ui
+
+  elasticsearch:
+    extends:
+      file: elasticsearch/search.yml
+      service: elasticsearch   
