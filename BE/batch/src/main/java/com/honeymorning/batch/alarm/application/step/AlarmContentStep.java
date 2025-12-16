@@ -25,12 +25,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.honeymorning.batch.alarm.adapter.out.persistence.entity.OutBoxAlarmEventEntity;
+import com.honeymorning.batch.alarm.adapter.out.persistence.query.AlarmOutBoxEventWriteQueryGenerator;
+import com.honeymorning.batch.alarm.adapter.out.persistence.query.AlarmPagingQueryGenerator;
 import com.honeymorning.batch.alarm.application.dto.ReadyAlarmDto;
 import com.honeymorning.batch.alarm.application.step.processor.AlarmItemProcessor;
-import com.honeymorning.batch.alarm.adapter.out.persistence.query.AlarmPagingQueryGenerator;
-import com.honeymorning.batch.alarm.adapter.out.persistence.query.AlarmOutBoxEventWriteQueryGenerator;
 import com.honeymorning.batch.common.step.LoggingStepExecutionListener;
+import com.honeymorning.common.domain.event.entity.OutBoxAlarmEventEntity;
 
 @Configuration
 public class AlarmContentStep {

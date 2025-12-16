@@ -1,4 +1,4 @@
-package com.honeymorning.batch.alarm.adapter.out.persistence.entity;
+package com.honeymorning.common.domain.event.entity;
 
 import java.time.LocalDateTime;
 
@@ -38,7 +38,7 @@ public class OutBoxAlarmEventEntity {
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
 
-	@Column(name = "processed_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	@Column(name = "processed_at")
 	private LocalDateTime processedAt;
 
 	protected OutBoxAlarmEventEntity(Long alarmId,

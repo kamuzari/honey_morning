@@ -3,7 +3,7 @@ package com.honeymorning.batch.alarm.adapter.out.persistence.query;
 import org.springframework.batch.item.database.ItemSqlParameterSourceProvider;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
-import com.honeymorning.batch.alarm.adapter.out.persistence.entity.OutBoxAlarmEventEntity;
+import com.honeymorning.common.domain.event.entity.OutBoxAlarmEventEntity;
 
 public class AlarmOutBoxEventWriteQueryGenerator {
 	public String getSql() {

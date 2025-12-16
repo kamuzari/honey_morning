@@ -18,7 +18,11 @@ import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 
 @EnableJpaRepositories(
-	basePackages = "com.honeymorning.common.domain.*.repository",
+	basePackages = {
+		"com.honeymorning.common.domain.alarm.repository",
+		"com.honeymorning.common.domain.briefing.repository",
+		"com.honeymorning.common.domain.user.repository"
+	},
 	entityManagerFactoryRef = "readOnlyEntityManagerFactory",
 	transactionManagerRef = "readOnlyTransactionManager"
 )
@@ -44,7 +48,10 @@ public class ReadDataSourceConfig {
 		@Qualifier("mainReadOnlyDataSource") DataSource subDataSource) {
 
 		return builder.dataSource(subDataSource)
-			.packages("com.honeymorning.common.domain.*.entity")
+			.packages(
+				"com.honeymorning.common.domain.alarm.entity",
+				"com.honeymorning.common.domain.briefing.entity",
+				"com.honeymorning.common.domain.user.entity")
 			.persistenceUnit("<<readings: main service readOnly>>")
 			.build();
 	}

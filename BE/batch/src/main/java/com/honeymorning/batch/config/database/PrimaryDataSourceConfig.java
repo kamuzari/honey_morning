@@ -19,7 +19,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 
 @EnableJpaRepositories(
-	basePackages = {"com.honeymorning.batch.*"},
+	basePackages = {"com.honeymorning.common.domain.event.repository"},
 	entityManagerFactoryRef = "primaryEntityManagerFactory",
 	transactionManagerRef = "primaryTransactionManager"
 )
@@ -48,7 +48,7 @@ public class PrimaryDataSourceConfig {
 		@Qualifier("primaryDataSource") DataSource primaryDataSource) {
 
 		return builder.dataSource(primaryDataSource)
-			.packages("com.honeymorning.batch.*")
+			.packages("com.honeymorning.common.domain.event.entity")
 			.persistenceUnit("<<primary>>")
 			.build();
 	}

@@ -1,4 +1,4 @@
-package com.honeymorning.batch.alarm.adapter.out.persistence.entity;
+package com.honeymorning.common.domain.event.entity;
 
 public enum EventStatus {
 	PENDING("이벤트 발행 완료"),
