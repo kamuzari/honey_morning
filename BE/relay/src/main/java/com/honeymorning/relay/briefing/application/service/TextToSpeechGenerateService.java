@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.honeymorning.common.common.content.AccessAuthority;
 import com.honeymorning.common.common.content.Content;
@@ -17,11 +15,9 @@ import com.honeymorning.relay.briefing.application.domain.EmptyBriefingTts;
 import com.honeymorning.relay.briefing.application.domain.EmptyQuizTts;
 import com.honeymorning.relay.briefing.application.domain.LatestBriefing;
 import com.honeymorning.relay.briefing.application.domain.TextToSpeechContent;
-import com.honeymorning.relay.briefing.application.port.in.FallBackTtsCommandUseCase;
 import com.honeymorning.relay.briefing.application.port.in.TextToSpeechCommandUseCase;
 import com.honeymorning.relay.briefing.application.port.out.CommandBriefingPort;
 import com.honeymorning.relay.briefing.application.port.out.CommandContentStorePort;
-import com.honeymorning.relay.briefing.application.port.out.CommandFailTtsEventPort;
 import com.honeymorning.relay.briefing.application.port.out.CommandQuizPort;
 import com.honeymorning.relay.briefing.application.port.out.CommandTextToSpeechPort;
 import com.honeymorning.relay.briefing.application.port.out.LoadBriefingPort;
@@ -29,13 +25,12 @@ import com.honeymorning.relay.briefing.application.port.out.LoadQuizPort;
 import com.honeymorning.relay.util.ResponseEntityUtils;
 
 @Service
-public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase, FallBackTtsCommandUseCase {
+public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase {
 
 	private final CommandContentStorePort s3CommandContentStorePort;
 	private final CommandTextToSpeechPort commandTextToSpeechPort;
 	private final CommandBriefingPort commandBriefingPort;
 	private final CommandQuizPort commandQuizPort;
-	private final CommandFailTtsEventPort commandFailTtsEventPort;
 
 	private final LoadBriefingPort loadBriefingPort;
 	private final LoadQuizPort loadQuizPort;
@@ -49,7 +44,6 @@ public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase, 
 		LoadBriefingPort loadBriefingPort,
 		CommandBriefingPort commandBriefingPort,
 		CommandQuizPort commandQuizPort,
-		CommandFailTtsEventPort commandFailTtsEventPort,
 		LoadQuizPort loadQuizPort) {
 
 		this.s3CommandContentStorePort = s3ContentStoreAdapter;
@@ -57,7 +51,6 @@ public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase, 
 		this.loadBriefingPort = loadBriefingPort;
 		this.commandBriefingPort = commandBriefingPort;
 		this.commandQuizPort = commandQuizPort;
-		this.commandFailTtsEventPort = commandFailTtsEventPort;
 		this.loadQuizPort = loadQuizPort;
 	}
 
@@ -83,11 +76,6 @@ public class TextToSpeechGenerateService implements TextToSpeechCommandUseCase, 
 		EmptyQuizTts emptyQuizTts = loadQuizPort.getEmptyTtsQuiz(latestBriefing.briefingId(), order);
 		emptyQuizTts.add(content);
 		commandQuizPort.reflect(emptyQuizTts);
-	}
-
-	@Transactional(transactionManager = "eventTransactionManager", propagation = Propagation.REQUIRES_NEW)
-	public void write(Long briefingId) {
-		commandFailTtsEventPort.save(briefingId);
 	}
 
 	private void addBriefingContent(TextToSpeechContent textToSpeechContent) {
