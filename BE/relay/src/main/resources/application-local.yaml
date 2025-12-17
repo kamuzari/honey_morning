@@ -80,11 +80,7 @@ app:
   kafka:
     topics:
       cdc:
-        name: "alarm_contents-outbox_alarm_event"
-        partitions: 3
-        replicas: 3
-      fail-tts:
-        name: "alarm-contents-fail-tts-event"
+        name: "alarm_contents.event_store.outbox_alarm_event"
         partitions: 3
         replicas: 3
       from-ai-store:
@@ -103,13 +99,14 @@ app:
         name: "alarm-contents-ai-quiz2-tts"
         partitions: 3
         replicas: 3
+      briefing-indexing-cdc:
+        name: "briefing_search.honeymorning.briefings"
+        partitions: 3
+        replicas: 3
     consumers:
       cdc:
         topic: ${app.kafka.topics.cdc.name}
         group-id: "alarm-contents-cdc-group"
-      fail-tts:
-        topic: ${app.kafka.topics.fail-tts.name}
-        group-id: "fail-tts-compensation-group"
       ai-store:
         topic: ${app.kafka.topics.from-ai-store.name}
         group-id: "ai-response-store-group"
@@ -122,6 +119,9 @@ app:
       ai-quiz2-tts:
         topic: ${app.kafka.topics.from-ai-quiz2-tts.name}
         group-id: "ai-response-quiz2-tts-group"
+      briefing-indexing-cdc:
+        topic: ${app.kafka.topics.briefing-indexing-cdc.name}
+        group-id: "briefing-search-cdc-group"
 
 
 aws:

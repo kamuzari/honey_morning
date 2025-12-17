@@ -1,7 +1,7 @@
 package com.honeymorning.relay.briefing.application.port.in;
 
-import com.honeymorning.relay.briefing.adapter.in.event.dto.BriefingSearchCommandDto;
+import com.honeymorning.relay.briefing.application.service.dto.AiResponseDto;
 
 public interface SearchCommandUseCase {
-	void register(BriefingSearchCommandDto searchCommandDto);
+	void register(Long briefingId);
 }

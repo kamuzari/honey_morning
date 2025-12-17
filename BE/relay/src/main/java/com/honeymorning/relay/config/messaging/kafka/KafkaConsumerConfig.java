@@ -59,12 +59,14 @@ public class KafkaConsumerConfig {
 	@Bean
 	public ConcurrentKafkaListenerContainerFactory<String, String> cdcKafkaListenerContainerFactory(
 		ConsumerFactory<String, String> consumerFactory,
-		DefaultErrorHandler errorHandler
+		DefaultErrorHandler errorHandler,
+		RecordMessageConverter messageConverter
 	) {
 		var factory = new ConcurrentKafkaListenerContainerFactory<String, String>();
 		factory.setConsumerFactory(consumerFactory);
 		factory.getContainerProperties().setAckMode(AckMode.MANUAL_IMMEDIATE);
 		factory.setCommonErrorHandler(errorHandler);
+		factory.setRecordMessageConverter(messageConverter);
 		return factory;
 	}
 

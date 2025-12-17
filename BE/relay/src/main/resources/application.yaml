@@ -2,6 +2,7 @@ spring:
   application:
     name: relay
   profiles:
-    active: local
+    active: ${SPRING_PROFILES_ACTIVE:local}
+
 jasypt:
   password: ${JASYPT_PASSWORD:honeymorning}
