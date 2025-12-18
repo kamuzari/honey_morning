@@ -27,8 +27,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 
-import com.honeymorning.batch.alarm.adapter.out.persistence.entity.OutBoxAlarmEventEntity;
-import com.honeymorning.batch.alarm.adapter.out.persistence.repository.OutBoxAlarmEventRepository;
 import com.honeymorning.batch.config.TestSubDataBaseConfig;
 import com.honeymorning.batch.context.DefaultIntegrationContext;
 import com.honeymorning.batch.utils.TimeUtils;
@@ -39,6 +37,8 @@ import com.honeymorning.common.domain.alarm.entity.TagEntity;
 import com.honeymorning.common.domain.alarm.repository.AlarmRepository;
 import com.honeymorning.common.domain.alarm.repository.AlarmTagRepository;
 import com.honeymorning.common.domain.alarm.repository.TagRepository;
+import com.honeymorning.common.domain.event.entity.OutBoxAlarmEventEntity;
+import com.honeymorning.common.domain.event.repository.OutBoxAlarmEventRepository;
 
 @Import(TestSubDataBaseConfig.class)
 @SpringBatchTest

@@ -1,16 +1,20 @@
 #!/bin/bash
 
+KAFKA_CONNECT_HOST="${KAFKA_CONNECT_HOST:-localhost}"
+KAFKA_CONNECT_PORT="${KAFKA_CONNECT_PORT:-8083}"
+KAFKA_CONNECT_URL="http://${KAFKA_CONNECT_HOST}:${KAFKA_CONNECT_PORT}"
+
 echo "커넥터 확인"
 sleep 2
 
-curl -X DELETE http://localhost:8083/connectors/mysql-briefing-connector
+curl -X DELETE ${KAFKA_CONNECT_URL}/connectors/mysql-briefing-connector
 
 echo "\n\n\n"
 
 echo "커넥터 등록"
 sleep 2
 
-curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d '{
+curl -X POST ${KAFKA_CONNECT_URL}/connectors -H "Content-Type: application/json" -d '{
   "name": "to-indexing-briefing-connector",
   "config": {
     "connector.class": "io.debezium.connector.mysql.MySqlConnector",

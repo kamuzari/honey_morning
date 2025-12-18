@@ -70,4 +70,18 @@ services:
   elasticsearch:
     extends:
       file: elasticsearch/search.yml
-      service: elasticsearch   
+      service: elasticsearch
+
+  connector-init:
+    image: curlimages/curl:latest
+    depends_on:
+      kafka-connect:
+        condition: service_healthy
+    environment:
+      KAFKA_CONNECT_HOST: kafka-connect
+      KAFKA_CONNECT_PORT: 8083
+    volumes:
+      - ./cdc/alarm-event-cdc-connector.sh:/alarm-event-cdc-connector.sh
+      - ./cdc/indexing-search-connector.sh:/indexing-search-connector.sh
+    entrypoint: [ "/bin/sh", "-c", "sh /alarm-event-cdc-connector.sh && sh /indexing-search-connector.sh" ]
+    restart: "no"

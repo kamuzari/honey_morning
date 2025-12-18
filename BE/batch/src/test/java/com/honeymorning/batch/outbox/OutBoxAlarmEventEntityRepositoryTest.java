@@ -7,10 +7,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.honeymorning.batch.alarm.adapter.out.persistence.entity.EventStatus;
-import com.honeymorning.batch.alarm.adapter.out.persistence.entity.OutBoxAlarmEventEntity;
-import com.honeymorning.batch.alarm.adapter.out.persistence.repository.OutBoxAlarmEventRepository;
 import com.honeymorning.batch.mock.MockPersistenceTest;
+import com.honeymorning.common.domain.event.entity.EventStatus;
+import com.honeymorning.common.domain.event.entity.OutBoxAlarmEventEntity;
+import com.honeymorning.common.domain.event.repository.OutBoxAlarmEventRepository;
 
 class OutBoxAlarmEventEntityRepositoryTest extends MockPersistenceTest {
 
@@ -30,7 +30,8 @@ class OutBoxAlarmEventEntityRepositoryTest extends MockPersistenceTest {
 	void testGetTopData() {
 		//given
 		//when
-		OutBoxAlarmEventEntity outBoxAlarmEventEntity = outBoxAlarmEventRepository.findTopByEventStatus(EventStatus.PENDING)
+		OutBoxAlarmEventEntity outBoxAlarmEventEntity = outBoxAlarmEventRepository.findTopByEventStatus(
+				EventStatus.PENDING)
 			.orElseThrow(RuntimeException::new);
 
 		//then

@@ -94,7 +94,11 @@ services:
       PLUGIN_PATH: /kafka/connect
       CONNECT_PRODUCER_ENABLE_IDEMPOTENCE: "true"
       CONNECT_CONSUMER_ISOLATION_LEVEL: "read_committed"
-
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/connectors"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     depends_on:
       - kafka-1
       - kafka-2

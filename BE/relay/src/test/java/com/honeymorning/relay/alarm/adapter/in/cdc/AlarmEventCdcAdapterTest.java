@@ -31,7 +31,7 @@ import com.honeymorning.relay.briefing.adapter.in.consumer.AiClientDltConsumer;
 import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 
 @TestPropertySource(properties = {
-	"app.kafka.consumers.cdc.group-id=${random.uuid}"
+	"app.kafka.consumers.to-ai-cdc.group-id=${random.uuid}"
 })
 class AlarmEventCdcAdapterTest extends DefaultIntegrationTest {
 
