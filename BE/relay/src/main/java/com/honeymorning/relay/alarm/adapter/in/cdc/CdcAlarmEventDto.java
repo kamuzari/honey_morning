@@ -37,22 +37,4 @@ public class CdcAlarmEventDto {
 	@JsonProperty("processed_at")
 	@JsonDeserialize(using = MicrosecondToLocalDateTimeDeserializer.class)
 	private LocalDateTime processedAt;
-
-	public CdcAlarmEventDto(Long alarmId,
-		Long id,
-		String eventStatus,
-		String eventType,
-		String payload,
-		LocalDateTime createdAt,
-		LocalDateTime processedAt) {
-
-		this.alarmId = alarmId;
-		this.id = id;
-		this.eventStatus = eventStatus;
-		this.eventType = eventType;
-		this.payload = payload;
-		this.createdAt = createdAt;
-		this.processedAt = processedAt;
-	}
-
 }

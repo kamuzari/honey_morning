@@ -13,7 +13,7 @@ public class AiClientDltConsumer extends AiClientMessenger {
 	protected AiClientDltConsumer(
 		AlarmContentCommandUseCase alarmContentCommandUseCase,
 		TextToSpeechCommandUseCase textToSpeechCommandUseCase
-	) {
+		) {
 		super(alarmContentCommandUseCase, textToSpeechCommandUseCase);
 	}
 

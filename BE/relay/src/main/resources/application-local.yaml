@@ -79,7 +79,7 @@ spring:
 app:
   kafka:
     topics:
-      cdc:
+      to-ai-cdc:
         name: "alarm_contents.event_store.outbox_alarm_event"
         partitions: 3
         replicas: 3
@@ -104,8 +104,8 @@ app:
         partitions: 3
         replicas: 3
     consumers:
-      cdc:
-        topic: ${app.kafka.topics.cdc.name}
+      to-ai-cdc:
+        topic: ${app.kafka.topics.to-ai-cdc.name}
         group-id: "alarm-contents-cdc-group"
       ai-store:
         topic: ${app.kafka.topics.from-ai-store.name}

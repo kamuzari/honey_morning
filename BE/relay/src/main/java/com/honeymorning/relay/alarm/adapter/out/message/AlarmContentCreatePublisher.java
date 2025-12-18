@@ -28,7 +28,7 @@ public class AlarmContentCreatePublisher implements MessagePort {
 		this.toAiQueue = toAiQueue;
 	}
 
-	public void publish(String message, CdcAlarmEventDto scheduledAlarmContent) throws
+	public void publish(CdcAlarmEventDto scheduledAlarmContent) throws
 		ExecutionException,
 		InterruptedException,
 		TimeoutException {
@@ -38,7 +38,7 @@ public class AlarmContentCreatePublisher implements MessagePort {
 			scheduledAlarmContent.getPayload(), correlationData);
 		CorrelationData.Confirm confirm = correlationData.getFuture().get(2, TimeUnit.SECONDS);
 		if (!confirm.isAck()) {
-			LOGGER.error("exception outbox event {}", message);
+			LOGGER.error("exception outbox event {}", scheduledAlarmContent);
 			throw new AmqpException("fail publisher confirm");
 		}
 	}

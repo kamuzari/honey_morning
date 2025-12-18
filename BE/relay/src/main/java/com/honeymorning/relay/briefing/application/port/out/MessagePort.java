@@ -6,7 +6,7 @@ import java.util.concurrent.TimeoutException;
 import com.honeymorning.relay.alarm.adapter.in.cdc.CdcAlarmEventDto;
 
 public interface MessagePort {
-	void publish(String message, CdcAlarmEventDto scheduledAlarmContent) throws
+	void publish(CdcAlarmEventDto scheduledAlarmContent) throws
 		ExecutionException,
 		InterruptedException,
 		TimeoutException;

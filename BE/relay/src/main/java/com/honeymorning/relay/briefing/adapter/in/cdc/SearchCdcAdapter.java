@@ -20,7 +20,7 @@ public class SearchCdcAdapter {
 
 	@KafkaListener(
 		topics = "${app.kafka.topics.briefing-indexing-cdc.name}",
-		groupId = "${app.kafka.consumers.briefing-cdc.group-id}",
+		groupId = "${app.kafka.consumers.briefing-indexing-cdc.group-id}",
 		containerFactory = "cdcKafkaListenerContainerFactory"
 	)
 	public void consumeBriefingEvent(CommandSearchBriefingTextDto dto, Acknowledgment acknowledgment) {
@@ -30,8 +30,9 @@ public class SearchCdcAdapter {
 	}
 
 	@KafkaListener(
-		topics = "${app.kafka.topics.briefing-cdc.name}.DLT",
-		groupId = "${app.kafka.consumers.briefing-cdc.group-id}"
+		topics = "${app.kafka.topics.briefing-indexing-cdc.name}.DLT",
+		groupId = "${app.kafka.consumers.briefing-indexing-cdc.group-id}",
+	containerFactory = "cdcKafkaListenerContainerFactory"
 	)
 	public void consumeBriefingEventDlt(CommandSearchBriefingTextDto dto) {
 		LOGGER.warn("consume briefing cdc DLT event, briefingId={}", dto.briefingId());
