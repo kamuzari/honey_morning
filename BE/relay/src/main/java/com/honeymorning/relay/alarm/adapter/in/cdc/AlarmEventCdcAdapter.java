@@ -23,7 +23,7 @@ public class AlarmEventCdcAdapter {
 
 	@KafkaListener(
 		topics = "${app.kafka.topics.to-ai-cdc.name}",
-		groupId = "${app.kafka.consumers.to-ai-cdc.group-id}",
+		groupId = "${app.kafka.consumers.ai-cdc.group-id}",
 		containerFactory = "cdcKafkaListenerContainerFactory"
 	)
 	public void consumeOutboxEvent(CdcAlarmEventDto dto, Acknowledgment acknowledgment)
@@ -36,7 +36,7 @@ public class AlarmEventCdcAdapter {
 
 	@KafkaListener(
 		topics = "${app.kafka.topics.to-ai-cdc.name}.DLT",
-		groupId = "${app.kafka.consumers.to-ai-cdc.group-id}",
+		groupId = "${app.kafka.consumers.ai-cdc.group-id}",
 		containerFactory = "cdcKafkaListenerContainerFactory"
 	)
 	public void consumeOutboxEventDlt(CdcAlarmEventDto dto, Acknowledgment acknowledgment)

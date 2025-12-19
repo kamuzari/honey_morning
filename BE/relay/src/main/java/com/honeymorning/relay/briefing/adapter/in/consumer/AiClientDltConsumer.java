@@ -18,32 +18,37 @@ public class AiClientDltConsumer extends AiClientMessenger {
 	}
 
 	@KafkaListener(
-		topics = "${app.kafka.consumers.ai-store.topic}.DLT",
-		groupId = "${app.kafka.consumers.ai-store.group-id}"
+		topics = "${app.kafka.consumers.ai-store.topic}-dlt",
+		groupId = "${app.kafka.consumers.ai-store.group-id}",
+		containerFactory = "kafkaListenerContainerFactory"
+
 	)
 	public void storeAiResponse(AiResponseDto response) {
 		processStore(response);
 	}
 
 	@KafkaListener(
-		topics = "${app.kafka.consumers.ai-briefing-tts.topic}.DLT",
-		groupId = "${app.kafka.consumers.ai-briefing-tts.group-id}"
+		topics = "${app.kafka.consumers.ai-briefing-tts.topic}-dlt",
+		groupId = "${app.kafka.consumers.ai-briefing-tts.group-id}",
+		containerFactory = "kafkaListenerContainerFactory"
 	)
 	public void createBriefingTts(AiResponseDto response) {
 		processBriefingTts(response);
 	}
 
 	@KafkaListener(
-		topics = "${app.kafka.consumers.ai-quiz1-tts.topic}.DLT",
-		groupId = "${app.kafka.consumers.ai-quiz1-tts.group-id}"
+		topics = "${app.kafka.consumers.ai-quiz1-tts.topic}-dlt",
+		groupId = "${app.kafka.consumers.ai-quiz1-tts.group-id}",
+		containerFactory = "kafkaListenerContainerFactory"
 	)
 	public void createQuiz1Tts(AiResponseDto response) {
 		processQuiz1Tts(response);
 	}
 
 	@KafkaListener(
-		topics = "${app.kafka.consumers.ai-quiz2-tts.topic}.DLT",
-		groupId = "${app.kafka.consumers.ai-quiz2-tts.group-id}"
+		topics = "${app.kafka.consumers.ai-quiz2-tts.topic}-dlt",
+		groupId = "${app.kafka.consumers.ai-quiz2-tts.group-id}",
+		containerFactory = "kafkaListenerContainerFactory"
 	)
 	public void createQuiz2Tts(AiResponseDto response) {
 		processQuiz2Tts(response);

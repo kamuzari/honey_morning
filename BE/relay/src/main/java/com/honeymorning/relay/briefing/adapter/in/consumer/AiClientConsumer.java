@@ -22,7 +22,8 @@ public class AiClientConsumer extends AiClientMessenger {
 
 	@KafkaListener(
 		topics = "${app.kafka.consumers.ai-store.topic}",
-		groupId = "${app.kafka.consumers.ai-store.group-id}"
+		groupId = "${app.kafka.consumers.ai-store.group-id}",
+		containerFactory = "kafkaListenerContainerFactory"
 	)
 	public void storeAiResponse(AiResponseDto response) {
 		processStore(response);
@@ -30,7 +31,8 @@ public class AiClientConsumer extends AiClientMessenger {
 
 	@KafkaListener(
 		topics = "${app.kafka.consumers.ai-briefing-tts.topic}",
-		groupId = "${app.kafka.consumers.ai-briefing-tts.group-id}"
+		groupId = "${app.kafka.consumers.ai-briefing-tts.group-id}",
+		containerFactory = "kafkaListenerContainerFactory"
 	)
 	public void createBriefingTts(AiResponseDto response) {
 		processBriefingTts(response);
@@ -38,7 +40,8 @@ public class AiClientConsumer extends AiClientMessenger {
 
 	@KafkaListener(
 		topics = "${app.kafka.consumers.ai-quiz1-tts.topic}",
-		groupId = "${app.kafka.consumers.ai-quiz1-tts.group-id}"
+		groupId = "${app.kafka.consumers.ai-quiz1-tts.group-id}",
+		containerFactory = "kafkaListenerContainerFactory"
 	)
 	public void createQuiz1Tts(AiResponseDto response) {
 		processQuiz1Tts(response);
@@ -46,11 +49,11 @@ public class AiClientConsumer extends AiClientMessenger {
 
 	@KafkaListener(
 		topics = "${app.kafka.consumers.ai-quiz2-tts.topic}",
-		groupId = "${app.kafka.consumers.ai-quiz2-tts.group-id}"
+		groupId = "${app.kafka.consumers.ai-quiz2-tts.group-id}",
+		containerFactory = "kafkaListenerContainerFactory"
 	)
 	public void createQuiz2Tts(AiResponseDto response) {
 		processQuiz2Tts(response);
 	}
-
 
 }
