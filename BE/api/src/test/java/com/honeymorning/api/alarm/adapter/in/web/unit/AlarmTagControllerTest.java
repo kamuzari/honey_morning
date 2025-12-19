@@ -16,8 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.honeymorning.api.alarm.adapter.in.web.AlarmTagController;
@@ -46,10 +46,10 @@ class AlarmTagControllerTest extends MockControllerTest {
 
 	final String URI_PREFIX = "/api/alarmtags";
 
-	@MockBean
+	@MockitoBean
 	AlarmTagService alarmTagService;
 
-	@MockBean
+	@MockitoBean
 	AlarmTagQueryPort alarmTagQueryPort;
 
 	@Test

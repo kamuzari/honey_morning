@@ -11,6 +11,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,13 +37,13 @@ import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateSuccessHandl
 public class CorsTest {
 	static final String TEST_END_POINT = "/api/test";
 
-	@SpyBean
+	@MockitoSpyBean
 	MockMvc mockMvc;
 
-	@SpyBean
+	@MockitoSpyBean
 	ObjectMapper objectMapper;
 
-	@MockBean
+	@MockitoBean
 	TokenService tokenService;
 
 	@DisplayName("지정한_ORIGIN일경우 시큐리티의 CORSFilter를 무사 통과한다")

@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import com.github.javafaker.Faker;
+import net.datafaker.Faker;
+
 import com.honeymorning.common.domain.briefing.entity.BriefingEntity;
 import com.honeymorning.common.domain.briefing.entity.BriefingTagEntity;
 import com.honeymorning.common.domain.briefing.entity.QuizEntity;

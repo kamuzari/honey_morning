@@ -12,8 +12,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.honeymorning.api.alarm.adapter.in.web.dto.response.AlarmResultResponseDto;
 import com.honeymorning.api.alarm.adapter.out.persistence.AlarmResultPersistenceAdapter;
@@ -39,7 +39,7 @@ class AlarmResultQueryPortTest extends MockPersistenceTest {
 	@Autowired
 	UserRepository userRepository;
 
-	@MockBean
+	@MockitoBean
 	private UserAlarmResultStreakRepository userAlarmResultStreakRepository;
 
 	@Test

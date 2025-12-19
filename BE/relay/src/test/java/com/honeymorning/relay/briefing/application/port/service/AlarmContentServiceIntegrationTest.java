@@ -15,11 +15,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.amazonaws.services.s3.AmazonS3;
@@ -65,7 +65,7 @@ class AlarmContentServiceIntegrationTest extends DefaultIntegrationTest {
 	@Autowired
 	BriefingRepository briefingRepository;
 
-	@SpyBean
+	@MockitoSpyBean
 	TextToSpeechGenerateService ttsGenerateService;
 
 	@BeforeEach

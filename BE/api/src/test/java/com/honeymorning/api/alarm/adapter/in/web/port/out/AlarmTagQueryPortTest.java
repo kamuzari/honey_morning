@@ -13,7 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 
-import com.github.javafaker.Faker;
+import net.datafaker.Faker;
+
 import com.honeymorning.api.alarm.adapter.in.web.dto.response.AlarmTagResponseDto;
 import com.honeymorning.api.alarm.adapter.out.persistence.AlarmTagPersistenceAdapter;
 import com.honeymorning.api.alarm.adapter.out.persistence.mapper.AlarmTagPersistenceMapper;
@@ -28,7 +29,7 @@ import com.honeymorning.common.domain.alarm.repository.TagRepository;
 
 @Import({AlarmTagPersistenceAdapter.class, AlarmTagPersistenceMapper.class})
 class AlarmTagQueryPortTest extends MockPersistenceTest {
-	static final long USER_ID = Faker.instance().number().randomNumber(10, true);
+	static final long USER_ID = new Faker().number().randomNumber(10, true);
 
 	AlarmTagQueryPort sut;
 

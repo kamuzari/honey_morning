@@ -16,8 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.honeymorning.api.brief.adapter.in.web.dto.request.SelectionRequestDto;
@@ -43,10 +43,10 @@ import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateSuccessHandl
 class QuizControllerTest extends MockControllerTest {
 	final String URI_PREFIX = "/api/quizzes";
 
-	@MockBean
+	@MockitoBean
 	QuizCommandUseCase quizCommandUseCase;
 
-	@MockBean
+	@MockitoBean
 	QuizQueryPort quizQueryPort;
 
 	@Test

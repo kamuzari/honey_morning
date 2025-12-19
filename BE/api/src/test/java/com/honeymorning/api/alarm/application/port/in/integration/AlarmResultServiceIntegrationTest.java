@@ -12,8 +12,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.redis.RedisConnectionFailureException;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import com.honeymorning.api.alarm.adapter.in.web.dto.request.AddAlarmResultRequestDto;
 import com.honeymorning.api.alarm.adapter.out.persistence.entity.UserAlarmResultStreakEntity;
@@ -33,7 +33,7 @@ class AlarmResultServiceIntegrationTest extends DefaultIntegrationTest {
 	@Autowired
 	AlarmResultRepository alarmResultRepository;
 
-	@MockBean
+	@MockitoBean
 	private UserAlarmResultStreakRepository userAlarmResultStreakRepository;
 
 	@Test

@@ -20,10 +20,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,16 +44,16 @@ import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 })
 class AiClientConsumerMockTest extends DefaultIntegrationTest {
 
-	@SpyBean
+	@MockitoSpyBean
 	AiClientConsumer sut;
 
-	@SpyBean
+	@MockitoSpyBean
 	AiClientDltConsumer subSut;
 
-	@MockBean
+	@MockitoBean
 	AlarmContentService alarmContentService;
 
-	@MockBean
+	@MockitoBean
 	TextToSpeechGenerateService textToSpeechGenerateService;
 
 	@Value("${app.kafka.topics.from-ai-store.name}")

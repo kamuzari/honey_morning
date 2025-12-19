@@ -9,7 +9,7 @@ dependencies {
     api 'io.awspring.cloud:spring-cloud-aws-starter:3.2.1'
 
     // Fake Data
-    api group: 'com.github.javafaker', name: 'javafaker', version: '0.15'
+    api 'net.datafaker:datafaker:2.4.0'
 }
 
 bootJar {

@@ -12,7 +12,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.github.javafaker.Faker;
+import net.datafaker.Faker;
+
 import com.honeymorning.api.alarm.application.port.in.AlarmTagCommandUseCase;
 import com.honeymorning.api.context.integration.DefaultIntegrationTest;
 import com.honeymorning.common.domain.alarm.entity.AlarmEntity;
@@ -25,7 +26,7 @@ import com.honeymorning.common.domain.alarm.repository.TagRepository;
 
 class AlarmTagServiceIntegrationTest extends DefaultIntegrationTest {
 
-	static final long USER_ID = Faker.instance().number().randomNumber(10, true);
+	static final long USER_ID = new Faker().number().randomNumber(10, true);
 
 	@Autowired
 	AlarmTagCommandUseCase sut;

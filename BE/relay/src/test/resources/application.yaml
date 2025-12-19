@@ -113,7 +113,7 @@ app:
         partitions: 1
         replicas: 1
     consumers:
-      to-ai-cdc:
+      ai-cdc:
         topic: ${app.kafka.topics.to-ai-cdc.name}
         group-id: "alarm-contents-cdc-group"
       ai-store:

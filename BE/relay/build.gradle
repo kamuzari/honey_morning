@@ -29,7 +29,7 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.780'
 
     // RabbitMQ
-    implementation 'org.springframework.boot:spring-boot-starter-amqp:3.4.2'
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
     // Kafka
     implementation 'org.springframework.kafka:spring-kafka'
@@ -46,6 +46,6 @@ dependencies {
 
     // Mock Exterior Server Test
     testImplementation 'org.springframework.cloud:spring-cloud-contract-stub-runner'
-    testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:4.0.4'
+    testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock'
 
 }

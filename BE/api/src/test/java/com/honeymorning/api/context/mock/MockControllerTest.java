@@ -1,8 +1,8 @@
 package com.honeymorning.api.context.mock;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,10 +17,10 @@ public class MockControllerTest {
 	@Autowired
 	protected MockMvc mockMvc;
 
-	@SpyBean
+	@MockitoSpyBean
 	protected ObjectMapper objectMapper;
 
-	@MockBean
+	@MockitoBean
 	protected TokenService tokenService;
 
 }

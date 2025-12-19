@@ -10,12 +10,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.github.javafaker.Faker;
+import net.datafaker.Faker;
+
 import com.honeymorning.common.domain.alarm.entity.AlarmResultEntity;
 
 class AlarmResultEntityTest {
 
-	Supplier<Long> createId = () -> Faker.instance().number().randomNumber();
+	Supplier<Long> createId = () -> new Faker().number().randomNumber();
 
 	@Test
 	@DisplayName("알람 결과 객체를 생성한다")

@@ -16,14 +16,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.util.StreamUtils;
 
 import com.honeymorning.relay.alarm.adapter.out.message.AlarmContentCreatePublisher;
@@ -35,16 +35,16 @@ import com.honeymorning.relay.context.integration.DefaultIntegrationTest;
 })
 class AlarmEventCdcAdapterTest extends DefaultIntegrationTest {
 
-	@SpyBean
+	@MockitoSpyBean
 	AlarmEventCdcAdapter sut;
 
 	@Value("${app.kafka.topics.to-ai-cdc.name}")
 	String topic;
 
-	@MockBean
+	@MockitoBean
 	AiClientDltConsumer aiClientMessenger;
 
-	@MockBean
+	@MockitoBean
 	AlarmContentCreatePublisher alarmContentCreatePublisher;
 
 	@Autowired

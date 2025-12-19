@@ -45,5 +45,5 @@ dependencies {
 
     // Mock Exterior Server Test
     testImplementation 'org.springframework.cloud:spring-cloud-contract-stub-runner'
-    testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock:4.0.4'
+    testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock'
 }

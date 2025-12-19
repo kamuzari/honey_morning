@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.honeymorning.api.brief.adapter.in.web.port.out.BriefingQueryPort;
@@ -34,7 +34,7 @@ import com.honeymorning.api.user.adapter.in.web.handler.AuthenticateSuccessHandl
 class BriefingControllerTest extends MockControllerTest {
 	final String URI_PREFIX = "/api/briefings";
 
-	@MockBean
+	@MockitoBean
 	BriefingQueryPort briefingQueryPort;
 
 	@Test
