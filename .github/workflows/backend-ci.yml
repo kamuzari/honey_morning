@@ -23,11 +23,12 @@ jobs:
       - name: checkout Code
         uses: actions/checkout@v3
 
-      - name: set up JDK 17
+      - name: set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
+          cache: 'gradle'
 
       - name: grant execute permission
         working-directory: BE
