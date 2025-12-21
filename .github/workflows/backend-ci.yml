@@ -6,17 +6,17 @@ on:
       - develop
       - refactor
     paths:
-      - 'BE/**'
+      - '**'
   pull_request:
     branches:
       - develop
       - refactor
     paths:
-      - 'BE/**'
+      - '**'
 
 jobs:
   build:
-    name: Build BE Application
+    name: backend app build & test
     runs-on: ubuntu-latest
 
     steps:
@@ -31,9 +31,7 @@ jobs:
           cache: 'gradle'
 
       - name: grant execute permission
-        working-directory: BE
         run: chmod +x ./gradlew
 
       - name: build and test BackEnd Spring Boot
-        working-directory: BE
         run: ./gradlew clean build
